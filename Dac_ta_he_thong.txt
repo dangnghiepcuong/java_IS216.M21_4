@@ -5,11 +5,11 @@ Trong bối cảnh tăng tốc độ phủ vaccine toàn dân, chính phủ cầ
 *Các loại Vaccine:
 Đến thời điểm hiện nay, tại Việt Nam đã có 8 loại vắc-xin phòng COVID-19 được Bộ Y tế cấp phép sử dụng. Các loại vắc-xin được phê duyệt sử dung hiện nay gồm: AstraZeneca, Gam-COVID-Vac (tên khác là SPUTNIK V), Vero Cell, Comirnaty của Pfizer/BioNTech, Vắc xin Spikevax (Tên khác là Moderna), vắc-xin Janssen, vắc-xin Hayat-Vax và vắc-xin Abdala. Trong đó có 5 loại vaccine được sử dụng rộng rãi để tiêm cho mọi công dân, các thông tin cơ bản của những loại vaccine đó như sau:
 
-1. AstraZeneca - công nghệ Vector: 2 liều cách nhau 8-12 tuần. Mũi 2 khác loại có thể là: Pfizer, Moderna.
-2. SPUTNIK V - công nghệ Vector: 2 liều cách nhau 3 tuần.
-3. Vero Cell - công nghệ bất hoạt: 2 liều cách nhau 3-4 tuần. 
-4. Pfizer - công nghệ mRNA: 2 liều cách nhau 3-4 tuần. Mũi 2 khác loại có thể là: Moderna.
-5. Moderna - công nghệ mRNA: 2 liều cách nhau 4 tuần. Mũi 2 khác loại có thể là: Pfizer.
+1. AstraZeneca (AstraZeneca - Anh) - công nghệ Vector: 2 liều cách nhau 8-12 tuần. Mũi 2 khác loại có thể là: Pfizer, Moderna.
+2. SPUTNIK V (JSC Generium - Nga) - công nghệ Vector: 2 liều cách nhau 3 tuần.
+3. Vero Cell (Sinopharm - Trung Quốc) - công nghệ bất hoạt: 2 liều cách nhau 3-4 tuần. 
+4. Corminaty (Pfizer - Mỹ) - công nghệ mRNA: 2 liều cách nhau 3 tuần. Mũi 2 khác loại có thể là: Moderna.
+5. Moderna (Moderna - Mỹ) - công nghệ mRNA: 2 liều cách nhau 4 tuần. Mũi 2 khác loại có thể là: Pfizer.
 
 *Quy định về tiêm 2 mũi đầu:
 Bộ Y tế yêu cầu, đảm bảo hoàn thành việc bao phủ mũi 1 cho 100% dân số từ 12 tuổi trở lên trong năm 2021 và tiêm mũi 2 cho những đối tượng đã tiêm mũi 1 đủ thời gian.
@@ -32,7 +32,27 @@ Khoảng cách tiêm một mũi nhắc lại ít nhất 3 tháng sau mũi cuối
 
 Đối với những người đã mắc COVID-19. thì tiêm ngay sau khi hồi phục và hoàn thành việc cách ly y tế theo quy định.
 
+*Đơn vị tiêm phòng vaccine Covid-19:
+Hiện nay, những nơi mà người dân có thể đến để tiêm vaccine thường là các bệnh viện, trạm y tế tại địa phương, hay có thể tiêm tại nhà với trạm tiêm lưu động do một đơn vị có thẩm quyền nào đó tổ chức. Các đơn vị này sẽ thuộc một tỉnh/thành, quận/ huyện, xã/phường/thị trấn nào đó và có tên để phân biệt với nhau khi cùng một xã/phường/thị trấn, có thể đặt một mã đơn vị cho mỗi đơn vị để phân biệt với nhau.
 
+*Thiết lập lịch tiêm (thời gian - địa điểm):
+Mỗi đơn vị được phép tổ chức tiêm chủng khi được cấp các lô vaccine. Thời gian (ngày/tháng/năm) và địa điểm tiêm chủng (tỉnh/thành, quận/huyện, xã/phường/thị trấn) do đơn vị đó thiết lập và bố trí. Trong một ngày của lịch tiêm có thể có hai buổi tiêm sáng và chiều. Với mỗi buổi, tùy theo địa điểm có sức chứa bao nhiêu người thì sẽ cho phép bấy nhiêu người đăng ký tiêm vào buổi đó. Giới hạn về số lượng người đăng ký của mỗi buổi phải đảm bảo biện pháp phòng chống dịch, tuân thủ 5K theo quy định của Bộ Y Tế.
 
+*Đăng ký tiêm chủng:
+- Người dân sẽ đăng ký tiêm chủng tại các địa điểm tiêm gần nơi mình ở (trong cùng quận/huyện). Tuy nhiên một số trường hợp như người di chuyển đến nơi khác (quận/huyện khác, tỉnh/thành khác) thì vẫn có thể đăng ký tiêm chủng tại nơi đó. Để đăng ký tiêm chủng, người dân chọn tỉnh/thành, quận/huyện, xã/phường/thị trấn nơi mình đang ở để hệ thống cung cấp thông tin về các đơn vị tiêm chủng trong khu vực đó. Tiếp theo, chọn một đơn vị, hệ thống sẽ cung cấp các lịch tiêm đang hiện hữu trong tương lai gần, mỗi lịch tiêm hiển thị số lượng giới hạn đăng ký và số lượng người đã đăng ký, nếu lịch tiêm đã đạt số lượng giới hạn người đăng ký thì sẽ không thể chọn lịch đó để đăng ký nữa. Người dân chọn thời gian, buổi để đi tiêm theo mong muốn, khi đăng ký thành công, lịch đăng ký sẽ được lưu lại, khi đăng ký thất bại (do đã đủ số lượng giới hạn) thì hệ thống sẽ thông báo đăng ký thất bại do đã đủ số lượng người đăng ký. Khi đăng ký thành công, trạng thái tiêm chủng trên lịch đăng ký của người dân sẽ hiển thị là "chưa tiêm".
+- Khi việc tiêm chủng được thực hiện xong theo lịch, đơn vị tiêm sẽ nhập thông tin tiêm chủng của người dân lên hệ thống và trạng thái tiêm chủng trong lịch đăng ký tiêm của người dân sẽ đổi từ "chưa tiêm" sang "đã tiêm".
+- Người dân chỉ có thể có duy nhất một lịch đăng ký tiêm chủng có trạng thái là "chưa tiêm" để đảm bảo khoảng cách giữa các mũi tiêm.
+- Sau khi đăng ký thành công nhưng đến buổi tiêm mà người dân không đến thì trạng thái của lịch đăng ký sẽ chuyển sang "đã hủy".
+- Người dân cũng có thể tự hủy lịch đăng ký tiêm chủng trước khi ngày tiêm bắt đầu, trạng thái lịch đăng ký cũng sẽ chuyển sang "đã hủy".
+- Số lượng người đăng ký tiêm chủng của mỗi lịch tiêm sẽ được cập nhật mỗi khi có một người mới đăng ký hoặc hủy đăng ký khi lịch đó vẫn chưa đến ngày.
 
+*Chứng nhận tiêm chủng:
+- Người chưa tiêm mũi vaccine nào hoặc người đang dương tính thì có chứng nhận thẻ đỏ: không được hoạt động ngoài cộng đồng.
+- Người tiêm một mũi vaccine có chứng nhận thẻ vàng: bị hạn chế hoạt động ngoài địa phương.
+- Người tiêm hai mũi vaccine trở lên có chứng nhận thẻ xanh: không bị hạn chế hoạt động.
 
+*Tiểu sử bệnh tật:
+- Để đảm bảo về sức khỏe của người dân trong việc tiêm chủng thì cần phải khám sàng lọc sức khỏe người dân trước khi tiêm. Người dân cũng có thể tự khai báo tình trạng bệnh tật của mình trên hệ thống. Tại đây, người dân cũng có thể khai báo nếu như mình đang dương tính với Covid-19.
+- Mỗi người dân nếu không có bất kỳ một tiểu sử bệnh tật nào thì có thể đăng ký tiêm chủng bình thường.
+- Người có bệnh liên quan đến việc không thể tiêm ngừa thì người dân đó không thể đăng ký tiêm chủng, hoặc người đang dương tính với Covid-19 cũng không thể đăng ký tiêm chủng.
+- Người đã khỏi bệnh Covid-19, có chứng nhận khỏi bệnh được cấp từ đơn vị cách ly thì có thể khai báo tình trạng bệnh tật thành âm tính. Khi tình trạng bệnh tật cuối cùng được khai báo là âm tính và không có bất kì tiểu sử bệnh tật liên quan nào khác thì người dân có thể đăng ký tiêm chủng bình thường.
