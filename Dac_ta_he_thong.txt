@@ -1,0 +1,38 @@
+QUẢN LÝ MŨI TIÊM VACCINE VÀ TÌNH HÌNH DỊCH TỄ
+
+Trong bối cảnh tăng tốc độ phủ vaccine toàn dân, chính phủ cần có một hệ thống quản lý tình hình các mũi tiêm vaccine của người dân cũng như tình hình dịch tễ của mỗi người. Mỗi người đều có một mã số CMND/CCCD riêng biệt và đi kèm là các thông tin cơ bản như giới tính, ngày sinh, địa chỉ, quê quán, số điện thoại... 
+
+*Các loại Vaccine:
+Đến thời điểm hiện nay, tại Việt Nam đã có 8 loại vắc-xin phòng COVID-19 được Bộ Y tế cấp phép sử dụng. Các loại vắc-xin được phê duyệt sử dung hiện nay gồm: AstraZeneca, Gam-COVID-Vac (tên khác là SPUTNIK V), Vero Cell, Comirnaty của Pfizer/BioNTech, Vắc xin Spikevax (Tên khác là Moderna), vắc-xin Janssen, vắc-xin Hayat-Vax và vắc-xin Abdala. Trong đó có 5 loại vaccine được sử dụng rộng rãi để tiêm cho mọi công dân, các thông tin cơ bản của những loại vaccine đó như sau:
+
+1. AstraZeneca - công nghệ Vector: 2 liều cách nhau 8-12 tuần. Mũi 2 khác loại có thể là: Pfizer, Moderna.
+2. SPUTNIK V - công nghệ Vector: 2 liều cách nhau 3 tuần.
+3. Vero Cell - công nghệ bất hoạt: 2 liều cách nhau 3-4 tuần. 
+4. Pfizer - công nghệ mRNA: 2 liều cách nhau 3-4 tuần. Mũi 2 khác loại có thể là: Moderna.
+5. Moderna - công nghệ mRNA: 2 liều cách nhau 4 tuần. Mũi 2 khác loại có thể là: Pfizer.
+
+*Quy định về tiêm 2 mũi đầu:
+Bộ Y tế yêu cầu, đảm bảo hoàn thành việc bao phủ mũi 1 cho 100% dân số từ 12 tuổi trở lên trong năm 2021 và tiêm mũi 2 cho những đối tượng đã tiêm mũi 1 đủ thời gian.
+
+*Quy định về tiêm mũi 3:
+Về việc tiêm liều bổ sung, sẽ áp dụng cho người từ 18 tuổi trở lên, bảo đảm bao phủ cho toàn bộ người từ 50 tuổi trở lên đã tiêm đủ liều cơ bản (tiêm 1 hoặc 2 hoặc 3 mũi tùy theo loại vaccine).
+
+Cụ thể, người có tình trạng suy giảm miễn dịch vừa và nặng như người cấy ghép tạng, ung thư, HIV, đang điều trị thuốc ức chế miễn dịch hoặc đã điều trị trong vòng 6 tháng...; người đã tiêm đủ liều cơ bản bằng vaccine của hãng Sinopharm hoặc vaccine Sputnik V.
+
+Vaccine được sử dụng là vaccine cùng loại với liều cơ bản hoặc vaccine mRNA. Khoảng cách tiêm một mũi bổ sung sau mũi cuối cùng của liều cơ bản từ 28 ngày đến 3 tháng.
+
+Với những người có chỉ định tiêm liều bổ sung, sau khi đã tiêm liều bổ sung thì được coi là hoàn thành liều cơ bản.
+
+*Quy định về tiêm mũi 4:
+Việc tiêm liều nhắc lại cũng được áp dụng với người từ 18 tuổi trở lên đã tiêm đủ liều cơ bản hoặc liều bổ sung, bảo đảm bao phủ cho toàn bộ người có bệnh nền, người cần được chăm sóc dài hạn tại các cơ sở y tế, người từ 50 tuổi trở lên, người trực tiếp xét nghiệm, chăm sóc, điều trị bệnh nhân COVID-19, nhân viên y tế.
+
+Về loại vaccine, nếu các mũi tiêm cơ bản hoặc bổ sung cùng loại vaccine thì tiêm mũi nhắc lại cùng loại đó hoặc vaccine mRNA. Nếu trước đó đã tiêm các loại vaccine khác nhau thì tiêm mũi nhắc lại bằng vaccine mRNA. Nếu tiêm liều cơ bản hoặc bổ sung là vaccine của hãng Sinopharm thì có thể tiêm mũi nhắc lại cùng loại đó hoặc vaccine mRNA hoặc vaccine véc tơ virus (vaccine AstraZeneca)
+
+Khoảng cách tiêm một mũi nhắc lại ít nhất 3 tháng sau mũi cuối cùng của liều cơ bản.
+
+Đối với những người đã mắc COVID-19. thì tiêm ngay sau khi hồi phục và hoàn thành việc cách ly y tế theo quy định.
+
+
+
+
+
