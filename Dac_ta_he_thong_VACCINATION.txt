@@ -39,12 +39,23 @@ Hiện nay, những nơi mà người dân có thể đến để tiêm vaccine 
 Mỗi đơn vị được phép tổ chức tiêm chủng khi được cấp các lô vaccine. Thời gian (ngày/tháng/năm) và địa điểm tiêm chủng (tỉnh/thành, quận/huyện, xã/phường/thị trấn) do đơn vị đó thiết lập và bố trí. Trong một ngày của lịch tiêm có thể có hai buổi tiêm sáng và chiều. Với mỗi buổi, tùy theo địa điểm có sức chứa bao nhiêu người thì sẽ cho phép bấy nhiêu người đăng ký tiêm vào buổi đó. Giới hạn về số lượng người đăng ký của mỗi buổi phải đảm bảo biện pháp phòng chống dịch, tuân thủ 5K theo quy định của Bộ Y Tế.
 
 *Đăng ký tiêm chủng:
-- Người dân sẽ đăng ký tiêm chủng tại các địa điểm tiêm gần nơi mình ở (trong cùng quận/huyện). Tuy nhiên một số trường hợp như người di chuyển đến nơi khác (quận/huyện khác, tỉnh/thành khác) thì vẫn có thể đăng ký tiêm chủng tại nơi đó. Để đăng ký tiêm chủng, người dân chọn tỉnh/thành, quận/huyện, xã/phường/thị trấn nơi mình đang ở để hệ thống cung cấp thông tin về các đơn vị tiêm chủng trong khu vực đó. Tiếp theo, chọn một đơn vị, hệ thống sẽ cung cấp các lịch tiêm đang hiện hữu trong tương lai gần, mỗi lịch tiêm hiển thị số lượng giới hạn đăng ký và số lượng người đã đăng ký, nếu lịch tiêm đã đạt số lượng giới hạn người đăng ký thì sẽ không thể chọn lịch đó để đăng ký nữa. Người dân chọn thời gian, buổi để đi tiêm theo mong muốn, khi đăng ký thành công, lịch đăng ký sẽ được lưu lại, khi đăng ký thất bại (do đã đủ số lượng giới hạn) thì hệ thống sẽ thông báo đăng ký thất bại do đã đủ số lượng người đăng ký. Khi đăng ký thành công, trạng thái tiêm chủng trên lịch đăng ký của người dân sẽ hiển thị là "chưa tiêm".
-- Khi việc tiêm chủng được thực hiện xong theo lịch, đơn vị tiêm sẽ nhập thông tin tiêm chủng của người dân lên hệ thống và trạng thái tiêm chủng trong lịch đăng ký tiêm của người dân sẽ đổi từ "chưa tiêm" sang "đã tiêm".
-- Người dân chỉ có thể có duy nhất một lịch đăng ký tiêm chủng có trạng thái là "chưa tiêm" để đảm bảo khoảng cách giữa các mũi tiêm.
+- Người dân sẽ đăng ký tiêm chủng tại các địa điểm tiêm gần nơi mình ở (trong cùng quận/huyện). Tuy nhiên một số trường hợp như người di chuyển đến nơi khác (quận/huyện khác, tỉnh/thành khác) thì vẫn có thể đăng ký tiêm chủng tại nơi đó. 
+- Để đăng ký tiêm chủng, người dân chọn tỉnh/thành, quận/huyện, xã/phường/thị trấn nơi mình đang ở để hệ thống cung cấp thông tin về các đơn vị tiêm chủng trong khu vực và các lịch tiêm đang sẵn có của các đơn vị đó. Tiếp theo, chọn một đơn vị, hệ thống sẽ cung cấp các lịch tiêm đang sẵn có của đơn vị đã chọn. Mỗi lịch tiêm hiển thị số lượng giới hạn đăng ký và số lượng người đã đăng ký. Chọn lịch tiêm sẵn có, sau đó chọn buổi tiêm (sáng/chiều)
+- Người dân không thể đăng ký tiêm chủng nếu: 
+	+ Nếu lịch tiêm được chọn đã đạt số lượng giới hạn người đăng ký.
+	+ Nếu khoảng cách thời gian giữa mũi tiêm trước và mũi tiêm tiếp theo chưa hợp lệ.
+	+ Nếu đang có tiểu sử bệnh nền liên quan để vấn đề sức khỏe khi tiêm. (Xem thêm ở phần Tiểu sử bệnh tật)
+	+ Nếu đang dương tính với Covid-19. (Xem thêm ở phần Tiểu sử bệnh tật)
+- Khi đăng ký thành công, lịch đăng ký sẽ được lưu lại, trạng thái tiêm chủng trên lịch đăng ký của người dân sẽ hiển thị là "chưa tiêm". Khi đăng ký thất bại (do đã đủ số lượng giới hạn) thì hệ thống sẽ thông báo đăng ký thất bại do đã đủ số lượng người đăng ký.
+- Người dân chỉ có thể có duy nhất một lịch đăng ký tiêm chủng có trạng thái là "chưa tiêm" để đảm bảo khoảng cách thời gian giữa các mũi tiêm.
 - Sau khi đăng ký thành công nhưng đến buổi tiêm mà người dân không đến thì trạng thái của lịch đăng ký sẽ chuyển sang "đã hủy".
 - Người dân cũng có thể tự hủy lịch đăng ký tiêm chủng trước khi ngày tiêm bắt đầu, trạng thái lịch đăng ký cũng sẽ chuyển sang "đã hủy".
 - Số lượng người đăng ký tiêm chủng của mỗi lịch tiêm sẽ được cập nhật mỗi khi có một người mới đăng ký hoặc hủy đăng ký khi lịch đó vẫn chưa đến ngày.
+
+*Cập nhật mũi tiêm:
+- Khi việc tiêm chủng được thực hiện xong theo lịch, ngay trong ngày hoặc trong vòng 3 ngày, đơn vị tiêm sẽ đánh dấu thông tin tiêm chủng của người dân lên hệ thống, trạng thái tiêm chủng trong lịch đăng ký tiêm của người dân sẽ đổi từ "chưa tiêm" sang "đã tiêm".
+- Nếu sau 3 ngày (hoặc 1 tuần) mà tình trạng tiêm chủng chưa được cập nhật từ "chưa tiêm" sang "đã tiêm" thì sẽ chuyển sang "đã hủy".
+- Sau 2 ngày, nếu chưa được cập thông tin nhật mũi tiêm mà họ đã tiêm trên thực tế thì người dân có thể tự cập nhật mũi tiêm của mình bằng cách gửi ảnh chụp giấy chứng nhận đã tiêm. Hệ thống sẽ tiếp tục xác thực.
 
 *Chứng nhận tiêm chủng:
 - Người chưa tiêm mũi vaccine nào hoặc người đang dương tính thì có chứng nhận thẻ đỏ: không được hoạt động ngoài cộng đồng.
