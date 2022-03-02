@@ -44,12 +44,11 @@ Mỗi đơn vị được phép tổ chức tiêm chủng khi được cấp cá
 *Đăng ký tiêm chủng:
 - Chọn đối tượng đăng ký tiêm chủng (cho bản thân, cho người dưới quyền bảo hộ của mình).
 - Công dân sẽ đăng ký tiêm chủng tại các địa điểm tiêm gần nơi mình ở (trong cùng quận/huyện). Tuy nhiên một số trường hợp như người di chuyển đến nơi khác (quận/huyện khác, tỉnh/thành khác) thì vẫn có thể đăng ký tiêm chủng tại nơi đó. 
-- Để đăng ký tiêm chủng, công dân chọn tỉnh/thành, quận/huyện, xã/phường/thị trấn nơi mình đang ở để hệ thống cung cấp thông tin về các đơn vị tiêm chủng trong khu vực và các lịch tiêm đang sẵn có của các đơn vị đó. Tiếp theo, chọn một đơn vị, hệ thống sẽ cung cấp các lịch tiêm đang sẵn có của đơn vị đã chọn. Mỗi lịch tiêm hiển thị số lượng giới hạn đăng ký và số lượng người đã đăng ký. Chọn lịch tiêm sẵn có, sau đó chọn buổi tiêm (sáng/chiều).
+- Để đăng ký tiêm chủng, công dân chọn tỉnh/thành, quận/huyện, xã/phường/thị trấn nơi mình đang ở để hệ thống cung cấp thông tin về các đơn vị tiêm chủng trong khu vực. Tiếp theo, chọn một đơn vị, hệ thống sẽ cung cấp các lịch tiêm đang sẵn có của đơn vị đã chọn. Mỗi lịch tiêm hiển thị số lượng giới hạn đăng ký và số lượng người đã đăng ký. Chọn lịch tiêm sẵn có, sau đó chọn buổi tiêm (sáng/chiều).
 - Công dân không thể đăng ký tiêm chủng nếu:
 	+ Nếu lịch tiêm được chọn đã đạt số lượng giới hạn người đăng ký.
 	+ Nếu khoảng cách thời gian giữa mũi tiêm trước và mũi tiêm tiếp theo của đối tượng đăng ký chưa hợp lệ.
-	+ Nếu đối tượng đăng ký đang có tiểu sử bệnh nền liên quan để vấn đề sức khỏe khi tiêm. (Xem thêm ở phần Tiểu sử bệnh tật).
-	+ Nếu đối tượng đăng ký đang dương tính với Covid-19. (Xem thêm ở phần Tiểu sử bệnh tật).
+	+ Nếu đối tượng đăng ký đang có tình trạng bệnh nền liên quan đến vấn đề sức khỏe khi tiêm hoặc đang dương tính với Covid-19.
 - Khi đăng ký thành công, hệ thống sẽ lưu lại lịch đăng ký gồm các thông tin cơ bản của đối tượng đăng ký tiêm chủng, trạng thái tiêm chủng của đối tượng đối tượng đó sẽ hiển thị là "chưa tiêm".
 - Khi đăng ký thất bại (do đã đủ số lượng giới hạn) thì hệ thống sẽ thông báo đăng ký thất bại do đã đủ số lượng người đăng ký.
 - Mỗi đối tượng chỉ có thể có duy nhất một lịch đăng ký tiêm chủng có trạng thái là "chưa tiêm" để đảm bảo khoảng cách thời gian giữa các mũi tiêm.
