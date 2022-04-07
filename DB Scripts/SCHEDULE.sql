@@ -45,7 +45,7 @@ create table SCHEDULE
 /*	CONSTRAINT	*/
 --Primary Key
 alter table SCHEDULE
-add constraint PK_SCHEDULE primary key
+add constraint PK_SCHED primary key (ID)
 
 --Foreign Key
 alter table SCHEDULE
@@ -56,13 +56,19 @@ add constraint FK_SCHED_VAC foreign key VaccineID references VACCINE(ID)
 
 --Check
 alter table SCHEDULE
-add constraint CK_Date CHECK(Date > SYSDATE)
+add constraint CK_SCHED_Date CHECK(Date > SYSDATE)
 
 /*	TRIGGERS	*/
-create or replace trigger Limit_Register_Day
+-- DayRegistered <= LimitDay
+create or replace trigger Limit_Registers
 after insert or update on SCHEDULE
 for each row
 begin
+	if (:new.DayRegistered > :new.LimitDay
+	OR :new.NoonRegistered > :new.LimitNoon
+	OR :new.NightRegistered > :new.LimitNight)
+	then
+		raise_application_error	
 
 /*	STORED PROCEDURES	*/
 
