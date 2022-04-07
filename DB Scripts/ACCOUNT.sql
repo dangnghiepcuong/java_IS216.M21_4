@@ -4,7 +4,7 @@
 --<Attribute name> <Data type>
 
 --Store data of accounts from actors
-CREATE TABLE ACCOUNT
+create table ACCOUNT
 (
     --Username of an account
     Username varchar2(254) not null,
@@ -19,15 +19,18 @@ CREATE TABLE ACCOUNT
 
 /*	CONSTRAINT	*/
 --Primary Key
-CONSTRAINT s_customer_id_pk PRIMARY KEY (id)
+alter table ACCOUNT
+add constraint PK_ACCOUNT PRIMARY KEY (Username);
 
 
 --Foreign Key
-
+alter table ACCOUNT
+add constraint FK_ACCOUNT_PERSON foreign key PersonalID references PERSON(ID);
 
 
 --Check
-
+alter table ACCOUNT
+add constraint CK_ACCOUNT_Role check (Role in (0, 1, 2));
 
 
 /*	TRIGGERS	*/
