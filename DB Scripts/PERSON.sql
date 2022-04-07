@@ -8,24 +8,17 @@ create table PERSON
 (
     --Identity of the citizen
     ID varchar2(12) not null,
-<<<<<<< HEAD
     
     --Last name of the citizen
     LastName varchar2(100),
-    
-=======
 
-    --Last name of the citizen
-    LastName varchar2(100),
-
->>>>>>> 59609e5b95ce45eeec3cb7affd2e75723127486f
     --First name of the citizen
     FirstName varchar2(50),
 
     --Birthday of the citizen
     Birthday date,
 
-    --Gender of the citizen
+    --Gender of the citizen, value in {0, 1, 2} | 0: female, 1: male, 2: orther
     Gender number(1),
 
     --Hometown of the citizen
@@ -70,12 +63,22 @@ add constraint FK_PERSON_GUAR foreign key (Guardian) references PERSON(ID);
 
 --Check
 
---Check first name does not contain the character ' '
+--Check FirstName does not contain the character ' '
 alter table PERSON
 add constraint CK_PERSON_FIRSTNM check (FirstName not like '% %');
 
+--Check Birthday must be a date in the past or present 
+alter table PERSON
+add constraint CK_PERSON_BIRTH check (Birthday <= sysdate);
 
 
+--Check Gender has a value in { 0, 1, 2}
+alter table PERSON
+add constraint CK_PERSON_Gender check (Gender in (0, 1, 2));
+
+--Check Email does not contain the character ' '
+alter table PERSON
+add constraint CK_PERSON_Email check (Email not like '% %');
 
 /*	TRIGGERS	*/
 
