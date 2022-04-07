@@ -50,6 +50,7 @@ add constraint CK_REG_Status CHECK(Status in (0,1,2,3));
 
 
 /*	TRIGGERS	*/
+--NO <= the number of Limit due to the register Time
 create or replace trigger REG_NO_Limit
 after insert on REGISTER
 for each row
@@ -65,32 +66,77 @@ begin
 	end if;
 end;
 
+--The registered injection must follow the spacing rule of the previous vaccine injection
+create or replace trigger REG_SPACING_RULE
+after insert on REGISTER
+for each row
+as
+	PreInj INJECTION%rowtype;
+	ConstCase CONSTRAINT%rowtype;
+begin
+	--Find the previous injection info
+	select * into PreInj
+	from INJECTION
+	where INJECTION.PersonalID = :new.PersonalID
+	having InjNO = MAX(InjNO)
+	
+	--If cannot find a previous injection, it means this is the first injection. Then allow to register.
+	EXCEPTION
+		when no_data_found
+ 		then commit
+	END;
+	
+	--Reference the PreInj to CONSTRAINT cases to select out the rule
+	select * into ConstCase
+	from CONSTRAINT
+	where CONSTRAINT.InjectionNO = PrevInj.InjNO
+	and CONSTRAINT.VaccineID = 
+				(select VaccineID
+				from PrevInj.SchedID)
+	
+	--Check spacing rule: :new.OnDate - OnDate from PrevInj.SchedID must equal ConstCase.NextDistance
+	if (:new.OnDate - (select OnDate from SCHEDULE where SCHEDULE.ID = PrevInj.SchedID) < ConstCase.NextDistance-3)
+	then
+		raise_application_error(100004, 'Cannot register to this schedule due to the invalid in spacing rule!')
+	end if;
+end REG_SPACING_RULE;
 /*	STORED PROCEDURES	*/
 --Insert value for a registion
-create or replace procedure REG_INSERT_VALUE (par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type, par_TimeReg REGISTER.Time%type)
+create or replace procedure REG_INSERT_RECORD (par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type, par_TimeReg REGISTER.Time%type)
 as
 	set_NO REGISTER.NO%type;
 begin
-	--Calc the NO of registion
+	--Use S_FUNC to calculate the NO of registion
 	select REG_SIGNED_NO(:new.PersonalID, :new.SchedID, :new.Time) into set_NO
 
 	--insert new registion
 	insert into REGISTER(PersonalID, SchedID, Time, NO, Status, Image, Note) values (par_PersonalID, par_SchedID, par_TimeReg, set_NO, 0, NULL, NULL);
 
 	SCHED_INC_REG(SchedID, par_TimeReg);
-end REG_INSERT_VALUE;
+end REG_INSERT_RECORD;
 
 --Canceled a registion	
-create or replace procedure REG_CANCELED_REG(par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type)
+create or replace procedure REG_DELETE_RECORD(par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type)
 as
+	TimeReg REGISTER.Time%type;
 begin
-	delete *
-	from 
+	select TimeReg = Time
+	from REGISTER
+	where REGISTER.PersonalID = par_PersonalID
+	and REGISTER.SchedID = par_SchedID;
 
+	delete *
+	from REGISTER
+	where REGISTER.PersonalID = par_PersonalID
+	and REGISTER.SchedID = par_SchedID;
+
+	SCHED_DEC_REG(par_SchedID, TimeReg);
+
+end REG_DELETE_RECORD;
 
 
 /*	STORED FUNCTIONS	*/
---Put in PersonalID, SchedId, TimeRegistered. Return the NO of registion. If the registion meet the limit, return 0
+--Return the NO of registion. If the registion meet the limit, return 0
 create or replace function REG_SIGNED_NO (par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type, par_TimeReg REGISTER.Time%type)
 return number is
 	--par_ to get the present value of the registered time limit number
