@@ -8,32 +8,50 @@ create table PERSON
 (
     --Identity of the citizen
     ID varchar2(12) not null,
+<<<<<<< HEAD
     
     --Last name of the citizen
     LastName varchar2(100),
     
+=======
+
+    --Last name of the citizen
+    LastName varchar2(100),
+
+>>>>>>> 59609e5b95ce45eeec3cb7affd2e75723127486f
     --First name of the citizen
     FirstName varchar2(50),
+
     --Birthday of the citizen
     Birthday date,
+
     --Gender of the citizen
     Gender number(1),
+
     --Hometown of the citizen
     Hometown varchar2(50),
-    --Province of temporary residence / residence of citizen
+
+    --Province address of citizen
     Province varchar2(50),
-    --Resident district / temporary residence district of the citizen
+
+    --District address of the citizen
     District varchar2(50),
-    --resident commune / temporary residence commune of the citizen
+
+    --Town address of the citizen
     Town varchar2(50),
-    --Street of the citizen
+
+    --Street address of the citizen
     Street varchar2(100),
-    --Phone of the citizen
+
+    --Phone number of the citizen
     Phone varchar2(30),
+
     --Email of the citizen
     Email varchar2(254),
-    --Guardian of the citizen
+
+    --Guardian of the citizen (store a PersonalID)
     Guardian varchar2(12),
+
     --Note on the citizen
     Note varchar2(2000)
 );
