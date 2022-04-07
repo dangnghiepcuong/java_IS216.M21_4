@@ -4,12 +4,25 @@
 --<Attribute name> <Data type>
 create table ORGANIZATION
 (
+    --Identifier of organization, ID FK references ACCOUNT(OrgID)
     ID varchar2(16),
+    
+    --Name of organization
     Name varchar2(100),
+    
+    --Province of organization
     Province varchar2(50),
+    
+    --District of organization
     District varchar2(50),
+    
+    --Town of organization
     Town varchar2(50),
+    
+    --Street of organization
     Street varchar2(100),
+    
+    --Note of organization
     Note varchar2(2000)
 );
 
