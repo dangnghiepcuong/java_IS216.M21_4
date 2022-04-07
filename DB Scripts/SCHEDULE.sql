@@ -56,12 +56,13 @@ add constraint FK_SCHED_VAC foreign key VaccineID references VACCINE(ID)
 
 --Check
 alter table SCHEDULE
-add constraint CK_Date 
-
+add constraint CK_Date CHECK(Date > SYSDATE)
 
 /*	TRIGGERS	*/
-
-
+create or replace trigger Limit_Register_Day
+after insert or update on SCHEDULE
+for each row
+begin
 
 /*	STORED PROCEDURES	*/
 
