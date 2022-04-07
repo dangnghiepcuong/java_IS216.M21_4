@@ -44,8 +44,14 @@ create table SCHEDULE
 
 /*	CONSTRAINT	*/
 --Primary Key
+alter table SCHEDULE
+add constraint PK_SCHEDULE primary key
 
+alter table SCHEDULE
+add constraint FK_SCHED_ORG foreign key OrgID references ORGANIZATION(ID)
 
+alter table SCHEDULE
+add constraint FK_VAC
 
 --Foreign Key
 
