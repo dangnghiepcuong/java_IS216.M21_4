@@ -51,7 +51,7 @@ add constraint CK_REG_Status CHECK(Status in (0,1,2,3));
 
 /*	TRIGGERS	*/
 create or replace trigger REG_NO_Limit
-after update on REGISTER
+after insert on REGISTER
 for each row
 as
 	set_NO REGISTER.NO%type;	
@@ -66,6 +66,26 @@ begin
 end;
 
 /*	STORED PROCEDURES	*/
+--Insert value for a registion
+create or replace procedure REG_INSERT_VALUE (par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type, par_TimeReg REGISTER.Time%type)
+as
+	set_NO REGISTER.NO%type;
+begin
+	--Calc the NO of registion
+	select REG_SIGNED_NO(:new.PersonalID, :new.SchedID, :new.Time) into set_NO
+
+	--insert new registion
+	insert into REGISTER(PersonalID, SchedID, Time, NO, Status, Image, Note) values (par_PersonalID, par_SchedID, par_TimeReg, set_NO, 0, NULL, NULL);
+
+	SCHED_INC_REG(SchedID, par_TimeReg);
+end REG_INSERT_VALUE;
+
+--Canceled a registion	
+create or replace procedure REG_CANCELED_REG(par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type)
+as
+begin
+	delete *
+	from 
 
 
 
@@ -95,12 +115,8 @@ begin
 		return 0
 	end if;
 	
-	--After getting the Limit number
-	--Set the NO for registion by Limit number + 1
-	update REGISTER
-	set NO = RegNumber + 1;
-	where REGISTER.PersonalID = par_PersonalID
-	and REGISTER.SchedID = par_SchedID;
+	return (RegNumber + 1);
+
 end REG_SIGNED_NO;
 
 /*	RECORDS	*/

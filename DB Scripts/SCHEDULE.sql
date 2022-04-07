@@ -73,8 +73,26 @@ begin
 end Limit_Registers;	
 
 /*	STORED PROCEDURES	*/
-
-
+create or replace procedure SCHED_INC_REG(par_ID SCHEDULE.ID%type, par_TimeReg REGISTER.Time%type)
+as
+begin
+	if (par_TimeReg = 0)
+	then
+		update SCHEDULE
+		set DayRegistered = DayRegistered + 1
+		where SCHEDULE.ID = par_ID
+ 	elseif (par_TimeReg = 1)
+	then
+		update SCHEDULE
+		set NoonRegistered = NoonRegistered + 1
+		where SCHEDULE.ID = par_ID
+	elseif (par_TimeReg = 2)
+	then
+		update SCHEDULE
+		set NightRegistered = NightRegistered + 1
+		where SCHEDULE.ID = par_ID
+	endif;
+end;
 
 /*	STORED FUNCTIONS	*/
 
