@@ -56,8 +56,14 @@ for each row
 as
 	set_NO REGISTER.NO%type;	
 begin
-	select REG_SIGNED_NO(
-	if (:new.NO
+	--Calc the NO of registion
+	select REG_SIGNED_NO(:new.PersonalID, :new.SchedID, :new.Time) into set_NO
+
+	if (set_NO = 0)
+	then
+		raise_application_error(100003, 'The registion is limited!')
+	end if;
+end;
 
 /*	STORED PROCEDURES	*/
 
