@@ -13,7 +13,6 @@ create table ANNOUNCEMENT
     Note varchar2(2000)
 );
 
-Drop table ANNOUNCEMENT;
 
 /*	CONSTRAINT	*/
 --Primary Key
