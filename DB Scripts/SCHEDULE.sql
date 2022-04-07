@@ -47,18 +47,16 @@ create table SCHEDULE
 alter table SCHEDULE
 add constraint PK_SCHEDULE primary key
 
+--Foreign Key
 alter table SCHEDULE
 add constraint FK_SCHED_ORG foreign key OrgID references ORGANIZATION(ID)
 
 alter table SCHEDULE
-add constraint FK_VAC
-
---Foreign Key
-
-
+add constraint FK_SCHED_VAC foreign key VaccineID references VACCINE(ID)
 
 --Check
-
+alter table SCHEDULE
+add constraint CK_Date 
 
 
 /*	TRIGGERS	*/
