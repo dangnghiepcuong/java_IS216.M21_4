@@ -22,7 +22,7 @@ alter table VACCINE add constraint PK_VACCINE primary key (ID);
 
 
 --Check
-alter table VACCINE add constraint UNI_Name1 unique (Name);
+alter table VACCINE add constraint UNI_Name unique (Name);
 
 /*	TRIGGERS	*/
 
