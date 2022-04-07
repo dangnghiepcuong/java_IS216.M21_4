@@ -8,8 +8,10 @@ create table PERSON
 (
     --Identity of the citizen
     ID varchar2(12) not null,
+    
     --Last name of the citizen
     LastName varchar2(100),
+    
     --First name of the citizen
     FirstName varchar2(50),
     --Birthday of the citizen
@@ -39,14 +41,21 @@ create table PERSON
 
 /*	CONSTRAINT	*/
 --Primary Key
-
+alter table PERSON
+add constraint PK_PERSON primary key (ID);
 
 
 --Foreign Key
-
+alter table PERSON
+add constraint FK_PERSON_GUAR foreign key (Guardian) references PERSON(ID);
 
 
 --Check
+
+--Check first name does not contain the character ' '
+alter table PERSON
+add constraint CK_PERSON_FIRSTNM check (FirstName not like '% %');
+
 
 
 
