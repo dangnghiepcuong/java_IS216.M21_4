@@ -51,23 +51,31 @@ add constraint CK_REG_Status CHECK(Status in (0,1,2,3));
 
 /*	TRIGGERS	*/
 create or replace trigger REG_NO_Limit
-after insert on REGISTER
+after update on REGISTER
 for each row
+as
+	set_NO REGISTER.NO%type;	
 begin
-	
+	select REG_SIGNED_NO(
+	if (:new.NO
 
 /*	STORED PROCEDURES	*/
---Put in PersonalID, SchedId, TimeRegistered. Calculate the number order (NO) of registion
-create or replace procedure REG_SIGNED_NO (par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type, par_TimeReg REGISTER.Time%type)
-as
+
+
+
+/*	STORED FUNCTIONS	*/
+--Put in PersonalID, SchedId, TimeRegistered. Return the NO of registion. If the registion meet the limit, return 0
+create or replace function REG_SIGNED_NO (par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type, par_TimeReg REGISTER.Time%type)
+return number is
 	--par_ to get the present value of the registered time limit number
+	RegNumber REGISTER.NO%type;
 	LimitReg REGISTER.NO%type;
 begin
 	--from the registered time, select its limit number from SCHEDULE
-	select LimitReg,
-		case par_TimeReg when 0 then LimitDay
-			when 1 then LimitNoon
-			when 2 then LimitNight
+	select RegNumber, LimitReg
+		case par_TimeReg when 0 then DayRegistered, LimitDay
+			when 1 then NoonRegistered, LimitNoon
+			when 2 then NightRegistered, LimitNight
 		else
 			raise_application_error(100001, 'Time registion not found!')
 		end
@@ -75,18 +83,18 @@ begin
 	where SCHEDULE.ID = par_SchedID
 	and SCHEDULE.PersonalID = par_PersonalID;	
 	
+	--If the number of registion meet the limit of at that time, return 0
+	if (RegNumber = LimitReg)
+	then
+		return 0
+	end if;
+	
 	--After getting the Limit number
 	--Set the NO for registion by Limit number + 1
 	update REGISTER
-	set NO = LimitReg + 1;
+	set NO = RegNumber + 1;
 	where REGISTER.PersonalID = par_PersonalID
 	and REGISTER.SchedID = par_SchedID;
-
 end REG_SIGNED_NO;
-
-/*	STORED FUNCTIONS	*/
-
-
-
 
 /*	RECORDS	*/
