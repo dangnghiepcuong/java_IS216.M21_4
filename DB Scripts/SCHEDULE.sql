@@ -3,6 +3,43 @@
 --Create a table struct without constraint
 --<Attribute name> <Data type>
 
+--Store data of schedules from organizations
+create table SCHEDULE
+(
+	--Identity of a schedule, created from OrgID+DateNumber+NO
+	ID varchar2(26),
+
+	--OrganizationID FK references ORGANIZATION(ID)
+	OrgID varchar2(16),
+
+	--VaccineID FK references VACCINE(ID)
+	VaccineID varchar2(8),
+
+	--The serial of the using vaccine in the schedule
+	Serial varchar2(100),
+
+	--The number of limited registers in the morning
+	LimitDay number(5),
+
+	--The number of limited registers in the afternoon
+	LimitNoon number(5),
+
+	--The number of limited registers in the evening
+	LimitNight number(5),
+
+	--The number of registered in the morning
+	DayRegister number(5),
+
+	--The number of registered in the afternoon
+	NoonRegister number(5),
+
+	--The number of registered in the evening
+	NightRegister number(5),
+
+	--Note of record
+	Note varchar2(2000)
+)
+
 
 
 /*	CONSTRAINT	*/
