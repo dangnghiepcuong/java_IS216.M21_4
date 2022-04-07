@@ -45,22 +45,22 @@ create table SCHEDULE
 /*	CONSTRAINT	*/
 --Primary Key
 alter table SCHEDULE
-add constraint PK_SCHED primary key (ID)
+add constraint PK_SCHED primary key (ID);
 
 --Foreign Key
 alter table SCHEDULE
-add constraint FK_SCHED_ORG foreign key OrgID references ORGANIZATION(ID)
+add constraint FK_SCHED_ORG foreign key OrgID references ORGANIZATION(ID);
 
 alter table SCHEDULE
-add constraint FK_SCHED_VAC foreign key VaccineID references VACCINE(ID)
+add constraint FK_SCHED_VAC foreign key VaccineID references VACCINE(ID);
 
 --Check
 alter table SCHEDULE
-add constraint CK_SCHED_Date CHECK(Date > SYSDATE)
+add constraint CK_SCHED_Date CHECK(Date > SYSDATE);
 
 /*	TRIGGERS	*/
 -- DayRegistered <= LimitDay
-create or replace trigger Limit_Registers
+create or replace trigger SCHED_Limit_Registers
 after insert or update on SCHEDULE
 for each row
 begin
@@ -68,7 +68,9 @@ begin
 	OR :new.NoonRegistered > :new.LimitNoon
 	OR :new.NightRegistered > :new.LimitNight)
 	then
-		raise_application_error	
+		raise_application_error(10000, 'Number of register is limited!');
+	end if;
+end Limit_Registers;	
 
 /*	STORED PROCEDURES	*/
 
