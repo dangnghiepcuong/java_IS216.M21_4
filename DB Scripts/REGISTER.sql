@@ -62,44 +62,66 @@ begin
 
 	if (set_NO = 0)
 	then
-		raise_application_error(100003, 'The registion is limited!')
+		raise_application_error(10003, 'The registion is limited!')
 	end if;
 end;
 
---The registered injection must follow the spacing rule of the previous vaccine injection
-create or replace trigger REG_SPACING_RULE
+--The registered injection must follow the spacing rule of the previous vaccine injection (if have)
+--The vaccine used in the registered schedule must be compitable with the previous vaccine injection (if have)
+
+create or replace trigger REG_VACCINATION_RULE
 after insert on REGISTER
 for each row
 as
 	PreInj INJECTION%rowtype;
 	ConstCase CONSTRAINT%rowtype;
+	RegVac VACCINE.ID%type;
+	PreVac VACCINE.ID%type;
 begin
 	--Find the previous injection info
 	select * into PreInj
 	from INJECTION
 	where INJECTION.PersonalID = :new.PersonalID
-	having InjNO = MAX(InjNO)
+	having InjNO = MAX(InjNO);
 	
 	--If cannot find a previous injection, it means this is the first injection. Then allow to register.
 	EXCEPTION
 		when no_data_found
  		then commit
 	END;
+
+	--select out the vaccine used in the previous injection
+	select VaccineID into PrevVac from PrevInj.SchedID;
+
+	--select out the vaccine used in this registion
+	select VaccineID into RegVac from :new.SchedID;
 	
 	--Reference the PreInj to CONSTRAINT cases to select out the rule
 	select * into ConstCase
 	from CONSTRAINT
 	where CONSTRAINT.InjectionNO = PrevInj.InjNO
-	and CONSTRAINT.VaccineID = 
-				(select VaccineID
-				from PrevInj.SchedID)
+	and CONSTRAINT.VaccineID = PreVac
+	and CONSTRAINT.PreDose = INJ_Difference(:new.PersonalID);
 	
 	--Check spacing rule: :new.OnDate - OnDate from PrevInj.SchedID must equal ConstCase.NextDistance
 	if (:new.OnDate - (select OnDate from SCHEDULE where SCHEDULE.ID = PrevInj.SchedID) < ConstCase.NextDistance-3)
 	then
 		raise_application_error(100004, 'Cannot register to this schedule due to the invalid in spacing rule!')
 	end if;
-end REG_SPACING_RULE;
+
+	--Check vaccine combination rule: vaccine from registered schedule must be contained in ConstCase.NextDose	
+	if (CONTAINS(ConstCase.NextDose, RegVac, 1) > 0)
+	then
+		comit
+	else
+		raise_application_error(10005, 'Cannot register to this schedule due to the incompitable with the previous injection!')
+	end if;
+
+end REG_VACCINATION_RULE;
+
+
+
+
 /*	STORED PROCEDURES	*/
 --Insert value for a registion
 create or replace procedure REG_INSERT_RECORD (par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type, par_TimeReg REGISTER.Time%type)
