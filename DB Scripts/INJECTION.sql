@@ -47,7 +47,21 @@ add constraint CK_INJECTION_InjNO check (InjNO in (
 
 
 /*	STORED PROCEDURES	*/
+--Insert
+create or replace procedure INJ_INSERT_RECORD (par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type , par_Note INJECTION.Note%type DEFAULT NULL)
+as
+	PreInj INJECTION%rowtype;
+begin
+	select * into PreInj
+	from INJECTION
+	where INJECTION.PersonalID = :new.PersonalID
+	having InjNO = MAX(InjNO);
 
+	--If cannot find a previous injection, it means this is the first injection. Then allow to register.
+	EXCEPTION
+		when no_data_found
+ 		then commit
+	END;
 
 
 /*	STORED FUNCTIONS	*/

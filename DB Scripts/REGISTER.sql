@@ -50,14 +50,11 @@ add constraint CK_REG_Status CHECK(Status in (0,1,2,3));
 
 
 /*	TRIGGERS	*/
-<<<<<<< HEAD
 create or replace trigger REG_NO_Limit
 after update on REGISTER
-=======
 --NO <= the number of Limit due to the register Time
 create or replace trigger REG_NO_Limit
 after insert on REGISTER
->>>>>>> 2aaefa66f8445c2bf0e4225ce4451a64db0ddc3c
 for each row
 as
 	set_NO REGISTER.NO%type;	
@@ -67,11 +64,9 @@ begin
 
 	if (set_NO = 0)
 	then
-<<<<<<< HEAD
 		raise_application_error(100003, 'The registion is limited!')
 	end if;
 end;
-=======
 		raise_application_error(10003, 'The registion is limited!')
 	end if;
 end;
@@ -101,6 +96,16 @@ begin
  		then commit
 	END;
 
+	--Check the completed doses: If the citizen have done 4 dose (2 basic, 1 booster, 1 repeat) or 3 dose (2 basic, 1 repeat), she cannot register anymore.
+	if (PreInj.InjNO = 4)
+	then
+		raise_application_error(10006,'You have completed all vaccination doses!') 
+	elseif (PreInj.InjNO = 3 and PreInj.Type = repeat)
+	then
+		raise_application_error(10006,'You have completed all vaccination doses!')
+	end if;
+
+
 	--select out the vaccine used in the previous injection
 	select VaccineID into PrevVac from PrevInj.SchedID;
 
@@ -114,6 +119,8 @@ begin
 	and CONSTRAINT.VaccineID = PreVac
 	and CONSTRAINT.PreDose = INJ_Difference(:new.PersonalID);
 	
+	
+
 	--Check spacing rule: :new.OnDate - OnDate from PrevInj.SchedID must equal ConstCase.MinDistance
 	if (:new.OnDate - (select OnDate from SCHEDULE where SCHEDULE.ID = PrevInj.SchedID) < ConstCase.MinDistance-3)
 	then
@@ -144,7 +151,7 @@ begin
 	from HEALTH
 	where HEALTH.PersonalID = :new.PersonalID
 	having Health.FilledDate = MAX(Health.FilledDate)
-
+	
 	--Check vaccination target type
 	if ( SUBSTR(LastHealth.Healths, 4, 1) = '1' )
 	then	
@@ -160,7 +167,6 @@ begin
 end REG_VACCINATION_TARGET;
 
 
->>>>>>> 2aaefa66f8445c2bf0e4225ce4451a64db0ddc3c
 
 /*	STORED PROCEDURES	*/
 --Insert value for a registion
@@ -170,14 +176,60 @@ as
 begin
 	--Use S_FUNC to calculate the NO of registion
 	select REG_SIGNED_NO(:new.PersonalID, :new.SchedID, :new.Time) into set_NO
-
+	
+	--Check the type of registing dose
+	
 	--insert new registion
 	insert into REGISTER(PersonalID, SchedID, Time, NO, Status, Image, Note) values (par_PersonalID, par_SchedID, par_TimeReg, set_NO, 0, NULL, NULL);
 
 	SCHED_INC_REG(SchedID, par_TimeReg);
 end REG_INSERT_RECORD;
 
-<<<<<<< HEAD
+
+
+--Canceled a registion	
+create or replace procedure REG_DELETE_RECORD (par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type)
+as
+	TimeReg REGISTER.Time%type;
+begin
+	select TimeReg = Time
+	from REGISTER
+	where REGISTER.PersonalID = par_PersonalID
+	and REGISTER.SchedID = par_SchedID;
+
+	delete *
+	from REGISTER
+	where REGISTER.PersonalID = par_PersonalID
+	and REGISTER.SchedID = par_SchedID;
+
+	SCHED_DEC_REG(par_SchedID, TimeReg);
+
+end REG_DELETE_RECORD;
+
+--Update a registion status
+create or replace procedure REG_UPDATE_STATUS (par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type, par_Status REGISTER.Status%type)
+as
+begin
+	--Update status
+	update REGISTER
+	set Status = par_Status
+	where REGISTER.PersonalID = par_PersonalID
+	and REGISTER.SchedID = par_SchedID
+
+	--If the registion is completed by Injected status, insert new injection for the citizen
+	if (par_Status = 2)
+	then
+		INJ_INSERT_RECORD(par_PersonalID, par_SchedID, par_Note DEFAULT NULL);
+	end if;
+end;
+
+--Change time of a registion
+REG_UPDATE_TIME(par_PersonalID, par_SchedID, par_Time) 
+
+--Update a vaccination paper signed by the shecd-holding ORG
+REG_UPDATE_IMAGE(par_PersonalID, par_SchedID, par_Img) 
+
+
 /*	STORED FUNCTIONS	*/
 --Put in PersonalID, SchedId, TimeRegistered. Return the NO of registion. If the registion meet the limit, return 0
 create or replace function REG_SIGNED_NO (par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type, par_TimeReg REGISTER.Time%type)
@@ -211,29 +263,8 @@ begin
 	where REGISTER.PersonalID = par_PersonalID
 	and REGISTER.SchedID = par_SchedID;
 end REG_SIGNED_NO;
-=======
---Canceled a registion	
-create or replace procedure REG_DELETE_RECORD(par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type)
-as
-	TimeReg REGISTER.Time%type;
-begin
-	select TimeReg = Time
-	from REGISTER
-	where REGISTER.PersonalID = par_PersonalID
-	and REGISTER.SchedID = par_SchedID;
 
-	delete *
-	from REGISTER
-	where REGISTER.PersonalID = par_PersonalID
-	and REGISTER.SchedID = par_SchedID;
 
-	SCHED_DEC_REG(par_SchedID, TimeReg);
-
-end REG_DELETE_RECORD;
-
->>>>>>> 2aaefa66f8445c2bf0e4225ce4451a64db0ddc3c
-
-/*	STORED FUNCTIONS	*/
 --Return the NO of registion. If the registion meet the limit, return 0
 create or replace function REG_SIGNED_NO (par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type, par_TimeReg REGISTER.Time%type)
 return number is

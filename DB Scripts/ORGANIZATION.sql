@@ -30,7 +30,7 @@ create table ORGANIZATION
 /*	CONSTRAINT	*/
 --Primary Key
 alter table ORGANIZATION 
-add constraint PK_ORGANIZATION primary key (ID);
+add constraint PK_ORG primary key (ID);
 
 --Foreign Key
 alter table ORGANIZATION 
@@ -50,41 +50,40 @@ add constraint CHK_PROVINCE check (Province is not null);
 
 /*	STORED PROCEDURES	*/
 --Insert
-create or replace procedure ORG_INSERT_RECORD (org_ID ORGANIZATION.ID%type,
-                                             org_Name ORGANIZATION.Name%type,
-                                             org_Province ORGANIZATION.Province%type,
-                                             org_District ORGANIZATION.District%type,
-                                             org_Town ORGANIZATION.Town%type,
-                                             org_Street ORGANIZATION.Street%type)                                           
+create or replace procedure ORG_INSERT_RECORD (par_ID ORGANIZATION.ID%type,
+                                             par_Name ORGANIZATION.Name%type,
+                                             par_Province ORGANIZATION.Province%type,
+                                             par_District ORGANIZATION.District%type,
+                                             par_Town ORGANIZATION.Town%type,
+                                             par_Street ORGANIZATION.Street%type
+			par_Note  ORGANIZATION.Note%type)                                           
 as 
 begin
     --insert new ORGANIZATION
-    
 	insert into ORGANIZATION(ID, Name, Province, District, Town, Street, Note) 
-    values (org_ID, org_Name, org_Province, org_District, org_Town, org_Street,
-    NULL);
-end;
+	values (par_ID, par_Name, par_Province, par_District, par_Town, par_Street, par_Note);
+end ORG_INSERT_RECORD;
 
 --Delete
-create or replace procedure ORG_DELETE_RECORD (Org_ID ORGANIZATION.ID%type)
+create or replace procedure ORG_DELETE_RECORD (par_ID ORGANIZATION.ID%type)
 as
 begin
-    delete 
+    delete *
     from ORGANIZATION
-    where ID=Org_ID;
-end;
+    where ID = par_ID;
+end ORG_DELETE_RECORD;
 
 --Update
-create or replace procedure ORG_UPDATE_RECORD (Org_ID ORGANIZATION.ID%type,
-                                                org_Name ORGANIZATION.Name%type,
-                                                org_Province ORGANIZATION.Province%type)
+create or replace procedure ORG_UPDATE_RECORD (par_ID ORGANIZATION.ID%type,
+                                                par_Name ORGANIZATION.Name%type,
+                                                par_Province ORGANIZATION.Province%type)
 as
 begin
     update ORGANIZATION
-    set Name=org_Name,
-        Province=org_Province
-    where ID=Org_ID;
-end;
+    set Name = par_Name,
+        Province = par_Province
+    where ID = par_ID;
+end ORG_UPDATE_RECORD;
 
 EXEC ORG_UPDATE_RECORD(5,'h','ha')
 
