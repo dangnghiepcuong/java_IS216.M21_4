@@ -49,7 +49,46 @@ add constraint CHK_PROVINCE check (Province is not null);
 
 
 /*	STORED PROCEDURES	*/
---
+--Insert
+create or replace procedure ORG_INSERT_RECORD (org_ID ORGANIZATION.ID%type,
+                                             org_Name ORGANIZATION.Name%type,
+                                             org_Province ORGANIZATION.Province%type,
+                                             org_District ORGANIZATION.District%type,
+                                             org_Town ORGANIZATION.Town%type,
+                                             org_Street ORGANIZATION.Street%type)                                           
+as 
+begin
+    --insert new ORGANIZATION
+    
+	insert into ORGANIZATION(ID, Name, Province, District, Town, Street, Note) 
+    values (org_ID, org_Name, org_Province, org_District, org_Town, org_Street,
+    NULL);
+end;
+
+--Delete
+create or replace procedure ORG_DELETE_RECORD (Org_ID ORGANIZATION.ID%type)
+as
+begin
+    delete 
+    from ORGANIZATION
+    where ID=Org_ID;
+end;
+
+--Update
+create or replace procedure ORG_UPDATE_RECORD (Org_ID ORGANIZATION.ID%type,
+                                                org_Name ORGANIZATION.Name%type,
+                                                org_Province ORGANIZATION.Province%type)
+as
+begin
+    update ORGANIZATION
+    set Name=org_Name,
+        Province=org_Province
+    where ID=Org_ID;
+end;
+
+EXEC ORG_UPDATE_RECORD(5,'h','ha')
+
+--Annouce
 
 
 /*	STORED FUNCTIONS	*/
