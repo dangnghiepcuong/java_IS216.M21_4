@@ -66,9 +66,10 @@ begin
 	end if;
 end;
 
---The registered injection must follow the spacing rule of the previous vaccine injection (if have)
---The vaccine used in the registered schedule must be compitable with the previous vaccine injection (if have)
 
+--The registered schedule must follow the rule of vaccination (spacing time and vaccine type)
+--+ Spacing time: the registered injection must follow the spacing rule of the previous vaccine injection (if have)
+--+ Vaccine tpy: the vaccine used in the registered schedule must be compitable with the previous vaccine injection (if have)
 create or replace trigger REG_VACCINATION_RULE
 after insert on REGISTER
 for each row
@@ -103,8 +104,8 @@ begin
 	and CONSTRAINT.VaccineID = PreVac
 	and CONSTRAINT.PreDose = INJ_Difference(:new.PersonalID);
 	
-	--Check spacing rule: :new.OnDate - OnDate from PrevInj.SchedID must equal ConstCase.NextDistance
-	if (:new.OnDate - (select OnDate from SCHEDULE where SCHEDULE.ID = PrevInj.SchedID) < ConstCase.NextDistance-3)
+	--Check spacing rule: :new.OnDate - OnDate from PrevInj.SchedID must equal ConstCase.MinDistance
+	if (:new.OnDate - (select OnDate from SCHEDULE where SCHEDULE.ID = PrevInj.SchedID) < ConstCase.MinDistance-3)
 	then
 		raise_application_error(100004, 'Cannot register to this schedule due to the invalid in spacing rule!')
 	end if;
@@ -119,6 +120,34 @@ begin
 
 end REG_VACCINATION_RULE;
 
+--The citizen whose vaccination target type is vaccination delaying or incompitable vaccination cannot register
+--The citizen affected by Covid-19 can complete basic dose after healing. If you have completed basic dose before affected by Covid-19, it doesn't necessary to make an additional dose. 
+--Summary: citizen can't do vaccination during affected time, and can do vaccination immedietly after healing but still follow the vaccination rule about spacing time and vaccine type
+
+create or replace trigger REG_VACCINATION_TARGET
+after insert on REGISTER
+as
+	LastHealth HEALTH%rowtype;
+begin
+	--Select out the last medical declaration of the citizen
+	select * into LastHealth
+	from HEALTH
+	where HEALTH.PersonalID = :new.PersonalID
+	having Health.FilledDate = MAX(Health.FilledDate)
+
+	--Check vaccination target type
+	if ( SUBSTR(LastHealth.Healths, 4, 1) = '1' )
+	then	
+		raise_application_error(100005, 'You can not register vaccination due to your target type!')
+	end if;
+
+	--Check Covid-19 affected
+	if ( (SUBSTR(LastHealth.Healths, 3, 1) = '1') and (extract(day from SYSDATE - LastHealth.FilledDate) <= 14) )
+	then
+		raise_application_error(100006, 'You have been affected by Covid-19 recent days, please wait until you completely healed')
+	end if;
+
+end REG_VACCINATION_TARGET;
 
 
 
