@@ -30,7 +30,7 @@ create table ORGANIZATION
 /*	CONSTRAINT	*/
 --Primary Key
 alter table ORGANIZATION 
-add constraint PK_ORGANIZATION primary key (ID);
+add constraint PK_ORG primary key (ID);
 
 --Foreign Key
 alter table ORGANIZATION 
@@ -55,6 +55,7 @@ create or replace procedure ORG_INSERT_RECORD (par_ID ORGANIZATION.ID%type,
                                              par_Province ORGANIZATION.Province%type,
                                              par_District ORGANIZATION.District%type,
                                              par_Town ORGANIZATION.Town%type,
+<<<<<<< HEAD
                                              par_Street ORGANIZATION.Street%type)                                           
 as 
 begin
@@ -65,30 +66,52 @@ begin
     NULL);
     
 end;
+=======
+                                             par_Street ORGANIZATION.Street%type
+			par_Note  ORGANIZATION.Note%type)                                           
+as 
+begin
+    --insert new ORGANIZATION
+	insert into ORGANIZATION(ID, Name, Province, District, Town, Street, Note) 
+	values (par_ID, par_Name, par_Province, par_District, par_Town, par_Street, par_Note);
+end ORG_INSERT_RECORD;
+>>>>>>> 634e1aec40f6d2809f9df05cd12ac7617e54cc6a
 
 --Delete
 create or replace procedure ORG_DELETE_RECORD (par_ID ORGANIZATION.ID%type)
 as
 begin
+<<<<<<< HEAD
     ----delete record ORGANIZATION
     delete 
     from ORGANIZATION
     where ID=par_ID;
 end;
+=======
+    delete *
+    from ORGANIZATION
+    where ID = par_ID;
+end ORG_DELETE_RECORD;
+>>>>>>> 634e1aec40f6d2809f9df05cd12ac7617e54cc6a
 
 --Update
 create or replace procedure ORG_UPDATE_RECORD (par_ID ORGANIZATION.ID%type,
                                                 par_Name ORGANIZATION.Name%type,
+<<<<<<< HEAD
                                                 par_Province ORGANIZATION.Province%type,
                                                 par_District ORGANIZATION.District%type,
                                                 par_Town ORGANIZATION.Town%type,
                                                 par_Street ORGANIZATION.Street%type,
                                                 par_Note ORGANIZATION.Note%type)
+=======
+                                                par_Province ORGANIZATION.Province%type)
+>>>>>>> 634e1aec40f6d2809f9df05cd12ac7617e54cc6a
 as
 begin
     --Update record ORGANIZATION
 
     update ORGANIZATION
+<<<<<<< HEAD
     set Name=par_Name,
         Province=par_Province,
         District=par_District,
@@ -97,6 +120,12 @@ begin
         Note=par_Note
     where ID=par_ID;
 end;
+=======
+    set Name = par_Name,
+        Province = par_Province
+    where ID = par_ID;
+end ORG_UPDATE_RECORD;
+>>>>>>> 634e1aec40f6d2809f9df05cd12ac7617e54cc6a
 
 
 
