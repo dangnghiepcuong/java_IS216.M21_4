@@ -16,7 +16,7 @@ create table ANNOUNCEMENT
     --Content for announcement
     Content varchar2(4000),
     
-    --Publication date of the ANNOUNCEannouncementMENT
+    --Publication date of the ANNOUNCEMENT
     PublishDate date,
     
     --Attach pictures
@@ -30,7 +30,7 @@ create table ANNOUNCEMENT
 /*	CONSTRAINT	*/s
 --Primary Key
 alter table ANNOUNCEMENT 
-add constraint PK_ANNOUNCEMENT primary key (ID,OrgID);
+add constraint PK_ANN primary key (ID,OrgID);
 
 --Foreign Key
 alter table ANNOUNCEMENT
@@ -54,7 +54,7 @@ BEGIN
         then
             DBMS_OUTPUT.PUT_LINE('Da them thanh cong');
         else
-            RAISE_APPLICATION_ERROR(-20000,'PublishDate khong hop le, vui long nhap lai') ;
+            RAISE_APPLICATION_ERROR(-20000,'Publish date must follows the system date!') ;
         end if;
 END;
 

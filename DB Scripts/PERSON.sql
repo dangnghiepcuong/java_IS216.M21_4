@@ -8,17 +8,13 @@ create table PERSON
 (
     --Identity of the citizen
     ID varchar2(12) not null,
-<<<<<<< HEAD
     
     --Last name of the citizen
     LastName varchar2(100),
-    
-=======
 
     --Last name of the citizen
     LastName varchar2(100),
 
->>>>>>> 59609e5b95ce45eeec3cb7affd2e75723127486f
     --First name of the citizen
     FirstName varchar2(50),
 
@@ -69,8 +65,7 @@ add constraint FK_PERSON_GUAR foreign key (Guardian) references PERSON(ID);
 
 
 --Check
-
---Check first name does not contain the character ' '
+--Check first name does not contain space
 alter table PERSON
 add constraint CK_PERSON_FIRSTNM check (FirstName not like '% %');
 
