@@ -15,7 +15,7 @@ create table ACCOUNT
     --PersonalID FK references PERSON(ID)
     PersonalID varchar2(12),
 
-    --Role of an account, value of {0, 1, 2} | 0: MOH, 1: Organizations, 2: Citizens
+    --Role of an account, value in {0, 1, 2} | 0: MOH, 1: Organizations, 2: Citizens
     Role number(1)
 );
 

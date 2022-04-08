@@ -50,9 +50,14 @@ add constraint CK_REG_Status CHECK(Status in (0,1,2,3));
 
 
 /*	TRIGGERS	*/
+<<<<<<< HEAD
+create or replace trigger REG_NO_Limit
+after update on REGISTER
+=======
 --NO <= the number of Limit due to the register Time
 create or replace trigger REG_NO_Limit
 after insert on REGISTER
+>>>>>>> 2aaefa66f8445c2bf0e4225ce4451a64db0ddc3c
 for each row
 as
 	set_NO REGISTER.NO%type;	
@@ -62,13 +67,19 @@ begin
 
 	if (set_NO = 0)
 	then
+<<<<<<< HEAD
+		raise_application_error(100003, 'The registion is limited!')
+	end if;
+end;
+=======
 		raise_application_error(10003, 'The registion is limited!')
 	end if;
 end;
 
---The registered injection must follow the spacing rule of the previous vaccine injection (if have)
---The vaccine used in the registered schedule must be compitable with the previous vaccine injection (if have)
 
+--The registered schedule must follow the rule of vaccination (spacing time and vaccine type)
+--+ Spacing time: the registered injection must follow the spacing rule of the previous vaccine injection (if have)
+--+ Vaccine tpy: the vaccine used in the registered schedule must be compitable with the previous vaccine injection (if have)
 create or replace trigger REG_VACCINATION_RULE
 after insert on REGISTER
 for each row
@@ -103,8 +114,8 @@ begin
 	and CONSTRAINT.VaccineID = PreVac
 	and CONSTRAINT.PreDose = INJ_Difference(:new.PersonalID);
 	
-	--Check spacing rule: :new.OnDate - OnDate from PrevInj.SchedID must equal ConstCase.NextDistance
-	if (:new.OnDate - (select OnDate from SCHEDULE where SCHEDULE.ID = PrevInj.SchedID) < ConstCase.NextDistance-3)
+	--Check spacing rule: :new.OnDate - OnDate from PrevInj.SchedID must equal ConstCase.MinDistance
+	if (:new.OnDate - (select OnDate from SCHEDULE where SCHEDULE.ID = PrevInj.SchedID) < ConstCase.MinDistance-3)
 	then
 		raise_application_error(100004, 'Cannot register to this schedule due to the invalid in spacing rule!')
 	end if;
@@ -119,8 +130,37 @@ begin
 
 end REG_VACCINATION_RULE;
 
+--The citizen whose vaccination target type is vaccination delaying or incompitable vaccination cannot register
+--The citizen affected by Covid-19 can complete basic dose after healing. If you have completed basic dose before affected by Covid-19, it doesn't necessary to make an additional dose. 
+--Summary: citizen can't do vaccination during affected time, and can do vaccination immedietly after healing but still follow the vaccination rule about spacing time and vaccine type
+
+create or replace trigger REG_VACCINATION_TARGET
+after insert on REGISTER
+as
+	LastHealth HEALTH%rowtype;
+begin
+	--Select out the last medical declaration of the citizen
+	select * into LastHealth
+	from HEALTH
+	where HEALTH.PersonalID = :new.PersonalID
+	having Health.FilledDate = MAX(Health.FilledDate)
+
+	--Check vaccination target type
+	if ( SUBSTR(LastHealth.Healths, 4, 1) = '1' )
+	then	
+		raise_application_error(100005, 'You can not register vaccination due to your target type!')
+	end if;
+
+	--Check Covid-19 affected
+	if ( (SUBSTR(LastHealth.Healths, 3, 1) = '1') and (extract(day from SYSDATE - LastHealth.FilledDate) <= 14) )
+	then
+		raise_application_error(100006, 'You have been affected by Covid-19 recent days, please wait until you completely healed')
+	end if;
+
+end REG_VACCINATION_TARGET;
 
 
+>>>>>>> 2aaefa66f8445c2bf0e4225ce4451a64db0ddc3c
 
 /*	STORED PROCEDURES	*/
 --Insert value for a registion
@@ -137,6 +177,41 @@ begin
 	SCHED_INC_REG(SchedID, par_TimeReg);
 end REG_INSERT_RECORD;
 
+<<<<<<< HEAD
+/*	STORED FUNCTIONS	*/
+--Put in PersonalID, SchedId, TimeRegistered. Return the NO of registion. If the registion meet the limit, return 0
+create or replace function REG_SIGNED_NO (par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type, par_TimeReg REGISTER.Time%type)
+return number is
+	--par_ to get the present value of the registered time limit number
+	RegNumber REGISTER.NO%type;
+	LimitReg REGISTER.NO%type;
+begin
+	--from the registered time, select its limit number from SCHEDULE
+	select RegNumber, LimitReg
+		case par_TimeReg when 0 then DayRegistered, LimitDay
+			when 1 then NoonRegistered, LimitNoon
+			when 2 then NightRegistered, LimitNight
+		else
+			raise_application_error(100001, 'Time registion not found!')
+		end
+	from SCHEDULE
+	where SCHEDULE.ID = par_SchedID
+	and SCHEDULE.PersonalID = par_PersonalID;	
+	
+	--If the number of registion meet the limit of at that time, return 0
+	if (RegNumber = LimitReg)
+	then
+		return 0
+	end if;
+	
+	--After getting the Limit number
+	--Set the NO for registion by Limit number + 1
+	update REGISTER
+	set NO = RegNumber + 1;
+	where REGISTER.PersonalID = par_PersonalID
+	and REGISTER.SchedID = par_SchedID;
+end REG_SIGNED_NO;
+=======
 --Canceled a registion	
 create or replace procedure REG_DELETE_RECORD(par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type)
 as
@@ -156,6 +231,7 @@ begin
 
 end REG_DELETE_RECORD;
 
+>>>>>>> 2aaefa66f8445c2bf0e4225ce4451a64db0ddc3c
 
 /*	STORED FUNCTIONS	*/
 --Return the NO of registion. If the registion meet the limit, return 0
@@ -188,3 +264,5 @@ begin
 end REG_SIGNED_NO;
 
 /*	RECORDS	*/
+
+
