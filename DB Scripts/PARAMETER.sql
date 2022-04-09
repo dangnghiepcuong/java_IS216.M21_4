@@ -5,11 +5,22 @@
 
 create table PARAMETER
 (
+	--InjectionNO for parameter to references to
 	InjectionNO number,
+
+	--VaccineID for parameter to references to
 	VaccineID varchar2(8),
+
+	--Minimum spacing time between the register dose and this referencing dose
 	MinDistance number,
-	PreDose varchar2(100),
+
+	--Verify the difference between previous doses
+	PreDose number(1),
+
+	--The allowed vaccine for the registion dose
 	NextDose varchar2(100),
+
+	--Note of the parameter
 	Note varchar2(2000)
 )
 
