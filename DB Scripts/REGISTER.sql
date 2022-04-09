@@ -75,6 +75,7 @@ end;
 --The registered schedule must follow the rule of vaccination (spacing time and vaccine type)
 --+ Spacing time: the registered injection must follow the spacing rule of the previous vaccine injection (if have)
 --+ Vaccine tpy: the vaccine used in the registered schedule must be compitable with the previous vaccine injection (if have)
+
 create or replace trigger REG_VACCINATION_RULE
 after insert on REGISTER
 for each row
@@ -96,13 +97,10 @@ begin
  		then commit
 	END;
 
-	--Check the completed doses: If the citizen have done 4 dose (2 basic, 1 booster, 1 repeat) or 3 dose (2 basic, 1 repeat), she cannot register anymore.
-	if (PreInj.InjNO = 4)
+	--Check the completed doses: If the citizen have done 4 doses (2 basic, 1 booster, 1 repeat) or 3 doses (2 basic, 1 repeat), she cannot register anymore.
+	if ( (PreInj.InjNO = 4) OR (PreInj.InjNO = 3 and PreInj.Type = repeat) )
 	then
 		raise_application_error(10006,'You have completed all vaccination doses!') 
-	elseif (PreInj.InjNO = 3 and PreInj.Type = repeat)
-	then
-		raise_application_error(10006,'You have completed all vaccination doses!')
 	end if;
 
 
