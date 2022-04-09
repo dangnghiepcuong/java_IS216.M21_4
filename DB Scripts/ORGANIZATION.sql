@@ -55,19 +55,7 @@ create or replace procedure ORG_INSERT_RECORD (par_ID ORGANIZATION.ID%type,
                                              par_Province ORGANIZATION.Province%type,
                                              par_District ORGANIZATION.District%type,
                                              par_Town ORGANIZATION.Town%type,
-<<<<<<< HEAD
-                                             par_Street ORGANIZATION.Street%type)                                           
-as 
-begin
-    --insert new record ORGANIZATION
-    
-	insert into ORGANIZATION(ID, Name, Province, District, Town, Street, Note) 
-    values (par_ID, par_Name, par_Province, par_District, par_Town, par_Street,
-    NULL);
-    
-end;
-=======
-                                             par_Street ORGANIZATION.Street%type
+                                             par_Street ORGANIZATION.Street%type)
 			par_Note  ORGANIZATION.Note%type)                                           
 as 
 begin
@@ -75,57 +63,42 @@ begin
 	insert into ORGANIZATION(ID, Name, Province, District, Town, Street, Note) 
 	values (par_ID, par_Name, par_Province, par_District, par_Town, par_Street, par_Note);
 end ORG_INSERT_RECORD;
->>>>>>> 634e1aec40f6d2809f9df05cd12ac7617e54cc6a
+
+                                     
+
+
 
 --Delete
 create or replace procedure ORG_DELETE_RECORD (par_ID ORGANIZATION.ID%type)
 as
 begin
-<<<<<<< HEAD
     ----delete record ORGANIZATION
     delete 
     from ORGANIZATION
-    where ID=par_ID;
-end;
-=======
-    delete *
-    from ORGANIZATION
     where ID = par_ID;
 end ORG_DELETE_RECORD;
->>>>>>> 634e1aec40f6d2809f9df05cd12ac7617e54cc6a
 
 --Update
 create or replace procedure ORG_UPDATE_RECORD (par_ID ORGANIZATION.ID%type,
                                                 par_Name ORGANIZATION.Name%type,
-<<<<<<< HEAD
                                                 par_Province ORGANIZATION.Province%type,
                                                 par_District ORGANIZATION.District%type,
                                                 par_Town ORGANIZATION.Town%type,
                                                 par_Street ORGANIZATION.Street%type,
                                                 par_Note ORGANIZATION.Note%type)
-=======
                                                 par_Province ORGANIZATION.Province%type)
->>>>>>> 634e1aec40f6d2809f9df05cd12ac7617e54cc6a
 as
 begin
-    --Update record ORGANIZATION
-
-    update ORGANIZATION
-<<<<<<< HEAD
-    set Name=par_Name,
-        Province=par_Province,
-        District=par_District,
-        Town=par_Town,
-        Street=par_Street,
-        Note=par_Note
-    where ID=par_ID;
-end;
-=======
-    set Name = par_Name,
-        Province = par_Province
-    where ID = par_ID;
+    	--Update record ORGANIZATION
+    	update ORGANIZATION
+    	set Name = par_Name,
+        	Province = par_Province,
+        	District = par_District,
+        	Town = par_Town,
+        	Street = par_Street,
+        	Note = par_Note
+    	where ID = par_ID;
 end ORG_UPDATE_RECORD;
->>>>>>> 634e1aec40f6d2809f9df05cd12ac7617e54cc6a
 
 
 
@@ -139,22 +112,22 @@ create or replace function ORG_COUNT_SCHED (par_ID ORGANIZATION.ID%type,
                                             par_StatDate date,
                                             par_EndDate date)
 return number is 
---return value of count schedule
-    Count_Sched int;
+    	Count_Sched int;
 begin
-    --assign value 0 for Count_Sched
-    Count_Sched :=0; 
-   --check start date must be less than or equal to end date
-    if (par_StatDate<=par_EndDate) then
-    begin
-        --from the schedule, count OrgID
-        select count(OrtgID) into Count_Sched
-        from SCHEDULE SCHED
-        where SCHED.OnDate >= par_StatDate and SCHED.OnDate <= par_EndDate;
-    end;
-    else 
-        DBMS_OUTPUT.PUT_LINE('start date must be less than or equal to end date');
-    end if;
+    	--set value 0 for Count_Sched
+    	Count_Sched := 0; 
+
+   	--check start date must be less than or equal to end date
+    	if (par_StatDate <= par_EndDate) then
+    	begin
+       		--from the schedules, count OrgID
+        		select COUNT(OrtgID) into Count_Sched
+        		from SCHEDULE SCHED
+        		where SCHED.OnDate >= par_StatDate and SCHED.OnDate <= par_EndDate;
+    	end;
+    	else 
+        		DBMS_OUTPUT.PUT_LINE('start date must be less than or equal to end date');
+    	end if;
 end;
 
 --Count the number of injections have been done by the ORG from StartDate to EndDate
@@ -162,28 +135,41 @@ create or replace function ORG_COUNT_INJ (par_ID ORGANIZATION.ID%type,
                                             par_StatDate date,
                                             par_EndDate date)
 return number is 
---return value of count schedule
-    Count_Inj int;
+	--return value of count schedule
+   	Count_Inj int;
     
 begin
-    if (par_StatDate<=par_EndDate) then
-    begin
-    ---count the number of injections have been done by the ORG from StartDate 
-    --to EndDate
-        select count(status) into Count_Inj, sched.ID
-        from SCHEDULE sched join REGISTER reg on reg.SCHEDID=sched.ID
-        where reg.Status=2 and SCHED.OnDate >= par_StatDate
-              and SCHED.OnDate <= par_EndDate
-        group by sched.ID;
+    	if (par_StatDate <= par_EndDate) then
+    	begin
+    		--count the number of injections have been done by the ORG from StartDate to EndDate
+        		select COUNT(Status) into Count_Inj, sched.ID
+        		from SCHEDULE SCHED join REGISTER REG on REG.SchedID = SCHED.ID
+        		where reg.Status=2 and SCHED.OnDate >= par_StatDate
+              		and SCHED.OnDate <= par_EndDate
+        		group by SCHED.ID;
         
-        if(Count_Inj = 0) then
-            dbms_output.put_line('no previous injections');
-        end if;
-    end;
-    else 
-        DBMS_OUTPUT.PUT_LINE('start date must be less than or equal to end date');
-    end if;
-    
+        		if(Count_Inj = 0) then
+            			dbms_output.put_line('no previous injections');
+        		end if;
+    	end;
+    	else 
+        		DBMS_OUTPUT.PUT_LINE('start date must be less than or equal to end date');
+   	end if;
+
+	--Nghiep Cuong: FIX Function
+    	if (par_StatDate <= par_EndDate) then
+	begin
+		select COUNT(REG.Status) into Count_Inj
+		from SCHEDULE SCHED, REGISTER REG
+		where SCHED.ID = REG.SchedID
+		and SCHED.OnDate >= par_StartDate
+		and SCHED.OnDate <= par_EndDate
+		and REG.Status = 2;
+	end;
+	else
+		raise_application_error(100007,'Start date must be less than or equal to end date!');
+	end if;
+
 end;
 
 
