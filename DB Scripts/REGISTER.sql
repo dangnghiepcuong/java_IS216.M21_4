@@ -174,15 +174,33 @@ create or replace procedure REG_INSERT_RECORD (par_PersonalID PERSON.ID%type, pa
 as
 	set_NO REGISTER.NO%type;
 begin
+	--Take 1 slot in schedule
+	SCHED_INC_REG(SchedID, par_TimeReg);
+
 	--Use S_FUNC to calculate the NO of registion
 	select REG_SIGNED_NO(:new.PersonalID, :new.SchedID, :new.Time) into set_NO
 	
 	--Check the type of registing dose
+	--Find the previous injection info
+	select * into PreInj
+	from INJECTION
+	where INJECTION.PersonalID = :new.PersonalID
+	having InjNO = MAX(InjNO);
+	
+	--If cannot find a previous injection, it means this is the first injection. Then allow to register.
+	EXCEPTION
+		when no_data_found
+ 		then commit
+	END;
+
+	if (PreInj.InjNO = 2)
+	then
+		--Ask user to input type of register dose
+	end if;
 	
 	--insert new registion
-	insert into REGISTER(PersonalID, SchedID, Time, NO, Status, Image, Note) values (par_PersonalID, par_SchedID, par_TimeReg, set_NO, 0, NULL, NULL);
+	insert into REGISTER(PersonalID, SchedID, Type, Time, NO, Status, Image, Note) values (par_PersonalID, par_SchedID, par_Type, par_TimeReg, set_NO, 0, NULL, NULL);
 
-	SCHED_INC_REG(SchedID, par_TimeReg);
 end REG_INSERT_RECORD;
 
 
