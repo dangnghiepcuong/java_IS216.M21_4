@@ -80,7 +80,7 @@ after insert on REGISTER
 for each row
 as
 	PreInj INJECTION%rowtype;
-	ConstCase CONSTRAINT%rowtype;
+	ParCase PARAMETER%rowtype;
 	RegVac VACCINE.ID%type;
 	PreVac VACCINE.ID%type;
 begin
@@ -113,22 +113,22 @@ begin
 	select VaccineID into RegVac from :new.SchedID;
 	
 	--Reference the PreInj to CONSTRAINT cases to select out the rule
-	select * into ConstCase
-	from CONSTRAINT
-	where CONSTRAINT.InjectionNO = PrevInj.InjNO
-	and CONSTRAINT.VaccineID = PreVac
-	and CONSTRAINT.PreDose = INJ_Difference(:new.PersonalID);
+	select * into ParCase
+	from PARAMETER
+	where PARAMETER.InjectionNO = PrevInj.InjNO
+	and PARAMETER.VaccineID = PreVac
+	and PARAMETER.PreDose = INJ_Difference(:new.PersonalID);
 	
 	
 
-	--Check spacing rule: :new.OnDate - OnDate from PrevInj.SchedID must equal ConstCase.MinDistance
-	if (:new.OnDate - (select OnDate from SCHEDULE where SCHEDULE.ID = PrevInj.SchedID) < ConstCase.MinDistance-3)
+	--Check spacing rule: :new.OnDate - OnDate from PrevInj.SchedID must equal ParCase.MinDistance
+	if (:new.OnDate - (select OnDate from SCHEDULE where SCHEDULE.ID = PrevInj.SchedID) < ParCase.MinDistance-3)
 	then
 		raise_application_error(100004, 'Cannot register to this schedule due to the invalid in spacing rule!')
 	end if;
 
-	--Check vaccine combination rule: vaccine from registered schedule must be contained in ConstCase.NextDose	
-	if (CONTAINS(ConstCase.NextDose, RegVac, 1) > 0)
+	--Check vaccine combination rule: vaccine from registered schedule must be contained in ParCase.NextDose	
+	if (CONTAINS(ParCase.NextDose, RegVac, 1) > 0)
 	then
 		comit
 	else
