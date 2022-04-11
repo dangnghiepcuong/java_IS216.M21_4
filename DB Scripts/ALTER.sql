@@ -1,6 +1,4 @@
 /*	ALTER DATABASE COMMAND	*/
-
-
 /*	20520418	- Dang Nghiep Cuong		
 Written: 
 Executed: 

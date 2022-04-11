@@ -1,3 +1,4 @@
+--test git
 --20521252 - Lê Hoàng Duyên
 /*          TABLE: ACCOUNT          */
 --Create a table struct without constraint
