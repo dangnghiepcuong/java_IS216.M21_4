@@ -15,8 +15,6 @@ create table INJECTION
     --SchedlID FK references SCHEDULE(ID)
     SchedID varchar2(10),
     
-    --Type of the injection, value in { 0, 1, 2} | 0: basic injection dose, 1: basic injection dose, 2: booster dose  
-    Type number(1),
     
     --Note on the injection
     Note varchar2(2000)
@@ -39,7 +37,7 @@ add constraint FK_INJECTION_SchedID foreign key (SchedID) references SCHEDULE(ID
 
 --Check
 alter table INNJECTION
-add constraint CK_INJECTION_InjNO check (InjNO in (
+add constraint CK_INJECTION_InjNO check (InjNO in (1, 2, 3, 4));
 
 
 /*	TRIGGERS	*/

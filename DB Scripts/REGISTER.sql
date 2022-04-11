@@ -1,4 +1,4 @@
---test git
+---....
 --20520418 - Đặng Nghiệp Cường
 /*          TABLE: REGISTER          */
 --Create a table struct without constraint

@@ -11,12 +11,9 @@ create table PERSON
     
     --Last name of the citizen
     LastName varchar2(100),
-<<<<<<< HEAD
 
     --Last name of the citizen
     LastName varchar2(100),
-=======
->>>>>>> 52159c84ca409efb6ab582f409dfe70c320541d3
 
     --First name of the citizen
     FirstName varchar2(50),
