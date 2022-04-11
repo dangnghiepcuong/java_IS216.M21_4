@@ -49,9 +49,6 @@ create table PERSON
     --Last name of the citizen
     LastName varchar2(100),
 
-    --Last name of the citizen
-    LastName varchar2(100),
-
     --First name of the citizen
     FirstName varchar2(50),
 
