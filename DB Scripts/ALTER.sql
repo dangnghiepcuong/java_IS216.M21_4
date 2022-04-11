@@ -19,7 +19,7 @@ Executed:
 */
 
 /*	20521890 - Truong Nguyen Quang Thai	
-Written: 
+Written: 5,10
 Executed:
 */
 
@@ -83,6 +83,57 @@ create table PERSON
     Guardian varchar2(12),
 
     --Note on the citizen
+    Note varchar2(2000)
+);
+
+--5
+create table ORGANIZATION
+(
+    --Identifier of organization, ID FK references ACCOUNT(OrgID)
+    ID varchar2(16),
+    
+    --Name of organization..
+    Name varchar2(100),
+    
+    --Province of organization
+    Province varchar2(50),
+    
+    --District of organization
+    District varchar2(50),
+    
+    --Town of organization
+    Town varchar2(50),
+    
+    --Street of organization
+    Street varchar2(100),
+    
+    --Note of organization
+    Note varchar2(2000)
+);
+
+
+--10
+create table ANNOUNCEMENT
+(
+--ID 
+    ID varchar2(50),
+    
+    --OrganizationID FK references ORGANIZATION(ID)
+    OrgID varchar2(16),
+    
+    --Titel for announcement
+    Title varchar2(200),
+    
+    --Content for announcement
+    Content varchar2(4000),
+    
+    --Publication date of the ANNOUNCEMENT
+    PublishDate date,
+    
+    --Attach pictures
+    Image blob,
+    
+    --Health notes
     Note varchar2(2000)
 );
 
