@@ -1,9 +1,11 @@
-/*	ALTER DATABASE COMMAND	*/
-
+/*	ALTER DATABASE COMMAND	
+WRITE: create, insert, update, delete, select into
+READ: select
+*/
 
 /*	20520418	- Dang Nghiep Cuong		
-Written: 
-Executed: 
+Written:
+Executed:
 */
 
 /*	20521252 -  Le Hoang Duyen		
@@ -20,4 +22,7 @@ Executed:
 Written: 
 Executed:
 */
+
+/*	LOG	*/
+
 
