@@ -45,77 +45,28 @@ create table SCHEDULE
 /*	CONSTRAINT	*/
 --Primary Key
 alter table SCHEDULE
-add constraint PK_SCHED primary key (ID);
+add constraint PK_SCHEDULE primary key
 
 --Foreign Key
 alter table SCHEDULE
-add constraint FK_SCHED_ORG foreign key OrgID references ORGANIZATION(ID);
+add constraint FK_SCHED_ORG foreign key OrgID references ORGANIZATION(ID)
 
 alter table SCHEDULE
-add constraint FK_SCHED_VAC foreign key VaccineID references VACCINE(ID);
+add constraint FK_SCHED_VAC foreign key VaccineID references VACCINE(ID)
 
 --Check
 alter table SCHEDULE
-add constraint CK_SCHED_Date CHECK(Date > SYSDATE);
+add constraint CK_Date CHECK(Date > SYSDATE)
 
 /*	TRIGGERS	*/
--- DayRegistered <= LimitDay
-create or replace trigger SCHED_Limit_Registers
+create or replace trigger Limit_Register_Day
 after insert or update on SCHEDULE
 for each row
 begin
-	if (:new.DayRegistered > :new.LimitDay
-	OR :new.NoonRegistered > :new.LimitNoon
-	OR :new.NightRegistered > :new.LimitNight)
-	then
-		raise_application_error(10000, 'Number of register is limited!');
-	end if;
-end Limit_Registers;	
 
 /*	STORED PROCEDURES	*/
- --Increase 1 registion at Time parameter
-create or replace procedure SCHED_INC_REG(par_ID SCHEDULE.ID%type, par_RegTime REGISTER.Time%type)
-as
-begin
-	if (par_RegTime = 0)
-	then
-		update SCHEDULE
-		set DayRegistered = DayRegistered + 1
-		where SCHEDULE.ID = par_ID
- 	elseif (par_RegTime = 1)
-	then
-		update SCHEDULE
-		set NoonRegistered = NoonRegistered + 1
-		where SCHEDULE.ID = par_ID
-	elseif (par_RegTime = 2)
-	then
-		update SCHEDULE
-		set NightRegistered = NightRegistered + 1
-		where SCHEDULE.ID = par_ID
-	endif;
-end;
 
---Decrease 1 registion at Time parameter
-create or replace procedure SCHED_DEC_REG(par_SchedID SCHEDULE.ID%type, RegTime REGISTER.Time%type)
-as
-begin
-	if (par_RegTime = 0)
-	then
-		update SCHEDULE
-		set DayRegistered = DayRegistered - 1
-		where SCHEDULE.ID = par_ID
- 	elseif (par_TimeReg = 1)
-	then
-		update SCHEDULE
-		set NoonRegistered = NoonRegistered - 1
-		where SCHEDULE.ID = par_ID
-	elseif (par_TimeReg = 2)
-	then
-		update SCHEDULE
-		set NightRegistered = NightRegistered - 1
-		where SCHEDULE.ID = par_ID
-	endif;
-end SCHED_DEC_REG;
+
 
 /*	STORED FUNCTIONS	*/
 

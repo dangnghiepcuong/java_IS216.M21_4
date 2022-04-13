@@ -1,5 +1,5 @@
---20521252 - Lê Hoàng Duyên
-/*          TABLE: VACCINE          */
+--20520418 - Đặng Nghiệp Cường
+/*          TABLE: CONSTRAINT          */
 --Create a table struct without constraint
 --<Attribute name> <Data type>
 
