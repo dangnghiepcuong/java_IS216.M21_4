@@ -57,7 +57,7 @@ after update on REGISTER
 create or replace trigger REG_NO_Limit
 after insert on REGISTER
 for each row
-as
+declare
 	set_NO REGISTER.NO%type;	
 begin
 	--Calc the NO of registion
