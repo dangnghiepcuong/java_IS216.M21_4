@@ -1,4 +1,4 @@
---test git
+
 -- 20521890 - Trương Nguyễn Quang Thái
 /*          TABLE: ORGANIZATION          */
 --Create a table struct without constraint
@@ -6,7 +6,7 @@
 create table ORGANIZATION
 (
     --Identifier of organization, ID FK references ACCOUNT(OrgID)
-    ID varchar2(16),
+    ID varchar2(5),
     
     --Name of organization..
     Name varchar2(100),
