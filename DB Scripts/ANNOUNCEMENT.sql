@@ -27,7 +27,7 @@ create table ANNOUNCEMENT
 );
 
 
-/*	CONSTRAINT	*/s
+/*	CONSTRAINT	*/
 --Primary Key
 alter table ANNOUNCEMENT 
 add constraint PK_ANN primary key (ID,OrgID);
