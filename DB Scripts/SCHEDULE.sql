@@ -38,7 +38,7 @@ create table SCHEDULE
 
 	--Note of record
 	Note varchar2(2000)
-)
+);
 
 
 

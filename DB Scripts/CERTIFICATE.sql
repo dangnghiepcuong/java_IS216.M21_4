@@ -16,7 +16,7 @@ create table CERTIFICATE
 	
 	--Note of certificate
 	Note varchar2(2000),
-)
+);
 
 
 /*	CONSTRAINT	*/
