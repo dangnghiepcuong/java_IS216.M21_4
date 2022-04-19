@@ -1,4 +1,4 @@
---20520418 - Đặng Nghiệp Cường
+--20520418 - �?ặng Nghiệp Cư�?ng
 /*          TABLE: SCHEDULE          */
 --Create a table struct without constraint
 --<Attribute name> <Data type>
@@ -49,10 +49,10 @@ add constraint PK_SCHED primary key (ID);
 
 --Foreign Key
 alter table SCHEDULE
-add constraint FK_SCHED_ORG foreign key OrgID references ORGANIZATION(ID);
+add constraint FK_SCHED_ORG foreign key (OrgID) references ORGANIZATION(ID);
 
 alter table SCHEDULE
-add constraint FK_SCHED_VAC foreign key VaccineID references VACCINE(ID);
+add constraint FK_SCHED_VAC foreign key (VaccineID) references VACCINE(ID);
 
 --Check
 alter table SCHEDULE

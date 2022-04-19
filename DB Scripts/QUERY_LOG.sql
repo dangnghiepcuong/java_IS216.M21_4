@@ -24,7 +24,11 @@ Executed:
 */
 
 /*	LOG	*/
---1.
+/*
+========================================================
+                    TABLE ACCOUNT
+========================================================
+*/
 create table ACCOUNT
 (
     --Username of an account
@@ -44,7 +48,12 @@ create table ACCOUNT
     Note varchar2(2000)
     
 );
---2
+
+/*
+========================================================
+                    TABLE PERSON
+========================================================
+*/
 create table PERSON
 (
     --Identity of the citizen
@@ -90,7 +99,11 @@ create table PERSON
     Note varchar2(2000)
 );
 
---3
+/*
+========================================================
+                    TABLE VACCINE
+========================================================
+*/
 create table VACCINE 
 (
 	--ID of vaccine
@@ -109,7 +122,11 @@ create table VACCINE
     	Note varchar2(2000)
 );
 
---4
+/*
+========================================================
+                    TABLE INJECTION
+========================================================
+*/
 create table INJECTION
 (
     --PersonalID FK references PERSON(ID)
@@ -126,7 +143,11 @@ create table INJECTION
     Note varchar2(2000)
 );
 
---5
+/*
+========================================================
+                TABLE ORGANIZATION
+========================================================
+*/
 create table ORGANIZATION
 (
     --Identifier of organization, ID FK references ACCOUNT(OrgID)
@@ -151,32 +172,12 @@ create table ORGANIZATION
     Note varchar2(2000)
 );
 
---6
-create table ORGANIZATION
-(
-    --Identifier of organization, ID FK references ACCOUNT(OrgID)
-    ID varchar2(16),
-    
-    --Name of organization..
-    Name varchar2(100),
-    
-    --Province of organization
-    Province varchar2(50),
-    
-    --District of organization
-    District varchar2(50),
-    
-    --Town of organization
-    Town varchar2(50),
-    
-    --Street of organization
-    Street varchar2(100),
-    
-    --Note of organization
-    Note varchar2(2000)
-);
 
---7
+/*
+========================================================
+                TABLE SCHEDULE
+========================================================
+*/
 create table SCHEDULE
 (
 	--Identity of a schedule, created from OrgID+DateNumber+NO
@@ -213,7 +214,11 @@ create table SCHEDULE
 	Note varchar2(2000)
 );
 
---8
+/*
+========================================================
+                TABLE PERSON
+========================================================
+*/
 create table REGISTER
 (
 	--PersonalID of a person
@@ -238,7 +243,11 @@ create table REGISTER
 	Note varchar2(2000)
 );
 
---9
+/*
+========================================================
+                TABLE CERTIFICATE
+========================================================
+*/
 create table CERTIFICATE
 (
 	--PersonalID FK references PERSON(ID)
@@ -254,7 +263,11 @@ create table CERTIFICATE
 	Note varchar2(2000)
 );
 
---10
+/*
+========================================================
+                TABLE HEALTH
+========================================================
+*/
 create table HEALTH
 (
 	PersonalID varchar2(12),
@@ -263,7 +276,11 @@ create table HEALTH
 	Note varchar2(2000)
 );
 
---11
+/*
+========================================================
+                TABLE ANNOUNCEMENT
+========================================================
+*/
 create table ANNOUNCEMENT
 (
 --ID 
@@ -288,7 +305,11 @@ create table ANNOUNCEMENT
     Note varchar2(2000)
 );
 
---11
+/*
+========================================================
+                TABLE PARAMETER
+========================================================
+*/
 create table PARAMETER
 (
 	--InjectionNO for parameter to references to
@@ -310,7 +331,11 @@ create table PARAMETER
 	Note varchar2(2000)
 );
 
---12
+/*
+========================================================
+                TABLE STATISTIC
+========================================================
+*/
 create table STATISTIC
 (
 	--Title of statistic

@@ -51,17 +51,14 @@ add constraint CK_REG_Status CHECK(Status in (0,1,2,3));
 
 
 /*	TRIGGERS	*/
-create or replace trigger REG_NO_Limit
-after update on REGISTER
 --NO <= the number of Limit due to the register Time
 create or replace trigger REG_NO_Limit
-after insert on REGISTER
-for each row
+before insert on REGISTER
 declare
 	set_NO REGISTER.NO%type;	
 begin
 	--Calc the NO of registion
-	select REG_SIGNED_NO(:new.PersonalID, :new.SchedID, :new.Time) into set_NO
+	select REG_SIGNED_NO(:new.PersonalID, :new.SchedID, :new.Time) into set_NO;
 
 	if (set_NO = 0)
 	then
