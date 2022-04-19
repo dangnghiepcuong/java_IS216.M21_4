@@ -8,7 +8,7 @@ create table ANNOUNCEMENT
     ID varchar2(50),
     
     --OrganizationID FK references ORGANIZATION(ID)
-    OrgID varchar2(16),
+    OrgID varchar2(5),
     
     --Titel for announcement
     Title varchar2(200),
@@ -27,7 +27,7 @@ create table ANNOUNCEMENT
 );
 
 
-/*	CONSTRAINT	*/s
+/*	CONSTRAINT	*/
 --Primary Key
 alter table ANNOUNCEMENT 
 add constraint PK_ANN primary key (ID,OrgID);

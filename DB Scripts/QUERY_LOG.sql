@@ -49,6 +49,15 @@ create table ACCOUNT
     
 );
 
+                /*	CONSTRAINT	*/
+--Primary Key
+alter table ACCOUNT
+add constraint PK_ACC primary key (Username);
+
+--Check
+alter table ACCOUNT
+add constraint CK_ACC_Role check (Role in (0, 1, 2));
+
 /*
 ========================================================
                     TABLE PERSON
@@ -99,6 +108,21 @@ create table PERSON
     Note varchar2(2000)
 );
 
+                /*	CONSTRAINT	*/
+--Primary Key
+alter table PERSON
+add constraint PK_PERSON primary key (ID);
+
+--Foreign Key
+alter table PERSON
+add constraint FK_PERSON_GUAR foreign key (Guardian) references PERSON(ID);
+
+--Check
+
+--Check Gender has a value in { 0, 1, 2}
+alter table PERSON
+add constraint CK_PERSON_Gender check (Gender in (0, 1, 2));
+
 /*
 ========================================================
                     TABLE VACCINE
@@ -122,6 +146,16 @@ create table VACCINE
     	Note varchar2(2000)
 );
 
+
+/*	CONSTRAINT	*/
+--Primary Key
+alter table VACCINE add constraint PK_VACCINE primary key (ID);
+
+--Foreign Key
+
+--Check
+alter table VACCINE add constraint UNI_Name unique (Name);
+
 /*
 ========================================================
                     TABLE INJECTION
@@ -143,6 +177,22 @@ create table INJECTION
     Note varchar2(2000)
 );
 
+                /*	CONSTRAINT	*/
+--Primary Key
+alter table INJECTION 
+add constraint PK_INJECTION primary key (PersonalID, InjNO);
+
+--Foreign Key
+alter table INJECTION
+add constraint FK_INJECTION_PerID foreign key (PersonalID) references PERSON(ID);
+
+alter table INJECTION
+add constraint FK_INJECTION_SchedID foreign key (SchedID) references SCHEDULE(ID);
+
+--Check
+alter table INJECTION
+add constraint CK_INJECTION_InjNO check (InjNO in (1, 2, 3, 4));
+
 /*
 ========================================================
                 TABLE ORGANIZATION
@@ -151,7 +201,7 @@ create table INJECTION
 create table ORGANIZATION
 (
     --Identifier of organization, ID FK references ACCOUNT(OrgID)
-    ID varchar2(16),
+    ID varchar2(5),
     
     --Name of organization..
     Name varchar2(100),
@@ -172,6 +222,18 @@ create table ORGANIZATION
     Note varchar2(2000)
 );
 
+            /*	CONSTRAINT	*/
+--Primary Key
+alter table ORGANIZATION 
+add constraint PK_ORG primary key (ID);
+
+--Foreign Key
+alter table ORGANIZATION 
+add constraint FK_ORG_ACC foreign key (ID) references ACCOUNT(Username);
+
+--Check
+alter table ORGANIZATION
+add constraint CK_PROVINCE check (Province is not null);
 
 /*
 ========================================================
@@ -184,8 +246,11 @@ create table SCHEDULE
 	ID varchar2(26),
 
 	--OrganizationID FK references ORGANIZATION(ID)
-	OrgID varchar2(16),
-
+	OrgID varchar2(5),
+    
+    --Scheduled date
+    OnDate date,
+    
 	--VaccineID FK references VACCINE(ID)
 	VaccineID varchar2(8),
 
@@ -214,9 +279,25 @@ create table SCHEDULE
 	Note varchar2(2000)
 );
 
+/*	CONSTRAINT	*/
+--Primary Key
+alter table SCHEDULE
+add constraint PK_SCHED primary key (ID);
+
+--Foreign Key
+alter table SCHEDULE
+add constraint FK_SCHED_ORG foreign key (OrgID) references ORGANIZATION(ID);
+
+alter table SCHEDULE
+add constraint FK_SCHED_VAC foreign key (VaccineID) references VACCINE(ID);
+
+--Check
+alter table SCHEDULE
+add constraint CK_OnDate check (OnDate is not null);
+
 /*
 ========================================================
-                TABLE PERSON
+                TABLE REGISTER
 ========================================================
 */
 create table REGISTER
@@ -243,6 +324,25 @@ create table REGISTER
 	Note varchar2(2000)
 );
 
+/*	CONSTRAINT	*/
+--Primary Key
+alter table REGISTER
+add constraint PK_REG primary key (PersonalID, SchedID);
+
+--Foreign Key
+alter table REGISTER
+add constraint FK_REG_PERSON foreign key (PersonalID) references PERSON(ID);
+
+alter table REGISTER
+add constraint FK_REG_SCHED foreign key (SchedID) references SCHEDULE(ID);
+
+--Check
+alter table REGISTER
+add constraint CK_REG_Time CHECK(Time in (0,1,2));
+
+alter table REGISTER
+add constraint CK_REG_Status CHECK(Status in (0,1,2,3));
+
 /*
 ========================================================
                 TABLE CERTIFICATE
@@ -263,6 +363,22 @@ create table CERTIFICATE
 	Note varchar2(2000)
 );
 
+/*	CONSTRAINT	*/
+--Primary Key
+alter table CERTIFICATE
+add constraint PK_CERT primary key (PersonalID);
+
+--Foreign Key
+alter table CERTIFICATE
+add constraint FK_CERT_PERSON foreign key (PersonalID) references PERSON(ID);
+
+--Check
+alter table CERTIFICATE
+add constraint CK_Dose CHECK(Dose in (1,2,3,4));
+
+alter table CERTIFICATE
+add constraint CK_CertType CHECK(CertType in (0,1,2)); 
+
 /*
 ========================================================
                 TABLE HEALTH
@@ -275,6 +391,15 @@ create table HEALTH
 	Healths varchar2(20),
 	Note varchar2(2000)
 );
+
+/*	CONSTRAINT	*/
+--Primary Key
+alter table HEALTH
+add constraint PK_HEAL primary key (PersonalID);
+
+--Foreign Key
+alter table HEALTH
+add constraint FK_HEAL_PERSON foreign key (PersonalID) references PERSON(ID);
 
 /*
 ========================================================
@@ -305,6 +430,15 @@ create table ANNOUNCEMENT
     Note varchar2(2000)
 );
 
+/*	CONSTRAINT	*/
+--Primary Key
+alter table ANNOUNCEMENT 
+add constraint PK_ANN primary key (ID,OrgID);
+
+--Foreign Key
+alter table ANNOUNCEMENT
+add constraint FK_ANN_ORG foreign key (OrgID) references ORGANIZATION(ID);
+
 /*
 ========================================================
                 TABLE PARAMETER
@@ -331,6 +465,21 @@ create table PARAMETER
 	Note varchar2(2000)
 );
 
+/*	CONSTRAINT	*/
+--Primary Key
+alter table PARAMETER
+add constraint PK_PAR primary key (InjectionNO, VaccineID);
+
+--Foreign Key
+alter table PARAMETER
+add constraint CK_PAR_InjectionNO check (InjectionNO in (1, 2, 3, 4));
+
+alter table PARAMETER
+add constraint FK_PAR_VAC foreign key (VaccineID) references VACCINE(ID);
+
+--Check
+alter table PARAMETER
+add constraint CK_PreDose CHECK(PreDose in (0,1));
 /*
 ========================================================
                 TABLE STATISTIC
@@ -344,4 +493,3 @@ create table STATISTIC
 	--Statistic data
 	Data number
 );
-
