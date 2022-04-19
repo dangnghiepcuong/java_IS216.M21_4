@@ -22,7 +22,7 @@ create table PARAMETER
 
 	--Note of the parameter
 	Note varchar2(2000)
-)
+);
 
 
 /*	CONSTRAINT	*/

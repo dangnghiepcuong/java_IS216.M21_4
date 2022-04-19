@@ -9,7 +9,7 @@ create table HEALTH
 	FilledDate date,
 	Healths varchar2(20),
 	Note varchar2(2000)
-)
+);
 
 /*	CONSTRAINT	*/
 --Primary Key
