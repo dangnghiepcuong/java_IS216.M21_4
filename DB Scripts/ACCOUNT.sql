@@ -11,13 +11,18 @@ create table ACCOUNT
     Username varchar2(254) not null,
 
     --Password of an account
-    Password varchar2(128),
+    Password varchar2(128) not null,
 
-    --PersonalID FK references PERSON(ID)
-    PersonalID varchar2(12),
-
-    --Role of an account, value in {0, 1, 2} | 0: MOH, 1: Organizations, 2: Citizens
-    Role number(1)
+    --Role of an account, value in {0, 1, 2} |
+    -- 0: MOH, 1: Organizations, 2: Citizens and default value of Role is null
+    Role number(1) DEFAULT (null),
+    
+    --Status of an account, value in {0,1} | 0: active, 1: blocked
+    Status number(1),
+    
+    --Note of an account
+    Note varchar2(2000)
+    
 );
 
 
@@ -25,11 +30,6 @@ create table ACCOUNT
 --Primary Key
 alter table ACCOUNT
 add constraint PK_ACC primary key (Username);
-
-
---Foreign Key
-alter table ACCOUNT
-add constraint FK_ACC_PERSON foreign key PersonalID references PERSON(ID);
 
 
 --Check
