@@ -49,6 +49,7 @@ create table ACCOUNT
     
 );
 
+
 /*
 ========================================================
                     TABLE PERSON
@@ -98,6 +99,7 @@ create table PERSON
     --Note on the citizen
     Note varchar2(2000)
 );
+drop table ACCOUNT;
 
 /*
 ========================================================
@@ -121,6 +123,7 @@ create table VACCINE
 	--Note of the vaccine
     	Note varchar2(2000)
 );
+drop table VACCINE;
 
 /*
 ========================================================
@@ -142,6 +145,7 @@ create table INJECTION
     --Note on the injection
     Note varchar2(2000)
 );
+drop table INJECTION;
 
 /*
 ========================================================
@@ -171,7 +175,7 @@ create table ORGANIZATION
     --Note of organization
     Note varchar2(2000)
 );
-
+drop table ORGANIZATION;
 
 /*
 ========================================================
@@ -213,10 +217,11 @@ create table SCHEDULE
 	--Note of record
 	Note varchar2(2000)
 );
+drop table SCHEDULE;
 
 /*
 ========================================================
-                TABLE PERSON
+                TABLE REGISTER
 ========================================================
 */
 create table REGISTER
@@ -242,7 +247,7 @@ create table REGISTER
 	--Note of the registion
 	Note varchar2(2000)
 );
-
+drop table REGISTER;
 /*
 ========================================================
                 TABLE CERTIFICATE
@@ -262,6 +267,7 @@ create table CERTIFICATE
 	--Note of certificate
 	Note varchar2(2000)
 );
+drop table CERTIFICATE;
 
 /*
 ========================================================
@@ -275,6 +281,7 @@ create table HEALTH
 	Healths varchar2(20),
 	Note varchar2(2000)
 );
+drop table HEALTH;
 
 /*
 ========================================================
@@ -304,7 +311,7 @@ create table ANNOUNCEMENT
     --Health notes
     Note varchar2(2000)
 );
-
+drop table ANNOUNCEMENT;
 /*
 ========================================================
                 TABLE PARAMETER
@@ -330,6 +337,7 @@ create table PARAMETER
 	--Note of the parameter
 	Note varchar2(2000)
 );
+drop table PARAMETER;
 
 /*
 ========================================================
@@ -344,4 +352,5 @@ create table STATISTIC
 	--Statistic data
 	Data number
 );
+drop table STATISTIC;
 
