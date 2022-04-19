@@ -1,4 +1,4 @@
---test git
+
 -- 20521890 - Trương Nguyễn Quang Thái
 /*          TABLE: ORGANIZATION          */
 --Create a table struct without constraint
