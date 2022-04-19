@@ -6,7 +6,7 @@
 create table ORGANIZATION
 (
     --Identifier of organization, ID FK references ACCOUNT(OrgID)
-    ID varchar2(16),
+    ID varchar2(5),
     
     --Name of organization..
     Name varchar2(100),
