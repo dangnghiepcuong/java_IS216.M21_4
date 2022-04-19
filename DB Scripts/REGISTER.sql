@@ -1,5 +1,5 @@
 ---....
---20520418 - Đặng Nghiệp Cường
+--20520418 - �?ặng Nghiệp Cư�?ng
 /*          TABLE: REGISTER          */
 --Create a table struct without constraint
 --<Attribute name> <Data type>
@@ -16,7 +16,7 @@ create table REGISTER
 	Time number(1),
 	
 	--Number order of registion
-	NO
+	NO number(5),
 	
 	--Status of the registered injection (registered, attended, injected, canceled)
 	Status number(1),

@@ -44,7 +44,6 @@ create table ACCOUNT
     Note varchar2(2000)
     
 );
-
 --2
 create table PERSON
 (
@@ -227,7 +226,7 @@ create table REGISTER
 	Time number(1),
 	
 	--Number order of registion
-	NO
+	NO number(5),
 	
 	--Status of the registered injection (registered, attended, injected, canceled)
 	Status number(1),
@@ -252,7 +251,7 @@ create table CERTIFICATE
 	CertType number(1),
 	
 	--Note of certificate
-	Note varchar2(2000),
+	Note varchar2(2000)
 );
 
 --10
@@ -320,3 +319,4 @@ create table STATISTIC
 	--Statistic data
 	Data number
 );
+
