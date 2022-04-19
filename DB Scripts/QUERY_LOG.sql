@@ -24,7 +24,11 @@ Executed:
 */
 
 /*	LOG	*/
---1.
+/*
+========================================================
+                    TABLE ACCOUNT
+========================================================
+*/
 create table ACCOUNT
 (
     --Username of an account
@@ -45,7 +49,20 @@ create table ACCOUNT
     
 );
 
---2
+                /*	CONSTRAINT	*/
+--Primary Key
+alter table ACCOUNT
+add constraint PK_ACC primary key (Username);
+
+--Check
+alter table ACCOUNT
+add constraint CK_ACC_Role check (Role in (0, 1, 2));
+
+/*
+========================================================
+                    TABLE PERSON
+========================================================
+*/
 create table PERSON
 (
     --Identity of the citizen
@@ -91,7 +108,26 @@ create table PERSON
     Note varchar2(2000)
 );
 
---3
+                /*	CONSTRAINT	*/
+--Primary Key
+alter table PERSON
+add constraint PK_PERSON primary key (ID);
+
+--Foreign Key
+alter table PERSON
+add constraint FK_PERSON_GUAR foreign key (Guardian) references PERSON(ID);
+
+--Check
+
+--Check Gender has a value in { 0, 1, 2}
+alter table PERSON
+add constraint CK_PERSON_Gender check (Gender in (0, 1, 2));
+
+/*
+========================================================
+                    TABLE VACCINE
+========================================================
+*/
 create table VACCINE 
 (
 	--ID of vaccine
@@ -110,7 +146,21 @@ create table VACCINE
     	Note varchar2(2000)
 );
 
---4
+
+/*	CONSTRAINT	*/
+--Primary Key
+alter table VACCINE add constraint PK_VACCINE primary key (ID);
+
+--Foreign Key
+
+--Check
+alter table VACCINE add constraint UNI_Name unique (Name);
+
+/*
+========================================================
+                    TABLE INJECTION
+========================================================
+*/
 create table INJECTION
 (
     --PersonalID FK references PERSON(ID)
@@ -127,11 +177,31 @@ create table INJECTION
     Note varchar2(2000)
 );
 
---5
+                /*	CONSTRAINT	*/
+--Primary Key
+alter table INJECTION 
+add constraint PK_INJECTION primary key (PersonalID, InjNO);
+
+--Foreign Key
+alter table INJECTION
+add constraint FK_INJECTION_PerID foreign key (PersonalID) references PERSON(ID);
+
+alter table INJECTION
+add constraint FK_INJECTION_SchedID foreign key (SchedID) references SCHEDULE(ID);
+
+--Check
+alter table INJECTION
+add constraint CK_INJECTION_InjNO check (InjNO in (1, 2, 3, 4));
+
+/*
+========================================================
+                TABLE ORGANIZATION
+========================================================
+*/
 create table ORGANIZATION
 (
     --Identifier of organization, ID FK references ACCOUNT(OrgID)
-    ID varchar2(16),
+    ID varchar2(5),
     
     --Name of organization..
     Name varchar2(100),
@@ -152,40 +222,35 @@ create table ORGANIZATION
     Note varchar2(2000)
 );
 
---6
-create table ORGANIZATION
-(
-    --Identifier of organization, ID FK references ACCOUNT(OrgID)
-    ID varchar2(16),
-    
-    --Name of organization..
-    Name varchar2(100),
-    
-    --Province of organization
-    Province varchar2(50),
-    
-    --District of organization
-    District varchar2(50),
-    
-    --Town of organization
-    Town varchar2(50),
-    
-    --Street of organization
-    Street varchar2(100),
-    
-    --Note of organization
-    Note varchar2(2000)
-);
+            /*	CONSTRAINT	*/
+--Primary Key
+alter table ORGANIZATION 
+add constraint PK_ORG primary key (ID);
 
---7
+--Foreign Key
+alter table ORGANIZATION 
+add constraint FK_ORG_ACC foreign key (ID) references ACCOUNT(Username);
+
+--Check
+alter table ORGANIZATION
+add constraint CK_PROVINCE check (Province is not null);
+
+/*
+========================================================
+                TABLE SCHEDULE
+========================================================
+*/
 create table SCHEDULE
 (
 	--Identity of a schedule, created from OrgID+DateNumber+NO
 	ID varchar2(26),
 
 	--OrganizationID FK references ORGANIZATION(ID)
-	OrgID varchar2(16),
-
+	OrgID varchar2(5),
+    
+    --Scheduled date
+    OnDate date,
+    
 	--VaccineID FK references VACCINE(ID)
 	VaccineID varchar2(8),
 
@@ -214,7 +279,27 @@ create table SCHEDULE
 	Note varchar2(2000)
 );
 
---8
+/*	CONSTRAINT	*/
+--Primary Key
+alter table SCHEDULE
+add constraint PK_SCHED primary key (ID);
+
+--Foreign Key
+alter table SCHEDULE
+add constraint FK_SCHED_ORG foreign key (OrgID) references ORGANIZATION(ID);
+
+alter table SCHEDULE
+add constraint FK_SCHED_VAC foreign key (VaccineID) references VACCINE(ID);
+
+--Check
+alter table SCHEDULE
+add constraint CK_OnDate check (OnDate is not null);
+
+/*
+========================================================
+                TABLE REGISTER
+========================================================
+*/
 create table REGISTER
 (
 	--PersonalID of a person
@@ -227,7 +312,7 @@ create table REGISTER
 	Time number(1),
 	
 	--Number order of registion
-	NO
+	NO number(5),
 	
 	--Status of the registered injection (registered, attended, injected, canceled)
 	Status number(1),
@@ -239,7 +324,30 @@ create table REGISTER
 	Note varchar2(2000)
 );
 
---9
+/*	CONSTRAINT	*/
+--Primary Key
+alter table REGISTER
+add constraint PK_REG primary key (PersonalID, SchedID);
+
+--Foreign Key
+alter table REGISTER
+add constraint FK_REG_PERSON foreign key (PersonalID) references PERSON(ID);
+
+alter table REGISTER
+add constraint FK_REG_SCHED foreign key (SchedID) references SCHEDULE(ID);
+
+--Check
+alter table REGISTER
+add constraint CK_REG_Time CHECK(Time in (0,1,2));
+
+alter table REGISTER
+add constraint CK_REG_Status CHECK(Status in (0,1,2,3));
+
+/*
+========================================================
+                TABLE CERTIFICATE
+========================================================
+*/
 create table CERTIFICATE
 (
 	--PersonalID FK references PERSON(ID)
@@ -252,10 +360,30 @@ create table CERTIFICATE
 	CertType number(1),
 	
 	--Note of certificate
-	Note varchar2(2000),
+	Note varchar2(2000)
 );
 
---10
+/*	CONSTRAINT	*/
+--Primary Key
+alter table CERTIFICATE
+add constraint PK_CERT primary key (PersonalID);
+
+--Foreign Key
+alter table CERTIFICATE
+add constraint FK_CERT_PERSON foreign key (PersonalID) references PERSON(ID);
+
+--Check
+alter table CERTIFICATE
+add constraint CK_Dose CHECK(Dose in (1,2,3,4));
+
+alter table CERTIFICATE
+add constraint CK_CertType CHECK(CertType in (0,1,2)); 
+
+/*
+========================================================
+                TABLE HEALTH
+========================================================
+*/
 create table HEALTH
 (
 	PersonalID varchar2(12),
@@ -264,7 +392,20 @@ create table HEALTH
 	Note varchar2(2000)
 );
 
---11
+/*	CONSTRAINT	*/
+--Primary Key
+alter table HEALTH
+add constraint PK_HEAL primary key (PersonalID);
+
+--Foreign Key
+alter table HEALTH
+add constraint FK_HEAL_PERSON foreign key (PersonalID) references PERSON(ID);
+
+/*
+========================================================
+                TABLE ANNOUNCEMENT
+========================================================
+*/
 create table ANNOUNCEMENT
 (
 --ID 
@@ -289,7 +430,20 @@ create table ANNOUNCEMENT
     Note varchar2(2000)
 );
 
---11
+/*	CONSTRAINT	*/
+--Primary Key
+alter table ANNOUNCEMENT 
+add constraint PK_ANN primary key (ID,OrgID);
+
+--Foreign Key
+alter table ANNOUNCEMENT
+add constraint FK_ANN_ORG foreign key (OrgID) references ORGANIZATION(ID);
+
+/*
+========================================================
+                TABLE PARAMETER
+========================================================
+*/
 create table PARAMETER
 (
 	--InjectionNO for parameter to references to
@@ -311,7 +465,26 @@ create table PARAMETER
 	Note varchar2(2000)
 );
 
---12
+/*	CONSTRAINT	*/
+--Primary Key
+alter table PARAMETER
+add constraint PK_PAR primary key (InjectionNO, VaccineID);
+
+--Foreign Key
+alter table PARAMETER
+add constraint CK_PAR_InjectionNO check (InjectionNO in (1, 2, 3, 4));
+
+alter table PARAMETER
+add constraint FK_PAR_VAC foreign key (VaccineID) references VACCINE(ID);
+
+--Check
+alter table PARAMETER
+add constraint CK_PreDose CHECK(PreDose in (0,1));
+/*
+========================================================
+                TABLE STATISTIC
+========================================================
+*/
 create table STATISTIC
 (
 	--Title of statistic
@@ -320,44 +493,3 @@ create table STATISTIC
 	--Statistic data
 	Data number
 );
-
---13
---ATLER TABLE  ACCOUNT ADD CONSTRAINT
---Primary Key
-alter table ACCOUNT
-add constraint PK_ACC primary key (Username);
-
---Foreign Key
-
---Check
-alter table ACCOUNT
-add constraint CK_ACC_Role check (Role in (0, 1, 2));
-
-
---ALTER TABLE PERSON ADD CONSTRAINT
---Primary Key
-alter table PERSON
-add constraint PK_PERSON primary key (ID);
-
---Foreign Key
-alter table PERSON
-add constraint FK_PERSON_GUAR foreign key (Guardian) references PERSON(ID);
-
---Check
---Check first name does not contain space
-
---Check FirstName does not contain the character ' '
-alter table PERSON
-add constraint CK_PERSON_FIRSTNM check (FirstName not like '% %');
-
---Check Birthday must be a date in the past or present 
-alter table PERSON
-add constraint CK_PERSON_BIRTH check (Birthday <= sysdate);
-
---Check Gender has a value in { 0, 1, 2}
-alter table PERSON
-add constraint CK_PERSON_Gender check (Gender in (0, 1, 2));
-
---Check Email does not contain the character ' '
-alter table PERSON
-add constraint CK_PERSON_Email check (Email not like '% %');

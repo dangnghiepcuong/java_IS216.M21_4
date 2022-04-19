@@ -1,4 +1,4 @@
---20520418 - Đặng Nghiệp Cường
+--20520418 - �?ặng Nghiệp Cư�?ng
 /*          TABLE: SCHEDULE          */
 --Create a table struct without constraint
 --<Attribute name> <Data type>
@@ -11,6 +11,9 @@ create table SCHEDULE
 
 	--OrganizationID FK references ORGANIZATION(ID)
 	OrgID varchar2(16),
+    
+    --Scheduled date
+    OnDate date,
 
 	--VaccineID FK references VACCINE(ID)
 	VaccineID varchar2(8),
@@ -38,8 +41,7 @@ create table SCHEDULE
 
 	--Note of record
 	Note varchar2(2000)
-)
-
+);
 
 
 /*	CONSTRAINT	*/
@@ -49,14 +51,14 @@ add constraint PK_SCHED primary key (ID);
 
 --Foreign Key
 alter table SCHEDULE
-add constraint FK_SCHED_ORG foreign key OrgID references ORGANIZATION(ID);
+add constraint FK_SCHED_ORG foreign key (OrgID) references ORGANIZATION(ID);
 
 alter table SCHEDULE
-add constraint FK_SCHED_VAC foreign key VaccineID references VACCINE(ID);
+add constraint FK_SCHED_VAC foreign key (VaccineID) references VACCINE(ID);
 
 --Check
 alter table SCHEDULE
-add constraint CK_SCHED_Date CHECK(Date > SYSDATE);
+add constraint CK_OnDate check (OnDate is not null);
 
 /*	TRIGGERS	*/
 -- DayRegistered <= LimitDay

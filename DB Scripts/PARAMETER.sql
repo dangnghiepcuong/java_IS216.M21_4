@@ -1,4 +1,4 @@
---20520418 - Đặng Nghiệp Cường
+--20520418 - �?ặng Nghiệp Cư�?ng
 /*          TABLE: PARAMETER          */
 --Create a table struct without constraint
 --<Attribute name> <Data type>
@@ -22,25 +22,24 @@ create table PARAMETER
 
 	--Note of the parameter
 	Note varchar2(2000)
-)
+);
 
 
 /*	CONSTRAINT	*/
 --Primary Key
 alter table PARAMETER
-add constraint PK_PAR primary key (InjectionNO, VaccineID)
-
+add constraint PK_PAR primary key (InjectionNO, VaccineID);
 
 --Foreign Key
 alter table PARAMETER
-add constraint FK_PAR_INJ foreign key (InjectionNO) references INJECTION(InjNO)
+add constraint FK_PAR_INJ foreign key (InjectionNO) references INJECTION(InjNO);
 
 alter table PARAMETER
-add constraint FK_PAR_VAC foreign key (VaccineID) referencesVACCINE(ID)
+add constraint FK_PAR_VAC foreign key (VaccineID) references VACCINE(ID);
 
 --Check
 alter table PARAMETER
-add constraint CK_PreDose CHECK(PreDose in (0,1))
+add constraint CK_PreDose CHECK(PreDose in (0,1));
 
 
 /*	TRIGGERS	*/

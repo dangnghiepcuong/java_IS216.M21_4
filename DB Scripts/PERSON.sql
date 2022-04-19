@@ -65,27 +65,11 @@ add constraint FK_PERSON_GUAR foreign key (Guardian) references PERSON(ID);
 
 
 --Check
-<<<<<<< HEAD
---Check first name does not contain space
-=======
-
---Check FirstName does not contain the character ' '
->>>>>>> 52159c84ca409efb6ab582f409dfe70c320541d3
-alter table PERSON
-add constraint CK_PERSON_FIRSTNM check (FirstName not like '% %');
-
---Check Birthday must be a date in the past or present 
-alter table PERSON
-add constraint CK_PERSON_BIRTH check (Birthday <= sysdate);
-
 
 --Check Gender has a value in { 0, 1, 2}
 alter table PERSON
 add constraint CK_PERSON_Gender check (Gender in (0, 1, 2));
 
---Check Email does not contain the character ' '
-alter table PERSON
-add constraint CK_PERSON_Email check (Email not like '% %');
 
 /*	TRIGGERS	*/
 
