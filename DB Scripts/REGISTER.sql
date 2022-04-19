@@ -26,7 +26,7 @@ create table REGISTER
 	
 	--Note of the registion
 	Note varchar2(2000)
-)
+);
 
 
 
