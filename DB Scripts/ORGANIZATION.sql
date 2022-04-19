@@ -51,18 +51,14 @@ add constraint CHK_PROVINCE check (Province is not null);
 
 /*	STORED PROCEDURES	*/
 --Insert
-create or replace procedure ORG_INSERT_RECORD (par_ID ORGANIZATION.ID%type,
-                                             par_Name ORGANIZATION.Name%type,
-                                             par_Province ORGANIZATION.Province%type,
-                                             par_District ORGANIZATION.District%type,
-                                             par_Town ORGANIZATION.Town%type,
-                                             par_Street ORGANIZATION.Street%type)
-			par_Note  ORGANIZATION.Note%type)                                           
+create or replace procedure ORG_INSERT_RECORD (par_ID ORGANIZATION.ID%type,                                            
+                                             par_Province ORGANIZATION.Province%type,                                            
+							   par_Note  ORGANIZATION.Note%type)                                           
 as 
 begin
     --insert new ORGANIZATION
-	insert into ORGANIZATION(ID, Name, Province, District, Town, Street, Note) 
-	values (par_ID, par_Name, par_Province, par_District, par_Town, par_Street, par_Note);
+	insert into ORGANIZATION(ID, Province, Note) 
+	values (par_ID, par_Province, par_Note);
 end ORG_INSERT_RECORD;
 
                                      
