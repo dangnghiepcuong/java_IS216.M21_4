@@ -8,7 +8,7 @@ create table ANNOUNCEMENT
     ID varchar2(50),
     
     --OrganizationID FK references ORGANIZATION(ID)
-    OrgID varchar2(16),
+    OrgID varchar2(5),
     
     --Titel for announcement
     Title varchar2(200),
