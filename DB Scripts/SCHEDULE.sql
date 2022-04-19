@@ -11,6 +11,9 @@ create table SCHEDULE
 
 	--OrganizationID FK references ORGANIZATION(ID)
 	OrgID varchar2(16),
+    
+    --Scheduled date
+    OnDate date,
 
 	--VaccineID FK references VACCINE(ID)
 	VaccineID varchar2(8),
@@ -39,7 +42,6 @@ create table SCHEDULE
 	--Note of record
 	Note varchar2(2000)
 );
-drop table SCHEDULE;
 
 
 /*	CONSTRAINT	*/
@@ -56,7 +58,7 @@ add constraint FK_SCHED_VAC foreign key (VaccineID) references VACCINE(ID);
 
 --Check
 alter table SCHEDULE
-add constraint CK_SCHED_Date CHECK(Date > SYSDATE);
+add constraint CK_OnDate check (OnDate is not null);
 
 /*	TRIGGERS	*/
 -- DayRegistered <= LimitDay
