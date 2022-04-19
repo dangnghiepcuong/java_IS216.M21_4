@@ -9,8 +9,8 @@ Executed:
 */
 
 /*	20521252 -  Le Hoang Duyen		
-Written: 1, 2
-Executed: 
+Written:
+Executed:
 */
 
 /*	20521720 - Truong Y Nhi		
@@ -24,23 +24,36 @@ Executed:
 */
 
 /*	LOG	*/
---1.
+/*
+========================================================
+                    TABLE ACCOUNT
+========================================================
+*/
 create table ACCOUNT
 (
     --Username of an account
     Username varchar2(254) not null,
 
     --Password of an account
-    Password varchar2(128),
+    Password varchar2(128) not null,
 
-    --PersonalID FK references PERSON(ID)
-    PersonalID varchar2(12),
-
-    --Role of an account, value in {0, 1, 2} | 0: MOH, 1: Organizations, 2: Citizens
-    Role number(1)
+    --Role of an account, value in {0, 1, 2} |
+    -- 0: MOH, 1: Organizations, 2: Citizens and default value of Role is null
+    Role number(1) DEFAULT (null),
+    
+    --Status of an account, value in {0,1} | 0: active, 1: blocked
+    Status number(1),
+    
+    --Note of an account
+    Note varchar2(2000)
+    
 );
 
---2
+/*
+========================================================
+                    TABLE PERSON
+========================================================
+*/
 create table PERSON
 (
     --Identity of the citizen
@@ -86,7 +99,55 @@ create table PERSON
     Note varchar2(2000)
 );
 
---5
+/*
+========================================================
+                    TABLE VACCINE
+========================================================
+*/
+create table VACCINE 
+(
+	--ID of vaccine
+    	ID varchar2(8),
+
+	--Name of vaccine
+    	Name varchar2(100),
+
+	--Technology used to produce vaccine
+    	Technology varchar2(100),
+
+	--The country produces the vaccine
+    	Country varchar2(100),
+
+	--Note of the vaccine
+    	Note varchar2(2000)
+);
+
+/*
+========================================================
+                    TABLE INJECTION
+========================================================
+*/
+create table INJECTION
+(
+    --PersonalID FK references PERSON(ID)
+    PersonalID varchar2(12) not null,
+    
+    --Injection sequence number of the citizen, value in { 1, 2, 3, 4}
+    InjNO number(5),
+    
+    --SchedlID FK references SCHEDULE(ID)
+    SchedID varchar2(10),
+    
+    
+    --Note on the injection
+    Note varchar2(2000)
+);
+
+/*
+========================================================
+                TABLE ORGANIZATION
+========================================================
+*/
 create table ORGANIZATION
 (
     --Identifier of organization, ID FK references ACCOUNT(OrgID)
@@ -112,7 +173,114 @@ create table ORGANIZATION
 );
 
 
---10
+/*
+========================================================
+                TABLE SCHEDULE
+========================================================
+*/
+create table SCHEDULE
+(
+	--Identity of a schedule, created from OrgID+DateNumber+NO
+	ID varchar2(26),
+
+	--OrganizationID FK references ORGANIZATION(ID)
+	OrgID varchar2(16),
+
+	--VaccineID FK references VACCINE(ID)
+	VaccineID varchar2(8),
+
+	--The serial of the using vaccine in the schedule
+	Serial varchar2(100),
+
+	--The number of limited registers in the morning
+	LimitDay number(5),
+
+	--The number of limited registers in the afternoon
+	LimitNoon number(5),
+
+	--The number of limited registers in the evening
+	LimitNight number(5),
+
+	--The number of registered in the morning
+	DayRegister number(5),
+
+	--The number of registered in the afternoon
+	NoonRegister number(5),
+
+	--The number of registered in the evening
+	NightRegister number(5),
+
+	--Note of record
+	Note varchar2(2000)
+);
+
+/*
+========================================================
+                TABLE PERSON
+========================================================
+*/
+create table REGISTER
+(
+	--PersonalID of a person
+	PersonalID varchar2(12),
+
+	--ScheduleID of a schedule
+	SchedID varchar2(26),
+	
+	--The time for injection (morning, afternoon or night)
+	Time number(1),
+	
+	--Number order of registion
+	NO number(5),
+	
+	--Status of the registered injection (registered, attended, injected, canceled)
+	Status number(1),
+
+	--Image of the vaccinated confirmation paper signed by the organization hold the schedule
+	Image blob,
+	
+	--Note of the registion
+	Note varchar2(2000)
+);
+
+/*
+========================================================
+                TABLE CERTIFICATE
+========================================================
+*/
+create table CERTIFICATE
+(
+	--PersonalID FK references PERSON(ID)
+	PersonalID varchar2(12),
+	
+	--Number of injected doses
+	Dose number(2),
+	
+	--Type of certificate: 0 (red), 1 (yellow) or 2 (green).
+	CertType number(1),
+	
+	--Note of certificate
+	Note varchar2(2000)
+);
+
+/*
+========================================================
+                TABLE HEALTH
+========================================================
+*/
+create table HEALTH
+(
+	PersonalID varchar2(12),
+	FilledDate date,
+	Healths varchar2(20),
+	Note varchar2(2000)
+);
+
+/*
+========================================================
+                TABLE ANNOUNCEMENT
+========================================================
+*/
 create table ANNOUNCEMENT
 (
 --ID 
@@ -137,4 +305,43 @@ create table ANNOUNCEMENT
     Note varchar2(2000)
 );
 
+/*
+========================================================
+                TABLE PARAMETER
+========================================================
+*/
+create table PARAMETER
+(
+	--InjectionNO for parameter to references to
+	InjectionNO number,
+
+	--VaccineID for parameter to references to
+	VaccineID varchar2(8),
+
+	--Minimum spacing time between the register dose and this referencing dose
+	MinDistance number,
+
+	--Verify the difference between previous doses
+	PreDose number(1),
+
+	--The allowed vaccine for the registion dose
+	NextDose varchar2(100),
+
+	--Note of the parameter
+	Note varchar2(2000)
+);
+
+/*
+========================================================
+                TABLE STATISTIC
+========================================================
+*/
+create table STATISTIC
+(
+	--Title of statistic
+	Title varchar2(200),
+
+	--Statistic data
+	Data number
+);
 
