@@ -29,15 +29,21 @@ add constraint PK_INJECTION primary key (PersonalID, InjID);
 
 --Foreign Key
 alter table INJECTION
-add constraint FK_INJECTION_PerID foreign key (PersonalID) references PERSON(ID);
+add constraint FK_INJ_PERSON foreign key (PersonalID) references PERSON(ID);
 
 alter table INJECTION
-add constraint FK_INJECTION_SchedID foreign key (SchedID) references SCHEDULE(ID);
+add constraint FK_INJ_SCHED foreign key (SchedID) references SCHEDULE(ID);
 
 
 --Check
 alter table INNJECTION
 add constraint CK_INJECTION_InjNO check (InjNO in (1, 2, 3, 4));
+
+alter table INNJECTION
+add constraint CK_SchedID check(SchedID is not null);
+
+alter table INNJECTION
+add constraint CK_Type check(Type is not null and Type in (0,1,2));
 
 
 /*	TRIGGERS	*/
