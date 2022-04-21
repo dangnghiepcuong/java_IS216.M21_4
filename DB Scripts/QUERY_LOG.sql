@@ -451,6 +451,9 @@ create table PARAMETER
 
 	--VaccineID for parameter to references to
 	VaccineID varchar2(8),
+    
+    --Dose type (basic, booster, repeat)
+    DoseType varchar2(100),
 
 	--Minimum spacing time between the register dose and this referencing dose
 	MinDistance number,
@@ -464,6 +467,7 @@ create table PARAMETER
 	--Note of the parameter
 	Note varchar2(2000)
 );
+
 
 /*	CONSTRAINT	*/
 --Primary Key
@@ -480,6 +484,10 @@ add constraint FK_PAR_VAC foreign key (VaccineID) references VACCINE(ID);
 --Check
 alter table PARAMETER
 add constraint CK_PreDose CHECK(PreDose in (0,1));
+
+alter table PARAMETER
+add constraint CK_DoseType CHECK (DoseType in ('basic', 'booster', 'repeat'));
+
 /*
 ========================================================
                 TABLE STATISTIC
