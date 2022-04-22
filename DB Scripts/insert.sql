@@ -17,7 +17,7 @@ INSERT INTO ACCOUNT(Username,Password,Role,Status,Note) VALUES('0392545773', '12
 INSERT INTO ACCOUNT(Username,Password,Role,Status,Note) VALUES('0332743065', '123', 2, 1, NULL  );
 INSERT INTO ACCOUNT(Username,Password,Role,Status,Note) VALUES('0974182863', '123', 2, 1, NULL  );
 
-INSERT INTO PERSON(ID,LastName,FirstName,Birthday,Gender,Hometown,Province,District,Town,Street,Phone,Email,Guardian,Note) VALUES('100000000000', 'Nguyen Van', 'A', '01-01-1995', 1, '44', '01', 'A', 'B', 'C', '0975364142', NULL, NULL, NULL  );
+INSERT INTO PERSON(ID,LastName,FirstName,Birthday,Gender,Hometown,Province,District,Town,Street,Phone,Email,Guardian,Note) VALUES('100000000000', 'Nguyen Van', 'A', '01-JAN-1995', 1, '44', '01', 'A', 'B', 'C', '0975364142', NULL, NULL, NULL  );
 INSERT INTO PERSON(ID,LastName,FirstName,Birthday,Gender,Hometown,Province,District,Town,Street,Phone,Email,Guardian,Note) VALUES('100000000001', 'Nguyen Thi', 'B', '01-01-1996', 0, '44', '79', 'A', 'B', 'C', '0375262108', NULL, NULL, NULL  );
 INSERT INTO PERSON(ID,LastName,FirstName,Birthday,Gender,Hometown,Province,District,Town,Street,Phone,Email,Guardian,Note) VALUES('100000000002', 'Nguyen Van Thi', 'C', '01-01-2014', 0, '44', '44', 'A', 'B', 'C', '0391848573', NULL, NULL, NULL  );
 INSERT INTO PERSON(ID,LastName,FirstName,Birthday,Gender,Hometown,Province,District,Town,Street,Phone,Email,Guardian,Note) VALUES('100000000003', NULL, 'D', '01-01-2005', 1, '44', '79', 'A', 'B', 'C', '0168205674', NULL, NULL, NULL  );

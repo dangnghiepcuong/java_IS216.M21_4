@@ -5,6 +5,10 @@ select * from vaccine;
 
 select * from schedule;
 
+select * from person;
+
+select * from register;
+
 delete from organization;
 delete from account;
 
@@ -17,3 +21,6 @@ select ID
 from ORGANIZATION
 where Province = 79 and rownum = 1
 order by ID desc;
+
+alter table REGISTER
+add DoseType varchar2(50);
