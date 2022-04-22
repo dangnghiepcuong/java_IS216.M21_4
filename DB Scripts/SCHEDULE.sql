@@ -81,49 +81,52 @@ end Limit_Registers;
 
                 /*	STORED PROCEDURES	*/
  --Increase 1 registion at Time parameter
-create or replace procedure SCHED_INC_REG(par_ID SCHEDULE.ID%type, par_RegTime REGISTER.Time%type)
+create or replace procedure SCHED_INC_REG
+(par_SchedID SCHEDULE.ID%type, par_Time REGISTER.Time%type)
 as
 begin
-	if (par_RegTime = 0)
+	if (par_Time = 0)
 	then
 		update SCHEDULE
 		set DayRegistered = DayRegistered + 1
-		where SCHEDULE.ID = par_ID
- 	elsif (par_RegTime = 1)
+		where SCHEDULE.ID = par_SchedID;
+ 	elsif (par_Time = 1)
 	then
 		update SCHEDULE
 		set NoonRegistered = NoonRegistered + 1
-		where SCHEDULE.ID = par_ID
-	elseif (par_RegTime = 2)
+		where SCHEDULE.ID = par_SchedID;
+	elsif (par_Time = 2)
 	then
 		update SCHEDULE
 		set NightRegistered = NightRegistered + 1
-		where SCHEDULE.ID = par_ID
-	endif;
-end;
+		where SCHEDULE.ID = par_SchedID;
+	end if;
+end SCHED_INC_REG;
 
 --Decrease 1 registion at Time parameter
-create or replace procedure SCHED_DEC_REG(par_SchedID SCHEDULE.ID%type, RegTime REGISTER.Time%type)
+create or replace procedure SCHED_DEC_REG
+(par_SchedID SCHEDULE.ID%type, par_Time REGISTER.Time%type)
 as
 begin
-	if (par_RegTime = 0)
+	if (par_Time = 0)
 	then
 		update SCHEDULE
 		set DayRegistered = DayRegistered - 1
-		where SCHEDULE.ID = par_ID
- 	elseif (par_TimeReg = 1)
+		where SCHEDULE.ID = par_SchedID;
+ 	elsif (par_Time = 1)
 	then
 		update SCHEDULE
 		set NoonRegistered = NoonRegistered - 1
-		where SCHEDULE.ID = par_ID
-	elseif (par_TimeReg = 2)
+		where SCHEDULE.ID = par_SchedID;
+	elsif (par_Time = 2)
 	then
 		update SCHEDULE
 		set NightRegistered = NightRegistered - 1
-		where SCHEDULE.ID = par_ID
-	endif;
+		where SCHEDULE.ID = par_SchedID;
+	end if;
 end SCHED_DEC_REG;
 
+--Insert Record
 create or replace procedure SCHED_INSERT_RECORD
 (par_OrgID ORGANIZATION.ID%type, par_OnDate date, par_VaccineID VACCINE.ID%type,
 par_Serial varchar2, 
@@ -143,8 +146,28 @@ begin
 end SCHED_INSERT_RECORD;
 
 
-
-SCHED_DELETE_RECORD(par_SchedID)
+--Delete Record
+create or replace procedure SCHED_DELETE_RECORD(par_SchedID SCHEDULE.ID%type)
+as
+    cursor c_Register is
+        select PersonalID, SchedID 
+        from REGISTER
+        where REGISTER.SchedID = par_SchedID;
+        
+    crow_Register c_Register%rowtype;
+begin
+    --fetch out registion of the schedule and cancel them
+    open c_Register;
+    loop
+        fetch c_Register into crow_Register;
+        exit when c_Register%notfound;
+        --cancel registion
+        REG_UPDATE_RECORD(PersonalID, SchedID, 3);
+    end loop;
+    
+    delete from SCHEDULE
+    where SCHEDULE.ID = par_SchedID;
+end;
 
 /*	STORED FUNCTIONS	*/
 create or replace function SCHED_GENERATE_ID
