@@ -63,7 +63,27 @@ drop constraint PK_SCHED;
 
 --Check
 alter table SCHEDULE
-add constraint CK_OnDate check (OnDate is not null);
+add constraint CK_SCHED_OnDate check (OnDate is not null);
+
+alter table SCHEDULE
+add constraint CK_SCHED_LimitDay check (LimitDay >= 0);
+
+alter table SCHEDULE
+add constraint CK_SCHED_LimitNoon check (LimitNoon >= 0);
+
+alter table SCHEDULE
+add constraint CK_SCHED_LimitNight check (LimitNight >= 0);
+
+alter table SCHEDULE
+add constraint CK_SCHED_DayRegistered check (DayRegistered >= 0);
+
+alter table SCHEDULE
+add constraint CK_SCHED_NoonRegistered check (NoonRegistered >= 0);
+
+alter table SCHEDULE
+add constraint CK_SCHED_NightRegistered check (NightRegistered >= 0);
+
+
 
                 /*	TRIGGERS	*/
 -- DayRegistered <= LimitDay
