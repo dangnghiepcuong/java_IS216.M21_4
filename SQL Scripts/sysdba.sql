@@ -1,3 +1,4 @@
+/* CREATE USER AND GRANT DEBUG PRIVILEGE */
 --1. Create new account for new schema
 
 create user vaccination identified by vaccination;
