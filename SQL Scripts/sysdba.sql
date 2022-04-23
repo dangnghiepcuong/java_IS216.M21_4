@@ -1,21 +1,29 @@
-GRANT DEBUG ANY PROCEDURE TO VACCINATION;
-GRANT DEBUG CONNECT SESSION TO VACCINATION;
+--1. Create new account for new schema
+
+create user vaccination identified by vaccination;
+
+grant all privileges to vaccination;
+
+--2. Check debug privileges (DEBUG ANY PROCEDURE, DEBUG CONNECT ANY)
+
+select * from all_tab_privs;
+
+--3. If user doesn't have those privileges, grant them.
+
+grant debug any procedure to vaccination;
+
+grant debug connect session to vaccination;
+
 GRANT EXECUTE ON DBMS_DEBUG_JDWP To VACCINATION;
-COMMIT;
--- Here you want to again substitute the VACCINATION user with your user doing the debugging
-BEGIN
-DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE
-   (host=>'127.0.0.1',
-     ace=> SYS.XS$ACE_TYPE(privilege_list=>SYS.XS$NAME_LIST('JDWP'),
-               principal_name=>'VACCINATION',
-               principal_type=>SYS.XS_ACL.PTYPE_DB) 
-   );
-END;
-COMMIT;
 
-grant debug on any procedure to VACCINATION;
+--4. Execute this block
+begin
+dbms_network_acl_admin.append_host_ace
+    (host=>'127.0.0.1',
+        ace=> sys.xs$ace_type(privilege_list=>sys.xs$name_list('JDWP'),
+                    principal_name=>'vaccination',
+                    principal_type=>sys.xs_acl.ptype_db)
+    );
+end;
 
-select *
-from all_tab_privs
-where privilege in ('EXECUTE', 'DEBUG')
-    and table_name in ('PCK_LANCAMENTOSERVICO', 'PCK_LANCAMENTO', 'PCK_UTIL');
+commit;
