@@ -75,78 +75,90 @@ begin
 end REG_NO_LIMIT;
 
 
---The registered schedule must follow the rule of vaccination (spacing time and vaccine type)
---+ Spacing time: the registered injection must follow the spacing rule of the previous vaccine injection (if have)
---+ Vaccine tpy: the vaccine used in the registered schedule must be compitable with the previous vaccine injection (if have)
 
 create or replace trigger REG_VACCINATION_RULE
+--The registered schedule must follow the rule of vaccination (spacing time and vaccine type)
+--+ Dose type: If the citizen have done 4 doses (2 basic, 1 booster, 1 repeat) or 3 doses (2 basic, 1 repeat), she cannot register anymore. => Previous dose is repeat type can not register
+--+ Spacing time: the registered injection must follow the spacing rule of the previous vaccine injection (if have)
+--+ Vaccine type: the vaccine used in the registered schedule must be compitable with the previous vaccine injection (if have)
 before insert on REGISTER
 for each row
-as
+declare
 	PreInj INJECTION%rowtype;
 	ParCase PARAMETER%rowtype;
 	RegVac VACCINE.ID%type;
 	PreVac VACCINE.ID%type;
+    var_PreOnDate SCHEDULE.OnDate%type;
+    var_OnDate SCHEDULE.OnDate%type;
+    var_Contains_Pos int;
 begin
-    --set date format before process date data
-    alter session set NLS_DATE_FORMAT='DD-MM-YYYY';
 
 	--Find the previous injection info
 	select * into PreInj
 	from INJECTION
 	where INJECTION.PersonalID = :new.PersonalID
     and rownum = 1
-    order by InjNO desc
-	
-	/* Resolve this EXCEPTION in REG_INSERT_RECORD
-	--If cannot find a previous injection, it means this is the first injection. Then allow to register.
-	EXCEPTION
-		when no_data_found
- 		then commit
-	END;
-	*/
+    order by InjNO desc;
 
 	--Check the completed doses: If the citizen have done 4 doses (2 basic, 1 booster, 1 repeat) or 3 doses (2 basic, 1 repeat), she cannot register anymore. => Previous dose is repeat type can not register
-	if ( PreInj.Type = repeat )
+	if ( PreInj.DoseType = 'repeat' )
 	then
-		raise_application_error(10006,'You have completed all vaccination doses!') 
+		raise_application_error(10006,
+        'You have completed all vaccination doses!'); 
 	end if;
 
-
 	--select out the vaccine used in the previous injection
-	select VaccineID into PrevVac 
+	select VaccineID into PreVac 
 	from SCHEDULE
 	where SCHEDULE.ID = PreInj.SchedID;
-	
+
 	--select out the vaccine used in this registion
 	select VaccineID into RegVac 
 	from SCHEDULE
 	where SCHEDULE.ID = :new.SchedID;
-	
+
 	--Reference the PreInj to PARAMETER cases to select out the rule
 	select * into ParCase
-	from PARAMETER
-	where PARAMETER.InjectionNO = PrevInj.InjNO
-	and PARAMETER.VaccineID = PreVac
-	and PARAMETER.PreDose = INJ_Difference(:new.PersonalID);
-	
-	
+	from PARAMETER PAR
+	where PAR.InjectionNO = PreInj.InjNO
+	and PAR.VaccineID = PreVac
+	and PAR.DiffDoses = INJ_DIFFERENCE(:new.PersonalID);
 
-	--Check spacing rule: :new.OnDate - OnDate from PrevInj.SchedID must equal ParCase.MinDistance
-	if (:new.OnDate - (select OnDate from SCHEDULE where SCHEDULE.ID = PrevInj.SchedID) < ParCase.MinDistance-3)
+	--Check spacing rule: :new.OnDate - OnDate from PreInj.SchedID must equal ParCase.MinDistance
+	
+    select OnDate into var_PreOnDate
+    from SCHEDULE SCHED
+    where SCHED.ID = PreInj.SchedID;
+    
+    select OnDate into var_OnDate
+    from SCHEDULE SCHED
+    where SCHED.ID = :new.SchedID;
+    
+    if (var_OnDate - var_PreOnDate < ParCase.MinDistance-3)
 	then
-		raise_application_error(100004, 'Cannot register to this schedule due to the invalid in spacing rule!')
+		raise_application_error(100004, 
+        'Cannot register to this schedule due to the invalid in spacing rule!');
 	end if;
 
 	--Check vaccine combination rule: vaccine from registered schedule must be contained in ParCase.NextDose	
-	if (CONTAINS(ParCase.NextDose, RegVac, 1) > 0)
+	var_Contains_Pos := CONTAINS(ParCase.NextDose, RegVac, 1);
+    
+    if (var_Contains_Pos > 0)
 	then
-		commit
+		commit;
 	else
-		raise_application_error(10005, 'Cannot register to this schedule due to the incompitable with the previous injection!')
+		raise_application_error(10005, 
+        'Cannot register to this schedule due to the incompitable with the previous injection!');
 	end if;
 
+    --If cannot find a previous injection, it means this is the first injection. Then allow to register.
+	EXCEPTION
+		when no_data_found
+ 		then commit;
+
 end REG_VACCINATION_RULE;
+
+rollback;
 
 --The citizen whose vaccination target type is vaccination delaying or incompitable vaccination cannot register
 --The citizen affected by Covid-19 can complete basic dose after healing. If you have completed basic dose before affected by Covid-19, it doesn't necessary to make an additional dose. 
@@ -240,31 +252,46 @@ create or replace procedure REG_UPDATE_STATUS
 (par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type, par_Status REGISTER.Status%type)
 as
     var_Time REGISTER.Time%type;
+    var_DoseType REGISTER.DoseType%type;
+    var_n_Injection INJECTION.InjNO%type;
 begin
     --select out the time of registion
-    select Time into var_Time
+    select Time, DoseType into var_Time, var_DoseType
     from REGISTER REG
     where REG.PersonalID = par_PersonalID
     and REG.SchedID = par_SchedID;
-    
+
 	--Update status
 	update REGISTER
 	set Status = par_Status
 	where REGISTER.PersonalID = par_PersonalID
-	and REGISTER.SchedID = par_SchedID
+	and REGISTER.SchedID = par_SchedID;
 
-	--If the registion is completed by Injected status, insert new injection for the citizen
-	if (par_Status = 2)
+    --If the citizen is ready for vaccination
+    if (par_Status = 1)
+    then
+        commit;
+    --If the registion is completed by Injected status, insert new injection for the citizen
+	elsif (par_Status = 2)
 	then
-		INJ_INSERT_RECORD(par_PersonalID, par_SchedID, par_Note DEFAULT NULL);
-	end if;
-    
-    --If the registion is canceled, decrease the number of registion
-    if (par_Status = 3)
+        select COUNT(*) into var_n_Injection 
+        from INJECTION INJ
+        where INJ.PersonalID = par_PersonalID;
+
+		INJ_INSERT_RECORD(par_PersonalID, var_n_Injection, par_SchedID, 
+        var_DoseType);
+	--If the registion is canceled, decrease the number of registion
+    elsif (par_Status = 3)
     then 
-        SCHED_DEC_REG(par_SchedID, TimeReg);
+        SCHED_DEC_REG(par_SchedID, var_Time);
     end if;
-end;
+    
+    --There was no injection before, this the first injection
+    EXCEPTION
+        when no_data_found
+        then
+            INJ_INSERT_RECORD(par_PersonalID, 1, par_SchedID, var_DoseType);
+end REG_UPDATE_STATUS;
 
 --Change time of a registion
 REG_UPDATE_TIME(par_PersonalID, par_SchedID, par_Time) 

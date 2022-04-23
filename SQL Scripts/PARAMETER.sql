@@ -18,7 +18,7 @@ create table PARAMETER
 	MinDistance number,
 
 	--Verify the difference between previous doses
-	PreDose number(1),
+	DiffDose number(1),
 
 	--The allowed vaccine for the registion dose
 	NextDose varchar2(100),
@@ -31,8 +31,10 @@ create table PARAMETER
 /*	CONSTRAINT	*/
 --Primary Key
 alter table PARAMETER
-add constraint PK_PAR primary key (InjectionNO, VaccineID);
+add constraint PK_PAR primary key (InjectionNO, VaccineID, DoseType, DiffDoses);
 
+alter table PARAMETER
+drop constraint PK_PAR;
 --Foreign Key
 alter table PARAMETER
 add constraint FK_PAR_INJ foreign key (InjectionNO) references INJECTION(InjNO);
@@ -42,7 +44,7 @@ add constraint FK_PAR_VAC foreign key (VaccineID) references VACCINE(ID);
 
 --Check
 alter table PARAMETER
-add constraint CK_PreDose CHECK(PreDose in (0,1));
+add constraint CK_DiffDoses CHECK(DiffDoses in (0,1));
 
 alter table PARAMETER
 add constraint CK_DoseType CHECK (DoseType in ('basic', 'booster', 'repeat'));

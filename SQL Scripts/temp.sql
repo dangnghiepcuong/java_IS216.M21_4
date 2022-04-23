@@ -9,8 +9,19 @@ select * from person;
 
 select * from register;
 
+select * from injection;
+
+select * from vaccine;
+
+select * from parameter;
+
 delete from organization;
 delete from account;
+
+delete from parameter;
+
+delete from injection;
+delete from register;
 
 alter table ORGANIZATION
 modify ID varchar(5);
@@ -24,3 +35,10 @@ order by ID desc;
 
 alter table REGISTER
 add DoseType varchar2(50);
+
+alter table INJECTION
+add DoseType varchar2(50);
+
+alter table PARAMETER rename column PreDose to DiffDoses;
+
+commit;
