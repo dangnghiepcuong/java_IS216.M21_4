@@ -1,4 +1,5 @@
 select * from account;
+
 select * from organization;
 
 select * from vaccine;
