@@ -76,11 +76,33 @@ add constraint CK_PERSON_Gender check (Gender in (0, 1, 2));
 
 
 /*	STORED PROCEDURES	*/
-
+create or replace procedure PERSON_INSERT_RECORD(par_ID PERSON.ID%type, 
+    par_LastName PERSON.LastName%type, par_FirstName PERSON.FirstName%type,
+    par_Birthday PERSON.Birthday%type, par_Gender PERSON.Gender%type,
+    par_HomeTown PERSON.HomeTown%type, par_Province PERSON.Province%type,
+    par_District PERSON.District%type, par_Town PERSON.Town%type,
+    par_Street PERSON.Street%type,
+    par_Phone PERSON.Phone%type, par_Email PERSON.Email%type,
+    par_Guardian PERSON.Guardian%type, par_Note PERSON.Note%type DEFAULT NULL) 
+as
+begin
+    --create new PERSON
+    insert into PERSON(ID, LastName, FirstName, Birthday, Gender, HomeTown,
+    Province, District, Town, Street, Phone, Email, Guardian, Note) 
+    values (par_ID, par_LastName, par_FirstName, par_Birthday, par_Gender,
+    par_HomeTown, par_Province, par_Distruct, par_Town, par_Street, par_Phone,
+    par_Email, par_Guardian, par_Note);
+    
+    commit;
+    
+    EXCEPTION
+        when DUP_VAL_ON_INDEX
+        then
+            raise_application_error(1000,'ID has been registered by another user!');
+end PERSON_INSERT_RECORD;
 
 
 /*	STORED FUNCTIONS	*/
-
 
 
 
