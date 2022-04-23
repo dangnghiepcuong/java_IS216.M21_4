@@ -41,4 +41,16 @@ add DoseType varchar2(50);
 
 alter table PARAMETER rename column PreDose to DiffDoses;
 
+    select * into PreInj
+	from INJECTION INJ
+	where INJ.PersonalID = '100000000000'
+	and rownum = 1
+	order by INJ.InjNo desc;
+    
+    select * 
+    from INJECTION INJ
+    where INJ.PersonalID = '100000000000'
+    group by INJ.PersonalID
+    having INJ.InjNO = MAX(InjNO);
+
 commit;
