@@ -1,3 +1,4 @@
+--
 /*	ALTER DATABASE COMMAND	
 
 /*

@@ -1,3 +1,4 @@
+--
 --20521720 - Trương Ý Nhi
 /*          TABLE: CERTIFICATE 	*/
 --Create a table struct without constraint
