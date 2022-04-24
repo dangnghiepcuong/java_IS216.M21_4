@@ -10,10 +10,10 @@ create table REGISTER
 	PersonalID varchar2(12),
 
 	--ScheduleID of a schedule
-	SchedID varchar2(26),
+	SchedID varchar2(15),
 	
-    --Dose type
-    DoseType varchar2(50),
+    	--Dose type
+    	DoseType varchar2(50),
     
 	--The time for injection (morning, afternoon or night)
 	Time number(1),

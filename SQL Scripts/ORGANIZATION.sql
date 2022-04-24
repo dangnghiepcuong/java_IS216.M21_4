@@ -12,7 +12,7 @@ create table ORGANIZATION
     Name varchar2(100),
     
     --Province of organization
-    Province varchar2(50),
+    Province varchar2(2),
     
     --District of organization
     District varchar2(50),

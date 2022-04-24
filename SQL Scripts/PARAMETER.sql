@@ -11,14 +11,14 @@ create table PARAMETER
 	--VaccineID for parameter to references to
 	VaccineID varchar2(8),
     
-    --Dose type (basic, booster, repeat)
-    DoseType varchar2(100),
+    	--Dose type (basic, booster, repeat)
+    	DoseType varchar2(100),
 
 	--Minimum spacing time between the register dose and this referencing dose
 	MinDistance number,
 
 	--Verify the difference between previous doses
-	DiffDose number(1),
+	DiffDose number,
 
 	--The allowed vaccine for the registion dose
 	NextDose varchar2(100),
