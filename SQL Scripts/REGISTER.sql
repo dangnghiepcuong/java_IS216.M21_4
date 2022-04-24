@@ -91,7 +91,7 @@ declare
     var_PreOnDate SCHEDULE.OnDate%type;
     var_OnDate SCHEDULE.OnDate%type;
     var_Contains_Pos int;
-    var_Diff_Days int;
+    var_Diff_Days number;
 begin
 
 	--select out the previous injection info
@@ -125,7 +125,8 @@ begin
 	from PARAMETER PAR
 	where PAR.InjectionNO = PreInj.InjNO
 	and PAR.VaccineID = PreVac
-	and PAR.DiffDoses = INJ_DIFFERENCE(:new.PersonalID);
+	and PAR.DiffDoses = INJ_DIFFERENCE(:new.PersonalID)
+    and PAR.DoseType = PreInj.DoseType;
 
     --select out the dates of 2 injections
     select OnDate into var_PreOnDate
@@ -137,14 +138,14 @@ begin
     where SCHED.ID = :new.SchedID;
     
     --Check spacing rule between 2 injections      
-    if (abs(months_between(var_OnDate, var_PreOnDate))*30 < ParCase.MinDistance-3)
+    if (abs(months_between(var_OnDate, var_PreOnDate)) < (ParCase.MinDistance-3)/30)
 	then
 		raise_application_error(-20001, 
         'Cannot register to this schedule due to the invalid in spacing rule!');
 	end if;
 
 	--Check vaccine combination rule: vaccine from registered schedule must be contained in ParCase.NextDose	
-    if ('%'||RegVac||'%' not like ParCase.NextDose)
+    if (ParCase.NextDose not like '%'||RegVac||'%')
 	then
 		raise_application_error(-20002, 
         'Cannot register to this schedule due to the incompitable with the previous injection!');
@@ -153,7 +154,7 @@ begin
     --If cannot find a previous injection, it means this is the first injection. Then allow to register.
 	EXCEPTION
 		when no_data_found
-        then return;
+        then NULL;
 end REG_VACCINATION_RULE;
 
 
@@ -203,7 +204,7 @@ begin
 
 	--Check Covid-19 affected
 	if ( (SUBSTR(LastHealth.Healths, 3, 1) = '1') 
-    and (abs(months_between(SYSDATE, LastHealth.FilledDate))*30 < 14) )
+    and (abs(months_between(SYSDATE, LastHealth.FilledDate)) < 0.46) ) --14/30=0.466667
 	then
 		raise_application_error
         (-20006, 'You have been affected by Covid-19 recent days, please wait until you completely healed');
