@@ -29,11 +29,6 @@ dbms_network_acl_admin.append_host_ace
     );
 end;
 
- select * from dba_network_acls;
-
-DBMS_NETWORK_ACL_ADMIN.assign_acl (acl=> 'xedba.xml',
-HOST => '127.0.0.1',
-lower_port  => NULL,
-upper_port  => NULL);
+select * from dba_network_acls;
 
 commit;

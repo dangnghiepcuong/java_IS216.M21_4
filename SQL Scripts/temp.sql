@@ -4,13 +4,16 @@ select * from organization;
 
 select * from vaccine;
 
-select * from schedule;
+select * from schedule
+order by OnDate desc;
 
 select * from person;
 
 select * from register;
 
 select * from injection;
+
+select * from health;
 
 select * from vaccine;
 
@@ -22,7 +25,9 @@ delete from account;
 delete from parameter;
 
 delete from injection;
-delete from register;
+
+delete from register
+where SchedID = '44001221120221';
 
 alter table ORGANIZATION
 modify ID varchar(5);
@@ -39,6 +44,11 @@ add DoseType varchar2(50);
 
 alter table INJECTION
 add DoseType varchar2(50);
+
+alter table INJECTION
+modify InjNO varchar2(2);
+
+alter table PERSON modify ID varchar2(256);
 
 alter table PARAMETER rename column PreDose to DiffDoses;
 
