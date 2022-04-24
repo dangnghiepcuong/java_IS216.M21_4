@@ -59,7 +59,23 @@ BEGIN
 END;
 
 /*	STORED PROCEDURES	*/
-
+create or replace procedure ANN_INSERT_RECORD ( par_OrgID ANNOUNCEMENT.OrgID%type,
+                                                par_Tittle ANNOUNCEMENT.Tittle%type,
+                                                par_Content ANNOUNCEMENT.Content%type,
+                                                par_PuslishDate ANNOUNCEMENT.PublishDate%type,
+                                                par_Note ANNOUNCEMENT.Note%type DEFAULT NULL)
+as
+    Temp_ID ANNOUNCEMENT.ID%type;
+begin 
+    
+    --Give next value of ID
+    Temp_ID := ANN_ID(par_OrgID);
+    
+    --Insert
+    insert into ANNOUNCEMENT(ID, OrgID, Title, Content, PublishDate, Note)
+    values (par_OrgID, par_Tittle, par_Content, par_PuslishDate, par_Note);
+       
+end;
 
 
 /*	STORED FUNCTIONS	*/
