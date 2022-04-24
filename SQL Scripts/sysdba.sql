@@ -29,6 +29,6 @@ dbms_network_acl_admin.append_host_ace
     );
 end;
 
- select * from dba_network_acls;
+select * from dba_network_acls;
 
 commit;

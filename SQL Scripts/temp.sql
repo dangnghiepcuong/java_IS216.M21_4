@@ -22,7 +22,9 @@ delete from account;
 delete from parameter;
 
 delete from injection;
-delete from register;
+
+delete from register
+where SchedID = '44001220720221';
 
 alter table ORGANIZATION
 modify ID varchar(5);
