@@ -10,10 +10,10 @@ create table INJECTION
     PersonalID varchar2(12) not null,
     
     --Injection sequence number of the citizen, value in { 1, 2, 3, 4}
-    InjNO number(5),
+    InjNO number(2),
     
     --SchedlID FK references SCHEDULE(ID)
-    SchedID varchar2(10),
+    SchedID varchar2(15),
     
     --Injection type
     DoseType varchar(50),
