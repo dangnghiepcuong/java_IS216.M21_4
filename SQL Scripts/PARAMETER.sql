@@ -44,10 +44,10 @@ add constraint FK_PAR_VAC foreign key (VaccineID) references VACCINE(ID);
 
 --Check
 alter table PARAMETER
-add constraint CK_DiffDoses CHECK(DiffDoses in (0,1));
+add constraint CK_PAR_DiffDoses CHECK(DiffDoses in (0,1));
 
 alter table PARAMETER
-add constraint CK_DoseType CHECK (DoseType in ('basic', 'booster', 'repeat'));
+add constraint CK_PAR_DoseType CHECK (DoseType in ('basic', 'booster', 'repeat'));
 
 /*	TRIGGERS	*/
 
