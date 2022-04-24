@@ -40,6 +40,11 @@ add DoseType varchar2(50);
 alter table INJECTION
 add DoseType varchar2(50);
 
+alter table INJECTION
+modify InjNO varchar2(2);
+
+alter table PERSON modify ID varchar2(256);
+
 alter table PARAMETER rename column PreDose to DiffDoses;
 
     select * into PreInj

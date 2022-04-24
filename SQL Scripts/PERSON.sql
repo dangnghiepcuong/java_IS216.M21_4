@@ -60,6 +60,8 @@ add constraint PK_PERSON primary key (ID);
 alter table PERSON
 add constraint FK_PERSON_GUAR foreign key (Guardian) references PERSON(ID);
 
+alter table PERSON
+add constraint FK_PERSON_ACC foreign key (Phone) references ACCOUNT(Username);
 
 --Check
 
