@@ -7,10 +7,10 @@
 create table SCHEDULE
 (
 	--Identity of a schedule, created from OrgID+DateNumber+NO
-	ID varchar2(26),
+	ID varchar2(15),
 
 	--OrganizationID FK references ORGANIZATION(ID)
-	OrgID varchar2(16),
+	OrgID varchar2(5),
     
     --Scheduled date
     OnDate date,

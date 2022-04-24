@@ -20,11 +20,15 @@ GRANT EXECUTE ON DBMS_DEBUG_JDWP To VACCINATION;
 --4. Execute this block
 begin
 dbms_network_acl_admin.append_host_ace
-    (host='192.168.1.25',
-        ace=> sys.xs$ace_type(privilege_list=>sys.xs$name_list('JDWP'),
+    (host => '127.0.0.1',
+        lower_port => null,
+        upper_port => null,
+        ace=> sys.xs$ace_type(privilege_list=>sys.xs$name_list('jdwp'),
                     principal_name=>'vaccination',
                     principal_type=>sys.xs_acl.ptype_db)
     );
 end;
+
+select * from dba_network_acls;
 
 commit;

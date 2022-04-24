@@ -11,14 +11,14 @@ create table PARAMETER
 	--VaccineID for parameter to references to
 	VaccineID varchar2(8),
     
-    --Dose type (basic, booster, repeat)
-    DoseType varchar2(100),
+    	--Dose type (basic, booster, repeat)
+    	DoseType varchar2(100),
 
 	--Minimum spacing time between the register dose and this referencing dose
 	MinDistance number,
 
 	--Verify the difference between previous doses
-	DiffDose number(1),
+	DiffDose number,
 
 	--The allowed vaccine for the registion dose
 	NextDose varchar2(100),
@@ -44,10 +44,10 @@ add constraint FK_PAR_VAC foreign key (VaccineID) references VACCINE(ID);
 
 --Check
 alter table PARAMETER
-add constraint CK_DiffDoses CHECK(DiffDoses in (0,1));
+add constraint CK_PAR_DiffDoses CHECK(DiffDoses in (0,1));
 
 alter table PARAMETER
-add constraint CK_DoseType CHECK (DoseType in ('basic', 'booster', 'repeat'));
+add constraint CK_PAR_DoseType CHECK (DoseType in ('basic', 'booster', 'repeat'));
 
 /*	TRIGGERS	*/
 
