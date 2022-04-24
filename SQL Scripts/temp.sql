@@ -4,13 +4,16 @@ select * from organization;
 
 select * from vaccine;
 
-select * from schedule;
+select * from schedule
+order by OnDate desc;
 
 select * from person;
 
 select * from register;
 
 select * from injection;
+
+select * from health;
 
 select * from vaccine;
 
@@ -24,7 +27,7 @@ delete from parameter;
 delete from injection;
 
 delete from register
-where SchedID = '44001220720221';
+where SchedID = '44001221120221';
 
 alter table ORGANIZATION
 modify ID varchar(5);
