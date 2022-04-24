@@ -12,9 +12,6 @@ create table PERSON
     --Last name of the citizen
     LastName varchar2(100),
 
-    --Last name of the citizen
-    LastName varchar2(100),
-
     --First name of the citizen
     FirstName varchar2(50),
 
@@ -31,7 +28,7 @@ create table PERSON
     Province varchar2(50),
 
     --District address of the citizen
-    District varchar2(50),
+    District varchar2(2),
 
     --Town address of the citizen
     Town varchar2(50),
