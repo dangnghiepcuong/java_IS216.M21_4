@@ -20,13 +20,23 @@ select * from vaccine;
 select * from parameter;
 
 delete from organization;
+
 delete from account;
+
+delete from vaccine;
+
+delete from person;
+
+delete from schedule;
 
 delete from parameter;
 
 delete from injection;
 
-delete from register
+delete from register;
+
+delete from health;
+
 where SchedID = '44001221120221';
 
 alter table ORGANIZATION
