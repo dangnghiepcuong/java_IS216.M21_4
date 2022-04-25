@@ -60,10 +60,10 @@ end HEAL_INSERT_RECORD;
 /*	STORED FUNCTIONS	*/
 --return the next ID for filling form
 
-create or replace function NUM__COUNT_HEAL_FORM_ID(par_personalID PERSON.ID%type)
+create or replace function HEAL_FORM_ID(par_personalID PERSON.ID%type)
 return number is
 --return value of count health form
-Count_HEAL_FORM int;
+Count_HEAL_FORM number;
 begin
 if(par_personalID = NULL)
 then 
@@ -72,7 +72,7 @@ end if;
 select Count(PersonalID) into Count_HEAL_FORM
 from HEALTH
 return Count_HEAL_FORM;
-end NUM_COUNT_HEAL_FORM_ID;
+end HEAL_FORM_ID;
 
 
 
