@@ -14,11 +14,12 @@ create table STATISTIC
 
 /*	CONSTRAINT	*/
 --Primary Key
+alter table STATISTIC add constraint PK_STAT primary key (Title);
 
 --Foreign Key
 
 --Check
-
+alter table STATISTIC add constraint CK_STAT_Data check(Data>0);
 
 /*	TRIGGERS	*/
 
