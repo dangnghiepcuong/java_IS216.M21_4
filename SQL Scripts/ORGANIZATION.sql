@@ -12,7 +12,7 @@ create table ORGANIZATION
     Name varchar2(100),
     
     --Province of organization
-    Province varchar2(50),
+    Province varchar2(2),
     
     --District of organization
     District varchar2(50),
@@ -49,7 +49,7 @@ add constraint CHK_PROVINCE check (Province is not null);
 
 
 
-/*	STORED PROCEDURES	*/
+                /*	STORED PROCEDURES	*/
 --Insert
 create or replace procedure ORG_INSERT_RECORD (par_ID ORGANIZATION.ID%type,                                            
                                              par_Province ORGANIZATION.Province%type,                                            
@@ -94,30 +94,39 @@ end ORG_UPDATE_RECORD;
 --Annouce
 
 
-/*	STORED FUNCTIONS	*/
-
+                    /*	STORED FUNCTIONS	*/
 -- Count the number of schedules were hold by the ORG from StartDate to EndDate
-create or replace function ORG_COUNT_SCHED (par_ID ORGANIZATION.ID%type,
-                                            par_StatDate date,
-                                            par_EndDate date)
-return number is 
-    	Count_Sched int;
+create or replace function ORG_COUNT_SCHED 
+(par_OrgID ORGANIZATION.ID%type, par_StartDate date DEFAULT NULL, par_EndDate date DEFAULT NULL)
+return number 
+is 
+    Count_Sched int;
+    var_StartDate date;
+    var_EndDate date;
 begin
-    	--set value 0 for Count_Sched
-    	Count_Sched := 0; 
+    --set value 0 for Count_Sched
+    Count_Sched := 0; 
 
-   	--check start date must be less than or equal to end date
-    	if (par_StatDate <= par_EndDate) then
-    	begin
-       		--from the schedules, count OrgID
-        		select COUNT(OrtgID) into Count_Sched
-        		from SCHEDULE SCHED
-        		where SCHED.OnDate >= par_StatDate and SCHED.OnDate <= par_EndDate;
-    	end;
-    	else 
-        		DBMS_OUTPUT.PUT_LINE('start date must be less than or equal to end date');
-    	end if;
-end;
+    var_StartDate := par_StartDate;
+    var_EndDate := par_EndDate;
+
+    --if StartDate > EndDate, then swap their value.
+    if (par_StartDate > par_EndDate) 
+    then
+        begin
+        var_StartDate := par_EndDate;
+        var_EndDate := par_StartDate;
+        end;
+    end if;
+
+    --from the SCHEDULES, count OrgID
+    select COUNT(OrgID) into Count_Sched
+    from SCHEDULE SCHED
+    where SCHED.OnDate >= par_StartDate 
+    and SCHED.OnDate <= par_EndDate;
+    
+    return Count_Sched;
+end ORG_COUNT_SCHED;
 
 --Count the number of injections have been done by the ORG from StartDate to EndDate
 create or replace function ORG_COUNT_INJ (par_ID ORGANIZATION.ID%type,

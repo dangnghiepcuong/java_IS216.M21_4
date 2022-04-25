@@ -10,10 +10,10 @@ create table INJECTION
     PersonalID varchar2(12) not null,
     
     --Injection sequence number of the citizen, value in { 1, 2, 3, 4}
-    InjNO number(5),
+    InjNO number(2),
     
     --SchedlID FK references SCHEDULE(ID)
-    SchedID varchar2(10),
+    SchedID varchar2(15),
     
     --Injection type
     DoseType varchar(50),
@@ -24,8 +24,7 @@ create table INJECTION
 /*	CONSTRAINT	*/
 --Primary Key
 alter table INJECTION 
-add constraint PK_INJECTION primary key (PersonalID, InjID);
-
+add constraint PK_INJ primary key (PersonalID, InjNO);
 
 --Foreign Key
 alter table INJECTION
@@ -36,14 +35,14 @@ add constraint FK_INJ_SCHED foreign key (SchedID) references SCHEDULE(ID);
 
 
 --Check
-alter table INNJECTION
-add constraint CK_INJECTION_InjNO check (InjNO in (1, 2, 3, 4));
+alter table INJECTION
+add constraint CK_INJ_InjNO check (InjNO in (1, 2, 3, 4));
 
-alter table INNJECTION
-add constraint CK_SchedID check(SchedID is not null);
+alter table INJECTION
+add constraint CK_INJ_SchedID check(SchedID is not null);
 
-alter table INNJECTION
-add constraint CK_Type check(Type is not null and Type in (0,1,2));
+alter table INJECTION
+add constraint CK_INJ_DoseType check((DoseType is not null) and (DoseType in (0,1,2)));
 
 
             /*	TRIGGERS	*/
