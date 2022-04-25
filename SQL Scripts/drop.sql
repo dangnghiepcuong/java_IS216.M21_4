@@ -59,8 +59,8 @@ alter table INJECTION drop constraint FK_INJ_PERSON;
 ========================================================
 */
 drop table ORGANIZATION;
-alter table ORGANIZATION drop constraint CHK_NAME;
-alter table ORGANIZATION drop constraint CHK_PROVINCE;
+alter table ORGANIZATION drop constraint CK_ORG_NAME;
+alter table ORGANIZATION drop constraint CK_ORG_PROVINCE;
 alter table ORGANIZATION drop constraint PK_ORG;
 
 
@@ -156,5 +156,7 @@ drop table PARAMETER;
                 TABLE STATISTIC
 ========================================================
 */
+alter table STATISTIC drop constraint CK_Data;
+
 drop table STATISTIC;
 
