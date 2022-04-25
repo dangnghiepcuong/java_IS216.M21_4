@@ -1331,7 +1331,7 @@ end SCHED_GENERATE_ID;
 
   ALTER TABLE "ORGANIZATION" ADD CONSTRAINT "PK_ORG" PRIMARY KEY ("ID") USING INDEX  ENABLE
   ALTER TABLE "ORGANIZATION" ADD CONSTRAINT "CK_ORG_PROVINCE" CHECK (Province is not null) ENABLE
-  ALTER TABLE "ORGANIZATION" ADD CONSTRAINT "CK_NAME" CHECK (Name is not null) ENABLE
+  ALTER TABLE "ORGANIZATION" ADD CONSTRAINT "CK_ORG_NAME" CHECK (Name is not null) ENABLE
 --------------------------------------------------------
 --  Constraints for Table PARAMETER
 --------------------------------------------------------
