@@ -41,12 +41,11 @@ add constraint FK_ORG_ACC foreign key (ID) references ACCOUNT(OrgID);
 --Check
     --Check name is not null
 alter table ORGANIZATION
-add constraint CK_NAME check (Name is not null);
+add constraint CK_ORG_NAME check (Name is not null);
 
 alter table ORGANIZATION
 add constraint CK_ORG_PROVINCE check (Province is not null);
 /*	TRIGGERS	*/
-
 
 
                 /*	STORED PROCEDURES	*/
