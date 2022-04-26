@@ -5,18 +5,16 @@ select * from organization;
 select * from vaccine;
 
 select * from schedule
-
 order by OnDate desc;
 
 select * from person;
 
 select * from register;
 
-select * from injection;
+select * from injection
+order by PersonalID;
 
 select * from health;
-
-select * from vaccine;
 
 select * from parameter;
 
