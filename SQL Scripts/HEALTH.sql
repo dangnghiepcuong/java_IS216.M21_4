@@ -4,11 +4,11 @@
 
 create table HEALTH
 (
-    ID int,
+      ID int,
 	PersonalID varchar2(12),
 	FilledDate date,
 	Healths varchar2(20),
-	Note varchar2(2000)
+	Note varchar2(2000),
 );
 
 /*	CONSTRAINT	*/
@@ -27,21 +27,21 @@ add constraint FK_HEAL_PERSON foreign key (PersonalID) references PERSON(ID);
 ---check Filleddate=SYSDATE
 
 create or replace trigger HEALTH_FilledDate
-after insert on HEALTH
+after insert or update on HEALTH
 for each row
 begin
-    if((Extract(Year From : new.FilledDate) = Extract(Year From SYSDATE))
-    and (Extract(Month From : new.FilledDate) = Extract(Year From SYSDATE))
-    and (Extract(Year From : new.FilledDate) = Extract(Year From SYSDATE))
+    if((Extract(Day From : new.FilledDate) != Extract(Day From SYSDATE))
+    and (Extract(Month From : new.FilledDate) != Extract(Month From SYSDATE))
+    and (Extract(Year From : new.FilledDate) != Extract(Year From SYSDATE))
     then 
-        DBMS_OUTPUT.PUT_LINE('Successfully added filled date');
-    else
         RAISE_APPLICATION_ERROR(-10000,'Filled date must be according to SYSDATE!);
 end if;
-end;
+end HEALTH_FilledDate;
 
 
 /*	STORED PROCEDURES	*/
+--insert
+
 create or replace procedure HEAL_INSERT_RECORD
 (par_ID HEALTH.ID%type,
 par_PersonalID PERSON.ID%type, 
@@ -58,6 +58,21 @@ end HEAL_INSERT_RECORD;
 
 
 /*	STORED FUNCTIONS	*/
+--return the next ID for filling form
+
+create or replace function HEAL_FORM_ID(par_personalID PERSON.ID%type)
+return number is
+--return value of count health form
+Count_HEAL_FORM number;
+begin
+if(par_personalID = NULL)
+then 
+return NULL;
+end if;
+select Count(PersonalID) into Count_HEAL_FORM
+from HEALTH
+return Count_HEAL_FORM;
+end HEAL_FORM_ID;
 
 
 

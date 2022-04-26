@@ -74,7 +74,6 @@ begin
 end REG_NO_LIMIT;
 
 
-
 create or replace trigger REG_VACCINATION_RULE
 --The registered schedule must follow the rule of vaccination (spacing time and vaccine type)
 --+ Dose type: If the citizen have done 4 doses (2 basic, 1 booster, 1 repeat) or 3 doses (2 basic, 1 repeat), she cannot register anymore. => Previous dose is repeat type can not register

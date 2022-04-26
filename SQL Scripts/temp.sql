@@ -5,6 +5,7 @@ select * from organization;
 select * from vaccine;
 
 select * from schedule
+
 order by OnDate desc;
 
 select * from person;
@@ -19,14 +20,26 @@ select * from vaccine;
 
 select * from parameter;
 
-delete from organization;
-delete from account;
-
+/* DELETE */
 delete from parameter;
+
+delete from health;
 
 delete from injection;
 
-delete from register
+delete from register;
+
+delete from schedule;
+
+delete from vaccine;
+
+delete from organization;
+
+delete from person;
+
+delete from account;
+
+
 where SchedID = '44001221120221';
 
 alter table ORGANIZATION
