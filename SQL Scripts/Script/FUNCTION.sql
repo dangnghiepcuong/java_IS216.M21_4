@@ -108,31 +108,7 @@ is
     
     var_Distinct int;
 begin
-    /*
-    if (INJ_COUNT_INJ(par_PersonalID) <= 1)
-    then
-        return 0;
-    end if;
-    fetch c_INJ into crow_INJ_be;
-    open c_INJ;
-    loop
-        fetch c_INJ into crow_INJ_af;
-        exit when c_INJ%notfound;
-        --select out the vaccine id of 2 injection in theirs schedule
-        select ID into var_VaccineID_1
-        from SCHEDULE SCHED
-        where SCHED.ID = crow_INJ_be.SchedID;
-        select ID into var_VaccineID_2
-        from SCHEDULE SCHED
-        where SCHED.ID = crow_INJ_af.SchedID;
-        if (var_VaccineID_1 != var_VaccineID_2)
-        then
-            return 1;
-        end if;
-        crow_INJ_be := crow_INJ_af;
-    end loop;
-    return 0;*/
-    
+      
     select COUNT(distinct SCHED.VaccineID) into var_Distinct
     from INJECTION INJ, SCHEDULE SCHED
     where INJ.PersonalID = par_PersonalID
@@ -206,14 +182,12 @@ begin
         into LimitReg, RegNumber
         from SCHEDULE SCHED
         where SCHED.ID = par_SchedID;
-    elsif (par_Time = 2)
+    else (par_Time = 2)
     then
         select LimitNight, NightRegistered
         into LimitReg, RegNumber
         from SCHEDULE SCHED
         where SCHED.ID = par_SchedID;
-    else
-        raise_application_error(-20011, 'Time registion not found!');
     end if;	
 
 	--If the number of registion meet the limit of at that time, return 0
