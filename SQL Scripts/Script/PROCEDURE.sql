@@ -63,12 +63,10 @@ begin
     for i in Last_Seq .. Last_Seq + par_Quantity - 1
     loop
         --Create account
-        ACC_INSERT_RECORD(TO_CHAR(par_Province)||ACC_CONVERT_SEQ_TO_STR(i), 
-                            TO_CHAR(par_Province)||ACC_CONVERT_SEQ_TO_STR(i),
-                            1, 1, null);
+        temp_ID := TO_CHAR(par_Province)||ACC_CONVERT_SEQ_TO_STR(i);
+        ACC_INSERT_RECORD(temp_ID,  temp_ID, 1, 1, null);
         --Create ORG
-        ORG_INSERT_RECORD(TO_CHAR(par_Province)||ACC_CONVERT_SEQ_TO_STR(i),
-        par_Province, null);
+        ORG_INSERT_RECORD(temp_ID, par_Province, null);
     end loop;
     
     commit;
@@ -82,12 +80,10 @@ EXCEPTION
     for i in Last_Seq .. Last_Seq + par_Quantity - 1
     loop
         --Create account
-        ACC_INSERT_RECORD(TO_CHAR(par_Province)||ACC_CONVERT_SEQ_TO_STR(i), 
-                            TO_CHAR(par_Province)||ACC_CONVERT_SEQ_TO_STR(i),
-                            1, 1, null);
+        temp_ID := TO_CHAR(par_Province)||ACC_CONVERT_SEQ_TO_STR(i);
+        ACC_INSERT_RECORD(temp_ID, temp_ID, 1, 1, null);
         --Create ORGs
-        ORG_INSERT_RECORD(TO_CHAR(par_Province)||ACC_CONVERT_SEQ_TO_STR(i),
-        par_Province, null);
+        ORG_INSERT_RECORD(temp_ID, par_Province, null);
     end loop;
 
 end ACC_CREATE_ORG;
@@ -448,7 +444,7 @@ begin
     
     insert into SCHEDULE(ID,OrgID,OnDate,VaccineID,Serial,LimitDay,LimitNoon,LimitNight,DayRegistered,NoonRegistered,NightRegistered,Note)
     values(var_SchedID, par_OrgID, par_OnDate, par_VaccineID, par_Serial, 
-    par_LimitDay, par_LimitNoon, par_LimitNight, 0, 0, 0, par_Note);
+    par_LimitDay, par_LimitNoon, par_LimitNight);
     commit;
 end SCHED_INSERT_RECORD;
 --------------------------------------------------------

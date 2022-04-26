@@ -40,6 +40,8 @@ begin
 
     --The next value of ID
     Value_OrgID := TO_NUMBER(SUBSTR(TO_CHAR(par_OrgID), -3, 3)) + 1;
+	
+	return Value_OrgID;
 
 EXCEPTION 
     when no_data_found
