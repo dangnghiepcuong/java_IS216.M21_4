@@ -2,6 +2,43 @@
 --  File created - Tuesday-April-26-2022   
 --------------------------------------------------------
 --------------------------------------------------------
+--  DDL for Procedure ACC_INSERT_RECORD
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "ACC_INSERT_RECORD" 
+(par_Username varchar2, par_Password varchar2, par_Role number, par_Status number, par_Note varchar2 DEFAULT NULL)
+is   
+begin 
+     insert into ACCOUNT(Username, Password, Role, status, Note) values 
+     (par_Username, par_Password, par_Role, par_Status, par_Note);    
+     
+     commit;
+     
+     EXCEPTION
+        when DUP_VAL_ON_INDEX
+        then
+            raise_application_error(1000,'Username has been registered by another user!');
+end ACC_INSERT_RECORD;
+
+--------------------------------------------------------
+--  DDL for Procedure ORG_INSERT_RECORD
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "ORG_INSERT_RECORD" (par_ID ORGANIZATION.ID%type,                                            
+                                             par_Province ORGANIZATION.Province%type,                                            
+							   par_Note  ORGANIZATION.Note%type DEFAULT NULL)                                           
+as 
+begin
+    --insert new ORGANIZATION
+	insert into ORGANIZATION(ID, Province, Note) 
+	values (par_ID, par_Province, par_Note);
+    
+    commit;
+end ORG_INSERT_RECORD;
+
+--------------------------------------------------------
 --  DDL for Procedure ACC_CREATE_ORG
 --------------------------------------------------------
 set define off;
@@ -67,25 +104,7 @@ begin
     
     commit;
 end ACC_DELETE_RECORD;
---------------------------------------------------------
---  DDL for Procedure ACC_INSERT_RECORD
---------------------------------------------------------
-set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "ACC_INSERT_RECORD" 
-(par_Username varchar2, par_Password varchar2, par_Role number, par_Status number, par_Note varchar2 DEFAULT NULL)
-is   
-begin 
-     insert into ACCOUNT(Username, Password, Role, status, Note) values 
-     (par_Username, par_Password, par_Role, par_Status, par_Note);    
-     
-     commit;
-     
-     EXCEPTION
-        when DUP_VAL_ON_INDEX
-        then
-            raise_application_error(1000,'Username has been registered by another user!');
-end ACC_INSERT_RECORD;
 --------------------------------------------------------
 --  DDL for Procedure ACC_UPDATE_PASSWORD
 --------------------------------------------------------
@@ -142,22 +161,7 @@ begin
 
     commit;
 end INJ_INSERT_RECORD;
---------------------------------------------------------
---  DDL for Procedure ORG_INSERT_RECORD
---------------------------------------------------------
-set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "ORG_INSERT_RECORD" (par_ID ORGANIZATION.ID%type,                                            
-                                             par_Province ORGANIZATION.Province%type,                                            
-							   par_Note  ORGANIZATION.Note%type DEFAULT NULL)                                           
-as 
-begin
-    --insert new ORGANIZATION
-	insert into ORGANIZATION(ID, Province, Note) 
-	values (par_ID, par_Province, par_Note);
-    
-    commit;
-end ORG_INSERT_RECORD;
 --------------------------------------------------------
 --  DDL for Procedure ORG_UPDATE_RECORD
 --------------------------------------------------------
@@ -255,6 +259,62 @@ begin
     commit;
 
 end PERSON_UPDATE_RECORD;
+
+--------------------------------------------------------
+--  DDL for Procedure SCHED_DEC_REG
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "SCHED_DEC_REG" 
+(par_SchedID SCHEDULE.ID%type, par_Time REGISTER.Time%type)
+as
+begin
+	if (par_Time = 0)
+	then
+		update SCHEDULE
+		set DayRegistered = DayRegistered - 1
+		where SCHEDULE.ID = par_SchedID;
+ 	elsif (par_Time = 1)
+	then
+		update SCHEDULE
+		set NoonRegistered = NoonRegistered - 1
+		where SCHEDULE.ID = par_SchedID;
+	elsif (par_Time = 2)
+	then
+		update SCHEDULE
+		set NightRegistered = NightRegistered - 1
+		where SCHEDULE.ID = par_SchedID;
+	end if;
+    commit;
+end SCHED_DEC_REG;
+--------------------------------------------------------
+--  DDL for Procedure SCHED_INC_REG
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "SCHED_INC_REG" 
+(par_SchedID SCHEDULE.ID%type, par_Time REGISTER.Time%type)
+as
+begin
+	if (par_Time = 0)
+	then
+		update SCHEDULE
+		set DayRegistered = DayRegistered + 1
+		where SCHEDULE.ID = par_SchedID;
+ 	elsif (par_Time = 1)
+	then
+		update SCHEDULE
+		set NoonRegistered = NoonRegistered + 1
+		where SCHEDULE.ID = par_SchedID;
+	elsif (par_Time = 2)
+	then
+		update SCHEDULE
+		set NightRegistered = NightRegistered + 1
+		where SCHEDULE.ID = par_SchedID;
+	end if;
+    commit;
+end SCHED_INC_REG;
+
 --------------------------------------------------------
 --  DDL for Procedure REG_INSERT_RECORD
 --------------------------------------------------------
@@ -368,60 +428,7 @@ begin
     
     --There was no injection before, this the first injection
 end REG_UPDATE_STATUS;
---------------------------------------------------------
---  DDL for Procedure SCHED_DEC_REG
---------------------------------------------------------
-set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "SCHED_DEC_REG" 
-(par_SchedID SCHEDULE.ID%type, par_Time REGISTER.Time%type)
-as
-begin
-	if (par_Time = 0)
-	then
-		update SCHEDULE
-		set DayRegistered = DayRegistered - 1
-		where SCHEDULE.ID = par_SchedID;
- 	elsif (par_Time = 1)
-	then
-		update SCHEDULE
-		set NoonRegistered = NoonRegistered - 1
-		where SCHEDULE.ID = par_SchedID;
-	elsif (par_Time = 2)
-	then
-		update SCHEDULE
-		set NightRegistered = NightRegistered - 1
-		where SCHEDULE.ID = par_SchedID;
-	end if;
-    commit;
-end SCHED_DEC_REG;
---------------------------------------------------------
---  DDL for Procedure SCHED_INC_REG
---------------------------------------------------------
-set define off;
-
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "SCHED_INC_REG" 
-(par_SchedID SCHEDULE.ID%type, par_Time REGISTER.Time%type)
-as
-begin
-	if (par_Time = 0)
-	then
-		update SCHEDULE
-		set DayRegistered = DayRegistered + 1
-		where SCHEDULE.ID = par_SchedID;
- 	elsif (par_Time = 1)
-	then
-		update SCHEDULE
-		set NoonRegistered = NoonRegistered + 1
-		where SCHEDULE.ID = par_SchedID;
-	elsif (par_Time = 2)
-	then
-		update SCHEDULE
-		set NightRegistered = NightRegistered + 1
-		where SCHEDULE.ID = par_SchedID;
-	end if;
-    commit;
-end SCHED_INC_REG;
 --------------------------------------------------------
 --  DDL for Procedure SCHED_INSERT_RECORD
 --------------------------------------------------------
@@ -581,3 +588,4 @@ begin
         then
             raise_application_error(-20011,'Duplicate ID or name!');
 end VAC_INSERT_RECORD;
+--
