@@ -11,31 +11,32 @@ select * from person;
 
 select * from register;
 
-select * from injection;
+select * from injection
+order by PersonalID;
 
 select * from health;
 
-select * from vaccine;
-
 select * from parameter;
 
-delete from organization;
-
-delete from account;
-
-delete from vaccine;
-
-delete from person;
-
-delete from schedule;
-
+/* DELETE */
 delete from parameter;
+
+delete from health;
 
 delete from injection;
 
 delete from register;
 
-delete from health;
+delete from schedule;
+
+delete from vaccine;
+
+delete from organization;
+
+delete from person;
+
+delete from account;
+
 
 where SchedID = '44001221120221';
 
