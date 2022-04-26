@@ -160,3 +160,8 @@ alter table STATISTIC drop constraint CK_Data;
 
 drop table STATISTIC;
 
+drop table REGION;
+
+commit;
+
+drop procedure ACC_CREATE_ORG;
