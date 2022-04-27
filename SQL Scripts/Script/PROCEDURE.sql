@@ -18,7 +18,7 @@ begin
      EXCEPTION
         when DUP_VAL_ON_INDEX
         then
-            raise_application_error(1000,'Username has been registered by another user!');
+            raise_application_error(-20012,'Username has been registered by another user!');
 end ACC_INSERT_RECORD;
 
 --------------------------------------------------------
@@ -87,19 +87,7 @@ EXCEPTION
     end loop;
 
 end ACC_CREATE_ORG;
---------------------------------------------------------
---  DDL for Procedure ACC_DELETE_RECORD
---------------------------------------------------------
-set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "ACC_DELETE_RECORD" (par_Username varchar2)
-is
-begin
-    delete from PERSON where PERSON.Phone = par_Username;
-    delete from ACCOUNT where ACCOUNT.Username = par_Username;
-    
-    commit;
-end ACC_DELETE_RECORD;
 
 --------------------------------------------------------
 --  DDL for Procedure ACC_UPDATE_PASSWORD
@@ -112,14 +100,20 @@ is
     Pass varchar2(128);
 begin
     select Password into Pass from ACCOUNT where Username = par_Username;
-    if (par_OldPass != Pass) then
-        DBMS_Output.Put_line('Mat khau khong dung!');
+    if (par_OldPass != Pass) 
+    then
+        raise_applicaiton_error(-20013,'Incorrect password!');
     else
         update ACCOUNT set Password = par_NewPass 
         where  Username = par_Username;
     end if;
     
     commit;
+    
+    EXCEPTION
+        when no_data_found
+        then
+            raise_application_error(-20014,'Username does not exist!');
 end ACC_UPDATE_PASSWORD;
 --------------------------------------------------------
 --  DDL for Procedure HEAL_INSERT_RECORD
@@ -211,12 +205,27 @@ begin
         then
             raise_application_error(1000,'ID has been registered by another user!');
 end PERSON_INSERT_RECORD;
+
+--------------------------------------------------------
+--  DDL for Procedure ACC_DELETE_RECORD
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "ACC_DELETE_RECORD" (par_Username varchar2)
+is
+begin
+    delete from PERSON where PERSON.Phone = par_Username;
+    delete from ACCOUNT where ACCOUNT.Username = par_Username;
+    
+    commit;
+end ACC_DELETE_RECORD;
+
 --------------------------------------------------------
 --  DDL for Procedure PERSON_UPDATE_RECORD
 --------------------------------------------------------
 set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "PERSON_UPDATE_RECORD" (par_ID PERSON.ID%type,
+  create or replace PROCEDURE "PERSON_UPDATE_RECORD" (par_ID PERSON.ID%type,
 par_HomeTown PERSON.HomeTown%type, par_Province PERSON.Province%type,
 par_District PERSON.District%type, par_Town PERSON.Town%type,
 par_Street PERSON.Street%type, par_Phone PERSON.Phone%type,
@@ -233,7 +242,7 @@ begin
 
     --Update Phone of PERSON
 
-    --Select old password and old phone of PERSON
+    --Select out the old account info of PERSON
      select Phone into temp_User
     from PERSON
     where ID = par_ID;
@@ -242,15 +251,16 @@ begin
     from ACCOUNT
     where Username = temp_User;
 
-    --Create ACCOUNT
+    --Create new ACCOUNT
      ACC_INSERT_RECORD (par_Phone, temp_Pass, 2, 1, NULL);
-     --Delete ACCOUNT
-     ACC_DELETE_RECORD (temp_User);
-
+     
      --update Phone of PERSON
      update PERSON
      set Phone = par_Phone
      where ID = par_ID;
+     
+     --Delete old ACCOUNT
+     ACC_DELETE_RECORD (temp_User);
 
     commit;
 
@@ -444,7 +454,7 @@ begin
     
     insert into SCHEDULE(ID,OrgID,OnDate,VaccineID,Serial,LimitDay,LimitNoon,LimitNight,DayRegistered,NoonRegistered,NightRegistered,Note)
     values(var_SchedID, par_OrgID, par_OnDate, par_VaccineID, par_Serial, 
-    par_LimitDay, par_LimitNoon, par_LimitNight);
+    par_LimitDay, par_LimitNoon, par_LimitNight, 0, 0, 0, par_Note);
     commit;
 end SCHED_INSERT_RECORD;
 --------------------------------------------------------

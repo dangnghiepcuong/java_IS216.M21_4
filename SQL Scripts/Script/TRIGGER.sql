@@ -2,6 +2,50 @@
 --  File created - Tuesday-April-26-2022   
 --------------------------------------------------------
 --------------------------------------------------------
+--  DDL for Trigger PERSON_VALUE
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "PERSON_VALUE" 
+BEFORE INSERT OR UPDATE ON PERSON 
+FOR EACH ROW
+BEGIN
+    if (:new.FirstName = null or :new.FirstName like '% %')
+    then
+        raise_application_error(-20008, 'First name can not be empty or contain space!');
+    end if;
+    
+    if (:new.BirthDay > sysdate)
+    then
+        raise_application_error(-20009, 'Birthday must not be a future day!');
+    end if;
+    
+    if (:new.Email like '% %' or :new.Email not like '%@%')
+    then
+        raise_application_error(-20010, 'Email must not contains space and must contains "@" !');
+    end if;
+END;
+
+--------------------------------------------------------
+--  DDL for Trigger SCHED_REGISTION_LIMIT
+--------------------------------------------------------
+  CREATE OR REPLACE EDITIONABLE TRIGGER "SCHED_REGISTION_LIMIT" 
+BEFORE UPDATE OR INSERT ON SCHEDULE
+FOR EACH ROW
+BEGIN
+    if (:new.DayRegistered < 0 or :new.NoonRegistered < 0 or :new.NightRegistered < 0)
+    then
+        raise_application_error(-20010,'Number of registion can not be negative!');
+    end if;
+    
+    if (:new.DayRegistered > :new.LimitDay
+        or :new.NoonRegistered > :new.LimitNoon
+        or :new.NightRegistered > :new.LimitNight)
+    then
+        raise_application_error(-20011,'Number of registion is limited!');
+    end if;
+END;
+
+--------------------------------------------------------
 --  DDL for Trigger REG_VACCINATION_AGE_STATUS
 --------------------------------------------------------
 
@@ -20,7 +64,7 @@ begin
     --Check age
     if ( months_between(sysdate, var_BirthDay) < 60)
     then
-        raise_application_error(-20007,
+        raise_application_error(-20000,
         'Your age is lower than the regulation!');
     end if;
 
@@ -34,7 +78,7 @@ begin
 
     if (LastReg < 2)
     then
-        raise_application_error(-20008,
+        raise_application_error(-20001,
         'You must complete your previous registion before register a new one!');
     end if;
 
@@ -78,7 +122,7 @@ begin
     --=> If the previous dose is 'repeat' type, can not register.
 	if ( PreInj.DoseType = 'repeat' )
 	then
-		raise_application_error(-20000,
+		raise_application_error(-20002,
         'You have completed all vaccination doses!'); 
 	end if;
 
@@ -112,14 +156,14 @@ begin
     --Check spacing rule between 2 injections      
     if (abs(months_between(var_OnDate, var_PreOnDate)) < (ParCase.MinDistance-3)/30)
 	then
-		raise_application_error(-20001, 
+		raise_application_error(-20003, 
         'Cannot register to this schedule due to the invalid in spacing rule!');
 	end if;
 
 	--Check vaccine combination rule: vaccine from registered schedule must be contained in ParCase.NextDose	
     if (ParCase.NextDose not like '%'||RegVac||'%')
 	then
-		raise_application_error(-20002, 
+		raise_application_error(-20004, 
         'Cannot register to this schedule due to the incompitable with the previous injection!');
 	end if;
 
@@ -157,7 +201,7 @@ begin
     
     if ( months_between(var_OnDate, LastHealth.FilledDate) > 0.25) 
     then
-        raise_application_error(-20008,'You must fill out medical form before registion with 7 days');
+        raise_application_error(-20005,'You must fill out medical form before registion with 7 days');
     end if;
     
 	--Check vaccination target type
@@ -179,5 +223,5 @@ begin
         when no_data_found
         then
             raise_application_error
-            (-20009,'You have not fill out any medical form within 7 days yet!');
+            (-20007,'You have not fill out any medical form within 7 days yet!');
 end REG_VACCINATION_TARGET;
