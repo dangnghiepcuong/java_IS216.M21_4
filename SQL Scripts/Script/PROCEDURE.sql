@@ -203,7 +203,8 @@ begin
     EXCEPTION
         when DUP_VAL_ON_INDEX
         then
-            raise_application_error(1000,'ID has been registered by another user!');
+            raise_application_error
+            (-20015,'ID or phone number has been registered by another user!');
 end PERSON_INSERT_RECORD;
 
 --------------------------------------------------------
@@ -592,6 +593,6 @@ begin
     EXCEPTION
         when DUP_VAL_ON_INDEX
         then
-            raise_application_error(-20011,'Duplicate ID or name!');
+            raise_application_error(-20016,'Duplicate ID or name!');
 end VAC_INSERT_RECORD;
 --
