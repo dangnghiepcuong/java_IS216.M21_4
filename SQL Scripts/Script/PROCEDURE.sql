@@ -102,7 +102,7 @@ begin
     select Password into Pass from ACCOUNT where Username = par_Username;
     if (par_OldPass != Pass) 
     then
-        raise_applicaiton_error(-20013,'Incorrect password!');
+        raise_application_error(-20013,'Incorrect password!');
     else
         update ACCOUNT set Password = par_NewPass 
         where  Username = par_Username;
