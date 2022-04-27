@@ -26,6 +26,7 @@
 --------------------------------------------------------
 
   ALTER TABLE "HEALTH" ADD CONSTRAINT "PK_HEAL" PRIMARY KEY ("PERSONALID", "ID") USING INDEX  ENABLE;
+  ALTER TABLE "HEALTH" ADD CONSTRAINT "CK_HEAL_FILLEDDATE" CHECK ("FILLEDDATE" IS NOT NULL) ENABLE;
 --------------------------------------------------------
 --  Constraints for Table INJECTION
 --------------------------------------------------------
@@ -34,6 +35,8 @@
   ALTER TABLE "INJECTION" ADD CONSTRAINT "PK_INJ" PRIMARY KEY ("PERSONALID", "INJNO") USING INDEX  ENABLE;
   ALTER TABLE "INJECTION" ADD CONSTRAINT "CK_INJ_INJNO" CHECK (InjNO in (1, 2, 3, 4)) ENABLE;
   ALTER TABLE "INJECTION" ADD CONSTRAINT "CK_INJ_SCHEDID" CHECK (SchedID is not null) ENABLE;
+  ALTER TABLE "INJECTION" ADD CONSTRAINT "CK_INJ_DOSETYPE" CHECK (DoseType in ('basic', 'booster', 'repeat')) ENABLE;
+  
 --------------------------------------------------------
 --  Constraints for Table ORGANIZATION
 --------------------------------------------------------
@@ -54,7 +57,9 @@
 
   ALTER TABLE "PERSON" MODIFY ("ID" NOT NULL ENABLE);
   ALTER TABLE "PERSON" ADD CONSTRAINT "PK_PERSON" PRIMARY KEY ("ID") USING INDEX  ENABLE;
-  ALTER TABLE "PERSON" ADD CONSTRAINT "CK_PERSON_GENDER" CHECK (Gender in (0, 1, 2)) ENABLE;
+  ALTER TABLE "PERSON" ADD CONSTRAINT "CK_PERSON_GENDER" CHECK ("GENDER" in (0, 1, 2)) ENABLE;
+  ALTER TABLE "PERSON" ADD CONSTRAINT "UNI_PERSON_PHONE" UNIQUE ("PHONE") ENABLE;
+
 --------------------------------------------------------
 --  Constraints for Table REGION
 --------------------------------------------------------

@@ -203,7 +203,8 @@ begin
     EXCEPTION
         when DUP_VAL_ON_INDEX
         then
-            raise_application_error(1000,'ID has been registered by another user!');
+            raise_application_error
+            (-20015,'ID or phone number has been registered by another user!');
 end PERSON_INSERT_RECORD;
 
 --------------------------------------------------------
@@ -241,7 +242,6 @@ begin
     where ID = par_ID;
 
     --Update Phone of PERSON
-
     --Select out the old account info of PERSON
      select Phone into temp_User
     from PERSON
@@ -252,15 +252,15 @@ begin
     where Username = temp_User;
 
     --Create new ACCOUNT
-     ACC_INSERT_RECORD (par_Phone, temp_Pass, 2, 1, NULL);
+    ACC_INSERT_RECORD (par_Phone, temp_Pass, 2, 1, NULL);
      
-     --update Phone of PERSON
-     update PERSON
-     set Phone = par_Phone
-     where ID = par_ID;
+    --update Phone of PERSON
+    update PERSON
+    set Phone = par_Phone
+    where ID = par_ID;
      
-     --Delete old ACCOUNT
-     ACC_DELETE_RECORD (temp_User);
+    --Delete old ACCOUNT
+    ACC_DELETE_RECORD (temp_User);
 
     commit;
 
@@ -592,6 +592,25 @@ begin
     EXCEPTION
         when DUP_VAL_ON_INDEX
         then
-            raise_application_error(-20011,'Duplicate ID or name!');
+            raise_application_error(-20016,'Duplicate ID or name!');
 end VAC_INSERT_RECORD;
---
+
+--------------------------------------------------------
+--  DDL for Procedure PAR_INSERT_RECORD
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "PAR_INSERT_RECORD" 
+(
+  par_INJNO NUMBER 
+, par_VACCINEID VARCHAR2 
+, par_DOSETYPE VARCHAR2 
+, par_MINDISTANCE NUMBER 
+, par_DIFFDOSES NUMBER 
+, par_NEXTDOSE VARCHAR2 
+, par_NOTE VARCHAR2 DEFAULT NULL
+) AS 
+BEGIN
+  insert into PARAMETER (InjectionNO, VaccineID, DoseType, MinDistance, DiffDoses, NextDose, Note)
+  values (par_InjNO, par_VaccineID, par_DoseType, par_MinDistance, par_DiffDoses, par_NextDose, par_Note);
+END PAR_INSERT_RECORD;
