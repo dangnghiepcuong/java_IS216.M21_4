@@ -52,7 +52,7 @@ EXCEPTION
  	then par_ID := 1;
 
     return par_ID;
-end;
+end "ANN_ID";
 
 --------------------------------------------------------
 --  DDL for Function PERSON_AGE
