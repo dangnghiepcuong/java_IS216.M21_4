@@ -192,7 +192,7 @@ return number is
 begin
 	--from the registered time, 
     --take out its limit number and number of registion from SCHEDULE
-        
+    
     if (par_Time = 0)
     then
         select LimitDay, DayRegistered

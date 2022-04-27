@@ -334,6 +334,8 @@ as
     PreInj INJECTION%rowtype;
 	PreVac VACCINE.ID%type;
 begin
+    ALTER SESSION SET ISOLATION_LEVEL READ ONLY;
+
 	--Use S_FUNC to calculate the NO of registion
 	set_NO := REG_SIGNED_NO(par_PersonalID, par_SchedID, par_Time);
     

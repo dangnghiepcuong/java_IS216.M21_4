@@ -23,7 +23,7 @@ BEGIN
     then
         raise_application_error(-20010, 'Email must not contains space and must contains "@" !');
     end if;
-END;
+END "PERSON_VALUE";
 
 --------------------------------------------------------
 --  DDL for Trigger SCHED_REGISTION_LIMIT
@@ -43,7 +43,7 @@ BEGIN
     then
         raise_application_error(-20011,'Number of registion is limited!');
     end if;
-END;
+END "SCHED_REGISTION_LIMIT";
 
 --------------------------------------------------------
 --  DDL for Trigger REG_VACCINATION_AGE_STATUS
