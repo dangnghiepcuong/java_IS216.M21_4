@@ -4,32 +4,36 @@
 --------------------------------------------------------
 --  DDL for Function ACC_CONVERT_SEQ_TO_STR
 --------------------------------------------------------
-
   CREATE OR REPLACE EDITIONABLE FUNCTION "ACC_CONVERT_SEQ_TO_STR" 
 (par_Last_Seq int)
 return varchar2 is
 begin
-	if ( par_Last_Seq >= 100 )
+	if ( par_Last_Seq < 10 )
 	then
-		return TO_CHAR(par_Last_Seq);
+		return ('00' || TO_CHAR(par_Last_Seq));
 	end if;
     
-    if ( par_Last_Seq >= 10 )
+    if ( par_Last_Seq < 100 )
 	then
 		return ('0' || TO_CHAR(par_Last_Seq));
 	end if;
     
-    return ('00' || TO_CHAR(par_Last_Seq));
+    if ( par_Last_Seq <1000 )
+    then
+        return (TO_CHAR(par_Last_Seq));
+    end if;
+
+	return TO_CHAR(par_Last_Seq);
 
 end ACC_CONVERT_SEQ_TO_STR;
+
 --------------------------------------------------------
 --  DDL for Function ANN_ID
 --------------------------------------------------------
-
   CREATE OR REPLACE EDITIONABLE FUNCTION "ANN_ID" (par_OrgID ANNOUNCEMENT.OrgID%type)
 return number
 is
-    Value_OrgID int;
+    par_ID number;
     temp_OrgID ANNOUNCEMENT.OrgID%type;
 begin 
     --select out the last ID of the ORG in the Organization
@@ -39,20 +43,62 @@ begin
     order by OrgID desc;
 
     --The next value of ID
-    Value_OrgID := TO_NUMBER(SUBSTR(TO_CHAR(par_OrgID), -3, 3)) + 1;
+    par_ID := TO_NUMBER(SUBSTR(TO_CHAR(par_OrgID), -3, 3)) + 1;
 	
-	return Value_OrgID;
+	return par_ID;
 
 EXCEPTION 
     when no_data_found
- 	then Value_OrgID := 1;
+ 	then par_ID := 1;
 
-    return Value_OrgID;
+    return par_ID;
 end;
+
+--------------------------------------------------------
+--  DDL for Trigger PERSON_VALUE
+--------------------------------------------------------
+  CREATE OR REPLACE EDITIONABLE TRIGGER "PERSON_VALUE" 
+BEFORE INSERT OR UPDATE ON PERSON 
+FOR EACH ROW
+BEGIN
+    if (:new.FirstName = null or :new.FirstName like '% %')
+    then
+        raise_application_error(-20008, 'First name can not be empty or contain space!');
+    end if;
+    
+    if (:new.BirthDay > sysdate)
+    then
+        raise_application_error(-20009, 'Birthday must not be a future day!');
+    end if;
+    
+    if (:new.Email like '% %' or :new.Email not like '%@%')
+    then
+        raise_application_error(-20010, 'Email must not contains space and must contains "@" !');
+    end if;
+END;
+
+--------------------------------------------------------
+--  DDL for Function PERSON_AGE
+--------------------------------------------------------
+  CREATE OR REPLACE EDITIONABLE FUNCTION "PERSON_AGE" (par_PersonalID PERSON.ID%type)
+RETURN NUMBER 
+AS 
+    var_BirthDay PERSON.BirthDay%type;
+    var_Age number;
+BEGIN
+    --select out day of birth
+    select BirthDay into var_BirthDay
+    from PERSON
+    where PERSON.ID = par_PersonalID;
+    
+    --count months between sysdate and birthday then div 12
+    var_Age := trunc(months_between(sysdate, var_BirthDay)/12);
+    RETURN var_Age;
+END PERSON_AGE;
+
 --------------------------------------------------------
 --  DDL for Function HEAL_FORM_ID
 --------------------------------------------------------
-
   CREATE OR REPLACE EDITIONABLE FUNCTION "HEAL_FORM_ID" (par_PersonalID PERSON.ID%type)
 return number
 is
@@ -87,10 +133,10 @@ begin
 
     return var_n_Injection;
 end INJ_COUNT_INJ;
+
 --------------------------------------------------------
 --  DDL for Function INJ_DIFFERENCE
 --------------------------------------------------------
-
   CREATE OR REPLACE EDITIONABLE FUNCTION "INJ_DIFFERENCE" (par_PersonalID PERSON.ID%type)
 return number 
 is
@@ -182,7 +228,7 @@ begin
         into LimitReg, RegNumber
         from SCHEDULE SCHED
         where SCHED.ID = par_SchedID;
-    else (par_Time = 2)
+    elsif (par_Time = 2)
     then
         select LimitNight, NightRegistered
         into LimitReg, RegNumber

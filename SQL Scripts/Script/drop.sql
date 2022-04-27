@@ -16,7 +16,7 @@ DELETE FROM ACCOUNT;
 alter table ACCOUNT drop constraint CK_ACC_Role;
 
 
-alter table ORGANIZATION drop constraint FK_ORG_ACC
+alter table ORGANIZATION drop constraint FK_ORG_ACC;
 alter table PERSON drop constraint FK_PERSON_GUAR;
 alter table PERSON drop constraint FK_PERSON_ACC;
 alter table SCHEDULE drop constraint FK_SCHED_ORG;
@@ -28,7 +28,6 @@ alter table INJECTION drop constraint FK_INJ_PERSON;
 alter table CERTIFICATE drop constraint FK_CERT_PERSON;
 alter table HEALTH drop constraint FK_HEAL_PERSON;
 alter table ANNOUNCEMENT drop constraint FK_ANN_ORG;
-alter table PARAMETER drop constraint FK_PAR_INJ;
 alter table PARAMETER drop constraint FK_PAR_VAC;
 
 alter table VACCINE drop constraint UNI_VAC_Name;
@@ -45,7 +44,7 @@ alter table REGISTER drop constraint CK_REG_Time;
 alter table REGISTER drop constraint CK_REG_Status;
 alter table REGISTER drop constraint CK_REG_DoseType;
 alter table INJECTION drop constraint CK_INJ_InjNO;
-alter table INJECTION drop constraint CK_INJ_ScheID;
+alter table INJECTION drop constraint CK_INJ_SchedID;
 alter table INJECTION drop constraint CK_INJ_DoseType;
 alter table CERTIFICATE drop constraint CK_CERT_Dose;
 alter table CERTIFICATE drop constraint CK_CERT_CertType;
@@ -102,5 +101,12 @@ DROP FUNCTION "HEAL_FORM_ID";
 DROP FUNCTION "INJ_COUNT_INJ";
 DROP FUNCTION "INJ_DIFFERENCE";
 DROP FUNCTION "ORG_COUNT_SCHED";
+DROP FUNCTION "PERSON_AGE";
 DROP FUNCTION "REG_SIGNED_NO";
 DROP FUNCTION "SCHED_GENERATE_ID";
+
+DROP TRIGGER "SCHED_REGISTION_LIMIT";
+DROP TRIGGER "PERSON_VALUE";
+DROP TRIGGER "REG_VACCINATION_AGE_STATUS";
+DROP TRIGGER "REG_vACCINATION_TARGET";
+DROP TRIGGER "REG_REGISTION_LIMIT";
