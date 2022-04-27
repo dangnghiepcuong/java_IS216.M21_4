@@ -242,7 +242,6 @@ begin
     where ID = par_ID;
 
     --Update Phone of PERSON
-
     --Select out the old account info of PERSON
      select Phone into temp_User
     from PERSON
@@ -253,15 +252,15 @@ begin
     where Username = temp_User;
 
     --Create new ACCOUNT
-     ACC_INSERT_RECORD (par_Phone, temp_Pass, 2, 1, NULL);
+    ACC_INSERT_RECORD (par_Phone, temp_Pass, 2, 1, NULL);
      
-     --update Phone of PERSON
-     update PERSON
-     set Phone = par_Phone
-     where ID = par_ID;
+    --update Phone of PERSON
+    update PERSON
+    set Phone = par_Phone
+    where ID = par_ID;
      
-     --Delete old ACCOUNT
-     ACC_DELETE_RECORD (temp_User);
+    --Delete old ACCOUNT
+    ACC_DELETE_RECORD (temp_User);
 
     commit;
 
