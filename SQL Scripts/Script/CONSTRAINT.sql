@@ -26,6 +26,7 @@
 --------------------------------------------------------
 
   ALTER TABLE "HEALTH" ADD CONSTRAINT "PK_HEAL" PRIMARY KEY ("PERSONALID", "ID") USING INDEX  ENABLE;
+  ALTER TABLE "HEALTH" ADD CONSTRAINT "CK_HEAL_FILLEDDATE" CHECK ("FILLEDDATE" IS NOT NULL) ENABLE;
 --------------------------------------------------------
 --  Constraints for Table INJECTION
 --------------------------------------------------------

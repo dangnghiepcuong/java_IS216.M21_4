@@ -595,4 +595,23 @@ begin
         then
             raise_application_error(-20016,'Duplicate ID or name!');
 end VAC_INSERT_RECORD;
---
+
+--------------------------------------------------------
+--  DDL for Procedure PAR_INSERT_RECORD
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "PAR_INSERT_RECORD" 
+(
+  par_INJNO NUMBER 
+, par_VACCINEID VARCHAR2 
+, par_DOSETYPE VARCHAR2 
+, par_MINDISTANCE NUMBER 
+, par_DIFFDOSES NUMBER 
+, par_NEXTDOSE VARCHAR2 
+, par_NOTE VARCHAR2 DEFAULT NULL
+) AS 
+BEGIN
+  insert into PARAMETER (InjectionNO, VaccineID, DoseType, MinDistance, DiffDoses, NextDose, Note)
+  values (par_InjNO, par_VaccineID, par_DoseType, par_MinDistance, par_DiffDoses, par_NextDose, par_Note);
+END PAR_INSERT_RECORD;
