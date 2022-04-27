@@ -18,7 +18,7 @@ begin
      EXCEPTION
         when DUP_VAL_ON_INDEX
         then
-            raise_application_error(1000,'Username has been registered by another user!');
+            raise_application_error(-20012,'Username has been registered by another user!');
 end ACC_INSERT_RECORD;
 
 --------------------------------------------------------
@@ -100,14 +100,20 @@ is
     Pass varchar2(128);
 begin
     select Password into Pass from ACCOUNT where Username = par_Username;
-    if (par_OldPass != Pass) then
-        DBMS_Output.Put_line('Mat khau khong dung!');
+    if (par_OldPass != Pass) 
+    then
+        raise_applicaiton_error(-20013,'Incorrect password!');
     else
         update ACCOUNT set Password = par_NewPass 
         where  Username = par_Username;
     end if;
     
     commit;
+    
+    EXCEPTION
+        when no_data_found
+        then
+            raise_application_error(-20014,'Username does not exist!');
 end ACC_UPDATE_PASSWORD;
 --------------------------------------------------------
 --  DDL for Procedure HEAL_INSERT_RECORD

@@ -55,29 +55,6 @@ EXCEPTION
 end;
 
 --------------------------------------------------------
---  DDL for Trigger PERSON_VALUE
---------------------------------------------------------
-  CREATE OR REPLACE EDITIONABLE TRIGGER "PERSON_VALUE" 
-BEFORE INSERT OR UPDATE ON PERSON 
-FOR EACH ROW
-BEGIN
-    if (:new.FirstName = null or :new.FirstName like '% %')
-    then
-        raise_application_error(-20008, 'First name can not be empty or contain space!');
-    end if;
-    
-    if (:new.BirthDay > sysdate)
-    then
-        raise_application_error(-20009, 'Birthday must not be a future day!');
-    end if;
-    
-    if (:new.Email like '% %' or :new.Email not like '%@%')
-    then
-        raise_application_error(-20010, 'Email must not contains space and must contains "@" !');
-    end if;
-END;
-
---------------------------------------------------------
 --  DDL for Function PERSON_AGE
 --------------------------------------------------------
   CREATE OR REPLACE EDITIONABLE FUNCTION "PERSON_AGE" (par_PersonalID PERSON.ID%type)
