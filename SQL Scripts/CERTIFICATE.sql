@@ -42,7 +42,12 @@ add constraint CK_CERT_CertType CHECK(CertType in (0,1,2)) ;
 
 
 /*	STORED PROCEDURES	*/
-
+create or replace procedure CERT_INSERT_RECORD(par_personalID PERSON.ID%Type, par_dose CERTIFICATE.Dose%Type, par_certtype CERTIFICATE.CertType%Type, par_note CERTIFICATE.Note%Type DEFAULT NULL)
+as
+begin
+insert into CERTIFICATE(PersonalID, Dose, CertType, Note)
+values (par_personalID, par_dose, par_certtype, par_note);
+end CERT_INSERT_RECORD;
 
 
 /*	STORED FUNCTIONS	*/
