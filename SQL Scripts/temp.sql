@@ -75,4 +75,11 @@ alter table PARAMETER rename column PreDose to DiffDoses;
     group by INJ.PersonalID
     having INJ.InjNO = MAX(InjNO);
 
+update person
+set FirstName = 'C??ng'
+where ID = '20520418';
+
+alter table REGION
+modify CODE varchar2(2);
+
 commit;

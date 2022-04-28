@@ -4,32 +4,36 @@
 --------------------------------------------------------
 --  DDL for Function ACC_CONVERT_SEQ_TO_STR
 --------------------------------------------------------
-
   CREATE OR REPLACE EDITIONABLE FUNCTION "ACC_CONVERT_SEQ_TO_STR" 
 (par_Last_Seq int)
 return varchar2 is
 begin
-	if ( par_Last_Seq >= 100 )
+	if ( par_Last_Seq < 10 )
 	then
-		return TO_CHAR(par_Last_Seq);
+		return ('00' || TO_CHAR(par_Last_Seq));
 	end if;
     
-    if ( par_Last_Seq >= 10 )
+    if ( par_Last_Seq < 100 )
 	then
 		return ('0' || TO_CHAR(par_Last_Seq));
 	end if;
     
-    return ('00' || TO_CHAR(par_Last_Seq));
+    if ( par_Last_Seq <1000 )
+    then
+        return (TO_CHAR(par_Last_Seq));
+    end if;
+
+	return TO_CHAR(par_Last_Seq);
 
 end ACC_CONVERT_SEQ_TO_STR;
+
 --------------------------------------------------------
 --  DDL for Function ANN_ID
 --------------------------------------------------------
-
   CREATE OR REPLACE EDITIONABLE FUNCTION "ANN_ID" (par_OrgID ANNOUNCEMENT.OrgID%type)
 return number
 is
-    Value_OrgID int;
+    par_ID number;
     temp_OrgID ANNOUNCEMENT.OrgID%type;
 begin 
     --select out the last ID of the ORG in the Organization
@@ -39,18 +43,39 @@ begin
     order by OrgID desc;
 
     --The next value of ID
-    Value_OrgID := TO_NUMBER(SUBSTR(TO_CHAR(par_OrgID), -3, 3)) + 1;
+    par_ID := TO_NUMBER(SUBSTR(TO_CHAR(par_OrgID), -3, 3)) + 1;
+	
+	return par_ID;
 
 EXCEPTION 
     when no_data_found
- 	then Value_OrgID := 1;
+ 	then par_ID := 1;
 
-    return Value_OrgID;
-end;
+    return par_ID;
+end "ANN_ID";
+
+--------------------------------------------------------
+--  DDL for Function PERSON_AGE
+--------------------------------------------------------
+  CREATE OR REPLACE EDITIONABLE FUNCTION "PERSON_AGE" (par_PersonalID PERSON.ID%type)
+RETURN NUMBER 
+AS 
+    var_BirthDay PERSON.BirthDay%type;
+    var_Age number;
+BEGIN
+    --select out day of birth
+    select BirthDay into var_BirthDay
+    from PERSON
+    where PERSON.ID = par_PersonalID;
+    
+    --count months between sysdate and birthday then div 12
+    var_Age := trunc(months_between(sysdate, var_BirthDay)/12);
+    RETURN var_Age;
+END PERSON_AGE;
+
 --------------------------------------------------------
 --  DDL for Function HEAL_FORM_ID
 --------------------------------------------------------
-
   CREATE OR REPLACE EDITIONABLE FUNCTION "HEAL_FORM_ID" (par_PersonalID PERSON.ID%type)
 return number
 is
@@ -85,10 +110,10 @@ begin
 
     return var_n_Injection;
 end INJ_COUNT_INJ;
+
 --------------------------------------------------------
 --  DDL for Function INJ_DIFFERENCE
 --------------------------------------------------------
-
   CREATE OR REPLACE EDITIONABLE FUNCTION "INJ_DIFFERENCE" (par_PersonalID PERSON.ID%type)
 return number 
 is
@@ -106,31 +131,7 @@ is
     
     var_Distinct int;
 begin
-    /*
-    if (INJ_COUNT_INJ(par_PersonalID) <= 1)
-    then
-        return 0;
-    end if;
-    fetch c_INJ into crow_INJ_be;
-    open c_INJ;
-    loop
-        fetch c_INJ into crow_INJ_af;
-        exit when c_INJ%notfound;
-        --select out the vaccine id of 2 injection in theirs schedule
-        select ID into var_VaccineID_1
-        from SCHEDULE SCHED
-        where SCHED.ID = crow_INJ_be.SchedID;
-        select ID into var_VaccineID_2
-        from SCHEDULE SCHED
-        where SCHED.ID = crow_INJ_af.SchedID;
-        if (var_VaccineID_1 != var_VaccineID_2)
-        then
-            return 1;
-        end if;
-        crow_INJ_be := crow_INJ_af;
-    end loop;
-    return 0;*/
-    
+      
     select COUNT(distinct SCHED.VaccineID) into var_Distinct
     from INJECTION INJ, SCHEDULE SCHED
     where INJ.PersonalID = par_PersonalID
@@ -191,7 +192,7 @@ return number is
 begin
 	--from the registered time, 
     --take out its limit number and number of registion from SCHEDULE
-        
+    
     if (par_Time = 0)
     then
         select LimitDay, DayRegistered
@@ -210,8 +211,6 @@ begin
         into LimitReg, RegNumber
         from SCHEDULE SCHED
         where SCHED.ID = par_SchedID;
-    else
-        raise_application_error(-20011, 'Time registion not found!');
     end if;	
 
 	--If the number of registion meet the limit of at that time, return 0
