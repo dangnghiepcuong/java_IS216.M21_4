@@ -20,11 +20,13 @@
 
   ALTER TABLE "CERTIFICATE" ADD CONSTRAINT "PK_CERT" PRIMARY KEY ("PERSONALID") USING INDEX  ENABLE;
   ALTER TABLE "CERTIFICATE" ADD CONSTRAINT "CK_CERT_CERTTYPE" CHECK (CertType in (0,1,2)) ENABLE;
+  ALTER TABLE "CERTIFICATE" ADD CONSTRAINT "CK_CERT_DOSE" CHECK (Dose in (1,2,3,4)) ENABLE;    
 --------------------------------------------------------
 --  Constraints for Table HEALTH
 --------------------------------------------------------
 
   ALTER TABLE "HEALTH" ADD CONSTRAINT "PK_HEAL" PRIMARY KEY ("PERSONALID", "ID") USING INDEX  ENABLE;
+  ALTER TABLE "HEALTH" ADD CONSTRAINT "CK_HEAL_FILLEDDATE" CHECK ("FILLEDDATE" IS NOT NULL) ENABLE;
 --------------------------------------------------------
 --  Constraints for Table INJECTION
 --------------------------------------------------------
@@ -33,6 +35,8 @@
   ALTER TABLE "INJECTION" ADD CONSTRAINT "PK_INJ" PRIMARY KEY ("PERSONALID", "INJNO") USING INDEX  ENABLE;
   ALTER TABLE "INJECTION" ADD CONSTRAINT "CK_INJ_INJNO" CHECK (InjNO in (1, 2, 3, 4)) ENABLE;
   ALTER TABLE "INJECTION" ADD CONSTRAINT "CK_INJ_SCHEDID" CHECK (SchedID is not null) ENABLE;
+  ALTER TABLE "INJECTION" ADD CONSTRAINT "CK_INJ_DOSETYPE" CHECK (DoseType in ('basic', 'booster', 'repeat')) ENABLE;
+  
 --------------------------------------------------------
 --  Constraints for Table ORGANIZATION
 --------------------------------------------------------
@@ -46,18 +50,23 @@
   ALTER TABLE "PARAMETER" ADD CONSTRAINT "CK_PAR_DIFFDOSES" CHECK (DiffDoses in (0,1)) ENABLE;
   ALTER TABLE "PARAMETER" ADD CONSTRAINT "PK_PAR" PRIMARY KEY ("INJECTIONNO", "VACCINEID", "DOSETYPE", "DIFFDOSES") USING INDEX  ENABLE;
   ALTER TABLE "PARAMETER" ADD CONSTRAINT "CK_PAR_INJECTIONNO" CHECK (InjectionNO in (1, 2, 3, 4)) ENABLE;
+  ALTER TABLE "PARAMETER" ADD CONSTRAINT "CK_PAR_DOSETYPE" CHECK (DoseType in ('basic', 'booster', 'repeat')) ENABLE;
 --------------------------------------------------------
 --  Constraints for Table PERSON
 --------------------------------------------------------
 
   ALTER TABLE "PERSON" MODIFY ("ID" NOT NULL ENABLE);
   ALTER TABLE "PERSON" ADD CONSTRAINT "PK_PERSON" PRIMARY KEY ("ID") USING INDEX  ENABLE;
-  ALTER TABLE "PERSON" ADD CONSTRAINT "CK_PERSON_GENDER" CHECK (Gender in (0, 1, 2)) ENABLE;
+  ALTER TABLE "PERSON" ADD CONSTRAINT "CK_PERSON_GENDER" CHECK ("GENDER" in (0, 1, 2)) ENABLE;
+  ALTER TABLE "PERSON" ADD CONSTRAINT "UNI_PERSON_PHONE" UNIQUE ("PHONE") ENABLE;
+
 --------------------------------------------------------
 --  Constraints for Table REGION
 --------------------------------------------------------
 
   ALTER TABLE "REGION" ADD CONSTRAINT "PK_REGION" PRIMARY KEY ("CODE") USING INDEX  ENABLE;
+  ALTER TABLE "REGION" ADD CONSTRAINT "UNI_REGION_NAME" UNIQUE ("NAME") ENABLE;
+  ALTER TABLE "REGION" ADD CONSTRAINT "UNI_REGION_CODE" UNIQUE ("CODE") ENABLE;
 --------------------------------------------------------
 --  Constraints for Table REGISTER
 --------------------------------------------------------
@@ -115,6 +124,8 @@
 --------------------------------------------------------
 
   ALTER TABLE "ORGANIZATION" ADD CONSTRAINT "FK_ORG_ACC" FOREIGN KEY ("ID") REFERENCES "ACCOUNT" ("USERNAME") ENABLE;
+  ALTER TABLE "ORGANIZATION" ADD CONSTRAINT "FK_ORG_REGION" FOREIGN KEY ("PROVINCE") REFERENCES "REGION" ("CODE") ENABLE;
+
 --------------------------------------------------------
 --  Ref Constraints for Table PARAMETER
 --------------------------------------------------------
@@ -126,6 +137,7 @@
 
   ALTER TABLE "PERSON" ADD CONSTRAINT "FK_PERSON_GUAR" FOREIGN KEY ("GUARDIAN") REFERENCES "PERSON" ("ID") ENABLE;
   ALTER TABLE "PERSON" ADD CONSTRAINT "FK_PERSON_ACC" FOREIGN KEY ("PHONE") REFERENCES "ACCOUNT" ("USERNAME") ENABLE;
+  ALTER TABLE "PERSON" ADD CONSTRAINT "FK_PERSON_REGION" FOREIGN KEY ("PROVINCE") REFERENCES "REGION" ("CODE") ENABLE;
 --------------------------------------------------------
 --  Ref Constraints for Table REGISTER
 --------------------------------------------------------

@@ -30,7 +30,7 @@
 --  DDL for Table ORGANIZATION
 --------------------------------------------------------
 
-  CREATE TABLE "ORGANIZATION" ("ID" VARCHAR2(6), "NAME" VARCHAR2(100), "PROVINCE" VARCHAR2(50), "DISTRICT" VARCHAR2(50), "TOWN" VARCHAR2(50), "STREET" VARCHAR2(100), "NOTE" VARCHAR2(2000));
+  CREATE TABLE "ORGANIZATION" ("ID" VARCHAR2(6), "NAME" VARCHAR2(100), "PROVINCE" VARCHAR2(2), "DISTRICT" VARCHAR2(50), "TOWN" VARCHAR2(50), "STREET" VARCHAR2(100), "NOTE" VARCHAR2(2000));
 --------------------------------------------------------
 --  DDL for Table PARAMETER
 --------------------------------------------------------
@@ -40,12 +40,12 @@
 --  DDL for Table PERSON
 --------------------------------------------------------
 
-  CREATE TABLE "PERSON" ("ID" VARCHAR2(256), "LASTNAME" VARCHAR2(100), "FIRSTNAME" VARCHAR2(50), "BIRTHDAY" DATE, "GENDER" NUMBER(1,0), "HOMETOWN" VARCHAR2(50), "PROVINCE" VARCHAR2(50), "DISTRICT" VARCHAR2(50), "TOWN" VARCHAR2(50), "STREET" VARCHAR2(100), "PHONE" VARCHAR2(30), "EMAIL" VARCHAR2(254), "GUARDIAN" VARCHAR2(12), "NOTE" VARCHAR2(2000));
+  CREATE TABLE "PERSON" ("ID" VARCHAR2(256), "LASTNAME" VARCHAR2(100), "FIRSTNAME" VARCHAR2(50), "BIRTHDAY" DATE, "GENDER" NUMBER(1,0), "HOMETOWN" VARCHAR2(50), "PROVINCE" VARCHAR2(2), "DISTRICT" VARCHAR2(50), "TOWN" VARCHAR2(50), "STREET" VARCHAR2(100), "PHONE" VARCHAR2(30), "EMAIL" VARCHAR2(254), "GUARDIAN" VARCHAR2(12), "NOTE" VARCHAR2(2000));
 --------------------------------------------------------
 --  DDL for Table REGION
 --------------------------------------------------------
 
-  CREATE TABLE "REGION" ("CODE" NUMBER(*,0), "NAME" VARCHAR2(50));
+  CREATE TABLE "REGION" ("CODE" VARCHAR2(2), "NAME" VARCHAR2(50));
 --------------------------------------------------------
 --  DDL for Table REGISTER
 --------------------------------------------------------
@@ -60,7 +60,7 @@
 --  DDL for Table STATISTIC
 --------------------------------------------------------
 
-  CREATE TABLE "STATISTIC" ("TITLE" VARCHAR2(200), "DATA" NUMBER);
+  CREATE TABLE "STATISTIC" ("TITLE" VARCHAR2(200), "DATA" NUMBER, "LASTUPDATE" DATE, "NOTE" VARCHAR2(2000));
 --------------------------------------------------------
 --  DDL for Table VACCINE
 --------------------------------------------------------
