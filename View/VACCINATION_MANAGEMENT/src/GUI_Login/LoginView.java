@@ -4,14 +4,11 @@
  */
 package GUI_Login;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.*;
 import javax.swing.border.Border;
 
 /**
@@ -20,8 +17,30 @@ import javax.swing.border.Border;
  */
 public class LoginView extends javax.swing.JFrame
 {
+    private JLabel ViewSymbol;
     private JLabel UsernameLabel;
     private JLabel PasswordLabel;
+    private JTextField UsernameTextField;
+    private JPasswordField PasswordField;
+    private JButton LoginButton;
+    private JPanel ViewSymbolPanel;
+    
+    private void initViewSymbol()
+    {
+        ViewSymbol = new JLabel();
+        
+        //create an icon
+        ImageIcon Virus = new ImageIcon(getClass().getResource("/GUI_Login/Virus.png"));
+       
+        //set label icon
+        ViewSymbol.setIcon(Virus); 
+        
+        ViewSymbol.setHorizontalAlignment(JLabel.CENTER);
+        
+        //ViewSymbol.setOpaque(true);
+        
+        ViewSymbol.setBounds(140, 50, 100, 100);
+    }
     
     private void initUsernameLabel()
     {
@@ -53,17 +72,46 @@ public class LoginView extends javax.swing.JFrame
 //        UsernameLabel.setIcon(Virus);    
 
         //set label border
-        UsernameLabel.setBorder(border);
+        //UsernameLabel.setBorder(null);
         
         //set label position
-        UsernameLabel.setHorizontalTextPosition(JLabel.LEFT);
-        UsernameLabel.setVerticalTextPosition(JLabel.CENTER);
+//        UsernameLabel.setHorizontalTextPosition(JLabel.CENTER);
+//        UsernameLabel.setVerticalTextPosition(JLabel.CENTER);
         
-//        UsernameLabel.setHorizontalAlignment(JLabel.CENTER);
-//        UsernameLabel.setVerticalAlignment(JLabel.CENTER);
+        UsernameLabel.setHorizontalAlignment(JLabel.LEFT);
+        UsernameLabel.setVerticalAlignment(JLabel.CENTER);
         
+        //set label position and frame area
+        UsernameLabel.setBounds(70, 165, 240, 30);
+    }
+    
+     private void initUsernameTextField()
+    {
+        Border border = BorderFactory.createLineBorder(Color.BLACK);
         
-        UsernameLabel.setBounds(70, 160, 240, 30);
+        //create Username text field
+        UsernameTextField = new JTextField();
+        
+        //set cursor
+        UsernameTextField.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        
+        //set field font
+        UsernameTextField.setFont(new Font("SVN-Arial", Font.PLAIN, 16));
+        
+        //set field size
+        UsernameTextField.setSize(240,30);
+        
+        //set text field color
+        UsernameTextField.setForeground(new Color(0x333333));
+        
+        //set field background color
+        UsernameTextField.setBackground(Color.WHITE);
+        
+        //set border
+        UsernameTextField.setBorder(border);
+        
+        //set position
+        UsernameTextField.setBounds(70, 195, 220, 30);
     }
     
     private void initPasswordLabel()
@@ -95,7 +143,72 @@ public class LoginView extends javax.swing.JFrame
 //      PasswordLabel.setVerticalAlignment(JLabel.CENTER);
         
         
-        PasswordLabel.setBounds(70, 230, 240, 30);
+        PasswordLabel.setBounds(70, 235, 240, 30);
+    }
+    
+    private void initPasswordField()
+    {
+        Border border = BorderFactory.createLineBorder(Color.BLACK);
+        
+        //create Username text field
+        PasswordField = new JPasswordField();
+        
+        //set cursor
+        PasswordField.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        
+        //set field font
+        PasswordField.setFont(new Font("SVN-Arial", Font.PLAIN, 16));
+        
+        //set field size
+        PasswordField.setSize(240,30);
+        
+        //set text field color
+        PasswordField.setForeground(new Color(0x333333));
+        
+        //set field background color
+        PasswordField.setBackground(Color.WHITE);
+        
+        //set border
+        PasswordField.setBorder(border);
+        
+        //set position
+        PasswordField.setBounds(70, 265, 220, 30);
+        
+        PasswordField.setPreferredSize(new java.awt.Dimension(220, 30));
+    }
+    
+    private void initLoginButton()
+    {
+        Border border = BorderFactory.createLineBorder(Color.BLACK);
+        
+        //create login button
+        LoginButton = new JButton();
+        
+        //set no border
+        LoginButton.setBorder(null);
+        
+        LoginButton.setContentAreaFilled(false);
+        
+        //create an icon
+        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("/GUI_Login/Login Button.png"));
+        
+        //set label icon
+        LoginButton.setIcon(LoginIcon);    
+        
+        LoginButton.setBounds(115, 380, 150, 49);
+    }
+    
+    private void initViewSymbolPanel()
+    {
+        ViewSymbolPanel = new JPanel();
+        
+        initViewSymbol();
+        
+        ViewSymbolPanel.add(ViewSymbol);
+        
+        ViewSymbolPanel.setBounds(140, 50, 100, 100);
+        
+        ViewSymbolPanel.setLayout(new BorderLayout());
     }
     
     private void initFrameComponent()
@@ -105,7 +218,8 @@ public class LoginView extends javax.swing.JFrame
         this.setTitle("Đăng nhập");
         
         //set frame size
-        this.setSize(380, 560);
+        this.setSize(380, 520);
+        //this.setSize(1080, 720); --Main View
         
         //set do not allow frame resizing
         this.setResizable(false);
@@ -121,6 +235,10 @@ public class LoginView extends javax.swing.JFrame
       
         this.setLayout(null);
         
+        //init ViewSymbol
+        initViewSymbol();
+        this.add(ViewSymbol);
+        
         //init UsernameLabel
         initUsernameLabel();
         this.add(UsernameLabel);
@@ -128,6 +246,19 @@ public class LoginView extends javax.swing.JFrame
         //init PasswordLabel
         initPasswordLabel();
         this.add(PasswordLabel);
+        
+        //init UsernameTextField
+        initUsernameTextField();
+        this.add(UsernameTextField);
+        
+        //init PasswordField;
+        initPasswordField();
+        this.add(PasswordField);
+        
+        //init LoginButton
+        initLoginButton();
+        this.add(LoginButton);
+        
     }
     
     public LoginView()
