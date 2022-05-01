@@ -265,6 +265,5 @@ public class LoginView extends javax.swing.JFrame
     {
         initFrameComponent();
     }
-    
-    
+        
 }
