@@ -65,13 +65,12 @@ return number is
 --return value of count health form
 Count_HEAL_FORM number;
 begin
-if(par_personalID = NULL)
-then 
-return NULL;
-end if;
 select Count(PersonalID) into Count_HEAL_FORM
 from HEALTH
 return Count_HEAL_FORM;
+exception
+when not_data_found
+then return 1;
 end HEAL_FORM_ID;
 
 
