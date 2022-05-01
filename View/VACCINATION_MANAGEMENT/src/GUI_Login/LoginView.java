@@ -1,13 +1,22 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
+
+COLOR HEX CODE
+màu xám dành cho nền: F2F2F2
+màu Peach dành cho button chức năng: FF9292
+màu xám hơi đậm dành cho label: 666666
+màu đen dành cho text nhập vào: 333333
+*/
 package GUI_Login;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -15,7 +24,7 @@ import javax.swing.border.Border;
  *
  * @author NghiepCuong
  */
-public class LoginView extends javax.swing.JFrame
+public class LoginView extends JFrame implements ActionListener
 {
     private JLabel ViewSymbol;
     private JLabel UsernameLabel;
@@ -264,6 +273,11 @@ public class LoginView extends javax.swing.JFrame
     public LoginView()
     {
         initFrameComponent();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
         
 }
