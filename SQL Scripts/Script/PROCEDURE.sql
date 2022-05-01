@@ -88,7 +88,6 @@ EXCEPTION
 
 end ACC_CREATE_ORG;
 
-
 --------------------------------------------------------
 --  DDL for Procedure ACC_UPDATE_PASSWORD
 --------------------------------------------------------
@@ -115,6 +114,19 @@ begin
         then
             raise_application_error(-20014,'Username does not exist!');
 end ACC_UPDATE_PASSWORD;
+
+--------------------------------------------------------
+--  DDL for Procedure ACC_RESET_PASSWORD
+--------------------------------------------------------
+CREATE OR REPLACE EDITIONABLE PROCEDURE "ACC_RESET_PASSWORD" 
+(par_Username varchar2, par_NewPassword varchar2)
+is
+begin
+     update ACCOUNT
+     set Password = par_NewPassword
+     where Username = par_Username;
+end ACC_RESET_PASSWORD;
+
 --------------------------------------------------------
 --  DDL for Procedure HEAL_INSERT_RECORD
 --------------------------------------------------------
