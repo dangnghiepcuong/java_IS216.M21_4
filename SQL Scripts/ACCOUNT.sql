@@ -124,11 +124,10 @@ end ACC_UPDATE_PASSWORD;
 
  --Reset password of an account
 create or replace procedure ACC_RESET_PASSWORD
-(par_Username varchar2, par_VerifyCode int)
+(par_Username varchar2, par_NewPassword varchar2)
 is
 begin
-    
-    
+        
 end ACC_RESET_PASSWORD;
 
 
