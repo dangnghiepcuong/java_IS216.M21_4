@@ -149,7 +149,7 @@ public class RegisterAccView extends JFrame implements ActionListener
         PasswordLabel = new JLabel();
 
         //set position and area
-        PasswordLabel.setBounds(40, 90 + DefaultFieldHeigth() + DefaultLabelHeigth(), 240, 30);
+        PasswordLabel.setBounds(40, 100 + 2*DefaultFieldHeigth() + DefaultLabelHeigth(), 240, 30);
 
         //set label text
         PasswordLabel.setText("Nhập lại mật khẩu");
@@ -167,8 +167,25 @@ public class RegisterAccView extends JFrame implements ActionListener
 
     private void initRepeatPasswordField()
     {
+//create Username text field
+        PasswordField = new JPasswordField();
 
+        //set position and area
+        PasswordField.setBounds(40, 90 + DefaultFieldHeigth() + 2 * DefaultLabelHeigth(), 220, 30);
 
+        //set cursor
+        PasswordField.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+
+        //set field font
+        PasswordField.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
+
+        //set text field color
+        PasswordField.setForeground(new Color(0x333333));
+
+        //set field background color
+        PasswordField.setBackground(Color.WHITE);
+
+        PasswordField.setPreferredSize(new java.awt.Dimension(220, 30));
     }
     
     private void initRegisterAccButton()
