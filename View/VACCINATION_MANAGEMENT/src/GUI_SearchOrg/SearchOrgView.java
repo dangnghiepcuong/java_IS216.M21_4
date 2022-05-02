@@ -155,7 +155,7 @@ public class SearchOrgView extends JFrame implements ActionListener
 
         //set font
         TownChoice.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
-        
+
         //set background color
         TownChoice.setBackground(Color.WHITE);
 

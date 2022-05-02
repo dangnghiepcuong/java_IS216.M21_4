@@ -11,10 +11,8 @@ màu đen dành cho text nhập vào: 333333
 */
 package GUI_Login;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Image;
+import java.awt.Image.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -188,36 +186,22 @@ public class LoginView extends JFrame implements ActionListener
     
     private void initLoginButton()
     {
-        Border border = BorderFactory.createLineBorder(Color.BLACK);
-        
         //create login button
         LoginButton = new JButton();
-        
+
+        //set position
+        LoginButton.setBounds(115, 380, 150, 49);
+
         //set no border
         LoginButton.setBorder(null);
         
         LoginButton.setContentAreaFilled(false);
         
         //create an icon
-        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("/GUI_Login/Login Button.png"));
+        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("Login Button.png"));
         
         //set label icon
         LoginButton.setIcon(LoginIcon);    
-        
-        LoginButton.setBounds(115, 380, 150, 49);
-    }
-    
-    private void initViewSymbolPanel()
-    {
-        ViewSymbolPanel = new JPanel();
-        
-        initViewSymbol();
-        
-        ViewSymbolPanel.add(ViewSymbol);
-        
-        ViewSymbolPanel.setBounds(140, 50, 100, 100);
-        
-        ViewSymbolPanel.setLayout(new BorderLayout());
     }
     
     private void initFrameComponent()
@@ -241,7 +225,11 @@ public class LoginView extends JFrame implements ActionListener
         
         //set frame background color
         this.getContentPane().setBackground(new Color(0xFCFCFC));
-      
+
+        //set Frame icon
+        this.setIconImage(new ImageIcon(getClass().getResource("Virus.png")).getImage());
+
+        //set layout
         this.setLayout(null);
         
         //init ViewSymbol
