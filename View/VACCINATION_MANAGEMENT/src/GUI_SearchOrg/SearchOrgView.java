@@ -11,6 +11,9 @@ import java.util.Vector;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import static java.awt.BorderLayout.PAGE_START;
+import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
+
 /**
  *
  * @author NghiepCuong
@@ -27,6 +30,7 @@ public class SearchOrgView extends JFrame implements ActionListener
     private JScrollPane ScrollPaneArea;
     private JPanel OrgListPanel;
     private JPanel OrgPanel[] = new JPanel[100000];
+    private JPanel CoverScrollPane;
 
     private void initProvinceLabel()
     {
@@ -195,41 +199,57 @@ public class SearchOrgView extends JFrame implements ActionListener
         //Org info
         JLabel OrgName = new JLabel("Ten don vi " + i);
 
+        OrgName.setFont(new Font("SVN-Arial", 0, 18));
 
-        OrgName.setFont(new Font("SVN-Arial", 0, 16));
+        OrgName.setPreferredSize(new Dimension(600, 40));
+
+        OrgName.setHorizontalAlignment(JLabel.LEFT);
+
+        OrgName.setBorder(border());
+
+        OrgName.setLocation(0,0);
 
         //create OrgPanel Panel
         OrgPanel[i] = new JPanel();
 
         //set alignment
-        //OrgPanel[i].setAlignmentX(JLabel.LEFT);
+        OrgPanel[i].setAlignmentX(LEFT_ALIGNMENT);
 
-        OrgPanel[i].setPreferredSize(new Dimension(810, 100));
-
-        //set Alignment
-        OrgPanel[i].setAlignmentY(Component.BOTTOM_ALIGNMENT);
+        OrgPanel[i].setPreferredSize(new Dimension(660, 120));
+        //OrgPanel[i].setSize(680, 100);
 
         //set Background color
         OrgPanel[i].setBackground(Color.WHITE);
 
-        OrgPanel[i].add(OrgName);
+        //OrgPanel[i].setBorder(border());
+
+        //create grid
+        /*GridBagConstraints controlGrid = new GridBagConstraints();
+
+        controlGrid.gridx = 0;
+        controlGrid.gridy = 0;
+        */OrgPanel[i].add(OrgName);
     }
 
     private void initOrgListPanel()
     {
-        OrgListPanel = new JPanel(new GridBagLayout());
+        OrgListPanel = new JPanel();
+
+        OrgListPanel.setLayout(new GridBagLayout());
 
         OrgListPanel.setAlignmentY(Component.TOP_ALIGNMENT);
 
-        GridBagConstraints controlGrid = new GridBagConstraints();
+        OrgListPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        for (int i = 0; i<10; i++)
+        GridBagConstraints c = new GridBagConstraints();
+
+        for (int i = 1; i<3; i++)
         {
             initOrgPanel(i);
-            controlGrid.insets = new Insets(0, 0, 1, 0);
-            controlGrid.gridx = 0;
-            controlGrid.gridy = i;
-            OrgListPanel.add(OrgPanel[i], controlGrid);
+            c.insets = new Insets(1, 0 ,1, 0);
+            c.gridx = 0;
+            c.gridy = i;
+            OrgListPanel.add(OrgPanel[i], c);
         }
     }
 
@@ -238,18 +258,13 @@ public class SearchOrgView extends JFrame implements ActionListener
         initOrgListPanel();
 
         //create ScrollPaneArea Panel
-        ScrollPaneArea = new JScrollPane(OrgListPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        ScrollPaneArea = new JScrollPane(OrgListPanel, VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-        //ScrollPaneArea.add(HorizontalScrollBar);
+        ScrollPaneArea.setAlignmentX(LEFT_ALIGNMENT);
+        ScrollPaneArea.setAlignmentY(TOP_ALIGNMENT);
 
         //set Bounds
-        ScrollPaneArea.setBounds(220, 40, 830, 630);
-
-        //set Border
-        //ScrollPaneArea.setBorder(border());
-
-        //set Background color
-        //ScrollPaneArea.setBackground(Color.WHITE);
+        ScrollPaneArea.setBounds(290, 40, 680, 630);
     }
 
     private void initFrameComponent()
