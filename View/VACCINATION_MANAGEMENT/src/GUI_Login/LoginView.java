@@ -55,7 +55,7 @@ public class LoginView extends JFrame implements ActionListener
         UsernameLabel = new JLabel();
 
         //set label position and frame area
-        UsernameLabel.setBounds(70, 165, Defa, 30);
+        UsernameLabel.setBounds(70, 165, DefaultLabelWidth(), DefaultLabelHeigth());
 
         //set label text
         UsernameLabel.setText("SĐT/Tên tài khoản");
@@ -78,7 +78,7 @@ public class LoginView extends JFrame implements ActionListener
         UsernameTextField = new JTextField();
 
         //set position and area
-        UsernameTextField.setBounds(70, 195, 220, 30);
+        UsernameTextField.setBounds(70, 195, DefaultFieldWidth(), DefaultFieldHeigth());
 
         //set cursor
         UsernameTextField.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
@@ -123,7 +123,7 @@ public class LoginView extends JFrame implements ActionListener
 //      PasswordLabel.setVerticalAlignment(JLabel.CENTER);
         
         
-        PasswordLabel.setBounds(70, 235, 240, 30);
+        PasswordLabel.setBounds(70, 235, DefaultLabelWidth(), DefaultLabelHeigth());
     }
     
     private void initPasswordField()
@@ -152,9 +152,9 @@ public class LoginView extends JFrame implements ActionListener
         PasswordField.setBorder(border);
         
         //set position
-        PasswordField.setBounds(70, 265, 220, 30);
+        PasswordField.setBounds(70, 265, DefaultFieldWidth(), DefaultFieldHeigth());
         
-        PasswordField.setPreferredSize(new java.awt.Dimension(220, 30));
+        PasswordField.setPreferredSize(new Dimension(220, 30));
     }
     
     private void initLoginButton()
@@ -240,5 +240,45 @@ public class LoginView extends JFrame implements ActionListener
     public void actionPerformed(ActionEvent e) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-        
+
+
+    private int DefaultLabelFontSize()
+    {
+        return 20;
+    }
+
+    private int DefaultLabelWidth()
+    {
+        return 200;
+    }
+
+    private int DefaultLabelHeigth()
+    {
+        return 30;
+    }
+
+    private int DefaultFieldWidth()
+    {
+        return 200;
+    }
+
+    private int DefaultFieldHeigth()
+    {
+        return 30;
+    }
+
+    private int DefaultFrameWidth()
+    {
+        return 1080;
+    }
+
+    private int DefaultFrameHeigth()
+    {
+        return 720;
+    }
+
+    private Border border()
+    {
+        return BorderFactory.createLineBorder(Color.BLACK);
+    }
 }
