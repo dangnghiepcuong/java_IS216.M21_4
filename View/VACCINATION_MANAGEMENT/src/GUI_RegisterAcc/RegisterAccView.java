@@ -9,8 +9,9 @@ màu Peach dành cho button chức năng: FF9292
 màu xám hơi đậm dành cho label: 666666
 màu đen dành cho text nhập vào: 333333
 */
-package GUI_Login;
+package GUI_RegisterAcc;
 
+import GUI_RegisterAcc.*;
 import java.awt.Image.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -20,161 +21,191 @@ import javax.swing.border.Border;
 
 /**
  *
- * @author NghiepCuong
+ * @author LeHoangDuyen
  */
-public class LoginView extends JFrame implements ActionListener
+public class RegisterAccView extends JFrame implements ActionListener
 {
-    private JLabel ViewSymbol;
     private JLabel UsernameLabel;
     private JLabel PasswordLabel;
+    private JLabel RepeatPasswordLabel;
     private JTextField UsernameTextField;
     private JPasswordField PasswordField;
-    private JButton LoginButton;
-    private JPanel ViewSymbolPanel;
+    private JPasswordField RepeatPasswordField;
+    private JButton RegisterAccButton;
+
+    private JPanel AccInfoPanel;
+
+    private JPanel PersonalInfoPanel;
     
-    private void initViewSymbol()
+    private void initAccInfoPanel()
     {
-        ViewSymbol = new JLabel();
-        
-        //create an icon
-        ImageIcon Virus = new ImageIcon(getClass().getResource("/GUI_Login/Virus.png"));
+        //create
+        AccInfoPanel = new JPanel();
 
         //set position and area
-        ViewSymbol.setBounds(140, 50, 100, 100);
+        AccInfoPanel.setBounds(0, 0,DefaultFrameWidth()-DefaultFrameHeigth(),DefaultFrameHeigth() );
 
-        //set label icon
-        ViewSymbol.setIcon(Virus); 
+        AccInfoPanel.setBorder(border());
 
-        //set alignment
-        ViewSymbol.setHorizontalAlignment(JLabel.CENTER);
+
     }
-    
+
     private void initUsernameLabel()
     {
+        Border border = BorderFactory.createLineBorder(Color.BLACK);
+        
+        //Label: Username
         //create new label
         UsernameLabel = new JLabel();
 
         //set label position and frame area
-        UsernameLabel.setBounds(70, 165, Defa, 30);
-
+        UsernameLabel.setBounds(40, 80, 240, 30);
+        
         //set label text
-        UsernameLabel.setText("SĐT/Tên tài khoản");
+        UsernameLabel.setText("Số điện thoại");
         
         //set label text style
-        UsernameLabel.setFont(new Font("SVN-Arial", 3, 20));
+        UsernameLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
 
-        //set label text color
+//        //set label text color
         UsernameLabel.setForeground(new Color(0x666666));
 
-        //set alignment
         UsernameLabel.setHorizontalAlignment(JLabel.LEFT);
         UsernameLabel.setVerticalAlignment(JLabel.CENTER);
-
     }
     
-    private void initUsernameTextField()
+     private void initUsernameTextField()
     {
         //create Username text field
         UsernameTextField = new JTextField();
 
-        //set position and area
-        UsernameTextField.setBounds(70, 195, 220, 30);
-
+        //set position
+        UsernameTextField.setBounds(40, 80+DefaultLabelHeigth(), 220, 30);
+        
         //set cursor
         UsernameTextField.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         
         //set field font
-        UsernameTextField.setFont(new Font("SVN-Arial", Font.PLAIN, 16));
+        UsernameTextField.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
 
         //set text field color
         UsernameTextField.setForeground(new Color(0x333333));
         
         //set field background color
         UsernameTextField.setBackground(Color.WHITE);
-        
+
+
     }
     
     private void initPasswordLabel()
     {
-        //Label: Username
         //create new label
         PasswordLabel = new JLabel();
+
+        //set position and area
+        PasswordLabel.setBounds(40, 90 + DefaultFieldHeigth() + DefaultLabelHeigth(), 240, 30);
         
         //set label text
         PasswordLabel.setText("Mật khẩu");
         
         //set label text style
-        PasswordLabel.setFont(new Font("SVN-Arial", 3, 20));
-        
-        //PasswordLabel.setLabelFor();
-        //PasswordLabel.setAutoscrolls(false);
-        
-        //set label size
-        PasswordLabel.setSize(240,30);
-        
-//      //set label text color
+        PasswordLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+
+       //set label text color
         PasswordLabel.setForeground(new Color(0x666666));
         
-        //set label position
+        //set label alignment
         PasswordLabel.setHorizontalTextPosition(JLabel.LEFT);
         PasswordLabel.setVerticalTextPosition(JLabel.CENTER);
-        
-//      PasswordLabel.setHorizontalAlignment(JLabel.CENTER);
-//      PasswordLabel.setVerticalAlignment(JLabel.CENTER);
-        
-        
-        PasswordLabel.setBounds(70, 235, 240, 30);
     }
     
     private void initPasswordField()
     {
-        Border border = BorderFactory.createLineBorder(Color.BLACK);
         
         //create Username text field
         PasswordField = new JPasswordField();
+
+        //set position and area
+        PasswordField.setBounds(40, 90 + DefaultFieldHeigth() + 2 * DefaultLabelHeigth(), 220, 30);
         
         //set cursor
         PasswordField.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         
         //set field font
-        PasswordField.setFont(new Font("SVN-Arial", Font.PLAIN, 16));
-        
-        //set field size
-        PasswordField.setSize(240,30);
-        
+        PasswordField.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
+
         //set text field color
         PasswordField.setForeground(new Color(0x333333));
         
         //set field background color
         PasswordField.setBackground(Color.WHITE);
-        
-        //set border
-        PasswordField.setBorder(border);
-        
-        //set position
-        PasswordField.setBounds(70, 265, 220, 30);
-        
+
+        PasswordField.setPreferredSize(new java.awt.Dimension(220, 30));
+    }
+
+    private void initRepeatPasswordLabel()
+    {
+        //create new label
+        PasswordLabel = new JLabel();
+
+        //set position and area
+        PasswordLabel.setBounds(40, 100 + 2*DefaultFieldHeigth() + DefaultLabelHeigth(), 240, 30);
+
+        //set label text
+        PasswordLabel.setText("Nhập lại mật khẩu");
+
+        //set label text style
+        PasswordLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+
+        //set label text color
+        PasswordLabel.setForeground(new Color(0x666666));
+
+        //set label alignment
+        PasswordLabel.setHorizontalTextPosition(JLabel.LEFT);
+        PasswordLabel.setVerticalTextPosition(JLabel.CENTER);
+    }
+
+    private void initRepeatPasswordField()
+    {
+//create Username text field
+        PasswordField = new JPasswordField();
+
+        //set position and area
+        PasswordField.setBounds(40, 90 + DefaultFieldHeigth() + 2 * DefaultLabelHeigth(), 220, 30);
+
+        //set cursor
+        PasswordField.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+
+        //set field font
+        PasswordField.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
+
+        //set text field color
+        PasswordField.setForeground(new Color(0x333333));
+
+        //set field background color
+        PasswordField.setBackground(Color.WHITE);
+
         PasswordField.setPreferredSize(new java.awt.Dimension(220, 30));
     }
     
-    private void initLoginButton()
+    private void initRegisterAccButton()
     {
         //create login button
-        LoginButton = new JButton();
+        RegisterAccButton = new JButton();
 
         //set position
-        LoginButton.setBounds(115, 380, 150, 49);
+        RegisterAccButton.setBounds(115, 380, 150, 49);
 
         //set no border
-        LoginButton.setBorder(null);
+        RegisterAccButton.setBorder(null);
         
-        LoginButton.setContentAreaFilled(false);
+        RegisterAccButton.setContentAreaFilled(false);
         
         //create an icon
         ImageIcon LoginIcon = new ImageIcon(getClass().getResource("Login Button.png"));
         
         //set label icon
-        LoginButton.setIcon(LoginIcon);    
+        RegisterAccButton.setIcon(LoginIcon);    
     }
     
     private void initFrameComponent()
@@ -184,7 +215,7 @@ public class LoginView extends JFrame implements ActionListener
         this.setTitle("Đăng nhập");
         
         //set frame size
-        this.setSize(380, 520);
+        this.setSize(DefaultFrameWidth(), DefaultFrameHeigth());
         //this.setSize(1080, 720); --Main View
         
         //set do not allow frame resizing
@@ -205,9 +236,6 @@ public class LoginView extends JFrame implements ActionListener
         //set layout
         this.setLayout(null);
         
-        //init ViewSymbol
-        initViewSymbol();
-        this.add(ViewSymbol);
         
         //init UsernameLabel
         initUsernameLabel();
@@ -225,13 +253,13 @@ public class LoginView extends JFrame implements ActionListener
         initPasswordField();
         this.add(PasswordField);
         
-        //init LoginButton
-        initLoginButton();
-        this.add(LoginButton);
+        //init RegisterAccButton
+        initRegisterAccButton();
+        this.add(RegisterAccButton);
         
     }
     
-    public LoginView()
+    public RegisterAccView()
     {
         initFrameComponent();
     }
@@ -240,5 +268,44 @@ public class LoginView extends JFrame implements ActionListener
     public void actionPerformed(ActionEvent e) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-        
+    
+    private int DefaultLabelFontSize()
+    {
+        return 18;
+    }
+
+    private int DefaultLabelWidth()
+    {
+        return 200;
+    }
+
+    private int DefaultLabelHeigth()
+    {
+        return 30;
+    }
+
+    private int DefaultFieldWidth()
+    {
+        return 200;
+    }
+
+    private int DefaultFieldHeigth()
+    {
+        return 30;
+    }
+
+    private int DefaultFrameWidth()
+    {
+        return 1080;
+    }
+
+    private int DefaultFrameHeigth()
+    {
+        return 720;
+    }
+
+    private Border border()
+    {
+        return BorderFactory.createLineBorder(Color.BLACK);
+    }
 }
