@@ -40,7 +40,7 @@ public class LoginView extends JFrame implements ActionListener
         ImageIcon Virus = new ImageIcon(getClass().getResource("/GUI_Login/Virus.png"));
 
         //set position and area
-        ViewSymbol.setBounds(140, 50, 100, 100);
+        ViewSymbol.setBounds(130, 50, 100, 100);
 
         //set label icon
         ViewSymbol.setIcon(Virus); 
@@ -96,7 +96,6 @@ public class LoginView extends JFrame implements ActionListener
     
     private void initPasswordLabel()
     {
-        //Label: Username
         //create new label
         PasswordLabel = new JLabel();
         
@@ -118,18 +117,13 @@ public class LoginView extends JFrame implements ActionListener
         //set label position
         PasswordLabel.setHorizontalTextPosition(JLabel.LEFT);
         PasswordLabel.setVerticalTextPosition(JLabel.CENTER);
-        
-//      PasswordLabel.setHorizontalAlignment(JLabel.CENTER);
-//      PasswordLabel.setVerticalAlignment(JLabel.CENTER);
-        
+
         
         PasswordLabel.setBounds(70, 235, DefaultLabelWidth(), DefaultLabelHeigth());
     }
     
     private void initPasswordField()
     {
-        Border border = BorderFactory.createLineBorder(Color.BLACK);
-        
         //create Username text field
         PasswordField = new JPasswordField();
         
@@ -147,14 +141,10 @@ public class LoginView extends JFrame implements ActionListener
         
         //set field background color
         PasswordField.setBackground(Color.WHITE);
-        
-        //set border
-        PasswordField.setBorder(border);
-        
+
         //set position
         PasswordField.setBounds(70, 265, DefaultFieldWidth(), DefaultFieldHeigth());
-        
-        PasswordField.setPreferredSize(new Dimension(220, 30));
+
     }
     
     private void initLoginButton()
@@ -163,7 +153,7 @@ public class LoginView extends JFrame implements ActionListener
         LoginButton = new JButton();
 
         //set position
-        LoginButton.setBounds(115, 380, 150, 49);
+        LoginButton.setBounds(100, 380, 150, 49);
 
         //set no border
         LoginButton.setBorder(null);
