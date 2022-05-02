@@ -15,8 +15,8 @@ import GUI_SearchOrg.*;
 public class MainClass {
     public static void main(String args[])
     {
-        //LoginView loginGUI = new LoginView();
+        LoginView loginGUI = new LoginView();
 
-        SearchOrgView searchOrgGUI = new SearchOrgView();
+        //SearchOrgView searchOrgGUI = new SearchOrgView();
     }
 }
