@@ -11,12 +11,12 @@ import java.awt.*;
  * @author NghiepCuong
  */
 
-public class LoginView extends javax.swing.JFrame {
+public class TestView extends javax.swing.JFrame {
 
     /**
      * Creates new form LoginView
      */
-    public LoginView() {
+    public TestView() {
         initComponents();
         
     }
@@ -30,170 +30,34 @@ public class LoginView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPopupMenu1 = new javax.swing.JPopupMenu();
-        textFieldUsername = new java.awt.TextField();
-        jLabelUsername = new javax.swing.JLabel();
-        jLabelPassword = new javax.swing.JLabel();
-        jPasswordFieldLoginPass = new javax.swing.JPasswordField();
-        jLabelRegisterAccount = new javax.swing.JLabel();
-        jLabelForgotPassword = new javax.swing.JLabel();
-        jButtonLogin = new javax.swing.JButton();
-        list1 = new java.awt.List();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(340, 460));
         setResizable(false);
 
-        textFieldUsername.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        textFieldUsername.setFont(new java.awt.Font("SVN-Arial", 0, 16));
-        textFieldUsername.setForeground(new java.awt.Color(204, 204, 204));
-        textFieldUsername.setMaximumSize(new java.awt.Dimension(220, 30));
-        textFieldUsername.setMinimumSize(new java.awt.Dimension(220, 30));
-        textFieldUsername.addHierarchyListener(new java.awt.event.HierarchyListener() {
-            public void hierarchyChanged(java.awt.event.HierarchyEvent evt) {
-                textFieldUsernameHierarchyChanged(evt);
-            }
-        });
-        textFieldUsername.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                textFieldUsernameInputMethodTextChanged(evt);
-            }
-        });
-
-        jLabelUsername.setFont(new java.awt.Font("SVN-Arial", 3, 20)); // NOI18N
-        jLabelUsername.setLabelFor(textFieldUsername);
-        jLabelUsername.setText("SĐT/Tên tài khoản");
-        jLabelUsername.setAutoscrolls(false);
-        jLabelUsername.setPreferredSize(new java.awt.Dimension(240, 30));
-
-        jLabelPassword.setFont(new java.awt.Font("SVN-Arial", 3, 20)); // NOI18N
-        jLabelPassword.setLabelFor(jPasswordFieldLoginPass);
-        jLabelPassword.setText("Mật khẩu");
-        jLabelPassword.setAutoscrolls(false);
-        jLabelPassword.setPreferredSize(new java.awt.Dimension(240, 30));
-
-        jPasswordFieldLoginPass.setFont(new java.awt.Font("SVN-Arial", 0, 16));
-        jPasswordFieldLoginPass.setForeground(new java.awt.Color(204, 204, 204));
-        jPasswordFieldLoginPass.setMaximumSize(new java.awt.Dimension(220, 30));
-        jPasswordFieldLoginPass.setMinimumSize(new java.awt.Dimension(220, 30));
-        jPasswordFieldLoginPass.setPreferredSize(new java.awt.Dimension(220, 30));
-
-        jLabelRegisterAccount.setFont(new java.awt.Font("SVN-Arial", 2, 12)); // NOI18N
-        jLabelRegisterAccount.setText("Đăng ký");
-        jLabelRegisterAccount.setFont(new Font("SVN-Arial", Font.ITALIC, 13));
-
-        jLabelForgotPassword.setFont(new java.awt.Font("SVN-Arial", 2, 12)); // NOI18N
-        jLabelForgotPassword.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabelForgotPassword.setText("Quên mật khẩu");
-
-        jButtonLogin.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButtonLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Login/Login Button.png"))); // NOI18N
-        jButtonLogin.setText(null);
-        jButtonLogin.setBorder(null);
-        jButtonLogin.setBorderPainted(false);
-        jButtonLogin.setContentAreaFilled(false);
-        jButtonLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jButtonLogin.setDefaultCapable(false);
-        jButtonLogin.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/Login/Login Button.png"))); // NOI18N
-        jButtonLogin.setDisabledSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/Login/Login Button.png"))); // NOI18N
-        jButtonLogin.setFocusPainted(false);
-        jButtonLogin.setFocusable(false);
-        jButtonLogin.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jButtonLogin.setPreferredSize(new java.awt.Dimension(150, 50));
-        jButtonLogin.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonLoginMouseClicked(evt);
-            }
-        });
-        jButtonLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonLoginActionPerformed(evt);
-            }
-        });
-
-        list1.setMultipleMode(true);
-        list1.setName("ProvinceList"); // NOI18N
-        list1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                list1ActionPerformed(evt);
-            }
-        });
+        jLabel1.setText("jLabel1");
+        jScrollPane2.setViewportView(jLabel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabelRegisterAccount)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabelForgotPassword)
-                        .addGap(61, 61, 61))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPasswordFieldLoginPass, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(textFieldUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(47, 47, 47)
-                                .addComponent(jButtonLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(50, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(list1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(76, 76, 76))
+                .addGap(120, 120, 120)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(46, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addComponent(list1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(textFieldUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(jPasswordFieldLoginPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(7, 7, 7)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelRegisterAccount)
-                    .addComponent(jLabelForgotPassword))
-                .addGap(18, 18, 18)
-                .addComponent(jButtonLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addGap(55, 55, 55)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(68, Short.MAX_VALUE))
         );
-
-        jLabelUsername.getAccessibleContext().setAccessibleName("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoginActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonLoginActionPerformed
-
-    private void jButtonLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonLoginMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonLoginMouseClicked
-
-    private void textFieldUsernameHierarchyChanged(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_textFieldUsernameHierarchyChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textFieldUsernameHierarchyChanged
-
-    private void textFieldUsernameInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_textFieldUsernameInputMethodTextChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textFieldUsernameInputMethodTextChanged
-
-    private void list1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_list1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_list1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -232,14 +96,7 @@ public class LoginView extends javax.swing.JFrame {
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonLogin;
-    private javax.swing.JLabel jLabelForgotPassword;
-    private javax.swing.JLabel jLabelPassword;
-    private javax.swing.JLabel jLabelRegisterAccount;
-    private javax.swing.JLabel jLabelUsername;
-    private javax.swing.JPasswordField jPasswordFieldLoginPass;
-    private javax.swing.JPopupMenu jPopupMenu1;
-    private java.awt.List list1;
-    private java.awt.TextField textFieldUsername;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 }
