@@ -167,11 +167,11 @@ public class RegisterAccView extends JFrame implements ActionListener
 
     private void initRepeatPasswordField()
     {
-//create Username text field
+        //create Username text field
         PasswordField = new JPasswordField();
 
         //set position and area
-        PasswordField.setBounds(40, 90 + DefaultFieldHeigth() + 2 * DefaultLabelHeigth(), 220, 30);
+        PasswordField.setBounds(40, 90 + DefaultFieldHeigth() + 3 * DefaultLabelHeigth(), 220, 30);
 
         //set cursor
         PasswordField.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
@@ -244,6 +244,10 @@ public class RegisterAccView extends JFrame implements ActionListener
         //init PasswordLabel
         initPasswordLabel();
         this.add(PasswordLabel);
+
+        //init RepeatPasswordLabel
+        initRepeatPasswordLabel();
+        this.add(RepeatPasswordLabel);
         
         //init UsernameTextField
         initUsernameTextField();
@@ -252,6 +256,10 @@ public class RegisterAccView extends JFrame implements ActionListener
         //init PasswordField;
         initPasswordField();
         this.add(PasswordField);
+
+        //init RepeatPasswordLabel
+        initRepeatPasswordField();
+        this.add(RepeatPasswordField);
         
         //init RegisterAccButton
         initRegisterAccButton();
