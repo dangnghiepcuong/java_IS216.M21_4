@@ -146,46 +146,46 @@ public class RegisterAccView extends JFrame implements ActionListener
     private void initRepeatPasswordLabel()
     {
         //create new label
-        PasswordLabel = new JLabel();
+        RepeatPasswordLabel = new JLabel();
 
         //set position and area
-        PasswordLabel.setBounds(40, 100 + 2*DefaultFieldHeigth() + DefaultLabelHeigth(), 240, 30);
+        RepeatPasswordLabel.setBounds(40, 100 + 3*DefaultFieldHeigth() + DefaultLabelHeigth(), 240, 30);
 
         //set label text
-        PasswordLabel.setText("Nhập lại mật khẩu");
+        RepeatPasswordLabel.setText("Nhập lại mật khẩu");
 
         //set label text style
-        PasswordLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        RepeatPasswordLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
 
         //set label text color
-        PasswordLabel.setForeground(new Color(0x666666));
+        RepeatPasswordLabel.setForeground(new Color(0x666666));
 
         //set label alignment
-        PasswordLabel.setHorizontalTextPosition(JLabel.LEFT);
-        PasswordLabel.setVerticalTextPosition(JLabel.CENTER);
+        RepeatPasswordLabel.setHorizontalTextPosition(JLabel.LEFT);
+        RepeatPasswordLabel.setVerticalTextPosition(JLabel.CENTER);
     }
 
     private void initRepeatPasswordField()
     {
         //create Username text field
-        PasswordField = new JPasswordField();
+        RepeatPasswordField = new JPasswordField();
 
         //set position and area
-        PasswordField.setBounds(40, 90 + DefaultFieldHeigth() + 3 * DefaultLabelHeigth(), 220, 30);
+        RepeatPasswordField.setBounds(40, 100 + 3*DefaultFieldHeigth() + 2 * DefaultLabelHeigth(), 220, 30);
 
         //set cursor
-        PasswordField.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        RepeatPasswordField.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         //set field font
-        PasswordField.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
+        RepeatPasswordField.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
 
         //set text field color
-        PasswordField.setForeground(new Color(0x333333));
+        RepeatPasswordField.setForeground(new Color(0x333333));
 
         //set field background color
-        PasswordField.setBackground(Color.WHITE);
+        RepeatPasswordField.setBackground(Color.WHITE);
 
-        PasswordField.setPreferredSize(new java.awt.Dimension(220, 30));
+        RepeatPasswordField.setPreferredSize(new java.awt.Dimension(220, 30));
     }
     
     private void initRegisterAccButton()
@@ -194,7 +194,7 @@ public class RegisterAccView extends JFrame implements ActionListener
         RegisterAccButton = new JButton();
 
         //set position
-        RegisterAccButton.setBounds(115, 380, 150, 49);
+        RegisterAccButton.setBounds(70, 420, 150, 49);
 
         //set no border
         RegisterAccButton.setBorder(null);
