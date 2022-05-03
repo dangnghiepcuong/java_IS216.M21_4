@@ -30,6 +30,7 @@ public class SearchOrgView extends JFrame implements ActionListener
     private JPanel OrgPanel[] = new JPanel[10000];
     private DefaultValue dv = new DefaultValue();
     private JPanel OrgListPanel;
+    private Organization org[] = new Organization[10000];
 
     private void initProvinceLabel()
     {
@@ -197,31 +198,31 @@ public class SearchOrgView extends JFrame implements ActionListener
     private void initOrgPanel(int i)
     {
         //Org info
-        JLabel OrgName = new JLabel("Tên đơn vị " + i);
+        JLabel OrgName = new JLabel("Tên đơn vị: " + org[i].getName());
         OrgName.setFont(new Font("SVN-Arial", 3, 18));
         OrgName.setBounds(30,1,605,30);
         OrgName.setHorizontalAlignment(JLabel.LEFT);
         OrgName.setBorder(dv.border());
 
-        JLabel OrgProvince = new JLabel("Tỉnh/TP: ");
+        JLabel OrgProvince = new JLabel("Tỉnh/TP: " + org[i].getProvince());
         OrgProvince.setFont(new Font("SVN-Arial", 0, 16));
         OrgProvince.setBounds(30,32,250,25);
         OrgProvince.setHorizontalAlignment(JLabel.LEFT);
         OrgProvince.setBorder(dv.border());
 
-        JLabel OrgDistrict = new JLabel("Quận/Huyện: ");
+        JLabel OrgDistrict = new JLabel("Quận/Huyện: " + org[i].getDistrict());
         OrgDistrict.setFont(new Font("SVN-Arial", 0, 16));
         OrgDistrict.setBounds(30, 32+25+2,350,25);
         OrgDistrict.setHorizontalAlignment(JLabel.LEFT);
         OrgDistrict.setBorder(dv.border());
 
-        JLabel OrgTown  = new JLabel("Xã/phường/thị trấn: ");
+        JLabel OrgTown  = new JLabel("Xã/phường/thị trấn: " + org[i].getTown());
         OrgTown.setFont(new Font("SVN-Arial", 0, 16));
         OrgTown.setBounds(30,(32+25+2)+25+2,350,25);
         OrgTown.setHorizontalAlignment(JLabel.LEFT);
         OrgTown.setBorder(dv.border());
 
-        JLabel OrgStreet  = new JLabel("Đ/c: ");
+        JLabel OrgStreet  = new JLabel("Đ/c: " + org[i].getStreet());
         OrgStreet.setFont(new Font("SVN-Arial", 0, 16));
         OrgStreet.setBounds(285,32,350,25);
         OrgStreet.setHorizontalAlignment(JLabel.LEFT);
@@ -259,17 +260,15 @@ public class SearchOrgView extends JFrame implements ActionListener
         OrgPanel[i].add(Org_Scheds);
     }
 
-    private void initOrgListPanel()
+    private void initOrgListPanel(int nORG)
     {
         OrgListPanel = new JPanel();
 
-        int n = 20;
-
-        OrgListPanel.setPreferredSize(new Dimension(680, 120*n));
+        OrgListPanel.setPreferredSize(new Dimension(680, 120*nORG));
 
         OrgListPanel.setLayout((new FlowLayout()));
 
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < nORG; i++)
         {
             initOrgPanel(i);
             OrgListPanel.add(OrgPanel[i]);
@@ -277,9 +276,9 @@ public class SearchOrgView extends JFrame implements ActionListener
 
    }
 
-    private void initScrollPaneArea()
+    private void initScrollPaneArea(int nORG)
     {
-        initOrgListPanel();
+        initOrgListPanel(nORG);
 
         //create ScrollPaneArea Panel
         ScrollPaneArea = new JScrollPane(OrgListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -340,9 +339,6 @@ public class SearchOrgView extends JFrame implements ActionListener
         initSearchOrgButton();
         this.add(SearchOrgButton);
 
-        //init ScrollPaneArea
-        initScrollPaneArea();
-        this.add(ScrollPaneArea);
 
     }
 
@@ -359,12 +355,40 @@ public class SearchOrgView extends JFrame implements ActionListener
         //Pressed SearchOrgButton
         if (e.getSource() == SearchOrgButton)
         {
-            String query = "select * from ORGANIZATION ORG ";
+            String query = "";
+
+            //Select out the code of chosen province
+            String ProvinceCode = "";
+
+            query = "select Code from REGION where REGION.Name = '"
+                    + ProvinceChoice.getSelectedItem() + "'";
+
+            try
+            {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+                //Statement st = connection.createStatement();
+                PreparedStatement st = connection.prepareStatement(query);
+
+                ResultSet rs = st.executeQuery(query);
+                while(rs.next())
+                    ProvinceCode = rs.getString("Code");
+                System.out.println(ProvinceCode);
+            }
+            catch (SQLException exception)
+            {
+                exception.printStackTrace();
+            }
+
+
+            //Select out the specified ORGs
+            query = "select ID, Name, Province, District, Town, Street, COUNT(SCHED.ID)"
+                    + " from ORGANIZATION ORG, SCHEDULE SCHED"
+                    + " where ORG.ID = SCHED.OrgID";
 
             if (ProvinceChoice.getSelectedIndex() > 0)
-                query = query + " where ORG.Province = '" + ProvinceChoice.getSelectedItem() + "' ";
+                query = query + " and ORG.Province = '" + ProvinceCode + "' ";
             else
-                query = query + "where ORG.Province like '%'  ";
+                query = query + " and ORG.Province like '%'  ";
 
             if (DistrictChoice.getSelectedIndex() > 0)
                 query = query + " and ORG.District = '" + DistrictChoice.getSelectedItem() + "' ";
@@ -372,21 +396,48 @@ public class SearchOrgView extends JFrame implements ActionListener
                 query = query + " and ORG.District like '%' ";
 
             if (TownChoice.getSelectedIndex() > 0)
-                query = query + " and ORG.Town = '" + TownChoice.getSelectedItem() + "'; ";
+                query = query + " and ORG.Town = '" + TownChoice.getSelectedItem() + "'";
             else
-                query = query + " and ORG.Town like '%';";
+                query = query + " and ORG.Town like '%'";
 
-            System.out.println(ProvinceChoice.getSelectedItem());
-            try {
+            query += " group by ORG.ID";
+
+            System.out.println(query);
+
+            try
+            {
                 Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-                Statement st = connection.createStatement();
+                //Statement st = connection.createStatement();
+
+                PreparedStatement st = connection.prepareStatement(query);
+
                 ResultSet rs = st.executeQuery(query);
 
+                int i = 0, n= 0;
+                while (rs.next())
+                {
+                    org[i] = new Organization();
+                    org[i].setID(rs.getString("ID"));
+                    org[i].setName(rs.getString("Name"));
+                    org[i].setProvince(rs.getString("Province"));
+                    org[i].setDistrict(rs.getString("District"));
+                    org[i].setTown(rs.getString("Town"));
+                    org[i].setStreet(rs.getString("Street"));
+                    i++;
+                }
+                n = i;
 
-            } catch (SQLException exception) {
-                exception.printStackTrace();
+                //init ScrollPaneArea
+                initScrollPaneArea(n);
+                this.add(ScrollPaneArea);
 
+                this.validate();
             }
+            catch (SQLException exception)
+            {
+                exception.printStackTrace();
+            }
+
         }
     }
 
