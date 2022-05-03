@@ -9,15 +9,12 @@ màu Peach dành cho button chức năng: FF9292
 màu xám hơi đậm dành cho label: 666666
 màu đen dành cho text nhập vào: 333333
 */
-package GUI_RegisterAcc;
 
-import GUI_RegisterAcc.*;
-import java.awt.Image.*;
+import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
-import javax.swing.border.Border;
 
 /**
  *
@@ -82,7 +79,7 @@ public class RegisterAccView extends JFrame implements ActionListener
         UsernameTextField.setBounds(40, 80+DefaultLabelHeigth(), 220, 30);
         
         //set cursor
-        UsernameTextField.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        UsernameTextField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         
         //set field font
         UsernameTextField.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
@@ -128,7 +125,7 @@ public class RegisterAccView extends JFrame implements ActionListener
         PasswordField.setBounds(40, 90 + DefaultFieldHeigth() + 2 * DefaultLabelHeigth(), 220, 30);
         
         //set cursor
-        PasswordField.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        PasswordField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         
         //set field font
         PasswordField.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
@@ -139,7 +136,7 @@ public class RegisterAccView extends JFrame implements ActionListener
         //set field background color
         PasswordField.setBackground(Color.WHITE);
 
-        PasswordField.setPreferredSize(new java.awt.Dimension(220, 30));
+        PasswordField.setPreferredSize(new Dimension(220, 30));
     }
 
     private void initRepeatPasswordLabel()
@@ -173,7 +170,7 @@ public class RegisterAccView extends JFrame implements ActionListener
         RepeatPasswordField.setBounds(40, 100 + 3*DefaultFieldHeigth() + 2 * DefaultLabelHeigth(), 220, 30);
 
         //set cursor
-        RepeatPasswordField.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        RepeatPasswordField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
 
         //set field font
         RepeatPasswordField.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
@@ -184,25 +181,25 @@ public class RegisterAccView extends JFrame implements ActionListener
         //set field background color
         RepeatPasswordField.setBackground(Color.WHITE);
 
-        RepeatPasswordField.setPreferredSize(new java.awt.Dimension(220, 30));
+        RepeatPasswordField.setPreferredSize(new Dimension(220, 30));
     }
     
     private void initRegisterAccButton()
     {
+        //create an icon
+        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("/icon/Login Button.png"));
+
         //create login button
         RegisterAccButton = new JButton();
 
         //set position
-        RegisterAccButton.setBounds(70, 420, 150, 49);
+        RegisterAccButton.setBounds(70, 380, LoginIcon.getIconWidth(), LoginIcon.getIconHeight());
 
         //set no border
         RegisterAccButton.setBorder(null);
         
         RegisterAccButton.setContentAreaFilled(false);
-        
-        //create an icon
-        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("Login Button.png"));
-        
+
         //set label icon
         RegisterAccButton.setIcon(LoginIcon);    
     }
@@ -211,7 +208,7 @@ public class RegisterAccView extends JFrame implements ActionListener
     {      
         //Frame
         //set frame title
-        this.setTitle("Đăng nhập");
+        this.setTitle("Đăng ký tài khoản mới");
         
         //set frame size
         this.setSize(DefaultFrameWidth(), DefaultFrameHeigth());
@@ -230,7 +227,7 @@ public class RegisterAccView extends JFrame implements ActionListener
         this.getContentPane().setBackground(new Color(0xFCFCFC));
 
         //set Frame icon
-        this.setIconImage(new ImageIcon(getClass().getResource("Virus.png")).getImage());
+        this.setIconImage(new ImageIcon(getClass().getResource("/icon/Virus.png")).getImage());
 
         //set layout
         this.setLayout(null);
