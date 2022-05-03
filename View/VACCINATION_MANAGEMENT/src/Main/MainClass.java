@@ -18,8 +18,8 @@ public class MainClass {
     {
         //LoginView loginGUI = new LoginView();
 
-        SearchOrgView searchOrgGUI = new SearchOrgView();
+        //SearchOrgView searchOrgGUI = new SearchOrgView();
 
-        //RegisterAccView registerAccGUI = new RegisterAccView();
+        RegisterAccView registerAccGUI = new RegisterAccView();
     }
 }
