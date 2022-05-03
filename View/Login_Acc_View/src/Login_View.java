@@ -20,7 +20,7 @@ import java.awt.event.ActionListener;
  *
  * @author NghiepCuong
  */
-public class LoginView extends JFrame implements ActionListener
+public class Login_View extends JFrame implements ActionListener
 {
     private JLabel ViewSymbol;
     private JLabel UsernameLabel;
@@ -35,7 +35,7 @@ public class LoginView extends JFrame implements ActionListener
         ViewSymbol = new JLabel();
         
         //create an icon
-        ImageIcon Virus = new ImageIcon(getClass().getResource("Virus.png"));
+        ImageIcon Virus = new ImageIcon(getClass().getResource("icon/Virus.png"));
 
         //set position and area
         ViewSymbol.setBounds(130, 50, 100, 100);
@@ -159,7 +159,7 @@ public class LoginView extends JFrame implements ActionListener
         LoginButton.setContentAreaFilled(false);
         
         //create an icon
-        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("Login Button.png"));
+        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("icon/Login Button.png"));
         
         //set label icon
         LoginButton.setIcon(LoginIcon);    
@@ -188,7 +188,7 @@ public class LoginView extends JFrame implements ActionListener
         this.getContentPane().setBackground(new Color(0xFCFCFC));
 
         //set Frame icon
-        this.setIconImage(new ImageIcon(getClass().getResource("Virus.png")).getImage());
+        this.setIconImage(new ImageIcon(getClass().getResource("icon/Virus.png")).getImage());
 
         //set layout
         this.setLayout(null);
@@ -219,7 +219,7 @@ public class LoginView extends JFrame implements ActionListener
         
     }
     
-    public LoginView()
+    public Login_View()
     {
         initFrameComponent();
     }
