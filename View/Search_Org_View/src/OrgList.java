@@ -1,9 +1,9 @@
+import javax.accessibility.Accessible;
 import javax.swing.*;
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class LargePanel extends JPanel
+public class OrgList extends JComponent implements Scrollable, Accessible
 {
     private ArrayList<JPanel> OrgPanel;
     private DefaultValue dv = new DefaultValue();
@@ -35,7 +35,7 @@ public class LargePanel extends JPanel
         OrgPanel.get(i).add(OrgName);
     }
 
-    public LargePanel()
+    public OrgList()
     {
         this.setLayout(null);
 
@@ -47,7 +47,7 @@ public class LargePanel extends JPanel
 
     }
 
-    public LargePanel(ArrayList<JPanel> ORGPanel)
+    public OrgList(ArrayList<JPanel> ORGPanel)
     {
         this.setLayout(null);
 
@@ -61,5 +61,30 @@ public class LargePanel extends JPanel
     public Dimension getPreferredSize()
     {
         return new Dimension( 680,630 );
+    }
+
+    @Override
+    public Dimension getPreferredScrollableViewportSize() {
+        return null;
+    }
+
+    @Override
+    public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+        return 0;
+    }
+
+    @Override
+    public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+        return 0;
+    }
+
+    @Override
+    public boolean getScrollableTracksViewportWidth() {
+        return false;
+    }
+
+    @Override
+    public boolean getScrollableTracksViewportHeight() {
+        return false;
     }
 }

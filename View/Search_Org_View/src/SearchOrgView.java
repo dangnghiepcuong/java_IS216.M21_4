@@ -8,6 +8,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
 
@@ -25,9 +26,9 @@ public class SearchOrgView extends JFrame implements ActionListener
     private Choice ProvinceChoice;
     private JButton SearchOrgButton;
     private JScrollPane ScrollPaneArea;
+    private JPanel OrgPanel[] = new JPanel[10000];
+    private DefaultValue dv = new DefaultValue();
     private JPanel OrgListPanel;
-    private JPanel OrgPanel[] = new JPanel[100000];
-    private JPanel CoverScrollPane;
 
     private void initProvinceLabel()
     {
@@ -35,10 +36,10 @@ public class SearchOrgView extends JFrame implements ActionListener
         ProvinceLabel = new JLabel();
 
         //set position and area
-        ProvinceLabel.setBounds(10, 10, DefaultLabelWidth(), DefaultLabelHeigth());
+        ProvinceLabel.setBounds(dv.AlignLeft(), 10, dv.LabelWidth(), dv.LabelHeigth());
 
         //set label text style
-        ProvinceLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        ProvinceLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         //set label text color
         ProvinceLabel.setForeground(new Color(0x666666));
@@ -47,7 +48,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         ProvinceLabel.setText("Tỉnh/thành phố:");
 
         //set label size
-        ProvinceLabel.setSize(DefaultFieldWidth(),DefaultFieldHeigth());
+        ProvinceLabel.setSize(dv.FieldWidth(),dv.FieldHeigth());
     }
 
     private void initProvinceChoice()
@@ -56,10 +57,10 @@ public class SearchOrgView extends JFrame implements ActionListener
         ProvinceChoice = new Choice();
 
         //set position
-        ProvinceChoice.setBounds(10, 40, DefaultFieldWidth(), DefaultFieldHeigth());
+        ProvinceChoice.setBounds(dv.AlignLeft(), 40, dv.FieldWidth(), dv.FieldHeigth());
 
         //set lít font
-        ProvinceChoice.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
+        ProvinceChoice.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
 
         //set lít color
         ProvinceChoice.setForeground(new Color(0x333333));
@@ -68,7 +69,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         ProvinceChoice.setBackground(Color.WHITE);
 
         //set choice
-        ProvinceChoice.add("");
+        ProvinceChoice.add("*");
         ProvinceChoice.add("Bình Dương");
         ProvinceChoice.add("Hồ Chí Minh");
         ProvinceChoice.add("Hà Nội");
@@ -80,10 +81,10 @@ public class SearchOrgView extends JFrame implements ActionListener
         DistrictLabel = new JLabel();
 
         //set position and area
-        DistrictLabel.setBounds(10, 80, DefaultLabelWidth(), DefaultLabelHeigth());
+        DistrictLabel.setBounds(dv.AlignLeft(), 80, dv.LabelWidth(), dv.LabelHeigth());
 
         //set text style
-        DistrictLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        DistrictLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         //set text color
         DistrictLabel.setForeground(new Color(0x666666));
@@ -92,7 +93,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         DistrictLabel.setText("Quận/Huyện:");
 
         //set size
-        DistrictLabel.setSize(DefaultLabelWidth(), DefaultLabelHeigth());
+        DistrictLabel.setSize(dv.LabelWidth(), dv.LabelHeigth());
     }
 
     private void initDistrictChoice()
@@ -101,10 +102,10 @@ public class SearchOrgView extends JFrame implements ActionListener
         DistrictChoice = new Choice();
 
         //set position
-        DistrictChoice.setBounds(10, 110, DefaultFieldWidth(), DefaultFieldHeigth());
+        DistrictChoice.setBounds(dv.AlignLeft(), 110, dv.FieldWidth(), dv.FieldHeigth());
 
         //set font
-        DistrictChoice.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
+        DistrictChoice.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
 
         //set text color
         DistrictChoice.setForeground(new Color(0x333333));
@@ -114,7 +115,7 @@ public class SearchOrgView extends JFrame implements ActionListener
 
 
         //set choice
-        DistrictChoice.add("");
+        DistrictChoice.add("*");
         DistrictChoice.add("Dầu Tiếng");
         DistrictChoice.add("Thuận An");
         DistrictChoice.add("Dĩ An");
@@ -128,16 +129,16 @@ public class SearchOrgView extends JFrame implements ActionListener
         TownLabel = new JLabel();
 
         //set label position and frame area
-        TownLabel.setBounds(10, 150, DefaultLabelWidth(), DefaultLabelHeigth());
+        TownLabel.setBounds(dv.AlignLeft(), 150, dv.LabelWidth(), dv.LabelHeigth());
 
         //set label text style
-        TownLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        TownLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         //set label text color
         TownLabel.setForeground(new Color(0x666666));
 
         //set label size
-        TownLabel.setSize(DefaultLabelWidth(), DefaultLabelHeigth());
+        TownLabel.setSize(dv.LabelWidth(), dv.LabelHeigth());
 
         //set label text
         TownLabel.setText("Xã/phường/thị trấn:");
@@ -149,19 +150,19 @@ public class SearchOrgView extends JFrame implements ActionListener
         TownChoice = new Choice();
 
         //set position
-        TownChoice.setBounds(10, 180, DefaultFieldWidth(), DefaultFieldHeigth());
+        TownChoice.setBounds(dv.AlignLeft(), 180, dv.FieldWidth(), dv.FieldHeigth());
 
         //set text color
         TownChoice.setForeground(new Color(0x333333));
 
         //set font
-        TownChoice.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
+        TownChoice.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
 
         //set background color
         TownChoice.setBackground(Color.WHITE);
 
         //set choice
-        TownChoice.add("");
+        TownChoice.add("*");
         TownChoice.add("Dầu Tiếng");
         TownChoice.add("Lái Thiêu");
         TownChoice.add("Đông Hòa");
@@ -182,86 +183,107 @@ public class SearchOrgView extends JFrame implements ActionListener
         SearchOrgButton.setContentAreaFilled(false);
 
         //create an icon
-        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("icon/Login Button.png"));
+        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("icon/Search.png"));
 
         //set label icon
         SearchOrgButton.setIcon(LoginIcon);
 
-        SearchOrgButton.setBounds(35, 250, 150, 49);
+        SearchOrgButton.setBounds(dv.AlignLeft(), 250, dv.FieldWidth(), LoginIcon.getIconHeight());
     }
-
 
     private void initOrgPanel(int i)
     {
         //Org info
-        JLabel OrgName = new JLabel("Ten don vi " + i);
-
-        OrgName.setFont(new Font("SVN-Arial", 0, 18));
-
-        OrgName.setPreferredSize(new Dimension(600, 40));
-
+        JLabel OrgName = new JLabel("Tên đơn vị " + i);
+        OrgName.setFont(new Font("SVN-Arial", 3, 18));
+        OrgName.setBounds(30,1,605,30);
         OrgName.setHorizontalAlignment(JLabel.LEFT);
+        OrgName.setBorder(dv.border());
 
-        OrgName.setBorder(border());
+        JLabel OrgProvince = new JLabel("Tỉnh/TP: ");
+        OrgProvince.setFont(new Font("SVN-Arial", 0, 16));
+        OrgProvince.setBounds(30,32,250,25);
+        OrgProvince.setHorizontalAlignment(JLabel.LEFT);
+        OrgProvince.setBorder(dv.border());
 
-        OrgName.setLocation(0,0);
+        JLabel OrgDistrict = new JLabel("Quận/Huyện: ");
+        OrgDistrict.setFont(new Font("SVN-Arial", 0, 16));
+        OrgDistrict.setBounds(30, 32+25+2,350,25);
+        OrgDistrict.setHorizontalAlignment(JLabel.LEFT);
+        OrgDistrict.setBorder(dv.border());
+
+        JLabel OrgTown  = new JLabel("Xã/phường/thị trấn: ");
+        OrgTown.setFont(new Font("SVN-Arial", 0, 16));
+        OrgTown.setBounds(30,(32+25+2)+25+2,350,25);
+        OrgTown.setHorizontalAlignment(JLabel.LEFT);
+        OrgTown.setBorder(dv.border());
+
+        JLabel OrgStreet  = new JLabel("Đ/c: ");
+        OrgStreet.setFont(new Font("SVN-Arial", 0, 16));
+        OrgStreet.setBounds(285,32,350,25);
+        OrgStreet.setHorizontalAlignment(JLabel.LEFT);
+        OrgStreet.setBorder(dv.border());
+
+        JLabel Org_avaiScheds = new JLabel("Số lịch tiêm hiện có: ");
+        Org_avaiScheds.setFont(new Font("SVN-Arial", 0, 16));
+        Org_avaiScheds.setBounds(385,(32+25)+2,250,25);
+        Org_avaiScheds.setHorizontalAlignment(JLabel.LEFT);
+        Org_avaiScheds.setBorder(dv.border());
+
+        JLabel Org_Scheds = new JLabel("Số lịch tiêm đã tổ chức: ");
+        Org_Scheds.setFont(new Font("SVN-Arial", 0, 16));
+        Org_Scheds.setBounds(385,((32+25)+2)+25+2,250,25);
+        Org_Scheds.setHorizontalAlignment(JLabel.LEFT);
+        Org_Scheds.setBorder(dv.border());
 
         //create OrgPanel Panel
         OrgPanel[i] = new JPanel();
 
-        //set alignment
-        OrgPanel[i].setAlignmentX(LEFT_ALIGNMENT);
+        //set layout
+        OrgPanel[i].setLayout(null);
 
-        OrgPanel[i].setPreferredSize(new Dimension(660, 120));
-        //OrgPanel[i].setSize(680, 100);
+        OrgPanel[i].setPreferredSize(new Dimension(660,120));
 
         //set Background color
         OrgPanel[i].setBackground(Color.WHITE);
 
-        //OrgPanel[i].setBorder(border());
-
-        //create grid
-        /*GridBagConstraints controlGrid = new GridBagConstraints();
-
-        controlGrid.gridx = 0;
-        controlGrid.gridy = 0;
-        */OrgPanel[i].add(OrgName);
+        OrgPanel[i].add(OrgName);
+        OrgPanel[i].add(OrgProvince);
+        OrgPanel[i].add(OrgDistrict);
+        OrgPanel[i].add(OrgTown);
+        OrgPanel[i].add(OrgStreet);
+        OrgPanel[i].add(Org_avaiScheds);
+        OrgPanel[i].add(Org_Scheds);
     }
 
     private void initOrgListPanel()
     {
         OrgListPanel = new JPanel();
 
-        OrgListPanel.setLayout(new GridBagLayout());
+        int n = 100;
 
-        OrgListPanel.setAlignmentY(Component.TOP_ALIGNMENT);
+        OrgListPanel.setPreferredSize(new Dimension(680, 120*n));
 
-        OrgListPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        OrgListPanel.setLayout(new BoxLayout(OrgListPanel, BoxLayout.Y_AXIS));
 
-        GridBagConstraints c = new GridBagConstraints();
-
-        for (int i = 1; i<3; i++)
+        for (int i = 0; i < n; i++)
         {
             initOrgPanel(i);
-            c.insets = new Insets(1, 0 ,1, 0);
-            c.gridx = 0;
-            c.gridy = i;
-            OrgListPanel.add(OrgPanel[i], c);
+            OrgListPanel.add(OrgPanel[i]);
+            OrgListPanel.add(Box.createRigidArea(new Dimension(0, 4)));
         }
-    }
+
+   }
 
     private void initScrollPaneArea()
     {
         initOrgListPanel();
 
         //create ScrollPaneArea Panel
-        ScrollPaneArea = new JScrollPane(OrgListPanel, VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-        ScrollPaneArea.setAlignmentX(LEFT_ALIGNMENT);
-        ScrollPaneArea.setAlignmentY(TOP_ALIGNMENT);
+        ScrollPaneArea = new JScrollPane(OrgListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         //set Bounds
-        ScrollPaneArea.setBounds(290, 40, 680, 630);
+        ScrollPaneArea.setBounds(320, 40, 680, 630);
     }
 
     private void initFrameComponent()
@@ -271,7 +293,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         this.setTitle("Tìm kiếm đơn vị tiêm chủng");
         
         //set frame size
-        this.setSize(DefaultFrameWidth(), DefaultFrameHeigth());
+        this.setSize(dv.FrameWidth(), dv.FrameHeigth());
         //this.setSize(1080, 720); --Main View
         
         //set do not allow frame resizing
@@ -319,11 +341,14 @@ public class SearchOrgView extends JFrame implements ActionListener
         //init ScrollPaneArea
         initScrollPaneArea();
         this.add(ScrollPaneArea);
+
     }
 
     public SearchOrgView()
     {
         initFrameComponent();
+        this.validate();
+
     }
 
     @Override
@@ -331,44 +356,4 @@ public class SearchOrgView extends JFrame implements ActionListener
 
     }
 
-
-    private int DefaultLabelFontSize()
-    {
-        return 20;
-    }
-
-    private int DefaultLabelWidth()
-    {
-        return 200;
-    }
-
-    private int DefaultLabelHeigth()
-    {
-        return 30;
-    }
-
-    private int DefaultFieldWidth()
-    {
-        return 200;
-    }
-
-    private int DefaultFieldHeigth()
-    {
-        return 30;
-    }
-
-    private int DefaultFrameWidth()
-    {
-        return 1080;
-    }
-
-    private int DefaultFrameHeigth()
-    {
-        return 720;
-    }
-
-    private Border border()
-    {
-        return BorderFactory.createLineBorder(Color.BLACK);
-    }
 }
