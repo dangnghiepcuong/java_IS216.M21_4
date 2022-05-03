@@ -29,6 +29,7 @@ public class LoginView extends JFrame implements ActionListener
     private JPasswordField PasswordField;
     private JButton LoginButton;
     private JPanel ViewSymbolPanel;
+    private DefaultValue dv = new DefaultValue();
 
     private void initViewSymbol()
     {
@@ -53,7 +54,7 @@ public class LoginView extends JFrame implements ActionListener
         UsernameLabel = new JLabel();
 
         //set label position and frame area
-        UsernameLabel.setBounds(70, 165, DefaultLabelWidth(), DefaultLabelHeigth());
+        UsernameLabel.setBounds(70, 165, dv.LabelWidth(), dv.LabelHeigth());
 
         //set label text
         UsernameLabel.setText("SĐT/Tên tài khoản");
@@ -76,7 +77,7 @@ public class LoginView extends JFrame implements ActionListener
         UsernameTextField = new JTextField();
 
         //set position and area
-        UsernameTextField.setBounds(70, 195, DefaultFieldWidth(), DefaultFieldHeigth());
+        UsernameTextField.setBounds(70, 195, dv.FieldWidth(), dv.FieldHeigth());
 
         //set cursor
         UsernameTextField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
@@ -117,7 +118,7 @@ public class LoginView extends JFrame implements ActionListener
         PasswordLabel.setVerticalTextPosition(JLabel.CENTER);
 
 
-        PasswordLabel.setBounds(70, 235, DefaultLabelWidth(), DefaultLabelHeigth());
+        PasswordLabel.setBounds(70, 235, dv.LabelWidth(), dv.LabelHeigth());
     }
 
     private void initPasswordField()
@@ -141,7 +142,7 @@ public class LoginView extends JFrame implements ActionListener
         PasswordField.setBackground(Color.WHITE);
 
         //set position
-        PasswordField.setBounds(70, 265, DefaultFieldWidth(), DefaultFieldHeigth());
+        PasswordField.setBounds(70, 265, dv.FieldWidth(), dv.FieldHeigth());
 
     }
 
@@ -222,6 +223,8 @@ public class LoginView extends JFrame implements ActionListener
     public LoginView()
     {
         initFrameComponent();
+
+        this.revalidate();
     }
 
     @Override
@@ -229,44 +232,4 @@ public class LoginView extends JFrame implements ActionListener
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-
-    private int DefaultLabelFontSize()
-    {
-        return 20;
-    }
-
-    private int DefaultLabelWidth()
-    {
-        return 200;
-    }
-
-    private int DefaultLabelHeigth()
-    {
-        return 30;
-    }
-
-    private int DefaultFieldWidth()
-    {
-        return 200;
-    }
-
-    private int DefaultFieldHeigth()
-    {
-        return 30;
-    }
-
-    private int DefaultFrameWidth()
-    {
-        return 1080;
-    }
-
-    private int DefaultFrameHeigth()
-    {
-        return 720;
-    }
-
-    private Border border()
-    {
-        return BorderFactory.createLineBorder(Color.BLACK);
-    }
 }

@@ -383,7 +383,7 @@ public class SearchOrgView extends JFrame implements ActionListener
                 Statement st = connection.createStatement();
                 ResultSet rs = st.executeQuery(query);
 
-                
+
             } catch (SQLException exception) {
                 exception.printStackTrace();
 
