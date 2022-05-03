@@ -2,16 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package GUI_SearchOrg;
 
+import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
-import javax.swing.*;
-import javax.swing.border.Border;
 
-import static java.awt.BorderLayout.PAGE_START;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
 
 /**
@@ -185,7 +182,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         SearchOrgButton.setContentAreaFilled(false);
 
         //create an icon
-        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("Login Button.png"));
+        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("icon/Login Button.png"));
 
         //set label icon
         SearchOrgButton.setIcon(LoginIcon);
