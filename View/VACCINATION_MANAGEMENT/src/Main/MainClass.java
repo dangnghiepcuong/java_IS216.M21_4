@@ -5,8 +5,8 @@
 package Main;
 
 import GUI_Login.*;
-import GUI_RegisterAcc.RegisterAccView;
-import GUI_SearchOrg.*;
+import GUI_RegisterAcc.*;
+//import GUI_SearchOrg.*;
 
 
 /**
