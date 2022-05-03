@@ -181,7 +181,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         //set no border
         SearchOrgButton.setBorder(null);
 
-        //SearchOrgButton.setContentAreaFilled(false);
+        SearchOrgButton.setContentAreaFilled(false);
 
         //create an icon
         ImageIcon LoginIcon = new ImageIcon(getClass().getResource("icon/Search.png"));
@@ -263,17 +263,16 @@ public class SearchOrgView extends JFrame implements ActionListener
     {
         OrgListPanel = new JPanel();
 
-        int n = 2;
+        int n = 20;
 
         OrgListPanel.setPreferredSize(new Dimension(680, 120*n));
 
-        OrgListPanel.setLayout(new BoxLayout(OrgListPanel, BoxLayout.Y_AXIS));
+        OrgListPanel.setLayout((new FlowLayout()));
 
         for (int i = 0; i < n; i++)
         {
             initOrgPanel(i);
             OrgListPanel.add(OrgPanel[i]);
-            OrgListPanel.add(Box.createRigidArea(new Dimension(0, 4)));
         }
 
    }
@@ -360,26 +359,26 @@ public class SearchOrgView extends JFrame implements ActionListener
         //Pressed SearchOrgButton
         if (e.getSource() == SearchOrgButton)
         {
-            String query = "select * from ORGANIZATION ORG";
+            String query = "select * from ORGANIZATION ORG ";
 
-            if (ProvinceChoice.getSelectedIndex() != -1)
-                query = query + " where ORG.Province = " + ProvinceChoice.getSelectedItem();
+            if (ProvinceChoice.getSelectedIndex() > 0)
+                query = query + " where ORG.Province = '" + ProvinceChoice.getSelectedItem() + "' ";
             else
-                query = query + "where ORG.Province = '%'";
+                query = query + "where ORG.Province like '%'  ";
 
-            if (DistrictChoice.getSelectedIndex() != -1)
-                query = query + " and ORG.District = " + DistrictChoice.getSelectedIndex();
+            if (DistrictChoice.getSelectedIndex() > 0)
+                query = query + " and ORG.District = '" + DistrictChoice.getSelectedItem() + "' ";
             else
-                query = query + "and ORG.District = '%'";
+                query = query + " and ORG.District like '%' ";
 
-            if (TownChoice.getSelectedIndex() != -1)
-                query = query + " and ORG.Town = " + TownChoice.getSelectedIndex();
+            if (TownChoice.getSelectedIndex() > 0)
+                query = query + " and ORG.Town = '" + TownChoice.getSelectedItem() + "'; ";
             else
-                query = query + "and ORG.Town = '%'";
+                query = query + " and ORG.Town like '%';";
 
             System.out.println(ProvinceChoice.getSelectedItem());
             try {
-                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getDB_URL(), dv.getPassword());
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
                 Statement st = connection.createStatement();
                 ResultSet rs = st.executeQuery(query);
 
