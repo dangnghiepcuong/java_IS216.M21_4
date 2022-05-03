@@ -53,8 +53,7 @@ public class RegisterAccView extends JFrame implements ActionListener
     private void initUsernameLabel()
     {
         Border border = BorderFactory.createLineBorder(Color.BLACK);
-        
-        //Label: Username
+
         //create new label
         UsernameLabel = new JLabel();
 
@@ -235,12 +234,11 @@ public class RegisterAccView extends JFrame implements ActionListener
 
         //set layout
         this.setLayout(null);
-        
-        
+
         //init UsernameLabel
         initUsernameLabel();
         this.add(UsernameLabel);
-        
+
         //init PasswordLabel
         initPasswordLabel();
         this.add(PasswordLabel);
@@ -248,11 +246,11 @@ public class RegisterAccView extends JFrame implements ActionListener
         //init RepeatPasswordLabel
         initRepeatPasswordLabel();
         this.add(RepeatPasswordLabel);
-        
+
         //init UsernameTextField
         initUsernameTextField();
         this.add(UsernameTextField);
-        
+
         //init PasswordField;
         initPasswordField();
         this.add(PasswordField);
@@ -260,11 +258,10 @@ public class RegisterAccView extends JFrame implements ActionListener
         //init RepeatPasswordLabel
         initRepeatPasswordField();
         this.add(RepeatPasswordField);
-        
+
         //init RegisterAccButton
         initRegisterAccButton();
         this.add(RegisterAccButton);
-        
     }
     
     public RegisterAccView()
