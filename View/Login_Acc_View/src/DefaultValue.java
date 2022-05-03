@@ -71,7 +71,7 @@ public class DefaultValue
     {
         return 60;
     }
-    
+
     public Border border()
     {
         return BorderFactory.createLineBorder(Color.BLACK);

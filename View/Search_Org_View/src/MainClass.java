@@ -17,7 +17,7 @@ import java.sql.SQLException;
 public class MainClass {
     public static void main(String args[])
     {
-        String DB_URL = "jdbc:oracle:oci@localhost:1521:NGHIEPCUONG";
+        String DB_URL = "jdbc:oracle:thin:@localhost:1521:nghiepcuong";
         String username = "test_project";
         String password = "test_project";
 
