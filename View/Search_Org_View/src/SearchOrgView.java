@@ -5,6 +5,7 @@
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.event.AncestorListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,6 +31,8 @@ public class SearchOrgView extends JFrame implements ActionListener
     private JPanel OrgPanel[] = new JPanel[10000];
     private DefaultValue dv = new DefaultValue();
     private JPanel OrgListPanel;
+    private Organization org[] = new Organization[10000];
+    private ProvinceList province;
 
     private void initProvinceLabel()
     {
@@ -197,47 +200,60 @@ public class SearchOrgView extends JFrame implements ActionListener
     private void initOrgPanel(int i)
     {
         //Org info
-        JLabel OrgName = new JLabel("Tên đơn vị " + i);
+        JLabel OrgName = new JLabel("Tên đơn vị: " + org[i].getName());
         OrgName.setFont(new Font("SVN-Arial", 3, 18));
+        OrgName.setForeground(new Color(dv.FeatureButtonColor()));
         OrgName.setBounds(30,1,605,30);
         OrgName.setHorizontalAlignment(JLabel.LEFT);
-        OrgName.setBorder(dv.border());
+        //OrgName.setBorder(dv.border());
 
-        JLabel OrgProvince = new JLabel("Tỉnh/TP: ");
+        JLabel OrgProvince = new JLabel("Tỉnh/TP: " + province.getProvinceName(org[i].getProvince()));
         OrgProvince.setFont(new Font("SVN-Arial", 0, 16));
+        OrgProvince.setForeground(new Color(dv.BlackTextColor()));
         OrgProvince.setBounds(30,32,250,25);
         OrgProvince.setHorizontalAlignment(JLabel.LEFT);
-        OrgProvince.setBorder(dv.border());
+        //OrgProvince.setBorder(dv.border());
 
-        JLabel OrgDistrict = new JLabel("Quận/Huyện: ");
+        JLabel OrgDistrict = new JLabel("Quận/Huyện: " + org[i].getDistrict());
         OrgDistrict.setFont(new Font("SVN-Arial", 0, 16));
+        OrgDistrict.setForeground(new Color(dv.BlackTextColor()));
         OrgDistrict.setBounds(30, 32+25+2,350,25);
         OrgDistrict.setHorizontalAlignment(JLabel.LEFT);
-        OrgDistrict.setBorder(dv.border());
+        //OrgDistrict.setBorder(dv.border());
 
-        JLabel OrgTown  = new JLabel("Xã/phường/thị trấn: ");
+        JLabel OrgTown  = new JLabel("Xã/phường/thị trấn: " + org[i].getTown());
         OrgTown.setFont(new Font("SVN-Arial", 0, 16));
+        OrgTown.setForeground(new Color(dv.BlackTextColor()));
         OrgTown.setBounds(30,(32+25+2)+25+2,350,25);
         OrgTown.setHorizontalAlignment(JLabel.LEFT);
-        OrgTown.setBorder(dv.border());
+        //OrgTown.setBorder(dv.border());
 
-        JLabel OrgStreet  = new JLabel("Đ/c: ");
+        JLabel OrgStreet  = new JLabel("Đ/c: " + org[i].getStreet());
         OrgStreet.setFont(new Font("SVN-Arial", 0, 16));
+        OrgStreet.setForeground(new Color(dv.BlackTextColor()));
         OrgStreet.setBounds(285,32,350,25);
         OrgStreet.setHorizontalAlignment(JLabel.LEFT);
-        OrgStreet.setBorder(dv.border());
+        //OrgStreet.setBorder(dv.border());
 
-        JLabel Org_avaiScheds = new JLabel("Số lịch tiêm hiện có: ");
-        Org_avaiScheds.setFont(new Font("SVN-Arial", 0, 16));
-        Org_avaiScheds.setBounds(385,(32+25)+2,250,25);
-        Org_avaiScheds.setHorizontalAlignment(JLabel.LEFT);
-        Org_avaiScheds.setBorder(dv.border());
+        JLabel OrgAvaiScheds = new JLabel("Số lịch tiêm hiện có: " + org[i].getAvaiScheds());
+        OrgAvaiScheds.setFont(new Font("SVN-Arial", 0, 16));
+        OrgAvaiScheds.setForeground(new Color(dv.BlackTextColor()));
+        OrgAvaiScheds.setBounds(385,(32+25)+2,250,25);
+        OrgAvaiScheds.setHorizontalAlignment(JLabel.LEFT);
+        //OrgAvaiScheds.setBorder(dv.border());
 
-        JLabel Org_Scheds = new JLabel("Số lịch tiêm đã tổ chức: ");
-        Org_Scheds.setFont(new Font("SVN-Arial", 0, 16));
-        Org_Scheds.setBounds(385,((32+25)+2)+25+2,250,25);
-        Org_Scheds.setHorizontalAlignment(JLabel.LEFT);
-        Org_Scheds.setBorder(dv.border());
+        JLabel OrgTotalScheds = new JLabel("Số lịch tiêm đã tổ chức: ");
+        OrgTotalScheds.setFont(new Font("SVN-Arial", 0, 16));
+        OrgTotalScheds.setBounds(385,((32+25)+2)+25+2,250,25);
+        OrgTotalScheds.setHorizontalAlignment(JLabel.LEFT);
+        //OrgTotalScheds.setBorder(dv.border());
+
+        JButton OrgDetailButton = new JButton("Xem lịch tiêm");
+        OrgDetailButton.setBounds(385,((32+25)+2)+25+2,120,30);
+        OrgDetailButton.setForeground(new Color(dv.BlackTextColor()));
+        OrgDetailButton.addActionListener(this);
+        //OrgDetailButton.setBorder(null);
+        //OrgDetailButton.setContentAreaFilled(false);
 
         //create OrgPanel Panel
         OrgPanel[i] = new JPanel();
@@ -255,21 +271,21 @@ public class SearchOrgView extends JFrame implements ActionListener
         OrgPanel[i].add(OrgDistrict);
         OrgPanel[i].add(OrgTown);
         OrgPanel[i].add(OrgStreet);
-        OrgPanel[i].add(Org_avaiScheds);
-        OrgPanel[i].add(Org_Scheds);
+        OrgPanel[i].add(OrgAvaiScheds);
+        OrgPanel[i].add(OrgDetailButton);
+
+        //OrgPanel[i].addAncestorListener((AncestorListener) this);
     }
 
-    private void initOrgListPanel()
+    private void initOrgListPanel(int nORG)
     {
         OrgListPanel = new JPanel();
 
-        int n = 20;
-
-        OrgListPanel.setPreferredSize(new Dimension(680, 120*n));
+        OrgListPanel.setPreferredSize(new Dimension(680, 120*nORG));
 
         OrgListPanel.setLayout((new FlowLayout()));
 
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < nORG; i++)
         {
             initOrgPanel(i);
             OrgListPanel.add(OrgPanel[i]);
@@ -277,9 +293,9 @@ public class SearchOrgView extends JFrame implements ActionListener
 
    }
 
-    private void initScrollPaneArea()
+    private void initScrollPaneArea(int nORG)
     {
-        initOrgListPanel();
+        initOrgListPanel(nORG);
 
         //create ScrollPaneArea Panel
         ScrollPaneArea = new JScrollPane(OrgListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -340,52 +356,119 @@ public class SearchOrgView extends JFrame implements ActionListener
         initSearchOrgButton();
         this.add(SearchOrgButton);
 
-        //init ScrollPaneArea
-        initScrollPaneArea();
-        this.add(ScrollPaneArea);
 
     }
 
     public SearchOrgView()
     {
+        province = new ProvinceList();
         initFrameComponent();
         this.validate();
-
     }
 
     @Override
     public void actionPerformed(ActionEvent e)
     {
+        int n = 0;
+
         //Pressed SearchOrgButton
         if (e.getSource() == SearchOrgButton)
         {
-            String query = "select * from ORGANIZATION ORG ";
+            String query = "";
+
+            //Select out the code of chosen province
+            String ProvinceCode = "";
+
+            query = "select Code from REGION where REGION.Name = '"
+                    + ProvinceChoice.getSelectedItem() + "'";
+
+            try
+            {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+                //Statement st = connection.createStatement();
+                PreparedStatement st = connection.prepareStatement(query);
+
+                ResultSet rs = st.executeQuery(query);
+                while(rs.next())
+                    ProvinceCode = rs.getString("Code");
+                System.out.println(ProvinceCode);
+            }
+            catch (SQLException exception)
+            {
+                exception.printStackTrace();
+            }
+
+
+            ProvinceCode = province.getProvinceCode(ProvinceChoice.getSelectedItem());
+
+
+            //Select out the specified ORGs
+            query = "select ORG.ID, Name, Province, District, Town, Street, COUNT(SCHED.ID)"
+                    + " from ORGANIZATION ORG left join SCHEDULE SCHED on ORG.ID = SCHED.OrgID";
 
             if (ProvinceChoice.getSelectedIndex() > 0)
-                query = query + " where ORG.Province = '" + ProvinceChoice.getSelectedItem() + "' ";
+                query = query + " where ORG.Province = '" + ProvinceCode + "'";
             else
-                query = query + "where ORG.Province like '%'  ";
+                query = query + " where ORG.Province like '%'";
 
             if (DistrictChoice.getSelectedIndex() > 0)
-                query = query + " and ORG.District = '" + DistrictChoice.getSelectedItem() + "' ";
+                query = query + " and ORG.District = '" + DistrictChoice.getSelectedItem() + "'";
             else
-                query = query + " and ORG.District like '%' ";
+                query = query + " and ORG.District like '%'";
 
             if (TownChoice.getSelectedIndex() > 0)
-                query = query + " and ORG.Town = '" + TownChoice.getSelectedItem() + "'; ";
+                query = query + " and ORG.Town = '" + TownChoice.getSelectedItem() + "'";
             else
-                query = query + " and ORG.Town like '%';";
+                query = query + " and ORG.Town like '%'";
 
-            System.out.println(ProvinceChoice.getSelectedItem());
-            try {
+            query += " group by ORG.ID, Name, Province, District, Town, Street";
+            query += " order by Province, District, Town";
+
+            System.out.println(query);
+
+            try
+            {
                 Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-                Statement st = connection.createStatement();
+                //Statement st = connection.createStatement();
+
+                PreparedStatement st = connection.prepareStatement(query);
+
                 ResultSet rs = st.executeQuery(query);
 
+                int i = 0;
+                n = 0;
 
-            } catch (SQLException exception) {
+                while (rs.next())
+                {
+                    org[i] = new Organization();
+                    org[i].setID(rs.getString(1));
+                    org[i].setName(rs.getString("Name"));
+                    org[i].setProvince(rs.getString("Province"));
+                    org[i].setDistrict(rs.getString("District"));
+                    org[i].setTown(rs.getString("Town"));
+                    org[i].setStreet(rs.getString("Street"));
+                    org[i].setAvaiScheds(rs.getInt("COUNT(SCHED.ID)"));
+                    i++;
+                }
+                n = i;
+
+                //init ScrollPaneArea
+                initScrollPaneArea(n);
+                this.add(ScrollPaneArea);
+
+                this.validate();
+            }
+            catch (SQLException exception)
+            {
                 exception.printStackTrace();
+            }
+        }
 
+        for (int i = 0; i<n; i++)
+        {
+            if (e.getSource() == OrgPanel[i])
+            {
+                System.out.println("Selected " + OrgPanel[i].getName());
             }
         }
     }
