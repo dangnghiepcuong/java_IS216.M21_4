@@ -84,9 +84,11 @@ where ID = '20520418';
 alter table REGION
 modify CODE varchar2(2);
 
-select * from ORGANIZATION ORG  
-where ORG.Province = 'Bình D??ng'  
-and ORG.District = 'D?u Ti?ng'  
-and ORG.Town = 'D?u Ti?ng';
+select * from ORGANIZATION ORG  where ORG.Province = '44'  and ORG.District = 'D?u Ti?ng'  and ORG.Town = 'D?u Ti?ng';
+select Code from REGION where REGION.Name = 'Bình D??ng';
+
+
+select ORG.ID, Name, Province, District, Town, Street, COUNT(SCHED.ID) from ORGANIZATION ORG left join SCHEDULE SCHED on ORG.ID = SCHED.OrgID and ORG.Province = '44' and ORG.District like '%' and ORG.Town like '%' group by ORG.ID, Name, Province, District, Town, Street order by Province, District, Town
+
 
 commit;

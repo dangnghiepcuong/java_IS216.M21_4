@@ -1,6 +1,6 @@
 /*1. Tạo ra Bộ Y tế. */
 INSERT INTO REGION(Code,Name,Note) VALUES('01', 'Hà Nội', NULL  );
-INSERT INTO REGION(Code,Name,Note) VALUES('79', 'Hồ Chí Minh', NULL  );
+INSERT INTO REGION(Code,Name,Note) VALUES('02', 'Hồ Chí Minh', NULL  );
 INSERT INTO REGION(Code,Name,Note) VALUES('44', 'Bình Dương', NULL  );
 INSERT INTO REGION(Code,Name,Note) VALUES('25', 'Nam Định', NULL  );
 INSERT INTO REGION(Code,Name,Note) VALUES('48', 'Đồng Nai', NULL  );
@@ -9,7 +9,7 @@ INSERT INTO REGION(Code,Name,Note) VALUES('39', 'Phú Yên', NULL  );
 insert into ACCOUNT values ('MOH', '123', 0, 1, NULL);
 select * from account;
 
-insert into ORGANIZATION values ('MOH', 'Bộ Y tế', 'Hà Nội', 'Ba Đình', 'Giảng Võ', '138A', NULL);
+insert into ORGANIZATION values ('MOH', 'Bộ Y tế', '01', 'Ba Đình', 'Giảng Võ', '138A', NULL);
 select * from organization;
 
 
@@ -87,11 +87,11 @@ exec ACC_INSERT_RECORD('0339770526', '123', 2, 1);
 select * from account where Role = 2;
 
 /*6. Thiết lập thông tin người dùng */
-exec PERSON_INSERT_RECORD('20520418', 'Đặng Nghiệp', 'Cường', '17-AUG-2002', 1, 'Bình Dương', 'Bình Dương', 'Dầu Tiếng', 'Dầu Tiếng', 'ABC123', '0332743065', 'dangnghiepcuong@gmail.com');
-exec PERSON_INSERT_RECORD('20521252', 'Lê Hoàng', 'Duyên', '27-OCT-2002', 0, 'Quảng Trị', '', 'Cẩm Mỹ', 'Sông Ray', 'ấp 8', '0395309824', '20521252@gm.uit.edu.vn');
-exec PERSON_INSERT_RECORD('20521890', 'Trương Nguyễn Quang', 'Thái', '14-FEB-2002', 1, 'Phú Yên', 'Phú Yên', 'Tuy An', 'An Hòa Hải', 'Tân Qui', '0347666292', '20521890@gm.uit.edu.vn');
-exec PERSON_INSERT_RECORD('20521720', 'Trương Ý', 'Nhi', '23-JUN-2000', 0, 'Quảng Bình', 'Nam Định', 'A', 'B', 'C', '0374540896', '20521720@gm.uit.edu.vn');
-exec PERSON_INSERT_RECORD('04180282', 'Nguyen Van', 'A', '26-MAR-2020', 0, 'Bình Dương', 'Hồ Chí Minh', 'Thủ Đức', 'Linh Trung', 'khu phố 6', '0339770526'); 
+exec PERSON_INSERT_RECORD('20520418', 'Đặng Nghiệp', 'Cường', '17-AUG-2002', 1, 'Bình Dương', '44', 'Dầu Tiếng', 'Dầu Tiếng', 'ABC123', '0332743065', 'dangnghiepcuong@gmail.com');
+exec PERSON_INSERT_RECORD('20521252', 'Lê Hoàng', 'Duyên', '27-OCT-2002', 0, 'Quảng Trị', '48', 'Cẩm Mỹ', 'Sông Ray', 'ấp 8', '0395309824', '20521252@gm.uit.edu.vn');
+exec PERSON_INSERT_RECORD('20521890', 'Trương Nguyễn Quang', 'Thái', '14-FEB-2002', 1, 'Phú Yên', '39', 'Tuy An', 'An Hòa Hải', 'Tân Qui', '0347666292', '20521890@gm.uit.edu.vn');
+exec PERSON_INSERT_RECORD('20521720', 'Trương Ý', 'Nhi', '23-JUN-2000', 0, 'Quảng Bình', '25', 'A', 'B', 'C', '0374540896', '20521720@gm.uit.edu.vn');
+exec PERSON_INSERT_RECORD('04180282', 'Nguyen Van', 'A', '26-MAR-2020', 0, 'Bình Dương', '02', 'Thủ Đức', 'Linh Trung', 'khu phố 6', '0339770526'); 
 
 select * from person;
 /*7. Tạo lịch tiêm chủng ngày 28/4/2022 --Kiểm tra hàm sinh ID tự động cho SCHED của cùng một ORG tạo ra trong cùng một ngày */
@@ -292,3 +292,5 @@ exec REG_UPDATE_STATUS('20521252', '44001280920221', 2);
 select * 
 from INJECTION INJ
 where INJ.DoseType = 'repeat';
+
+commit;
