@@ -4,9 +4,9 @@ import java.awt.*;
 
 public class DefaultValue
 {
-    private String DB_URL = "jdbc:oracle:thin:@localhost:1521:nghiepcuong";
-    private String username = "test_project";
-    private String password = "test_project";
+    private String DB_URL = "jdbc:oracle:thin:@localhost:1521:orcl";
+    private String username = "vaccination";
+    private String password = "vaccination";
 
     public String getDB_URL() {
         return DB_URL;
