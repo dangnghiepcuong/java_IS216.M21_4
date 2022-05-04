@@ -76,4 +76,30 @@ public class DefaultValue
     {
         return BorderFactory.createLineBorder(Color.BLACK);
     }
+
+    /*COLOR HEX CODE
+    màu xám dành cho nền: F2F2F2
+    màu Peach dành cho button chức năng: FF9292
+    màu xám hơi đậm dành cho label: 666666
+    màu đen dành cho text nhập vào: 333333*/
+
+    public int ViewBackgroundColor()
+    {
+        return 0xF2F2F2;
+    }
+
+    public int FeatureButtonColor()
+    {
+        return 0xFF9292;
+    }
+
+    public int FieldLabelColor()
+    {
+        return 0x666666;
+    }
+
+    public int BlackTextColor()
+    {
+        return 0x333333;
+    }
 }
