@@ -12,6 +12,8 @@ màu đen dành cho text nhập vào: 333333
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,8 +22,7 @@ import java.awt.event.ActionListener;
  *
  * @author NghiepCuong
  */
-public class LoginView extends JFrame implements ActionListener
-{
+public class LoginView extends JFrame implements ActionListener, AncestorListener {
     private JLabel ViewSymbol;
     private JLabel UsernameLabel;
     private JLabel PasswordLabel;
@@ -30,6 +31,8 @@ public class LoginView extends JFrame implements ActionListener
     private JButton LoginButton;
     private JPanel ViewSymbolPanel;
     private DefaultValue dv = new DefaultValue();
+    private JLabel ForgotPasswordLabel;
+    private  JLabel RegisterAccountLabel;
 
     private void initViewSymbol()
     {
@@ -136,7 +139,7 @@ public class LoginView extends JFrame implements ActionListener
         PasswordField.setSize(240,30);
 
         //set text field color
-        PasswordField.setForeground(new Color(0x333333));
+        PasswordField.setForeground(new Color(dv.FieldLabelColor()));
 
         //set field background color
         PasswordField.setBackground(Color.WHITE);
@@ -144,6 +147,46 @@ public class LoginView extends JFrame implements ActionListener
         //set position
         PasswordField.setBounds(70, 265, dv.FieldWidth(), dv.FieldHeigth());
 
+    }
+
+    private void initForgotPasswordLabel()
+    {
+        ForgotPasswordLabel = new JLabel();
+
+        ForgotPasswordLabel.setText("Quên mật khẩu");
+
+        ForgotPasswordLabel.setFont(new Font("SVN-Arial",Font.ITALIC, 12));
+
+        ForgotPasswordLabel.setSize(150, 25);
+
+        ForgotPasswordLabel.setForeground(new Color(dv.FieldLabelColor()));
+
+        ForgotPasswordLabel.setBounds(70, 270+dv.FieldHeigth(), 100, 25);
+
+       //ForgotPasswordLabel.setBorder(dv.border());
+
+        ForgotPasswordLabel.addAncestorListener(this);
+    }
+
+    private void initRegisterAccountLabel()
+    {
+        RegisterAccountLabel = new JLabel();
+
+        RegisterAccountLabel.setText("Đăng ký");
+
+        RegisterAccountLabel.setFont(new Font("SVN-Arial",Font.ITALIC, 12));
+
+        RegisterAccountLabel.setSize(150, 25);
+
+        RegisterAccountLabel.setForeground(new Color(dv.FieldLabelColor()));
+
+        RegisterAccountLabel.setHorizontalAlignment(JLabel.RIGHT);
+
+        RegisterAccountLabel.setBounds(69+100, 270+dv.FieldHeigth(), 100, 25);
+
+        //RegisterAccountLabel.setBorder(dv.border());
+
+        RegisterAccountLabel.addAncestorListener(this);
     }
 
     private void initLoginButton()
@@ -214,6 +257,14 @@ public class LoginView extends JFrame implements ActionListener
         initPasswordField();
         this.add(PasswordField);
 
+        //init ForgotPasswordLabel
+        initForgotPasswordLabel();
+        this.add(ForgotPasswordLabel);
+
+        //init RegisterAccountLabel
+        initRegisterAccountLabel();
+        this.add(RegisterAccountLabel);
+
         //init LoginButton
         initLoginButton();
         this.add(LoginButton);
@@ -232,4 +283,18 @@ public class LoginView extends JFrame implements ActionListener
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    @Override
+    public void ancestorAdded(AncestorEvent event) {
+
+    }
+
+    @Override
+    public void ancestorRemoved(AncestorEvent event) {
+
+    }
+
+    @Override
+    public void ancestorMoved(AncestorEvent event) {
+
+    }
 }
