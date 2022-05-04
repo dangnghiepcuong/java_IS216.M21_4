@@ -9,6 +9,8 @@ import javax.swing.event.AncestorListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -34,14 +36,14 @@ public class SearchOrgView extends JFrame implements ActionListener
     private Organization org[] = new Organization[100000];
     private ProvinceList province;
 
-    private JLabel OrgName[] = new JLabel[100000];
-    private JLabel OrgProvince[] = new JLabel[100000];
-    private JLabel OrgDistrict[] = new JLabel[100000];
-    private JLabel OrgTown[] = new JLabel[100000];
-    private JLabel OrgStreet[] = new JLabel[100000];
-    private JLabel OrgAvaiScheds[] = new JLabel[100000];
+    private JLabel OrgName;
+    private JLabel OrgProvince;
+    private JLabel OrgDistrict;
+    private JLabel OrgTown;
+    private JLabel OrgStreet;
+    private JLabel OrgAvaiScheds;
 
-    private JButton OrgDetailButton[] = new JButton[100000];
+    private JButton OrgDetailButton;
 
     private void initProvinceLabel()
     {
@@ -208,62 +210,62 @@ public class SearchOrgView extends JFrame implements ActionListener
 
     private void initOrgPanel(int i)
     {
+
+
         //Org info
-        OrgName[i] = new JLabel("Tên đơn vị: " + org[i].getName());
-        OrgName[i].setFont(new Font("SVN-Arial", 3, 18));
-        OrgName[i].setForeground(new Color(dv.FeatureButtonColor()));
-        OrgName[i].setBounds(30,1,605,30);
-        OrgName[i].setHorizontalAlignment(JLabel.LEFT);
+        OrgName = new JLabel("Tên đơn vị: " + org[i].getName());
+        OrgName.setFont(new Font("SVN-Arial", 3, 18));
+        OrgName.setForeground(new Color(dv.FeatureButtonColor()));
+        OrgName.setBounds(30,1,605,30);
+        OrgName.setHorizontalAlignment(JLabel.LEFT);
         //OrgName.setBorder(dv.border());
 
-        OrgProvince[i] = new JLabel("Tỉnh/TP: " + province.getProvinceName(org[i].getProvince()));
-        OrgProvince[i].setFont(new Font("SVN-Arial", 0, 16));
-        OrgProvince[i].setForeground(new Color(dv.BlackTextColor()));
-        OrgProvince[i].setBounds(30,32,250,25);
-        OrgProvince[i].setHorizontalAlignment(JLabel.LEFT);
-        //OrgProvince[i].setBorder(dv.border());
+        OrgProvince = new JLabel("Tỉnh/TP: " + province.getProvinceName(org[i].getProvince()));
+        OrgProvince.setFont(new Font("SVN-Arial", 0, 16));
+        OrgProvince.setForeground(new Color(dv.BlackTextColor()));
+        OrgProvince.setBounds(30,32,250,25);
+        OrgProvince.setHorizontalAlignment(JLabel.LEFT);
+        //OrgProvince.setBorder(dv.border());
 
-        OrgDistrict[i] = new JLabel("Quận/Huyện: " + org[i].getDistrict());
-        OrgDistrict[i].setFont(new Font("SVN-Arial", 0, 16));
-        OrgDistrict[i].setForeground(new Color(dv.BlackTextColor()));
-        OrgDistrict[i].setBounds(30, 32+25+2,350,25);
-        OrgDistrict[i].setHorizontalAlignment(JLabel.LEFT);
-        //OrgDistrict[i].setBorder(dv.border());
+        OrgDistrict = new JLabel("Quận/Huyện: " + org[i].getDistrict());
+        OrgDistrict.setFont(new Font("SVN-Arial", 0, 16));
+        OrgDistrict.setForeground(new Color(dv.BlackTextColor()));
+        OrgDistrict.setBounds(30, 32+25+2,350,25);
+        OrgDistrict.setHorizontalAlignment(JLabel.LEFT);
+        //OrgDistrict.setBorder(dv.border());
 
-        OrgTown[i]  = new JLabel("Xã/phường/thị trấn: " + org[i].getTown());
-        OrgTown[i].setFont(new Font("SVN-Arial", 0, 16));
-        OrgTown[i].setForeground(new Color(dv.BlackTextColor()));
-        OrgTown[i].setBounds(30,(32+25+2)+25+2,350,25);
-        OrgTown[i].setHorizontalAlignment(JLabel.LEFT);
-        //OrgTown[i].setBorder(dv.border());
+        OrgTown  = new JLabel("Xã/phường/thị trấn: " + org[i].getTown());
+        OrgTown.setFont(new Font("SVN-Arial", 0, 16));
+        OrgTown.setForeground(new Color(dv.BlackTextColor()));
+        OrgTown.setBounds(30,(32+25+2)+25+2,350,25);
+        OrgTown.setHorizontalAlignment(JLabel.LEFT);
+        //OrgTown.setBorder(dv.border());
 
-        OrgStreet[i]  = new JLabel("Đ/c: " + org[i].getStreet());
-        OrgStreet[i].setFont(new Font("SVN-Arial", 0, 16));
-        OrgStreet[i].setForeground(new Color(dv.BlackTextColor()));
-        OrgStreet[i].setBounds(285,32,350,25);
-        OrgStreet[i].setHorizontalAlignment(JLabel.LEFT);
-        //OrgStreet[i].setBorder(dv.border());
+        OrgStreet  = new JLabel("Đ/c: " + org[i].getStreet());
+        OrgStreet.setFont(new Font("SVN-Arial", 0, 16));
+        OrgStreet.setForeground(new Color(dv.BlackTextColor()));
+        OrgStreet.setBounds(285,32,350,25);
+        OrgStreet.setHorizontalAlignment(JLabel.LEFT);
+        //OrgStreet.setBorder(dv.border());
 
-        OrgAvaiScheds[i] = new JLabel("Số lịch tiêm hiện có: " + org[i].getAvaiScheds());
-        OrgAvaiScheds[i].setFont(new Font("SVN-Arial", 0, 16));
-        OrgAvaiScheds[i].setForeground(new Color(dv.BlackTextColor()));
-        OrgAvaiScheds[i].setBounds(385,(32+25)+2,250,25);
-        OrgAvaiScheds[i].setHorizontalAlignment(JLabel.LEFT);
-        //OrgAvaiScheds[i].setBorder(dv.border());
+        OrgAvaiScheds = new JLabel("Số lịch tiêm hiện có: " + org[i].getAvaiScheds());
+        OrgAvaiScheds.setFont(new Font("SVN-Arial", 0, 16));
+        OrgAvaiScheds.setForeground(new Color(dv.BlackTextColor()));
+        OrgAvaiScheds.setBounds(385,(32+25)+2,250,25);
+        OrgAvaiScheds.setHorizontalAlignment(JLabel.LEFT);
+        //OrgAvaiScheds.setBorder(dv.border());
 
         /*JLabel OrgTotalScheds = new JLabel("Số lịch tiêm đã tổ chức: ");
         OrgTotalScheds.setFont(new Font("SVN-Arial", 0, 16));
         OrgTotalScheds.setBounds(385,((32+25)+2)+25+2,250,25);
         OrgTotalScheds.setHorizontalAlignment(JLabel.LEFT);
-        //OrgTotalScheds.setBorder(dv.border());*/
+        OrgTotalScheds.setBorder(dv.border());*/
 
-        OrgDetailButton[i] = new JButton("Xem lịch tiêm");
-        OrgDetailButton[i].setBounds(385,((32+25)+2)+25+2,120,30);
-        OrgDetailButton[i].setForeground(new Color(dv.BlackTextColor()));
-        OrgDetailButton[i].addActionListener(this);
-        //OrgDetailButton[i].setBorder(null);
-        //OrgDetailButton[i].setContentAreaFilled(false);
-        OrgDetailButton[i].addActionListener(this);
+        /*OrgDetailButton = new JButton("Xem lịch tiêm");
+        OrgDetailButton.setBounds(385,((32+25)+2)+25+2,120,30);
+        OrgDetailButton.setForeground(new Color(dv.BlackTextColor()));
+        OrgDetailButton.setBorder(null);
+        OrgDetailButton.setContentAreaFilled(false);*/
 
         //create OrgPanel Panel
         OrgPanel[i] = new JPanel();
@@ -276,15 +278,49 @@ public class SearchOrgView extends JFrame implements ActionListener
         //set Background color
         OrgPanel[i].setBackground(Color.WHITE);
 
-        OrgPanel[i].add(OrgName[i]);
-        OrgPanel[i].add(OrgProvince[i]);
-        OrgPanel[i].add(OrgDistrict[i]);
-        OrgPanel[i].add(OrgTown[i]);
-        OrgPanel[i].add(OrgStreet[i]);
-        OrgPanel[i].add(OrgAvaiScheds[i]);
-        OrgPanel[i].add(OrgDetailButton[i]);
+        OrgPanel[i].add(OrgName);
+        OrgPanel[i].add(OrgProvince);
+        OrgPanel[i].add(OrgDistrict);
+        OrgPanel[i].add(OrgTown);
+        OrgPanel[i].add(OrgStreet);
+        OrgPanel[i].add(OrgAvaiScheds);
+        //rgPanel[i].add(OrgDetailButton);
 
-        //OrgPanel[i].addAncestorListener((AncestorListener) this);
+        MouseListener  handleMouseAction = new MouseListener()
+        {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getSource() == OrgDetailButton)
+                    System.out.println("You've clicked on button " + org[i].getName());
+                else
+                    System.out.println("You;ve clicked on panel " + org[i].getName());
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        };
+
+        //OrgDetailButton.addMouseListener(handleMouseAction);
+        OrgPanel[i].addMouseListener(handleMouseAction);
+
+
     }
 
     private void initOrgListPanel(int nORG)
@@ -474,13 +510,9 @@ public class SearchOrgView extends JFrame implements ActionListener
             }
         }
 
-        for (int i = 0; i<n; i++)
-        {
-            if (e.getSource() == OrgDetailButton[i])
-            {
-                System.out.println("Selected " + OrgName[i].getText());
-            }
-        }
+        
     }
+
+
 
 }
