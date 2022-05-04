@@ -127,7 +127,9 @@ create or replace procedure ACC_RESET_PASSWORD
 (par_Username varchar2, par_NewPassword varchar2)
 is
 begin
-        
+     update ACCOUNT
+     set Password = par_NewPassword
+     where Username = par_Username;
 end ACC_RESET_PASSWORD;
 
 
