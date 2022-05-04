@@ -4,9 +4,9 @@ import java.awt.*;
 
 public class DefaultValue
 {
-    private String DB_URL = "jdbc:oracle:thin:@localhost:1521:orcl";
-    private String username = "vaccination";
-    private String password = "vaccination";
+    private String DB_URL = "jdbc:oracle:thin:@localhost:1521:nghiepcuong";
+    private String username = "test_project";
+    private String password = "test_project";
 
     public String getDB_URL() {
         return DB_URL;
@@ -71,7 +71,7 @@ public class DefaultValue
     {
         return 60;
     }
-
+    
     public Border border()
     {
         return BorderFactory.createLineBorder(Color.BLACK);

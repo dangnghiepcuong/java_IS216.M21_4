@@ -17,6 +17,7 @@ import javax.swing.event.AncestorListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 
 /**
  *
@@ -207,6 +208,8 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
 
         //set label icon
         LoginButton.setIcon(LoginIcon);
+
+        LoginButton.addActionListener(this);
     }
 
     private void initFrameComponent()
@@ -280,7 +283,62 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        if (e.getSource() == LoginButton) {
+            String InputUsername = UsernameTextField.getText();
+            String InputPassword = String.valueOf(PasswordField.getPassword());
+
+            if (InputUsername.equals("") || InputPassword.equals("")) {
+                System.out.println("Nhập vào tài khoản/mật khẩu!");
+                return;
+            }
+
+            String Username = "";
+            String Password = "";
+            int Role = 0;
+
+
+            String query = "select *" +
+                    " from ACCOUNT" +
+                    " where Username = '" + InputUsername + "'";
+
+
+            try {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                PreparedStatement st = connection.prepareStatement(query);
+
+                ResultSet rs = st.executeQuery(query);
+
+                rs.next();
+                Username = rs.getString("Username");
+                Password = rs.getString("Password");
+                Role = rs.getInt("Role");
+
+            } catch (SQLException ex) {
+
+                System.out.println("Tài khoản không tồn tại!");
+
+                throw new RuntimeException(ex);
+            }
+
+            if (Password.equals(InputPassword) == false)
+                System.out.println("Mật khẩu không đúng!");
+            else
+                switch (Role) {
+                    case 0:
+                        System.out.println("Giao dien MOH");
+                        break;
+                    case 1:
+                        System.out.println("Giao dien dvtc");
+                        break;
+                    case 2:
+                        System.out.println("Giao dien nguoi dung");
+                        break;
+                    default:
+                        break;
+                }
+        }
     }
 
     @Override
