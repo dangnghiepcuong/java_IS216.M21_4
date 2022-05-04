@@ -272,14 +272,12 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
         initLoginButton();
         this.add(LoginButton);
 
-        this.revalidate();
+        this.repaint();
     }
 
     public LoginView()
     {
         initFrameComponent();
-
-        this.revalidate();
     }
 
     @Override

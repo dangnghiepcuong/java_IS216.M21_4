@@ -36,12 +36,14 @@ public class SearchOrgView extends JFrame implements ActionListener
     private Organization org[] = new Organization[100000];
     private ProvinceList province;
 
-    private JLabel OrgName;
+    //private handleMouseAction handle = new handleMouseAction();
+
+    /*private JLabel OrgName;
     private JLabel OrgProvince;
     private JLabel OrgDistrict;
     private JLabel OrgTown;
     private JLabel OrgStreet;
-    private JLabel OrgAvaiScheds;
+    private JLabel OrgAvaiScheds;*/
 
     private JButton OrgDetailButton;
 
@@ -211,42 +213,42 @@ public class SearchOrgView extends JFrame implements ActionListener
     private void initOrgPanel(int i)
     {
         //Org info
-        OrgName = new JLabel("Tên đơn vị: " + org[i].getName());
+        JLabel OrgName = new JLabel("Tên đơn vị: " + org[i].getName());
         OrgName.setFont(new Font("SVN-Arial", 3, 18));
         OrgName.setForeground(new Color(dv.FeatureButtonColor()));
         OrgName.setBounds(30,1,605,30);
         OrgName.setHorizontalAlignment(JLabel.LEFT);
         //OrgName.setBorder(dv.border());
 
-        OrgProvince = new JLabel("Tỉnh/TP: " + province.getProvinceName(org[i].getProvince()));
+        JLabel OrgProvince = new JLabel("Tỉnh/TP: " + province.getProvinceName(org[i].getProvince()));
         OrgProvince.setFont(new Font("SVN-Arial", 0, 16));
         OrgProvince.setForeground(new Color(dv.BlackTextColor()));
         OrgProvince.setBounds(30,32,250,25);
         OrgProvince.setHorizontalAlignment(JLabel.LEFT);
         //OrgProvince.setBorder(dv.border());
 
-        OrgDistrict = new JLabel("Quận/Huyện: " + org[i].getDistrict());
+        JLabel OrgDistrict = new JLabel("Quận/Huyện: " + org[i].getDistrict());
         OrgDistrict.setFont(new Font("SVN-Arial", 0, 16));
         OrgDistrict.setForeground(new Color(dv.BlackTextColor()));
         OrgDistrict.setBounds(30, 32+25+2,350,25);
         OrgDistrict.setHorizontalAlignment(JLabel.LEFT);
         //OrgDistrict.setBorder(dv.border());
 
-        OrgTown  = new JLabel("Xã/phường/thị trấn: " + org[i].getTown());
+        JLabel OrgTown  = new JLabel("Xã/phường/thị trấn: " + org[i].getTown());
         OrgTown.setFont(new Font("SVN-Arial", 0, 16));
         OrgTown.setForeground(new Color(dv.BlackTextColor()));
         OrgTown.setBounds(30,(32+25+2)+25+2,350,25);
         OrgTown.setHorizontalAlignment(JLabel.LEFT);
         //OrgTown.setBorder(dv.border());
 
-        OrgStreet  = new JLabel("Đ/c: " + org[i].getStreet());
+        JLabel OrgStreet  = new JLabel("Đ/c: " + org[i].getStreet());
         OrgStreet.setFont(new Font("SVN-Arial", 0, 16));
         OrgStreet.setForeground(new Color(dv.BlackTextColor()));
         OrgStreet.setBounds(285,32,350,25);
         OrgStreet.setHorizontalAlignment(JLabel.LEFT);
         //OrgStreet.setBorder(dv.border());
 
-        OrgAvaiScheds = new JLabel("Số lịch tiêm hiện có: " + org[i].getAvaiScheds());
+        JLabel OrgAvaiScheds = new JLabel("Số lịch tiêm hiện có: " + org[i].getAvaiScheds());
         OrgAvaiScheds.setFont(new Font("SVN-Arial", 0, 16));
         OrgAvaiScheds.setForeground(new Color(dv.BlackTextColor()));
         OrgAvaiScheds.setBounds(385,(32+25)+2,250,25);
@@ -281,23 +283,18 @@ public class SearchOrgView extends JFrame implements ActionListener
         OrgPanel[i].add(OrgAvaiScheds);
         //rgPanel[i].add(OrgDetailButton);
 
-        MouseListener  handleMouseAction = new MouseListener()
+        MouseListener handleMouseAction = new MouseListener()
         {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                /*if (e.getSource() == OrgPanel[i])
-                {*/
-                    System.out.println("clicked on " + org[i].getName());
-                    int next = 0;
-                    while (OrgPanel[next] != null)
-                    {
-                        OrgListPanel.remove(OrgPanel[i]);
-                        next++;
-                    }
-                    OrgListPanel.removeAll();
-                    OrgListPanel.repaint();
-                    System.out.println("Remove all panel!");
-//                }
+            public void mouseClicked(MouseEvent e)
+            {
+
+                System.out.println("clicked on " + OrgName.getText());
+                int next = 0;
+                ScrollPaneArea.removeAll();
+                ScrollPaneArea.repaint();
+                ScrollPaneArea.validate();
+                System.out.println("Remove all panel!");
             }
 
             @Override
@@ -323,8 +320,6 @@ public class SearchOrgView extends JFrame implements ActionListener
 
         //OrgDetailButton.addMouseListener(handleMouseAction);
         OrgPanel[i].addMouseListener(handleMouseAction);
-
-
     }
 
     private void initOrgListPanel(int nORG)
@@ -339,9 +334,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         {
             initOrgPanel(i);
             OrgListPanel.add(OrgPanel[i]);
-            OrgListPanel.repaint();
         }
-
    }
 
     private void initScrollPaneArea(int nORG)
@@ -409,7 +402,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         initSearchOrgButton();
         this.add(SearchOrgButton);
 
-
+        this.repaint();
     }
 
     public SearchOrgView()
@@ -432,28 +425,7 @@ public class SearchOrgView extends JFrame implements ActionListener
             //Select out the code of chosen province
             String ProvinceCode = "";
 
-            query = "select Code from REGION where REGION.Name = '"
-                    + ProvinceChoice.getSelectedItem() + "'";
-
-            try
-            {
-                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-                //Statement st = connection.createStatement();
-                PreparedStatement st = connection.prepareStatement(query);
-
-                ResultSet rs = st.executeQuery(query);
-                while(rs.next())
-                    ProvinceCode = rs.getString("Code");
-                System.out.println(ProvinceCode);
-            }
-            catch (SQLException exception)
-            {
-                exception.printStackTrace();
-            }
-
-
             ProvinceCode = province.getProvinceCode(ProvinceChoice.getSelectedItem());
-
 
             //Select out the specified ORGs
             query = "select ORG.ID, Name, Province, District, Town, Street, COUNT(SCHED.ID)"
@@ -519,5 +491,38 @@ public class SearchOrgView extends JFrame implements ActionListener
 
         
     }
+
+    /*private class handleMouseAction implements MouseListener
+    {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            System.out.println("clicked on ");
+            int next = 0;
+            ScrollPaneArea.removeAll();
+            ScrollPaneArea.repaint();
+            System.out.println("Remove all panel!");
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
+        }
+    }*/
 
 }
