@@ -65,7 +65,6 @@
 
   ALTER TABLE "REGION" ADD CONSTRAINT "PK_REGION" PRIMARY KEY ("CODE") USING INDEX  ENABLE;
   ALTER TABLE "REGION" ADD CONSTRAINT "UNI_REGION_NAME" UNIQUE ("NAME") ENABLE;
-  ALTER TABLE "REGION" ADD CONSTRAINT "UNI_REGION_CODE" UNIQUE ("CODE") ENABLE;
 --------------------------------------------------------
 --  Constraints for Table REGISTER
 --------------------------------------------------------

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="VACCINATION_MANAGEMENT">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/VACCINATION_MANAGEMENT/dist/VACCINATION_MANAGEMENT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

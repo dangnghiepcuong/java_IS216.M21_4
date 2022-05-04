@@ -45,7 +45,7 @@
 --  DDL for Table REGION
 --------------------------------------------------------
 
-  CREATE TABLE "REGION" ("CODE" VARCHAR2(2), "NAME" VARCHAR2(50));
+  CREATE TABLE "REGION" ("CODE" VARCHAR2(2), "NAME" VARCHAR2(50), "NOTE" VARCHAR2(2000));
 --------------------------------------------------------
 --  DDL for Table REGISTER
 --------------------------------------------------------

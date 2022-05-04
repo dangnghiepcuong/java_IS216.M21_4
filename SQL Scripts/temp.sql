@@ -18,6 +18,8 @@ select * from health;
 
 select * from parameter;
 
+select * from region;
+
 /* DELETE */
 delete from parameter;
 
@@ -81,5 +83,10 @@ where ID = '20520418';
 
 alter table REGION
 modify CODE varchar2(2);
+
+select * from ORGANIZATION ORG  
+where ORG.Province = 'Bình D??ng'  
+and ORG.District = 'D?u Ti?ng'  
+and ORG.Town = 'D?u Ti?ng';
 
 commit;
