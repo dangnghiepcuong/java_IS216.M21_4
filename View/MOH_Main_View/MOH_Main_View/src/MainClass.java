@@ -11,6 +11,6 @@
 public class MainClass {
     public static void main(String args[])
     {
-        RegisterAccView registerAccGUI = new RegisterAccView();
+        MOHMainView registerAccGUI = new MOHMainView();
     }
 }

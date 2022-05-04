@@ -488,31 +488,6 @@ public class RegisterAccView extends JFrame implements ActionListener
     }
     private void initBirthdayField()
     {
-/*        UtilDateModel model = new UtilDateModel();
-
-        Properties p = new Properties();
-        p.put("text.today", "Today");
-        p.put("text.month", "Month");
-        p.put("text.year", "Year");
-
-        String datePattern = "yyyy-MM-dd";
-        SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
-
-        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
-        JDatePickerImpl BirthdayField = new JDatePickerImpl(datePanel,  new DateLabelFormatter());
-
-
-        DateFormat dateFormat;
-        JFormattedTextField txfDate;
-        JFrame frmDetails;
-// Tạo một thể hiện của đối tượng dateFormat
-        dateFormat = DateFormat.getDateInstance();
-// Tạo trường văn bản có định dạng với bộ định dạng ngày tháng
-        txfDate = new JFormattedTextField(dateFormat);
-// Rồi thêm vào frame
-        txfDate.setBounds(70, 100 + 3*DefaultLabelHeigth()+2*DefaultFieldHeigth(),220,30);
-        PersonalInfoPanel.add(BirthdayField);*/
-
         SqlDateModel model = new SqlDateModel();
         Properties p = new Properties();
         p.put("text.today", "Day");
