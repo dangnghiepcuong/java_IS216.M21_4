@@ -210,8 +210,6 @@ public class SearchOrgView extends JFrame implements ActionListener
 
     private void initOrgPanel(int i)
     {
-
-
         //Org info
         OrgName = new JLabel("Tên đơn vị: " + org[i].getName());
         OrgName.setFont(new Font("SVN-Arial", 3, 18));
@@ -269,12 +267,9 @@ public class SearchOrgView extends JFrame implements ActionListener
 
         //create OrgPanel Panel
         OrgPanel[i] = new JPanel();
-
         //set layout
         OrgPanel[i].setLayout(null);
-
         OrgPanel[i].setPreferredSize(new Dimension(660,120));
-
         //set Background color
         OrgPanel[i].setBackground(Color.WHITE);
 
@@ -290,10 +285,19 @@ public class SearchOrgView extends JFrame implements ActionListener
         {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getSource() == OrgDetailButton)
-                    System.out.println("You've clicked on button " + org[i].getName());
-                else
-                    System.out.println("You;ve clicked on panel " + org[i].getName());
+                /*if (e.getSource() == OrgPanel[i])
+                {*/
+                    System.out.println("clicked on " + org[i].getName());
+                    int next = 0;
+                    while (OrgPanel[next] != null)
+                    {
+                        OrgListPanel.remove(OrgPanel[i]);
+                        next++;
+                    }
+                    OrgListPanel.removeAll();
+                    OrgListPanel.repaint();
+                    System.out.println("Remove all panel!");
+//                }
             }
 
             @Override
@@ -335,6 +339,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         {
             initOrgPanel(i);
             OrgListPanel.add(OrgPanel[i]);
+            OrgListPanel.repaint();
         }
 
    }
@@ -352,7 +357,9 @@ public class SearchOrgView extends JFrame implements ActionListener
 
     private void initFrameComponent()
     {      
-        //Frame
+        //set Frame icon
+        this.setIconImage(new ImageIcon(getClass().getResource("/icon/Virus.png")).getImage());
+
         //set frame title
         this.setTitle("Tìm kiếm đơn vị tiêm chủng");
         
@@ -512,7 +519,5 @@ public class SearchOrgView extends JFrame implements ActionListener
 
         
     }
-
-
 
 }
