@@ -202,36 +202,42 @@ public class SearchOrgView extends JFrame implements ActionListener
         //Org info
         JLabel OrgName = new JLabel("Tên đơn vị: " + org[i].getName());
         OrgName.setFont(new Font("SVN-Arial", 3, 18));
+        OrgName.setForeground(new Color(dv.FeatureButtonColor()));
         OrgName.setBounds(30,1,605,30);
         OrgName.setHorizontalAlignment(JLabel.LEFT);
         //OrgName.setBorder(dv.border());
 
         JLabel OrgProvince = new JLabel("Tỉnh/TP: " + province.getProvinceName(org[i].getProvince()));
         OrgProvince.setFont(new Font("SVN-Arial", 0, 16));
+        OrgProvince.setForeground(new Color(dv.BlackTextColor()));
         OrgProvince.setBounds(30,32,250,25);
         OrgProvince.setHorizontalAlignment(JLabel.LEFT);
         //OrgProvince.setBorder(dv.border());
 
         JLabel OrgDistrict = new JLabel("Quận/Huyện: " + org[i].getDistrict());
         OrgDistrict.setFont(new Font("SVN-Arial", 0, 16));
+        OrgDistrict.setForeground(new Color(dv.BlackTextColor()));
         OrgDistrict.setBounds(30, 32+25+2,350,25);
         OrgDistrict.setHorizontalAlignment(JLabel.LEFT);
         //OrgDistrict.setBorder(dv.border());
 
         JLabel OrgTown  = new JLabel("Xã/phường/thị trấn: " + org[i].getTown());
         OrgTown.setFont(new Font("SVN-Arial", 0, 16));
+        OrgTown.setForeground(new Color(dv.BlackTextColor()));
         OrgTown.setBounds(30,(32+25+2)+25+2,350,25);
         OrgTown.setHorizontalAlignment(JLabel.LEFT);
         //OrgTown.setBorder(dv.border());
 
         JLabel OrgStreet  = new JLabel("Đ/c: " + org[i].getStreet());
         OrgStreet.setFont(new Font("SVN-Arial", 0, 16));
+        OrgStreet.setForeground(new Color(dv.BlackTextColor()));
         OrgStreet.setBounds(285,32,350,25);
         OrgStreet.setHorizontalAlignment(JLabel.LEFT);
         //OrgStreet.setBorder(dv.border());
 
         JLabel OrgAvaiScheds = new JLabel("Số lịch tiêm hiện có: " + org[i].getAvaiScheds());
         OrgAvaiScheds.setFont(new Font("SVN-Arial", 0, 16));
+        OrgAvaiScheds.setForeground(new Color(dv.BlackTextColor()));
         OrgAvaiScheds.setBounds(385,(32+25)+2,250,25);
         OrgAvaiScheds.setHorizontalAlignment(JLabel.LEFT);
         //OrgAvaiScheds.setBorder(dv.border());
@@ -242,11 +248,12 @@ public class SearchOrgView extends JFrame implements ActionListener
         OrgTotalScheds.setHorizontalAlignment(JLabel.LEFT);
         //OrgTotalScheds.setBorder(dv.border());
 
-        JButton OrgForDetailButton = new JButton("Xem lịch tiêm");
-        OrgForDetailButton.setBounds(385,((32+25)+2)+25+2,120,30);
-        OrgForDetailButton.addActionListener(this);
-        //OrgForDetailButton.setBorder(null);
-        //OrgForDetailButton.setContentAreaFilled(false);
+        JButton OrgDetailButton = new JButton("Xem lịch tiêm");
+        OrgDetailButton.setBounds(385,((32+25)+2)+25+2,120,30);
+        OrgDetailButton.setForeground(new Color(dv.BlackTextColor()));
+        OrgDetailButton.addActionListener(this);
+        //OrgDetailButton.setBorder(null);
+        //OrgDetailButton.setContentAreaFilled(false);
 
         //create OrgPanel Panel
         OrgPanel[i] = new JPanel();
@@ -265,7 +272,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         OrgPanel[i].add(OrgTown);
         OrgPanel[i].add(OrgStreet);
         OrgPanel[i].add(OrgAvaiScheds);
-        OrgPanel[i].add(OrgForDetailButton);
+        OrgPanel[i].add(OrgDetailButton);
 
         //OrgPanel[i].addAncestorListener((AncestorListener) this);
     }
