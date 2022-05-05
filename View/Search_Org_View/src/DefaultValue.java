@@ -102,4 +102,93 @@ public class DefaultValue
     {
         return 0x333333;
     }
+
+    private String province[] = new String[65];
+
+    public DefaultValue()
+    {
+        for (int i=1; i<=64; i++)
+            province[i] = new String();
+
+        province[1] = "Hà Nội";
+        province[2] = "Hồ Chí Minh";
+        province[3] = "Hải Phòng";
+        province[4] = "Đà Nẵng";
+        province[5] = "Hà Giang";
+        province[25] = "Nam Định";
+        province[39] = "Phú Yên";
+        province[43] = "Bình Phước";
+        province[44] = "Bình Dương";
+        province[45] = "Ninh Thuận";
+        province[46] = "Tây Ninh";
+        province[47] = "Bình Thuận";
+        province[48] = "Đồng Nai";
+        province[49] = "Long An";
+        province[50] = "Đồng Tháp";
+        province[51] = "An Giang";
+        province[52] = "Bà Rịa - Vũng Tàu";
+        province[53] = "Tiền Giang";
+        province[54] = "Kiên Giang";
+        province[55] = "Cần Thơ";
+        province[56] = "Bến Tre";
+        province[57] = "Vĩnh Long";
+        province[58] = "Trà Vinh";
+        province[59] = "Sóc Trăng";
+    }
+
+    public String getProvinceName(String Code)
+    {
+        int index = Integer.parseInt(Code);
+        return province[index];
+    }
+
+    public String getProvinceCode(String Name)
+    {
+        for (int i = 1; i < 10; i++)
+            if (province[i].equals(Name))
+                return "0"+i+"";
+
+        for (int i = 10; i <= 64; i++)
+            if (province[i].equals(Name))
+                return ""+i+"";
+
+        return "";
+    }
+
+    public String toOracleDateFormat(String date)
+    {
+        String Month = date.substring(5,7);
+
+        if (Month.equals("01"))
+            Month = "JAN";
+        if (Month.equals("02"))
+            Month = "FEB";
+        if (Month.equals("03"))
+            Month = "MAR";
+        if (Month.equals("04"))
+            Month = "APR";
+        if (Month.equals("05"))
+            Month = "MAY";
+        if (Month.equals("06"))
+            Month = "JUN";
+        if (Month.equals("07"))
+            Month = "JUL";
+        if (Month.equals("08"))
+            Month = "AUG";
+        if (Month.equals("09"))
+            Month = "SEP";
+        if (Month.equals("10"))
+            Month = "OCT";
+        if (Month.equals("11"))
+            Month = "NOV";
+        if (Month.equals("12"))
+            Month = "DEC";
+
+        return date.substring(8,10) + "-" + Month + "-" + date.substring(0,4);
+    }
+
+    public String sysdate()
+    {
+        return toOracleDateFormat(java.time.LocalDateTime.now().toString().substring(0, 10));
+    }
 }

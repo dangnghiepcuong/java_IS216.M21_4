@@ -5,16 +5,15 @@
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.event.AncestorListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.*;
-import java.util.ArrayList;
-
-import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  *
@@ -22,6 +21,10 @@ import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
  */
 public class SearchOrgView extends JFrame implements ActionListener
 {
+    private DefaultValue dv = new DefaultValue();
+    private ProvinceList province;
+    private Organization org[] = new Organization[100000];
+
     private JLabel ProvinceLabel;
     private JLabel DistrictLabel;
     private JLabel TownLabel;
@@ -29,23 +32,20 @@ public class SearchOrgView extends JFrame implements ActionListener
     private Choice TownChoice;
     private Choice ProvinceChoice;
     private JButton SearchOrgButton;
-    private JScrollPane ScrollPaneArea;
-    private JPanel OrgPanel[] = new JPanel[100000];
-    private DefaultValue dv = new DefaultValue();
+
+    private JScrollPane ScrollPaneOrgList;
     private JPanel OrgListPanel;
-    private Organization org[] = new Organization[100000];
-    private ProvinceList province;
+    private JPanel OrgPanel[] = new JPanel[100000];
 
-    //private handleMouseAction handle = new handleMouseAction();
+    private JFrame OrgDetailView;
+    private JScrollPane ScrollPaneSchedList;
+    private JPanel SchedListPanel;
+    private JPanel SchedPanel[] = new JPanel[50];
 
-    /*private JLabel OrgName;
-    private JLabel OrgProvince;
-    private JLabel OrgDistrict;
-    private JLabel OrgTown;
-    private JLabel OrgStreet;
-    private JLabel OrgAvaiScheds;*/
+    private JLayeredPane LayeredPaneArea;
 
-    private JButton OrgDetailButton;
+
+    //private JButton OrgDetailButton[] = new JButton[100000];
 
     private void initProvinceLabel()
     {
@@ -261,12 +261,6 @@ public class SearchOrgView extends JFrame implements ActionListener
         OrgTotalScheds.setHorizontalAlignment(JLabel.LEFT);
         OrgTotalScheds.setBorder(dv.border());*/
 
-        /*OrgDetailButton = new JButton("Xem lịch tiêm");
-        OrgDetailButton.setBounds(385,((32+25)+2)+25+2,120,30);
-        OrgDetailButton.setForeground(new Color(dv.BlackTextColor()));
-        OrgDetailButton.setBorder(null);
-        OrgDetailButton.setContentAreaFilled(false);*/
-
         //create OrgPanel Panel
         OrgPanel[i] = new JPanel();
         //set layout
@@ -281,20 +275,20 @@ public class SearchOrgView extends JFrame implements ActionListener
         OrgPanel[i].add(OrgTown);
         OrgPanel[i].add(OrgStreet);
         OrgPanel[i].add(OrgAvaiScheds);
-        //rgPanel[i].add(OrgDetailButton);
+        //OrgPanel[i].add(OrgDetailButton[i]);
 
         MouseListener handleMouseAction = new MouseListener()
         {
             @Override
             public void mouseClicked(MouseEvent e)
             {
-
                 System.out.println("clicked on " + OrgName.getText());
-                int next = 0;
-                ScrollPaneArea.removeAll();
-                ScrollPaneArea.repaint();
-                ScrollPaneArea.validate();
-                System.out.println("Remove all panel!");
+                initScrollPaneSchedList(org[i]);
+
+                LayeredPaneArea.removeAll();
+                LayeredPaneArea.add(ScrollPaneOrgList, Integer.valueOf(0));
+                LayeredPaneArea.add(ScrollPaneSchedList, Integer.valueOf(1));
+                LayeredPaneArea.repaint(320, 40, 680, 630);
             }
 
             @Override
@@ -318,7 +312,7 @@ public class SearchOrgView extends JFrame implements ActionListener
             }
         };
 
-        //OrgDetailButton.addMouseListener(handleMouseAction);
+        //OrgDetailButton[i].addMouseListener(this);
         OrgPanel[i].addMouseListener(handleMouseAction);
     }
 
@@ -337,15 +331,186 @@ public class SearchOrgView extends JFrame implements ActionListener
         }
    }
 
-    private void initScrollPaneArea(int nORG)
+    private void initScrollPaneOrgList(int nORG)
     {
         initOrgListPanel(nORG);
 
-        //create ScrollPaneArea Panel
-        ScrollPaneArea = new JScrollPane(OrgListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        //create ScrollPaneOrgList Panel
+        ScrollPaneOrgList = new JScrollPane(OrgListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         //set Bounds
-        ScrollPaneArea.setBounds(320, 40, 680, 630);
+        ScrollPaneOrgList.setBounds(0, 0, 680, 630); //320-40
+    }
+
+    private void initSchedPanel(int i, Schedule sched, Organization SelectedOrg)
+    {
+        //Org info
+        JLabel OrgName = new JLabel("Tên đơn vị: " + SelectedOrg.getName());
+        OrgName.setFont(new Font("SVN-Arial", 3, 18));
+        OrgName.setForeground(new Color(dv.FeatureButtonColor()));
+        OrgName.setBounds(30,1,605,30);
+        OrgName.setHorizontalAlignment(JLabel.LEFT);
+        //OrgName.setBorder(dv.border());
+
+        JLabel OnDate = new JLabel("Lịch tiêm ngày: " + sched.getOnDate().toString().substring(0,10));
+        OnDate.setFont(new Font("SVN-Arial", 0, 16));
+        OnDate.setForeground(new Color(dv.BlackTextColor()));
+        OnDate.setBounds(30,32,200,25);
+        OnDate.setHorizontalAlignment(JLabel.LEFT);
+        //OnDate.setBorder(dv.border());
+
+        JLabel VaccineID = new JLabel("Vaccine: " + sched.getVaccineID());
+        VaccineID.setFont(new Font("SVN-Arial", 0, 16));
+        VaccineID.setForeground(new Color(dv.BlackTextColor()));
+        VaccineID.setBounds(30, 32+25+2,200,25);
+        VaccineID.setHorizontalAlignment(JLabel.LEFT);
+        //VaccineID.setBorder(dv.border());
+
+        JLabel Serial  = new JLabel("Serial: " + sched.getSerial());
+        Serial.setFont(new Font("SVN-Arial", 0, 16));
+        Serial.setForeground(new Color(dv.BlackTextColor()));
+        Serial.setBounds(30,(32+25+2)+25+2,200,25);
+        Serial.setHorizontalAlignment(JLabel.LEFT);
+        //Serial.setBorder(dv.border());
+
+        JRadioButton DayTimeButton  = new JRadioButton("Buổi sáng: " + sched.getDayRegistered() + "/" + sched.getLimitDay());
+        DayTimeButton.setFont(new Font("SVN-Arial", 0, 16));
+        DayTimeButton.setForeground(new Color(dv.BlackTextColor()));
+        DayTimeButton.setBounds(300,32,150,25);
+        DayTimeButton.setHorizontalAlignment(JLabel.LEFT);
+        DayTimeButton.setContentAreaFilled(false);
+        //DayTimeButton.setBorder(dv.border());
+
+        JRadioButton NoonTimeButton = new JRadioButton("Buổi trưa: " + sched.getNoonRegistered() + "/" + sched.getLimitNoon());
+        NoonTimeButton.setFont(new Font("SVN-Arial", 0, 16));
+        NoonTimeButton.setForeground(new Color(dv.BlackTextColor()));
+        NoonTimeButton.setBounds(300,(32+25)+2,150,25);
+        NoonTimeButton.setHorizontalAlignment(JLabel.LEFT);
+        NoonTimeButton.setContentAreaFilled(false);
+        //NoonTimeButton.setBorder(dv.border());
+
+        JRadioButton NightTimeButton = new JRadioButton("Buổi trưa: " + sched.getNightRegistered() + "/" + sched.getLimitNight());
+        NightTimeButton.setFont(new Font("SVN-Arial", 0, 16));
+        NightTimeButton.setForeground(new Color(dv.BlackTextColor()));
+        NightTimeButton.setBounds(300,(32+25+2)+25+2,150,25);
+        NightTimeButton.setHorizontalAlignment(JLabel.LEFT);
+        NightTimeButton.setContentAreaFilled(false);
+        //NightTimeButton.setBorder(dv.border());
+        
+        ButtonGroup TimeGroupButton = new ButtonGroup();
+        TimeGroupButton.add(DayTimeButton);
+        TimeGroupButton.add(NoonTimeButton);
+        TimeGroupButton.add(NightTimeButton);
+
+        JButton SchedRegisterButton = new JButton();
+        SchedRegisterButton.setForeground(new Color(dv.BlackTextColor()));
+        SchedRegisterButton.setBounds(470,32+24,120,38);
+        SchedRegisterButton.setContentAreaFilled(false);
+        SchedRegisterButton.setBorder(null);
+        SchedRegisterButton.setIcon(new ImageIcon(getClass().getResource("/icon/SchedRegister.png")));
+
+        SchedPanel[i] = new JPanel();
+
+        SchedPanel[i].setLayout(null);
+        SchedPanel[i].setPreferredSize(new Dimension(660,120));
+        //set Background color
+        SchedPanel[i].setBackground(Color.WHITE);
+
+        SchedPanel[i].add(OrgName);
+        SchedPanel[i].add(OnDate);
+        SchedPanel[i].add(VaccineID);
+        SchedPanel[i].add(Serial);
+        SchedPanel[i].add(DayTimeButton);
+        SchedPanel[i].add(NoonTimeButton);
+        SchedPanel[i].add(NightTimeButton);
+        SchedPanel[i].add(DayTimeButton);
+        SchedPanel[i].add(NoonTimeButton);
+        SchedPanel[i].add(NightTimeButton);
+        SchedPanel[i].add(SchedRegisterButton);
+    }
+
+    private void initSchedListPanel(Organization SelectedOrg)
+    {
+
+        Schedule sched[] = new Schedule[50];
+        String query = "";
+
+        int nSched = 0;
+        int i = 0;
+
+        query = "select *" +
+                " from SCHEDULE SCHED" +
+                " where SCHED.OrgID = '" + SelectedOrg.getID() + "'" +
+                " and SCHED.OnDate >= TO_DATE('" + dv.sysdate() + "')";
+
+        System.out.println(query);
+
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+            PreparedStatement st = connection.prepareStatement(query);
+
+            ResultSet rs = st.executeQuery(query);
+
+            while(rs.next())
+            {
+                sched[i] = new Schedule();
+                sched[i].setID(rs.getString("ID"));
+                sched[i].setOrgID(rs.getString("OrgID"));
+                sched[i].setOnDate(rs.getString("OnDate"));
+                sched[i].setVaccineID(rs.getString("VaccineID"));
+                sched[i].setSerial(rs.getString("Serial"));
+                sched[i].setLimitDay(rs.getInt("LimitDay"));
+                sched[i].setLimitNoon(rs.getInt("LimitNoon"));
+                sched[i].setLimitNight(rs.getInt("LimitNight"));
+                sched[i].setDayRegistered(rs.getInt("DayRegistered"));
+                sched[i].setNoonRegistered(rs.getInt("Noonregistered"));
+                sched[i].setNightRegistered(rs.getInt("NightRegistered"));
+                i++;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        nSched = i;
+
+        SchedListPanel = new JPanel();
+
+        SchedListPanel.setPreferredSize(new Dimension(680, 120));
+
+        SchedListPanel.setLayout(new FlowLayout());
+
+        for (i = 0; i<nSched; i++)
+        {
+            initSchedPanel(i, sched[i], SelectedOrg);
+            SchedListPanel.add(SchedPanel[i]);
+        }
+
+
+
+    }
+
+    private void initScrollPaneSchedList(Organization SelectedOrg)
+    {
+        initSchedListPanel(SelectedOrg);
+
+        //create ScrollPaneOrgList Panel
+        ScrollPaneSchedList = new JScrollPane(SchedListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        //set Bounds
+        ScrollPaneSchedList.setBounds(0, 0, 680, 630); //320 40
+    }
+
+    private void initLayeredPaneArea()
+    {
+        LayeredPaneArea = new JLayeredPane();
+
+        LayeredPaneArea.setLayout(null);
+
+        LayeredPaneArea.setBounds(320, 40, 680, 630);
+
+        LayeredPaneArea.repaint(320, 40, 680, 630);
     }
 
     private void initFrameComponent()
@@ -402,6 +567,10 @@ public class SearchOrgView extends JFrame implements ActionListener
         initSearchOrgButton();
         this.add(SearchOrgButton);
 
+        //init LayeredPane
+        initLayeredPaneArea();
+        this.add(LayeredPaneArea);
+
         this.repaint();
     }
 
@@ -446,6 +615,7 @@ public class SearchOrgView extends JFrame implements ActionListener
             else
                 query = query + " and ORG.Town like '%'";
 
+            query += " and OnDate >= '" + dv.sysdate() + "'";
             query += " group by ORG.ID, Name, Province, District, Town, Street";
             query += " order by Province, District, Town";
 
@@ -477,11 +647,17 @@ public class SearchOrgView extends JFrame implements ActionListener
                 }
                 n = i;
 
-                //init ScrollPaneArea
-                initScrollPaneArea(n);
-                this.add(ScrollPaneArea);
+                //init ScrollPaneOrgList
 
-                this.validate();
+                //clear the Layered Area
+                LayeredPaneArea.removeAll();
+
+                //init Scroll Pane of Orgs
+                initScrollPaneOrgList(n);
+                //add Scroll Pane of Orgs to TOP of Layered Area
+                LayeredPaneArea.add(ScrollPaneOrgList, Integer.valueOf(1));
+                //Delete scroll pane of sched
+                ScrollPaneSchedList = null;
             }
             catch (SQLException exception)
             {
@@ -489,40 +665,6 @@ public class SearchOrgView extends JFrame implements ActionListener
             }
         }
 
-        
     }
-
-    /*private class handleMouseAction implements MouseListener
-    {
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            System.out.println("clicked on ");
-            int next = 0;
-            ScrollPaneArea.removeAll();
-            ScrollPaneArea.repaint();
-            System.out.println("Remove all panel!");
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-
-        }
-    }*/
 
 }
