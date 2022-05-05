@@ -48,7 +48,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         ProvinceLabel = new JLabel();
 
         //set position and area
-        ProvinceLabel.setBounds(dv.AlignLeft(), 10, dv.LabelWidth(), dv.LabelHeigth());
+        ProvinceLabel.setBounds(dv.AlignLeft(), 10, dv.LabelWidth(), dv.LabelHeight());
 
         //set label text style
         ProvinceLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
@@ -60,7 +60,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         ProvinceLabel.setText("Tỉnh/thành phố:");
 
         //set label size
-        ProvinceLabel.setSize(dv.FieldWidth(),dv.FieldHeigth());
+        ProvinceLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
     }
 
     private void initProvinceChoice()
@@ -69,13 +69,13 @@ public class SearchOrgView extends JFrame implements ActionListener
         ProvinceChoice = new Choice();
 
         //set position
-        ProvinceChoice.setBounds(dv.AlignLeft(), 40, dv.FieldWidth(), dv.FieldHeigth());
+        ProvinceChoice.setBounds(dv.AlignLeft(), 40, dv.FieldWidth(), dv.FieldHeight());
 
         //set lít font
         ProvinceChoice.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
 
         //set lít color
-        ProvinceChoice.setForeground(new Color(0x333333));
+        ProvinceChoice.setForeground(new Color(dv.BlackTextColor()));
 
          //set lít background color
         ProvinceChoice.setBackground(Color.WHITE);
@@ -93,7 +93,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         DistrictLabel = new JLabel();
 
         //set position and area
-        DistrictLabel.setBounds(dv.AlignLeft(), 80, dv.LabelWidth(), dv.LabelHeigth());
+        DistrictLabel.setBounds(dv.AlignLeft(), 80, dv.LabelWidth(), dv.LabelHeight());
 
         //set text style
         DistrictLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
@@ -105,7 +105,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         DistrictLabel.setText("Quận/Huyện:");
 
         //set size
-        DistrictLabel.setSize(dv.LabelWidth(), dv.LabelHeigth());
+        DistrictLabel.setSize(dv.LabelWidth(), dv.LabelHeight());
     }
 
     private void initDistrictChoice()
@@ -114,7 +114,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         DistrictChoice = new Choice();
 
         //set position
-        DistrictChoice.setBounds(dv.AlignLeft(), 110, dv.FieldWidth(), dv.FieldHeigth());
+        DistrictChoice.setBounds(dv.AlignLeft(), 110, dv.FieldWidth(), dv.FieldHeight());
 
         //set font
         DistrictChoice.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
@@ -141,7 +141,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         TownLabel = new JLabel();
 
         //set label position and frame area
-        TownLabel.setBounds(dv.AlignLeft(), 150, dv.LabelWidth(), dv.LabelHeigth());
+        TownLabel.setBounds(dv.AlignLeft(), 150, dv.LabelWidth(), dv.LabelHeight());
 
         //set label text style
         TownLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
@@ -150,7 +150,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         TownLabel.setForeground(new Color(0x666666));
 
         //set label size
-        TownLabel.setSize(dv.LabelWidth(), dv.LabelHeigth());
+        TownLabel.setSize(dv.LabelWidth(), dv.LabelHeight());
 
         //set label text
         TownLabel.setText("Xã/phường/thị trấn:");
@@ -162,7 +162,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         TownChoice = new Choice();
 
         //set position
-        TownChoice.setBounds(dv.AlignLeft(), 180, dv.FieldWidth(), dv.FieldHeigth());
+        TownChoice.setBounds(dv.AlignLeft(), 180, dv.FieldWidth(), dv.FieldHeight());
 
         //set text color
         TownChoice.setForeground(new Color(0x333333));
@@ -195,7 +195,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         SearchOrgButton.setContentAreaFilled(false);
 
         //create an icon
-        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("icon/Search.png"));
+        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search.png"));
 
         //set label icon
         SearchOrgButton.setIcon(LoginIcon);
@@ -402,7 +402,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         SchedRegisterButton.setBounds(470,32+24,120,38);
         SchedRegisterButton.setContentAreaFilled(false);
         SchedRegisterButton.setBorder(null);
-        SchedRegisterButton.setIcon(new ImageIcon(getClass().getResource("/icon/SchedRegister.png")));
+        SchedRegisterButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/SchedRegister.png")));
 
         SchedPanel[i] = new JPanel();
 
@@ -509,15 +509,15 @@ public class SearchOrgView extends JFrame implements ActionListener
     }
 
     private void initFrameComponent()
-    {      
+    {
         //set Frame icon
-        this.setIconImage(new ImageIcon(getClass().getResource("/icon/Virus.png")).getImage());
+        this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
 
         //set frame title
         this.setTitle("Tìm kiếm đơn vị tiêm chủng");
         
         //set frame size
-        this.setSize(dv.FrameWidth(), dv.FrameHeigth());
+        this.setSize(dv.FrameWidth(), dv.FrameHeight());
         //this.setSize(1080, 720); --Main View
         
         //set do not allow frame resizing
@@ -530,7 +530,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         //set frame background color
-        this.getContentPane().setBackground(new Color(0xFCFCFC));
+        this.getContentPane().setBackground(new Color(dv.ViewBackgroundColor()));
       
         this.setLayout(null);
         
@@ -566,7 +566,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         initLayeredPaneArea();
         this.add(LayeredPaneArea);
 
-        this.repaint();
+        this.repaint(0,0, dv.FrameWidth(), dv.FrameHeight());
     }
 
     public SearchOrgView()

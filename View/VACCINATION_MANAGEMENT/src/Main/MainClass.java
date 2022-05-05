@@ -1,6 +1,7 @@
 package Main;
 import GUI_Login.*;
-
+import GUI_RegisterAcc.*;
+import GUI_SearchOrg.*;
 
 /**
  *
@@ -9,7 +10,10 @@ import GUI_Login.*;
 public class MainClass {
     public static void main(String args[])
     {
-        LoginView loginGUI = new LoginView();
+        LoginView loginView = new LoginView();
 
+        RegisterAccView registerAccView = new RegisterAccView();
+
+        SearchOrgView searchOrgView = new SearchOrgView();
     }
 }
