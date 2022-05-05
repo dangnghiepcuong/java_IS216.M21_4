@@ -1,4 +1,4 @@
-/*1. Tạo ra Bộ Y tế. */
+/*1. Tạo ra Bộ Y tế. --*/
 INSERT INTO REGION(Code,Name,Note) VALUES('01', 'Hà Nội', NULL  );
 INSERT INTO REGION(Code,Name,Note) VALUES('02', 'Hồ Chí Minh', NULL  );
 INSERT INTO REGION(Code,Name,Note) VALUES('44', 'Bình Dương', NULL  );
