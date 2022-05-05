@@ -1,5 +1,6 @@
 package GUI_SearchOrg;
 
+import Data_Processor.*;
 import javax.accessibility.Accessible;
 import javax.swing.*;
 import java.awt.*;

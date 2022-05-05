@@ -44,7 +44,7 @@ public class DefaultValue
         return 200;
     }
 
-    public int LabelHeigth()
+    public int LabelHeight()
     {
         return 30;
     }
@@ -54,7 +54,7 @@ public class DefaultValue
         return 200;
     }
 
-    public int FieldHeigth()
+    public int FieldHeight()
     {
         return 30;
     }
@@ -64,7 +64,7 @@ public class DefaultValue
         return 1080;
     }
 
-    public int FrameHeigth()
+    public int FrameHeight()
     {
         return 720;
     }
