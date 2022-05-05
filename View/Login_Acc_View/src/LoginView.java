@@ -235,7 +235,7 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
         this.getContentPane().setBackground(new Color(0xFCFCFC));
 
         //set Frame icon
-        this.setIconImage(new ImageIcon("icon/Virus.png").getImage());
+        this.setIconImage(new ImageIcon(getClass().getResource("/icon/Virus.png")).getImage());
 
         //set layout
         this.setLayout(null);
@@ -272,13 +272,12 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
         initLoginButton();
         this.add(LoginButton);
 
+        this.repaint();
     }
 
     public LoginView()
     {
         initFrameComponent();
-
-        this.revalidate();
     }
 
     @Override
