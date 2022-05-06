@@ -14,9 +14,11 @@ import org.jdatepicker.util.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.event.AncestorEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -36,50 +38,31 @@ public class RegisterAccView extends JFrame implements ActionListener
     private JLabel FirstNameLabel;
     private JLabel IDLabel;
     private JLabel BirthdayLabel;
-
     private JLabel GenderLabel;
-
     private JLabel HomeTownLabel;
-
     private JLabel ProvinceLabel;
-
     private JLabel DistrictLabel;
-
     private JLabel TownLabel;
-
     private JLabel StreetLabel;
-
     private JLabel EmailLabel;
     private JTextField UsernameTextField;
     private JPasswordField PasswordField;
     private JPasswordField RepeatPasswordField;
-
     private JTextField LastNameTextField;
-
     private JTextField FirstNameTextField;
-
     private JTextField IDTextField;
-
     private JTextField StreetTextField;
-
     private JTextField EmailTextField;
-
     private JButton RegisterAccButton;
-
     private Choice GenderChoice;
-
     private Choice HomeTownChoice;
-
     private Choice ProvinceChoice;
-
     private Choice DistrictChoice;
-
     private Choice TownChoice;
     private JDatePickerImpl BirthdayField;
-
     private JPanel AccInfoPanel;
-
     private JPanel PersonalInfoPanel;
+    private Person personalUser;
 
     private void initAccInfoPanel()
     {
@@ -366,6 +349,8 @@ public class RegisterAccView extends JFrame implements ActionListener
 
         //set label icon
         RegisterAccButton.setIcon(LoginIcon);
+
+        RegisterAccButton.addActionListener(this);
     }
 
     private void initLastNameLabel()
@@ -558,6 +543,8 @@ public class RegisterAccView extends JFrame implements ActionListener
         textField.setBackground(Color.WHITE);
 
         BirthdayField.setForeground(new Color(dv.BlackTextColor()));
+        BirthdayField.setVisible(true);
+        BirthdayField.setEnabled(true);
     }
     private void initGenderLabel()
     {
@@ -892,19 +879,70 @@ public class RegisterAccView extends JFrame implements ActionListener
         initAccInfoPanel();
         this.add(AccInfoPanel);
 
+        this.repaint(0,0, dv.FrameWidth(), dv.FrameHeight());
+
         //set personal information Panel
         initPersonalInfoPanel();
         this.add(PersonalInfoPanel);
     }
+
+
     public RegisterAccView()
     {
         initFrameComponent();
-        this.repaint(0,0, dv.FrameWidth(), dv.FrameHeight());
+
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        if (e.getSource() == RegisterAccButton) {
+
+            JFormattedTextField textField = BirthdayField.getJFormattedTextField();
+
+            String InputID = IDTextField.getText();
+            String InputUsername = UsernameTextField.getText();
+            String InputPassword = String.valueOf(PasswordField.getPassword());
+            String InputRepeatPassword = String.valueOf(RepeatPasswordField.getPassword());
+            String InputLastName = LastNameTextField.getText();
+            String InputFirstName = FirstNameTextField.getText();
+            String InputBirthday = dv.toOracleDateFormat(textField.getText());
+            int InputGender = GenderChoice.getSelectedIndex();
+            String InputHomeTown = HomeTownChoice.getSelectedItem();
+            String InputProvince = ProvinceChoice.getSelectedItem();
+            String InputDistrict = DistrictChoice.getSelectedItem();
+            String InputTown = TownChoice.getSelectedItem();
+            String InputStreet = StreetTextField.getText();
+            String InputEmail = EmailTextField.getText();
+
+            if (InputPassword.equals(InputRepeatPassword) == false) {
+                System.out.println("Mật khẩu không trùng khớp!");
+                return;
+            }
+            String query = "exec PERSON_INSERT_RECORD('" + InputID + "', '" + InputLastName + "', '" +InputFirstName
+                    + "', '" + InputBirthday + "', '" + InputGender + "', '" + InputHomeTown + "', '" + InputProvince
+                    + "', '" + InputDistrict + "', '" + InputTown + "', '" + InputStreet + "', '" + InputUsername
+                    + "', '"  +InputEmail +  "', null);";
+
+            try {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL1(), dv.getUsername1(), dv.getPassword1());
+
+                PreparedStatement st = connection.prepareStatement(query);
+
+                ResultSet rs = st.executeQuery(query);
+
+                rs.next();
+
+            } catch (SQLException ex) {
+                System.out.println("Không thành công!");
+                throw new RuntimeException(ex);
+
+            }
+
+
+        }
     }
+
+
 
 }

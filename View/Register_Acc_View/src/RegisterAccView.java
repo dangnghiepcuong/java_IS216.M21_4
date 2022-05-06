@@ -374,6 +374,7 @@ public class RegisterAccView extends JFrame implements ActionListener
         //set label icon
         RegisterAccButton.setIcon(LoginIcon);
 
+        RegisterAccButton.addActionListener(this);
     }
 
     private void initLastNameLabel()
@@ -910,6 +911,71 @@ public class RegisterAccView extends JFrame implements ActionListener
         this.validate();
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+        if (e.getSource() == RegisterAccButton) {
+            String InputID = IDTextField.getText();
+            String InputUsername = UsernameTextField.getText();
+            String InputPassword = String.valueOf(PasswordField.getPassword());
+            String InputRepeatPassword = String.valueOf(RepeatPasswordField.getPassword());
+            String InputLastName = LastNameTextField.getText();
+            String InputFirstName = FirstNameTextField.getText();
+            String InputBirthday = BirthdayField.getToolTipText();
+            int InputGender = GenderChoice.getSelectedIndex();
+            String InputHomeTown = HomeTownChoice.getName();
+            String InputProvince = ProvinceChoice.getName();
+            String InputDistrict = DistrictChoice.getName();
+            String InputTown = TownChoice.getName();
+            String InputStreet = StreetTextField.getText();
+            String InputEmail = EmailTextField.getText();
+
+            if (InputPassword.equals(InputRepeatPassword) == false) {
+                System.out.println("Mật khẩu không trùng khớp!");
+                return;
+            }
+            System.out.println(InputBirthday + "\n" +InputGender);
+/*
+            String query = "exec PERSON_INSERT_RECORD('" + InputID + "', '" + InputLastName + "', '" +InputFirstName
+                    + "', '" + InputBirthday + "', '" + InputGender + "', ";
+
+            try {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                PreparedStatement st = connection.prepareStatement(query);
+
+                ResultSet rs = st.executeQuery(query);
+
+                rs.next();
+                Username = rs.getString("Username");
+                Password = rs.getString("Password");
+                Role = rs.getInt("Role");
+
+            } catch (SQLException ex) {
+
+                System.out.println("Tài khoản không tồn tại!");
+
+                throw new RuntimeException(ex);
+            }
+
+            if (Password.equals(InputPassword) == false)
+                System.out.println("Mật khẩu không đúng!");
+            else
+                switch (Role) {
+                    case 0:
+                        System.out.println("Giao dien MOH");
+                        break;
+                    case 1:
+                        System.out.println("Giao dien dvtc");
+                        break;
+                    case 2:
+                        System.out.println("Giao dien nguoi dung");
+                        break;
+                    default:
+                        break;
+                }*/
+        }
+    }
 
     private int DefaultLabelFontSize()
     {

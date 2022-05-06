@@ -10,10 +10,15 @@ import GUI_Main.*;
  * @author NghiepCuong
  */
 public class MainClass {
-    private static MOHMainView mohMainView;
+    //private static MOHMainView mohMainView;
 
     public static void main(String args[])
     {
-        mohMainView = new MOHMainView();
+        RegisterAccView registerAccGUI = new RegisterAccView();
     }
+
+    /*public static void main(String args[])
+    {
+        mohMainView = new MOHMainView();
+    }*/
 }
