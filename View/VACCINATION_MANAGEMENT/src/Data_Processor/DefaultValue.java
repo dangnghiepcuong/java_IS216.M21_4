@@ -10,6 +10,10 @@ public class DefaultValue
     private String username = "test_project";
     private String password = "test_project";
 
+    private String DB_URL1 = "jdbc:oracle:thin:@localhost:1521:orcl";
+    private String username1 = "vaccination";
+    private String password1 = "vaccination";
+
     public String getDB_URL() {
         return DB_URL;
     }
@@ -32,6 +36,30 @@ public class DefaultValue
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getDB_URL1() {
+        return DB_URL1;
+    }
+
+    public void setDB_URL1(String DB_URL1) {
+        this.DB_URL1 = DB_URL1;
+    }
+
+    public String getUsername1() {
+        return username1;
+    }
+
+    public void setUsername1(String username1) {
+        this.username1 = username1;
+    }
+
+    public String getPassword1() {
+        return password1;
+    }
+
+    public void setPassword1(String password1) {
+        this.password1 = password1;
     }
 
     public int LabelFontSize()
