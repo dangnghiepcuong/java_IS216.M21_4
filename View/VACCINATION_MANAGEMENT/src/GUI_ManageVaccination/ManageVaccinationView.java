@@ -1,6 +1,7 @@
 package GUI_ManageVaccination;
 
 import Data_Processor.DefaultValue;
+import Data_Processor.Person;
 import Data_Processor.RegisteredScheds;
 import Data_Processor.Schedule;
 
@@ -19,311 +20,108 @@ import java.sql.*;
 public class ManageVaccinationView extends JPanel implements ActionListener
 {
     private DefaultValue dv = new DefaultValue();
-    private RegisteredScheds reg_Scheds[] = new RegisteredScheds[100000];
+    private Person personalUser;
 
-    private JLabel ProvinceLabel;
-    private JLabel DistrictLabel;
-    private JLabel TownLabel;
-    private Choice DistrictChoice;
-    private Choice TownChoice;
-    private Choice ProvinceChoice;
-    private JButton SearchOrgButton;
+    private JLabel RegSchedFilterLabel;
+    private Choice RegSchedFilterChoice;
+    private JButton FilterButton;
 
     private JScrollPane ScrollPaneOrgList;
     private JPanel OrgListPanel;
     private JPanel OrgPanel[] = new JPanel[100000];
 
     private JFrame OrgDetailView;
-    private JScrollPane ScrollPaneSchedList;
-    private JPanel SchedListPanel;
+    private JScrollPane ScrollPaneRegSchedList;
+    private JPanel RegSchedListPanel;
     private JPanel SchedPanel[] = new JPanel[50];
 
     private JLayeredPane LayeredPaneArea;
 
-
-
-    private void initProvinceLabel()
-    {
-        ProvinceLabel = new JLabel();
-        ProvinceLabel.setBounds(dv.AlignLeft(), 40, dv.LabelWidth(), dv.LabelHeight());
-        ProvinceLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
-        ProvinceLabel.setForeground(new Color(0x666666));
-        ProvinceLabel.setText("Tỉnh/thành phố:");
-        ProvinceLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
+    public Person getPersonalUser() {
+        return personalUser;
     }
 
-    private void initProvinceChoice()
-    {
-        ProvinceChoice = new Choice();
-        ProvinceChoice.setBounds(dv.AlignLeft(), 80, dv.FieldWidth(), dv.FieldHeight());
-        ProvinceChoice.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
-        ProvinceChoice.setForeground(new Color(dv.BlackTextColor()));
-        ProvinceChoice.setBackground(Color.WHITE);
-
-        ProvinceChoice.add("*");
-        ProvinceChoice.add("Bình Dương");
-        ProvinceChoice.add("Hồ Chí Minh");
-        ProvinceChoice.add("Hà Nội");
+    public void setPersonalUser(Person personalUser) {
+        this.personalUser = personalUser;
     }
 
-    private void initDistrictLabel()
+    private void initRegSchedFilterLabel()
     {
-        DistrictLabel = new JLabel();
-        DistrictLabel.setBounds(dv.AlignLeft(), 120, dv.LabelWidth(), dv.LabelHeight());
-        DistrictLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
-        DistrictLabel.setForeground(new Color(0x666666));
-        DistrictLabel.setText("Quận/Huyện:");
-        DistrictLabel.setSize(dv.LabelWidth(), dv.LabelHeight());
+        RegSchedFilterLabel = new JLabel();
+        RegSchedFilterLabel.setBounds(dv.AlignLeft(), 40, dv.LabelWidth()+50, dv.LabelHeight());
+        RegSchedFilterLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
+        RegSchedFilterLabel.setForeground(new Color(0x666666));
+        RegSchedFilterLabel.setText("Bộ lọc:");
+        RegSchedFilterLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
     }
 
-    private void initDistrictChoice()
+    private void initRegSchedFilterChoice()
     {
-        DistrictChoice = new Choice();
-        DistrictChoice.setBounds(dv.AlignLeft(), 150, dv.FieldWidth(), dv.FieldHeight());
-        DistrictChoice.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
-        DistrictChoice.setForeground(new Color(0x333333));
-        DistrictChoice.setBackground(Color.WHITE);
+        RegSchedFilterChoice = new Choice();
+        RegSchedFilterChoice.setBounds(dv.AlignLeft(), 80, dv.FieldWidth(), dv.FieldHeight());
+        RegSchedFilterChoice.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
+        RegSchedFilterChoice.setForeground(new Color(dv.BlackTextColor()));
+        RegSchedFilterChoice.setBackground(Color.WHITE);
 
-        //set choice
-        DistrictChoice.add("*");
-        DistrictChoice.add("Dầu Tiếng");
-        DistrictChoice.add("Thuận An");
-        DistrictChoice.add("Dĩ An");
-        DistrictChoice.add("Thủ Đức");
-        DistrictChoice.add("Thanh Xuân");
+        RegSchedFilterChoice.add("Tất cả");
+        RegSchedFilterChoice.add("Đã đăng ký");
+        RegSchedFilterChoice.add("Đã điểm danh");
+        RegSchedFilterChoice.add("Đã tiêm");
+        RegSchedFilterChoice.add("Đã hủy");
     }
 
-    private void initTownLabel()
+    private void initFilterButton()
     {
-        TownLabel = new JLabel();
-        TownLabel.setBounds(dv.AlignLeft(), 190, dv.LabelWidth(), dv.LabelHeight());
-        TownLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
-        TownLabel.setForeground(new Color(0x666666));
-        TownLabel.setSize(dv.LabelWidth(), dv.LabelHeight());
-        TownLabel.setText("Xã/phường/thị trấn:");
-    }
-
-    private void initTownChoice()
-    {
-        TownChoice = new Choice();
-        TownChoice.setBounds(dv.AlignLeft(), 220, dv.FieldWidth(), dv.FieldHeight());
-        TownChoice.setForeground(new Color(0x333333));
-        TownChoice.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
-        TownChoice.setBackground(Color.WHITE);
-
-        TownChoice.add("*");
-        TownChoice.add("Dầu Tiếng");
-        TownChoice.add("Lái Thiêu");
-        TownChoice.add("Đông Hòa");
-        TownChoice.add("Linh Trung");
-        TownChoice.add("Trúc Bạch");
-    }
-
-    private void initSearchOrgButton()
-    {
-        SearchOrgButton = new JButton();
+        FilterButton = new JButton();
         ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search.png"));
-        SearchOrgButton.setIcon(SearchIcon);
+        FilterButton.setIcon(SearchIcon);
 
-        SearchOrgButton.setBounds(dv.AlignLeft(), 290, dv.FieldWidth(), SearchIcon.getIconHeight());
-        SearchOrgButton.setBorder(null);
-        SearchOrgButton.setContentAreaFilled(false);
+        FilterButton.setBounds(dv.AlignLeft(), 150, dv.FieldWidth(), SearchIcon.getIconHeight());
+        FilterButton.setBorder(null);
+        FilterButton.setContentAreaFilled(false);
 
-        SearchOrgButton.addActionListener(this);
+        FilterButton.addActionListener(this);
     }
 
-    private void initOrgPanel(int i)
+    private void initRegSchedPanel(int i, RegisteredScheds reg_Sched)
     {
         //Org info
-        JLabel OrgName = new JLabel("Người đăng ký: " + reg_Scheds[i].getPersonalID());
+        JLabel OrgName = new JLabel("Tên đơn vị: " + reg_Sched.getOrg().getName());
         OrgName.setFont(new Font("SVN-Arial", 3, 18));
         OrgName.setForeground(new Color(dv.FeatureButtonColor()));
         OrgName.setBounds(30,1,605,30);
         OrgName.setHorizontalAlignment(JLabel.LEFT);
         //OrgName.setBorder(dv.border());
 
-        JLabel OrgProvince = new JLabel("Đơn vị tiêm: " + dv.getProvinceName(reg_Scheds[i].getOrg().getName()));
-        OrgProvince.setFont(new Font("SVN-Arial", 0, 16));
-        OrgProvince.setForeground(new Color(dv.BlackTextColor()));
-        OrgProvince.setBounds(30,32,250,25);
-        OrgProvince.setHorizontalAlignment(JLabel.LEFT);
-        //OrgProvince.setBorder(dv.border());
-
-        JLabel OrgDistrict = new JLabel("Loại mũi tiêm: " + dv.getDoseTypeName(reg_Scheds[i].getDoseType()));
-        OrgDistrict.setFont(new Font("SVN-Arial", 0, 16));
-        OrgDistrict.setForeground(new Color(dv.BlackTextColor()));
-        OrgDistrict.setBounds(30, 32+25+2,350,25);
-        OrgDistrict.setHorizontalAlignment(JLabel.LEFT);
-        //OrgDistrict.setBorder(dv.border());
-
-        JLabel OrgTown  = new JLabel("Buổi tiêm: " + dv.getTimeName(reg_Scheds[i].getTime()));
-        OrgTown.setFont(new Font("SVN-Arial", 0, 16));
-        OrgTown.setForeground(new Color(dv.BlackTextColor()));
-        OrgTown.setBounds(30,(32+25+2)+25+2,350,25);
-        OrgTown.setHorizontalAlignment(JLabel.LEFT);
-        //OrgTown.setBorder(dv.border());
-
-        JLabel OrgStreet  = new JLabel("STT: " + reg_Scheds[i].getNO());
-        OrgStreet.setFont(new Font("SVN-Arial", 0, 16));
-        OrgStreet.setForeground(new Color(dv.BlackTextColor()));
-        OrgStreet.setBounds(285,32,350,25);
-        OrgStreet.setHorizontalAlignment(JLabel.LEFT);
-        //OrgStreet.setBorder(dv.border());
-
-        JLabel OrgAvaiScheds = new JLabel("Trạng thái: " + reg_Scheds[i].getStatus());
-        OrgAvaiScheds.setFont(new Font("SVN-Arial", 0, 16));
-        OrgAvaiScheds.setForeground(new Color(dv.BlackTextColor()));
-        OrgAvaiScheds.setBounds(385,(32+25)+2,250,25);
-        OrgAvaiScheds.setHorizontalAlignment(JLabel.LEFT);
-        //OrgAvaiScheds.setBorder(dv.border());
-
-        //create OrgPanel Panel
-        OrgPanel[i] = new JPanel();
-        //set layout
-        OrgPanel[i].setLayout(null);
-        OrgPanel[i].setPreferredSize(new Dimension(660,120));
-        //set Background color
-        OrgPanel[i].setBackground(Color.WHITE);
-
-        OrgPanel[i].add(OrgName);
-        OrgPanel[i].add(OrgProvince);
-        OrgPanel[i].add(OrgDistrict);
-        OrgPanel[i].add(OrgTown);
-        OrgPanel[i].add(OrgStreet);
-        OrgPanel[i].add(OrgAvaiScheds);
-        //OrgPanel[i].add(OrgDetailButton[i]);
-
-        MouseListener handleMouseAction = new MouseListener()
-        {
-            @Override
-            public void mouseClicked(MouseEvent e)
-            {
-                System.out.println("clicked on " + OrgName.getText());
-                initScrollPaneSchedList(org[i]);
-
-                LayeredPaneArea.removeAll();
-                LayeredPaneArea.add(ScrollPaneOrgList, Integer.valueOf(0));
-                LayeredPaneArea.add(ScrollPaneSchedList, Integer.valueOf(1));
-                LayeredPaneArea.repaint(320, 40, 680, 630);
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        };
-
-        //OrgDetailButton[i].addMouseListener(this);
-        OrgPanel[i].addMouseListener(handleMouseAction);
-    }
-
-    private void initOrgListPanel(int nORG)
-    {
-        OrgListPanel = new JPanel();
-
-        OrgListPanel.setPreferredSize(new Dimension(680, 120*nORG));
-
-        OrgListPanel.setLayout((new FlowLayout()));
-
-        for (int i = 0; i < nORG; i++)
-        {
-            initOrgPanel(i);
-            OrgListPanel.add(OrgPanel[i]);
-        }
-   }
-
-    private void initScrollPaneOrgList(int nORG)
-    {
-        initOrgListPanel(nORG);
-
-        //create ScrollPaneOrgList Panel
-        ScrollPaneOrgList = new JScrollPane(OrgListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        //set Bounds
-        ScrollPaneOrgList.setBounds(0, 0, 680, 630); //320-40
-    }
-
-    private void initSchedPanel(int i, Schedule sched, RegisteredScheds SelectedOrg)
-    {
-        //Org info
-        JLabel OrgName = new JLabel("Tên đơn vị: " + SelectedOrg.getName());
-        OrgName.setFont(new Font("SVN-Arial", 3, 18));
-        OrgName.setForeground(new Color(dv.FeatureButtonColor()));
-        OrgName.setBounds(30,1,605,30);
-        OrgName.setHorizontalAlignment(JLabel.LEFT);
+        JLabel Address = new JLabel("Đ/c: " + dv.getProvinceName(reg_Sched.getOrg().getProvince())  + ", "
+                + reg_Sched.getOrg().getDistrict() + ", " + reg_Sched.getOrg().getTown() + ", " + reg_Sched.getOrg().getStreet());
+        Address.setFont(new Font("SVN-Arial", 2, 16));
+        Address.setForeground(new Color(dv.BlackTextColor()));
+        Address.setBounds(30,32,600,25);
+        Address.setHorizontalAlignment(JLabel.LEFT);
         //OrgName.setBorder(dv.border());
 
-        JLabel OnDate = new JLabel("Lịch tiêm ngày: " + sched.getOnDate().toString().substring(0,10));
-        OnDate.setFont(new Font("SVN-Arial", 0, 16));
-        OnDate.setForeground(new Color(dv.BlackTextColor()));
-        OnDate.setBounds(30,32,200,25);
-        OnDate.setHorizontalAlignment(JLabel.LEFT);
+        JLabel OnDateTime = new JLabel("Lịch tiêm ngày: " + reg_Sched.getSched().getOnDate()
+                + "          Buổi: " + dv.getTimeName(reg_Sched.getTime())  + "          STT: " + reg_Sched.getNO());
+        OnDateTime.setFont(new Font("SVN-Arial", 1, 16));
+        OnDateTime.setForeground(new Color(dv.BlackTextColor()));
+        OnDateTime.setBounds(30,32+25+2,600,25);
+        OnDateTime.setHorizontalAlignment(JLabel.LEFT);
         //OnDate.setBorder(dv.border());
 
-        JLabel VaccineID = new JLabel("Vaccine: " + sched.getVaccineID());
-        VaccineID.setFont(new Font("SVN-Arial", 0, 16));
-        VaccineID.setForeground(new Color(dv.BlackTextColor()));
-        VaccineID.setBounds(30, 32+25+2,200,25);
-        VaccineID.setHorizontalAlignment(JLabel.LEFT);
+        JLabel Vaccine = new JLabel("Vaccine: " + reg_Sched.getSched().getVaccineID() + " - " + reg_Sched.getSched().getSerial());
+        Vaccine.setFont(new Font("SVN-Arial", 0, 16));
+        Vaccine.setForeground(new Color(dv.BlackTextColor()));
+        Vaccine.setBounds(30, 32+25*2+2,250,25);
+        Vaccine.setHorizontalAlignment(JLabel.LEFT);
         //VaccineID.setBorder(dv.border());
 
-        JLabel Serial  = new JLabel("Serial: " + sched.getSerial());
-        Serial.setFont(new Font("SVN-Arial", 0, 16));
-        Serial.setForeground(new Color(dv.BlackTextColor()));
-        Serial.setBounds(30,(32+25+2)+25+2,200,25);
-        Serial.setHorizontalAlignment(JLabel.LEFT);
-        //Serial.setBorder(dv.border());
-
-        JRadioButton DayTimeButton  = new JRadioButton("Buổi sáng: " + sched.getDayRegistered() + "/" + sched.getLimitDay());
-        DayTimeButton.setFont(new Font("SVN-Arial", 0, 16));
-        DayTimeButton.setForeground(new Color(dv.BlackTextColor()));
-        DayTimeButton.setBounds(300,32,150,25);
-        DayTimeButton.setHorizontalAlignment(JLabel.LEFT);
-        DayTimeButton.setContentAreaFilled(false);
-        //DayTimeButton.setBorder(dv.border());
-
-        JRadioButton NoonTimeButton = new JRadioButton("Buổi trưa: " + sched.getNoonRegistered() + "/" + sched.getLimitNoon());
-        NoonTimeButton.setFont(new Font("SVN-Arial", 0, 16));
-        NoonTimeButton.setForeground(new Color(dv.BlackTextColor()));
-        NoonTimeButton.setBounds(300,(32+25)+2,150,25);
-        NoonTimeButton.setHorizontalAlignment(JLabel.LEFT);
-        NoonTimeButton.setContentAreaFilled(false);
-        //NoonTimeButton.setBorder(dv.border());
-
-        JRadioButton NightTimeButton = new JRadioButton("Buổi trưa: " + sched.getNightRegistered() + "/" + sched.getLimitNight());
-        NightTimeButton.setFont(new Font("SVN-Arial", 0, 16));
-        NightTimeButton.setForeground(new Color(dv.BlackTextColor()));
-        NightTimeButton.setBounds(300,(32+25+2)+25+2,150,25);
-        NightTimeButton.setHorizontalAlignment(JLabel.LEFT);
-        NightTimeButton.setContentAreaFilled(false);
-        //NightTimeButton.setBorder(dv.border());
-
-        ButtonGroup TimeGroupButton = new ButtonGroup();
-        TimeGroupButton.add(DayTimeButton);
-        TimeGroupButton.add(NoonTimeButton);
-        TimeGroupButton.add(NightTimeButton);
-
-        JButton SchedRegisterButton = new JButton();
-        SchedRegisterButton.setForeground(new Color(dv.BlackTextColor()));
-        SchedRegisterButton.setBounds(470,32+24,120,38);
-        SchedRegisterButton.setContentAreaFilled(false);
-        SchedRegisterButton.setBorder(null);
-        SchedRegisterButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/SchedRegister.png")));
+        JLabel Status = new JLabel("Tình trạng: " + dv.getStatusName(reg_Sched.getStatus()));
+        Status.setFont(new Font("SVN-Arial", 0, 16));
+        Status.setForeground(new Color(dv.BlackTextColor()));
+        Status.setBounds(270, 32+25*2+2,250,25);
+        Status.setHorizontalAlignment(JLabel.LEFT);
+        //VaccineID.setBorder(dv.border());
 
         SchedPanel[i] = new JPanel();
 
@@ -333,31 +131,39 @@ public class ManageVaccinationView extends JPanel implements ActionListener
         SchedPanel[i].setBackground(Color.WHITE);
 
         SchedPanel[i].add(OrgName);
-        SchedPanel[i].add(OnDate);
-        SchedPanel[i].add(VaccineID);
-        SchedPanel[i].add(Serial);
-        SchedPanel[i].add(DayTimeButton);
-        SchedPanel[i].add(NoonTimeButton);
-        SchedPanel[i].add(NightTimeButton);
-        SchedPanel[i].add(DayTimeButton);
-        SchedPanel[i].add(NoonTimeButton);
-        SchedPanel[i].add(NightTimeButton);
-        SchedPanel[i].add(SchedRegisterButton);
+        SchedPanel[i].add(Address);
+        SchedPanel[i].add(OnDateTime);
+        SchedPanel[i].add(Vaccine);
+        SchedPanel[i].add(Status);
     }
 
-    private void initSchedListPanel(RegisteredScheds SelectedOrg)
+    private void initRegSchedListPanel(int StatusFilter)
     {
-
-        Schedule sched[] = new Schedule[50];
+        RegisteredScheds reg_Scheds[] = new RegisteredScheds[1000];
         String query = "";
 
-        int nSched = 0;
+        int nRegScheds = 0;
         int i = 0;
 
-        query = "select *" +
-                " from SCHEDULE SCHED" +
-                " where SCHED.OrgID = '" + SelectedOrg.getID() + "'" +
-                " and SCHED.OnDate >= TO_DATE('" + dv.sysdate() + "')";
+        personalUser = new Person();
+        personalUser.setID("20520418");
+
+        query = "select DoseType, Time, NO, Status, Image, OnDate, VaccineID, Serial, Name, Province, District, Town, Street" +
+                " from REGISTER REG, SCHEDULE SCHED, ORGANIZATION ORG" +
+                " where '" + personalUser.getID() + "' = REG.PersonalID" +
+                " and REG.SchedID = SCHED.ID" +
+                " and SCHED.OrgID = ORG.ID";
+
+        if (StatusFilter == 1) //select choice: Da dang ky
+            query += " and Status = 0";
+        if (StatusFilter == 2) //select choice: Da diem danh
+            query += " and Status = 1";
+        if (StatusFilter == 3) //select choice: Da tiem
+            query += " and Status = 2";
+        if (StatusFilter == 4) //select choice: Da huy
+            query += " and Status = 3";
+
+        query += " order by Status asc, OnDate desc";
 
         System.out.println(query);
 
@@ -371,51 +177,47 @@ public class ManageVaccinationView extends JPanel implements ActionListener
 
             while(rs.next())
             {
-                sched[i] = new Schedule();
-                sched[i].setID(rs.getString("ID"));
-                sched[i].setOrgID(rs.getString("OrgID"));
-                sched[i].setOnDate(rs.getString("OnDate"));
-                sched[i].setVaccineID(rs.getString("VaccineID"));
-                sched[i].setSerial(rs.getString("Serial"));
-                sched[i].setLimitDay(rs.getInt("LimitDay"));
-                sched[i].setLimitNoon(rs.getInt("LimitNoon"));
-                sched[i].setLimitNight(rs.getInt("LimitNight"));
-                sched[i].setDayRegistered(rs.getInt("DayRegistered"));
-                sched[i].setNoonRegistered(rs.getInt("Noonregistered"));
-                sched[i].setNightRegistered(rs.getInt("NightRegistered"));
+                reg_Scheds[i] = new RegisteredScheds();
+                reg_Scheds[i].setDoseType(rs.getString("DoseType"));
+                reg_Scheds[i].setTime(rs.getInt("Time"));
+                reg_Scheds[i].setNO(rs.getInt("NO"));
+                reg_Scheds[i].setStatus(rs.getInt("Status"));
+                reg_Scheds[i].setImage(rs.getByte("Image"));
+                reg_Scheds[i].getSched().setOnDate(rs.getString("OnDate").substring(0,10));
+                reg_Scheds[i].getSched().setVaccineID(rs.getString("VaccineID"));
+                reg_Scheds[i].getSched().setSerial(rs.getString("Serial"));
+                reg_Scheds[i].getOrg().setName(rs.getString("Name"));
+                reg_Scheds[i].getOrg().setProvince(rs.getString("Province"));
+                reg_Scheds[i].getOrg().setDistrict(rs.getString("District"));
+                reg_Scheds[i].getOrg().setTown(rs.getString("Town"));
+                reg_Scheds[i].getOrg().setStreet(rs.getString("Street"));
                 i++;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        nSched = i;
+        nRegScheds = i;
 
-        SchedListPanel = new JPanel();
+        RegSchedListPanel = new JPanel();
 
-        SchedListPanel.setPreferredSize(new Dimension(680, 120));
+        RegSchedListPanel.setPreferredSize(new Dimension(680, 120));
 
-        SchedListPanel.setLayout(new FlowLayout());
+        RegSchedListPanel.setLayout(new FlowLayout());
 
-        for (i = 0; i<nSched; i++)
+        for (i = 0; i<nRegScheds; i++)
         {
-            initSchedPanel(i, sched[i], SelectedOrg);
-            SchedListPanel.add(SchedPanel[i]);
+            initRegSchedPanel(i, reg_Scheds[i]);
+            RegSchedListPanel.add(SchedPanel[i]);
         }
-
-
-
     }
 
-    private void initScrollPaneSchedList(RegisteredScheds SelectedOrg)
+    private void initScrollPaneRegSchedList()
     {
-        initSchedListPanel(SelectedOrg);
-
-        //create ScrollPaneOrgList Panel
-        ScrollPaneSchedList = new JScrollPane(SchedListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        ScrollPaneRegSchedList = new JScrollPane(RegSchedListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         //set Bounds
-        ScrollPaneSchedList.setBounds(0, 0, 680, 630); //320 40
+        ScrollPaneRegSchedList.setBounds(0, 0, 680, 630); //320 40
     }
 
     private void initLayeredPaneArea()
@@ -456,36 +258,25 @@ public class ManageVaccinationView extends JPanel implements ActionListener
 
         this.setLayout(null);
 
-        //init ProvinceLabel
-        initProvinceLabel();
-        this.add(ProvinceLabel);
+        //init RegSchedFilterLabel
+        initRegSchedFilterLabel();
+        this.add(RegSchedFilterLabel);
 
-        //init ProvinceChoice
-        initProvinceChoice();
-        this.add(ProvinceChoice);
+        //init RegSchedFilterChoice
+        initRegSchedFilterChoice();
+        this.add(RegSchedFilterChoice);
 
-        //init DistrictLabel;
-        initDistrictLabel();
-        this.add(DistrictLabel);
+        //init FilterButton
+        initFilterButton();
+        this.add(FilterButton);
 
-        //init DistrictChoice
-        initDistrictChoice();
-        this.add(DistrictChoice);
+        //init RegSchedList
+        initRegSchedListPanel(0);
 
-        //init TownLabel;
-        initTownLabel();
-        this.add(TownLabel);
-
-        //init TownChoice
-        initTownChoice();
-        this.add(TownChoice);
-
-        //init SearchOrgButton
-        initSearchOrgButton();
-        this.add(SearchOrgButton);
-
-        //init LayeredPane
+        //init LayeredPaneArea
+        initScrollPaneRegSchedList();
         initLayeredPaneArea();
+        LayeredPaneArea.add(ScrollPaneRegSchedList);
         this.add(LayeredPaneArea);
 
         this.repaint(0,0, dv.FrameWidth(), dv.FrameHeight());
@@ -500,87 +291,16 @@ public class ManageVaccinationView extends JPanel implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        int n = 0;
-
-        //Pressed SearchOrgButton
-        if (e.getSource() == SearchOrgButton)
+        if (e.getSource() == FilterButton)
         {
-            String query = "";
+            LayeredPaneArea.removeAll();
 
-            //Select out the code of chosen province
-            String ProvinceCode = "";
+            initRegSchedListPanel(RegSchedFilterChoice.getSelectedIndex());
+            initScrollPaneRegSchedList();
 
-            ProvinceCode = dv.getProvinceCode(ProvinceChoice.getSelectedItem());
-
-            //Select out the specified ORGs
-            query = "select ORG.ID, Name, Province, District, Town, Street, COUNT(SCHED.ID)"
-                    + " from Registered_Scheds ORG left join SCHEDULE SCHED on ORG.ID = SCHED.OrgID";
-
-            if (ProvinceChoice.getSelectedIndex() > 0)
-                query = query + " where ORG.Province = '" + ProvinceCode + "'";
-            else
-                query = query + " where ORG.Province like '%'";
-
-            if (DistrictChoice.getSelectedIndex() > 0)
-                query = query + " and ORG.District = '" + DistrictChoice.getSelectedItem() + "'";
-            else
-                query = query + " and ORG.District like '%'";
-
-            if (TownChoice.getSelectedIndex() > 0)
-                query = query + " and ORG.Town = '" + TownChoice.getSelectedItem() + "'";
-            else
-                query = query + " and ORG.Town like '%'";
-
-            query += " and OnDate >= '" + dv.sysdate() + "'";
-            query += " group by ORG.ID, Name, Province, District, Town, Street";
-            query += " order by Province, District, Town";
-
-            System.out.println(query);
-
-            try
-            {
-                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-                //Statement st = connection.createStatement();
-
-                PreparedStatement st = connection.prepareStatement(query);
-
-                ResultSet rs = st.executeQuery(query);
-
-                int i = 0;
-                n = 0;
-
-                while (rs.next())
-                {
-                    org[i] = new RegisteredScheds();
-                    org[i].setID(rs.getString(1));
-                    org[i].setName(rs.getString("Name"));
-                    org[i].setProvince(rs.getString("Province"));
-                    org[i].setDistrict(rs.getString("District"));
-                    org[i].setTown(rs.getString("Town"));
-                    org[i].setStreet(rs.getString("Street"));
-                    org[i].setAvaiScheds(rs.getInt("COUNT(SCHED.ID)"));
-                    i++;
-                }
-                n = i;
-
-                //init ScrollPaneOrgList
-
-                //clear the Layered Area
-                LayeredPaneArea.removeAll();
-
-                //init Scroll Pane of Orgs
-                initScrollPaneOrgList(n);
-                //add Scroll Pane of Orgs to TOP of Layered Area
-                LayeredPaneArea.add(ScrollPaneOrgList, Integer.valueOf(1));
-                //Delete scroll pane of sched
-                ScrollPaneSchedList = null;
-            }
-            catch (SQLException exception)
-            {
-                exception.printStackTrace();
-            }
+            LayeredPaneArea.add(ScrollPaneRegSchedList);
+            LayeredPaneArea.repaint(320, 40, 680, 630);
         }
-
 
     }
 

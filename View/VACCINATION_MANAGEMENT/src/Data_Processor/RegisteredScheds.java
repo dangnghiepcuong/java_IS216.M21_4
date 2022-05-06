@@ -8,8 +8,8 @@ import java.util.ArrayList;
  */
 public class RegisteredScheds {
     private String PersonalID;
-    private Schedule SchedID;
-    private Organization Org;
+    private Schedule Sched = new Schedule();
+    private Organization Org = new Organization();
     private String DoseType;
     private int Time;
     private int NO;
@@ -20,9 +20,9 @@ public class RegisteredScheds {
     public RegisteredScheds() {
     }
 
-    public RegisteredScheds(String PersonalID, Schedule SchedID, Organization Org, String DoseType, int Time, int NO, int Status, byte Image, String Note) {
+    public RegisteredScheds(String PersonalID, Schedule Sched, Organization Org, String DoseType, int Time, int NO, int Status, byte Image, String Note) {
         this.PersonalID = PersonalID;
-        this.SchedID = SchedID;
+        this.Sched = Sched;
         this.Org = Org;
         this.DoseType = DoseType;
         this.Time = Time;
@@ -40,12 +40,12 @@ public class RegisteredScheds {
         this.PersonalID = PersonalID;
     }
 
-    public Schedule getSchedID() {
-        return SchedID;
+    public Schedule getSched() {
+        return Sched;
     }
 
-    public void setSchedID(Schedule SchedID) {
-        this.SchedID = SchedID;
+    public void setSched(Schedule Sched) {
+        this.Sched = Sched;
     }
 
     public Organization getOrg() {
