@@ -39,7 +39,6 @@ public class SearchOrgView extends JPanel implements ActionListener
     private JLayeredPane LayeredPaneArea;
 
 
-    //private JButton OrgDetailButton[] = new JButton[100000];
 
     private void initProvinceLabel()
     {
@@ -183,23 +182,13 @@ public class SearchOrgView extends JPanel implements ActionListener
 
     private void initSearchOrgButton() 
     {
-        Border border = BorderFactory.createLineBorder(Color.BLACK);
-
-        //create login button
         SearchOrgButton = new JButton();
+        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search.png"));
+        SearchOrgButton.setIcon(SearchIcon);
 
-        //set no border
+        SearchOrgButton.setBounds(dv.AlignLeft(), 250, dv.FieldWidth(), SearchIcon.getIconHeight());
         SearchOrgButton.setBorder(null);
-
         SearchOrgButton.setContentAreaFilled(false);
-
-        //create an icon
-        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search.png"));
-
-        //set label icon
-        SearchOrgButton.setIcon(LoginIcon);
-
-        SearchOrgButton.setBounds(dv.AlignLeft(), 250, dv.FieldWidth(), LoginIcon.getIconHeight());
 
         SearchOrgButton.addActionListener(this);
     }
@@ -658,6 +647,7 @@ public class SearchOrgView extends JPanel implements ActionListener
                 exception.printStackTrace();
             }
         }
+
 
     }
 

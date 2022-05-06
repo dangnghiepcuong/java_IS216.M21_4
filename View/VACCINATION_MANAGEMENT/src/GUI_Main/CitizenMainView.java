@@ -1,6 +1,8 @@
 package GUI_Main;
 
-import Data_Processor.*;
+import Data_Processor.Account;
+import Data_Processor.DefaultValue;
+import Data_Processor.Person;
 import GUI_SearchOrg.SearchOrgView;
 
 import javax.swing.*;
@@ -9,7 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 
-public class MOHMainView extends JFrame implements ActionListener
+public class CitizenMainView extends JFrame implements ActionListener
 {
     private JLayeredPane MainLayeredPane;
 
@@ -23,15 +25,17 @@ public class MOHMainView extends JFrame implements ActionListener
 
     private JLayeredPane FeatureLayeredPane;
     private JButton InfoSettingButton;
-    private JButton CreateOrgAccButton;
-    private JButton PublishPostButton;
     private JButton SearchButton;
-    private JButton StatisticButton;
+    private JButton NotificationButton;
+    private JButton FillFormButton;
+    private JButton ManageVaccinationButton;
+    private JButton UpdateInjectionButton;
+    private JButton CertificateButton;
 
     private JButton LogoutButton;
 
     private Account userAccount = new Account();
-    private Organization orgUser = new Organization();
+    private Person personalUser = new Person();
 
     private SearchOrgView searchOrgView;
 
@@ -50,6 +54,17 @@ public class MOHMainView extends JFrame implements ActionListener
         BackButton.addActionListener(this);
     }
 
+    private void initLogoutButton()
+    {
+        LogoutButton = new JButton();
+        LogoutButton.setBounds(105, 580, 160, 56);
+        LogoutButton.setBorder(null);
+        LogoutButton.setContentAreaFilled(false);
+        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Personal Logout Button.png"));
+        LogoutButton.setIcon(LoginIcon);
+        LogoutButton.addActionListener(this);
+    }
+
     private void initInfoLayeredPane()
     {
         InfoLayeredPane = new JLayeredPane();
@@ -62,7 +77,7 @@ public class MOHMainView extends JFrame implements ActionListener
 
         initInfoBackground();
         InfoLayeredPane.add(InfoBackground, Integer.valueOf(0));
-        
+
         JLabel InfoLabel = new JLabel("THÔNG TIN CƠ BẢN");
         InfoLabel.setBounds(0,40,360,35);
         InfoLabel.setFont(new Font("SVN-Arial",Font.BOLD, 24));
@@ -73,13 +88,13 @@ public class MOHMainView extends JFrame implements ActionListener
         Avatar.setBounds(90,100,190,190);
         Avatar.setHorizontalAlignment(JLabel.CENTER);
 
-        JLabel Name = new JLabel(orgUser.getName());
+        JLabel Name = new JLabel(personalUser.getFullName());
         Name.setBounds(0, 300, 360, 35);
         Name.setFont(new Font("SVN-Arial",Font.BOLD, 24));
         Name.setHorizontalAlignment(JLabel.CENTER);
 
         ImageIcon LocationImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/Location.png"));
-        JLabel Location = new JLabel(dv.getProvinceName(orgUser.getProvince()));
+        JLabel Location = new JLabel(dv.getProvinceName(personalUser.getProvince()));
         Location.setFont(new Font("SVN-Arial",Font.BOLD, 20));
         Location.setIcon(LocationImage);
         Location.setBounds(0,400,360,30);
@@ -97,32 +112,10 @@ public class MOHMainView extends JFrame implements ActionListener
         InfoLayeredPane.repaint(0,0, dv.FrameWidth()-dv.FrameHeight() + 8, dv.FrameHeight());
     }
 
-    private void initFeatureLayeredPane()
-    {
-        FeatureLayeredPane = new JLayeredPane();
-        FeatureLayeredPane.setBounds(360, 0, dv.FrameWidth() - 360, dv.FrameHeight());
-        FeatureLayeredPane.setLayout(null);
-        FeatureLayeredPane.setBackground(new Color(dv.ViewBackgroundColor()));
-
-        initInfoSettingButton();
-        FeatureLayeredPane.add(InfoSettingButton);
-
-        initCreateOrgAccButton();
-        FeatureLayeredPane.add(CreateOrgAccButton);
-
-        initPublishPostButton();
-        FeatureLayeredPane.add(PublishPostButton);
-
-        initSearchButton();
-        FeatureLayeredPane.add(SearchButton);
-
-        initStatisticButton();
-        FeatureLayeredPane.add(StatisticButton);
-    }
 
     private void initInfoBackground()
     {
-        ImageIcon InfoLayeredPaneBackground = new ImageIcon(getClass().getResource("/Data_Processor/icon/Org Info Panel.png"));
+        ImageIcon InfoLayeredPaneBackground = new ImageIcon(getClass().getResource("/Data_Processor/icon/Personal Info Panel.png"));
 
         InfoBackground = new JLabel(InfoLayeredPaneBackground);
 
@@ -134,60 +127,102 @@ public class MOHMainView extends JFrame implements ActionListener
     private void initInfoSettingButton()
     {
         InfoSettingButton = new JButton();
-        InfoSettingButton.setBounds(120 +60, 30, 133, 133);
+        InfoSettingButton.setBounds(60, 30, 133, 133);
         InfoSettingButton.setBorder(null);
         InfoSettingButton.setContentAreaFilled(false);
-        InfoSettingButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Org Info Feature Button.png")));
-    }
-
-    private void initCreateOrgAccButton()
-    {
-        CreateOrgAccButton = new JButton();
-        CreateOrgAccButton.setBounds(360+120 -60, 30, 133, 133);
-        CreateOrgAccButton.setBorder(null);
-        CreateOrgAccButton.setContentAreaFilled(false);
-        CreateOrgAccButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Create Org Acc Feature Button.png")));
-    }
-
-    private void initPublishPostButton()
-    {
-        PublishPostButton = new JButton();
-        PublishPostButton.setBounds(120 +60, 30+240, 133, 133);
-        PublishPostButton.setBorder(null);
-        PublishPostButton.setContentAreaFilled(false);
-        PublishPostButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Send Notification Feature Button.png")));
-
+        InfoSettingButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Personal Info Feature Button.png")));
+        InfoSettingButton.addActionListener(this);
     }
 
     private void initSearchButton()
     {
         SearchButton = new JButton();
-        SearchButton.setBounds(360+120 -60, 30+240, 133, 133);
+        SearchButton.setBounds(240 + 30+15, 30, 133, 133);
         SearchButton.setBorder(null);
         SearchButton.setContentAreaFilled(false);
         SearchButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Search Feature Button.png")));
         SearchButton.addActionListener(this);
     }
 
-    private void initStatisticButton()
+    private void initNotificationButton()
     {
-        StatisticButton = new JButton();
-        StatisticButton.setBounds(120 +60, 30+240+240, 133, 133);
-        StatisticButton.setBorder(null);
-        StatisticButton.setContentAreaFilled(false);
-        StatisticButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Statistic Feature Button.png")));
+        NotificationButton = new JButton();
+        NotificationButton.setBounds(240*2+30, 30, 133,133);
+        NotificationButton.setBorder(null);
+        NotificationButton.setContentAreaFilled(false);
+        NotificationButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Notification Feature Button.png")));
+        NotificationButton.addActionListener(this);
     }
 
-    private void initLogoutButton()
+    private void initFillFormButton()
     {
-        LogoutButton = new JButton();
-        LogoutButton.setBounds(105, 580, 160, 56);
-        LogoutButton.setBorder(null);
-        LogoutButton.setContentAreaFilled(false);
-        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Logout Button.png"));
-        LogoutButton.setIcon(LoginIcon);
-        LogoutButton.addActionListener(this);
+        FillFormButton = new JButton();
+        FillFormButton.setBounds(60, 240+30, 133, 133);
+        FillFormButton.setBorder(null);
+        FillFormButton.setContentAreaFilled(false);
+        FillFormButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Fill Form Feature Button.png")));
+        FillFormButton.addActionListener(this);
     }
+
+    private void initManageVaccinationButton()
+    {
+        ManageVaccinationButton = new JButton();
+        ManageVaccinationButton.setBounds(240 + 30+15, 240 + 30, 133, 133);
+        ManageVaccinationButton.setBorder(null);
+        ManageVaccinationButton.setContentAreaFilled(false);
+        ManageVaccinationButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Manage Vaccination Feature Button.png")));
+        ManageVaccinationButton.addActionListener(this);
+    }
+
+    private void initUpdateInjectionButton()
+    {
+        UpdateInjectionButton = new JButton();
+        UpdateInjectionButton.setBounds(240*2+30, 240 + 30, 133, 133);
+        UpdateInjectionButton.setBorder(null);
+        UpdateInjectionButton.setContentAreaFilled(false);
+        UpdateInjectionButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Update Injection Feature Button.png")));
+        UpdateInjectionButton.addActionListener(this);
+    }
+
+    private void initCertificateButton()
+    {
+        CertificateButton = new JButton();
+        CertificateButton.setBounds(60, 240*2 + 30, 133, 133);
+        CertificateButton.setBorder(null);
+        CertificateButton.setContentAreaFilled(false);
+        CertificateButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Certificate Feature Button.png")));
+        CertificateButton.addActionListener(this);
+    }
+
+    private void initFeatureLayeredPane()
+    {
+        FeatureLayeredPane = new JLayeredPane();
+        FeatureLayeredPane.setBounds(360, 0, dv.FrameWidth() - 360, dv.FrameHeight());
+        FeatureLayeredPane.setLayout(null);
+        FeatureLayeredPane.setBackground(new Color(dv.ViewBackgroundColor()));
+
+        initInfoSettingButton();
+        FeatureLayeredPane.add(InfoSettingButton);
+
+        initSearchButton();
+        FeatureLayeredPane.add(SearchButton);
+
+        initNotificationButton();
+        FeatureLayeredPane.add(NotificationButton);
+
+        initFillFormButton();
+        FeatureLayeredPane.add(FillFormButton);
+
+        initManageVaccinationButton();
+        FeatureLayeredPane.add(ManageVaccinationButton);
+
+        initUpdateInjectionButton();
+        FeatureLayeredPane.add(UpdateInjectionButton);
+
+        initCertificateButton();
+        FeatureLayeredPane.add(CertificateButton);
+    }
+
 
     private void initMainPanel()
     {
@@ -205,7 +240,7 @@ public class MOHMainView extends JFrame implements ActionListener
         MainLayeredPane.setOpaque(true);
     }
 
-    public MOHMainView()
+    public CitizenMainView()
     {
         //Frame
         //set frame title
@@ -234,10 +269,10 @@ public class MOHMainView extends JFrame implements ActionListener
         this.setLayout(null);
 
 
-        userAccount.setUsername("MOH");
+        userAccount.setUsername("20520418");
         userAccount.setRole(0);
 
-        String query = "select * from ORGANIZATION ORG where ORG.ID = '" +  userAccount.getUsername() + "'";
+        String query = "select * from PERSON where PERSON.ID = '" +  userAccount.getUsername() + "'";
 
         try {
             Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
@@ -247,12 +282,19 @@ public class MOHMainView extends JFrame implements ActionListener
             ResultSet rs = st.executeQuery(query);
 
             rs.next();
-            orgUser.setID(rs.getString("ID"));
-            orgUser.setName(rs.getString("Name"));
-            orgUser.setProvince(rs.getString("Province"));
-            orgUser.setDistrict(rs.getString("District"));
-            orgUser.setTown(rs.getString("Town"));
-            orgUser.setStreet(rs.getString("Street"));
+            personalUser.setID(rs.getString("ID"));
+            personalUser.setFirstName(rs.getString("FirstName"));
+            personalUser.setLastName(rs.getString("LastName"));
+            personalUser.setBirthday(rs.getString("Birthday"));
+            personalUser.setGender(rs.getInt("Gender"));
+            personalUser.setHomeTown(rs.getString("HomeTown"));
+            personalUser.setProvince(rs.getString("Province"));
+            personalUser.setDistrict(rs.getString("District"));
+            personalUser.setTown(rs.getString("Town"));
+            personalUser.setStreet(rs.getString("Street"));
+            personalUser.setPhone(rs.getString("Phone"));
+            personalUser.setEmail(rs.getString("Email"));
+            personalUser.setGuardian(rs.getString("Guardian"));
 
         } catch (SQLException e) {
             e.printStackTrace();

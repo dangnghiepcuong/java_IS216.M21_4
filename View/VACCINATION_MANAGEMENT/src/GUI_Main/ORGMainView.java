@@ -1,6 +1,8 @@
 package GUI_Main;
 
-import Data_Processor.*;
+import Data_Processor.Account;
+import Data_Processor.DefaultValue;
+import Data_Processor.Organization;
 import GUI_SearchOrg.SearchOrgView;
 
 import javax.swing.*;
@@ -9,7 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 
-public class MOHMainView extends JFrame implements ActionListener
+public class ORGMainView extends JFrame implements ActionListener
 {
     private JLayeredPane MainLayeredPane;
 
@@ -23,7 +25,7 @@ public class MOHMainView extends JFrame implements ActionListener
 
     private JLayeredPane FeatureLayeredPane;
     private JButton InfoSettingButton;
-    private JButton CreateOrgAccButton;
+    private JButton ManageSchedButton;
     private JButton PublishPostButton;
     private JButton SearchButton;
     private JButton StatisticButton;
@@ -62,7 +64,7 @@ public class MOHMainView extends JFrame implements ActionListener
 
         initInfoBackground();
         InfoLayeredPane.add(InfoBackground, Integer.valueOf(0));
-        
+
         JLabel InfoLabel = new JLabel("THÔNG TIN CƠ BẢN");
         InfoLabel.setBounds(0,40,360,35);
         InfoLabel.setFont(new Font("SVN-Arial",Font.BOLD, 24));
@@ -107,8 +109,8 @@ public class MOHMainView extends JFrame implements ActionListener
         initInfoSettingButton();
         FeatureLayeredPane.add(InfoSettingButton);
 
-        initCreateOrgAccButton();
-        FeatureLayeredPane.add(CreateOrgAccButton);
+        initManageSchedButton();
+        FeatureLayeredPane.add(ManageSchedButton);
 
         initPublishPostButton();
         FeatureLayeredPane.add(PublishPostButton);
@@ -140,13 +142,13 @@ public class MOHMainView extends JFrame implements ActionListener
         InfoSettingButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Org Info Feature Button.png")));
     }
 
-    private void initCreateOrgAccButton()
+    private void initManageSchedButton()
     {
-        CreateOrgAccButton = new JButton();
-        CreateOrgAccButton.setBounds(360+120 -60, 30, 133, 133);
-        CreateOrgAccButton.setBorder(null);
-        CreateOrgAccButton.setContentAreaFilled(false);
-        CreateOrgAccButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Create Org Acc Feature Button.png")));
+        ManageSchedButton = new JButton();
+        ManageSchedButton.setBounds(360+120 -60, 30, 133, 133);
+        ManageSchedButton.setBorder(null);
+        ManageSchedButton.setContentAreaFilled(false);
+        ManageSchedButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Manage Schedule Feature Button.png")));
     }
 
     private void initPublishPostButton()
@@ -205,7 +207,7 @@ public class MOHMainView extends JFrame implements ActionListener
         MainLayeredPane.setOpaque(true);
     }
 
-    public MOHMainView()
+    public ORGMainView()
     {
         //Frame
         //set frame title
@@ -234,7 +236,7 @@ public class MOHMainView extends JFrame implements ActionListener
         this.setLayout(null);
 
 
-        userAccount.setUsername("MOH");
+        userAccount.setUsername("44001");
         userAccount.setRole(0);
 
         String query = "select * from ORGANIZATION ORG where ORG.ID = '" +  userAccount.getUsername() + "'";
