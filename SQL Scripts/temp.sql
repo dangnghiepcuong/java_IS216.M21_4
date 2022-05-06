@@ -90,5 +90,11 @@ select Code from REGION where REGION.Name = 'Bình D??ng';
 
 select ORG.ID, Name, Province, District, Town, Street, COUNT(SCHED.ID) from ORGANIZATION ORG left join SCHEDULE SCHED on ORG.ID = SCHED.OrgID and ORG.Province = '44' and ORG.District like '%' and ORG.Town like '%' group by ORG.ID, Name, Province, District, Town, Street order by Province, District, Town
 
+select DoseType, Time, NO, Status, Image, OnDate, VaccineID, Serial, Name, Province, District, Town, Street 
+from REGISTER REG, SCHEDULE SCHED, ORGANIZATION ORG 
+where '20520418' = REG.PersonalID 
+and REG.SchedID = SCHED.ID 
+and SCHED.OrgID = ORG.ID 
+order by Status asc, OnDate desc
 
 commit;

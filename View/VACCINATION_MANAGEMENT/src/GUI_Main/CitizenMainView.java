@@ -3,6 +3,7 @@ package GUI_Main;
 import Data_Processor.Account;
 import Data_Processor.DefaultValue;
 import Data_Processor.Person;
+import GUI_ManageVaccination.ManageVaccinationView;
 import GUI_SearchOrg.SearchOrgView;
 
 import javax.swing.*;
@@ -13,11 +14,10 @@ import java.sql.*;
 
 public class CitizenMainView extends JFrame implements ActionListener
 {
+    /*Main GUI*/
     private JLayeredPane MainLayeredPane;
-
     private JPanel MainPanel;
 
-    private DefaultValue dv = new DefaultValue();
     private JLayeredPane InfoLayeredPane;
     private JLabel InfoBackground;
     private JLabel NameLabel;
@@ -32,14 +32,18 @@ public class CitizenMainView extends JFrame implements ActionListener
     private JButton UpdateInjectionButton;
     private JButton CertificateButton;
 
+    private JButton BackButton;
     private JButton LogoutButton;
 
+    /*Data Stored Class*/
+    private DefaultValue dv = new DefaultValue();
     private Account userAccount = new Account();
     private Person personalUser = new Person();
 
+    /*Other Views*/
     private SearchOrgView searchOrgView;
+    private ManageVaccinationView manageVaccinationView;
 
-    private JButton BackButton;
 
     private void initBackButton()
     {
@@ -47,7 +51,7 @@ public class CitizenMainView extends JFrame implements ActionListener
         ImageIcon BackButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Back Button-Pink.png"));
         BackButton.setIcon(BackButtonIcon);
 
-        BackButton.setBounds(0, 0, BackButtonIcon.getIconWidth(), BackButtonIcon.getIconHeight());
+        BackButton.setBounds(10, 10, BackButtonIcon.getIconWidth(), BackButtonIcon.getIconHeight());
         BackButton.setBorder(null);
         BackButton.setContentAreaFilled(false);
 
@@ -93,6 +97,12 @@ public class CitizenMainView extends JFrame implements ActionListener
         Name.setFont(new Font("SVN-Arial",Font.BOLD, 24));
         Name.setHorizontalAlignment(JLabel.CENTER);
 
+        JLabel BasicInfo = new JLabel(dv.getGenderName(personalUser.getGender()) + " - "
+                + dv.toOracleDateFormat(personalUser.getBirthday()).substring(7,11));
+        BasicInfo.setBounds(0, 350, 360, 35);
+        BasicInfo.setFont(new Font("SVN-Arial",Font.BOLD, 20));
+        BasicInfo.setHorizontalAlignment(JLabel.CENTER);
+
         ImageIcon LocationImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/Location.png"));
         JLabel Location = new JLabel(dv.getProvinceName(personalUser.getProvince()));
         Location.setFont(new Font("SVN-Arial",Font.BOLD, 20));
@@ -105,13 +115,13 @@ public class CitizenMainView extends JFrame implements ActionListener
         InfoLayeredPane.add(InfoLabel, Integer.valueOf(1));
         InfoLayeredPane.add(Avatar, Integer.valueOf(1));
         InfoLayeredPane.add(Name, Integer.valueOf(1));
+        InfoLayeredPane.add(BasicInfo, Integer.valueOf(1));
         InfoLayeredPane.add(Location, Integer.valueOf(1));
 
         InfoLayeredPane.add(LogoutButton, Integer.valueOf(1));
 
         InfoLayeredPane.repaint(0,0, dv.FrameWidth()-dv.FrameHeight() + 8, dv.FrameHeight());
     }
-
 
     private void initInfoBackground()
     {
@@ -321,6 +331,15 @@ public class CitizenMainView extends JFrame implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
+        if(e.getSource() == BackButton)
+        {
+            searchOrgView = null;
+            manageVaccinationView = null;
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(MainPanel, Integer.valueOf(0));
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+        }
+
         if (e.getSource() == SearchButton)
         {
             searchOrgView = new SearchOrgView();
@@ -332,12 +351,15 @@ public class CitizenMainView extends JFrame implements ActionListener
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }
 
-        if(e.getSource() == BackButton)
+        if(e.getSource() == ManageVaccinationButton)
         {
-            searchOrgView = null;
-            MainLayeredPane.removeAll();
-            MainLayeredPane.add(MainPanel, Integer.valueOf(0));
+            manageVaccinationView = new ManageVaccinationView();
+            MainLayeredPane.add(manageVaccinationView, Integer.valueOf(1));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+
+            //init BackButton
+            initBackButton();
+            MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }
     }
 

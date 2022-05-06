@@ -221,4 +221,58 @@ public class DefaultValue
     {
         return toOracleDateFormat(java.time.LocalDateTime.now().toString().substring(0, 10));
     }
+
+    public String getDoseTypeName(String DoseType)
+    {
+        if (DoseType == "basic")
+            return "Cơ bản";
+
+        if (DoseType == "booster")
+            return "Tăng cường";
+
+        if (DoseType == "repeat")
+            return "Nhắc lại";
+
+        return "";
+    }
+
+    public String getTimeName(int Time)
+    {
+        if (Time == 0)
+            return "Sáng";
+
+        if (Time == 1)
+            return "Trưa";
+
+        if (Time == 2)
+            return "Tối";
+
+        return "";
+    }
+
+    public String getStatusName(int Status)
+    {
+        if (Status == 0)
+            return "Đã đăng ký";
+        if (Status == 1)
+            return "Đã điểm danh";
+        if (Status == 2)
+            return "Đã tiêm";
+        if (Status == 3)
+            return "Đã hủy";
+
+        return "";
+    }
+
+    public String getGenderName(int Gender)
+    {
+        if (Gender == 0)
+            return "Nữ";
+        if (Gender == 1)
+            return "Nam";
+        if (Gender == 2)
+            return "Khác";
+
+        return "";
+    }
 }
