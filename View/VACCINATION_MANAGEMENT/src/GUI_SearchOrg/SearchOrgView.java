@@ -14,10 +14,9 @@ import java.sql.*;
  *
  * @author NghiepCuong
  */
-public class SearchOrgView extends JFrame implements ActionListener
+public class SearchOrgView extends JPanel implements ActionListener
 {
     private DefaultValue dv = new DefaultValue();
-    private ProvinceList province;
     private Organization org[] = new Organization[100000];
 
     private JLabel ProvinceLabel;
@@ -215,7 +214,7 @@ public class SearchOrgView extends JFrame implements ActionListener
         OrgName.setHorizontalAlignment(JLabel.LEFT);
         //OrgName.setBorder(dv.border());
 
-        JLabel OrgProvince = new JLabel("Tỉnh/TP: " + province.getProvinceName(org[i].getProvince()));
+        JLabel OrgProvince = new JLabel("Tỉnh/TP: " + dv.getProvinceName(org[i].getProvince()));
         OrgProvince.setFont(new Font("SVN-Arial", 0, 16));
         OrgProvince.setForeground(new Color(dv.BlackTextColor()));
         OrgProvince.setBounds(30,32,250,25);
@@ -511,27 +510,28 @@ public class SearchOrgView extends JFrame implements ActionListener
     private void initFrameComponent()
     {
         //set Frame icon
-        this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
+        //this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
 
         //set frame title
-        this.setTitle("Tìm kiếm đơn vị tiêm chủng");
+        //this.setTitle("Tìm kiếm đơn vị tiêm chủng");
         
         //set frame size
         this.setSize(dv.FrameWidth(), dv.FrameHeight());
         //this.setSize(1080, 720); --Main View
         
         //set do not allow frame resizing
-        this.setResizable(false);
+        //this.setResizable(false);
         
         //set frame visible on screen
         this.setVisible(true);
         
         //set frame close on X button
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         //set frame background color
-        this.getContentPane().setBackground(new Color(dv.ViewBackgroundColor()));
-      
+        //this.getContentPane().setBackground(new Color(dv.ViewBackgroundColor()));
+        this.setBackground(new Color(dv.ViewBackgroundColor()));
+
         this.setLayout(null);
         
         //init ProvinceLabel
@@ -571,7 +571,6 @@ public class SearchOrgView extends JFrame implements ActionListener
 
     public SearchOrgView()
     {
-        province = new ProvinceList();
         initFrameComponent();
         this.validate();
     }
@@ -589,7 +588,7 @@ public class SearchOrgView extends JFrame implements ActionListener
             //Select out the code of chosen province
             String ProvinceCode = "";
 
-            ProvinceCode = province.getProvinceCode(ProvinceChoice.getSelectedItem());
+            ProvinceCode = dv.getProvinceCode(ProvinceChoice.getSelectedItem());
 
             //Select out the specified ORGs
             query = "select ORG.ID, Name, Province, District, Town, Street, COUNT(SCHED.ID)"

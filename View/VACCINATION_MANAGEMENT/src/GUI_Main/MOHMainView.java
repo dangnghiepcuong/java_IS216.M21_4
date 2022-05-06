@@ -1,3 +1,8 @@
+package GUI_Main;
+
+import Data_Processor.*;
+import GUI_SearchOrg.SearchOrgView;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -24,6 +29,8 @@ public class MOHMainView extends JFrame implements ActionListener
     private Account userAccount = new Account();
     private Organization orgUser = new Organization();
 
+    private SearchOrgView searchOrgView = new SearchOrgView();
+
     private void initInfoLayeredPane()
     {
         InfoLayeredPane = new JLayeredPane();
@@ -42,7 +49,7 @@ public class MOHMainView extends JFrame implements ActionListener
         InfoLabel.setFont(new Font("SVN-Arial",Font.BOLD, 24));
         InfoLabel.setHorizontalAlignment(JLabel.CENTER);
 
-        ImageIcon AvatarImage = new ImageIcon(getClass().getResource("/icon/Avatar.png"));
+        ImageIcon AvatarImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/Avatar.png"));
         JLabel Avatar = new JLabel(AvatarImage);
         Avatar.setBounds(90,100,190,190);
         Avatar.setHorizontalAlignment(JLabel.CENTER);
@@ -52,7 +59,7 @@ public class MOHMainView extends JFrame implements ActionListener
         Name.setFont(new Font("SVN-Arial",Font.BOLD, 24));
         Name.setHorizontalAlignment(JLabel.CENTER);
 
-        ImageIcon LocationImage = new ImageIcon(getClass().getResource("/icon/Location.png"));
+        ImageIcon LocationImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/Location.png"));
         JLabel Location = new JLabel(dv.getProvinceName(orgUser.getProvince()));
         Location.setFont(new Font("SVN-Arial",Font.BOLD, 20));
         Location.setIcon(LocationImage);
@@ -96,7 +103,7 @@ public class MOHMainView extends JFrame implements ActionListener
 
     private void initInfoBackground()
     {
-        ImageIcon InfoLayeredPaneBackground = new ImageIcon(getClass().getResource("/icon/Org Info Panel.png"));
+        ImageIcon InfoLayeredPaneBackground = new ImageIcon(getClass().getResource("/Data_Processor/icon/Org Info Panel.png"));
 
         InfoBackground = new JLabel(InfoLayeredPaneBackground);
 
@@ -111,7 +118,7 @@ public class MOHMainView extends JFrame implements ActionListener
         InfoSettingButton.setBounds(120 +60, 30, 133, 133);
         InfoSettingButton.setBorder(null);
         InfoSettingButton.setContentAreaFilled(false);
-        InfoSettingButton.setIcon(new ImageIcon(getClass().getResource("/icon/Org Info Feature Button.png")));
+        InfoSettingButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Org Info Feature Button.png")));
     }
 
     private void initCreateOrgAccButton()
@@ -120,7 +127,7 @@ public class MOHMainView extends JFrame implements ActionListener
         CreateOrgAccButton.setBounds(360+120 -60, 30, 133, 133);
         CreateOrgAccButton.setBorder(null);
         CreateOrgAccButton.setContentAreaFilled(false);
-        CreateOrgAccButton.setIcon(new ImageIcon(getClass().getResource("/icon/Create Org Acc Feature Button.png")));
+        CreateOrgAccButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Create Org Acc Feature Button.png")));
     }
 
     private void initPublishPostButton()
@@ -129,7 +136,7 @@ public class MOHMainView extends JFrame implements ActionListener
         PublishPostButton.setBounds(120 +60, 30+240, 133, 133);
         PublishPostButton.setBorder(null);
         PublishPostButton.setContentAreaFilled(false);
-        PublishPostButton.setIcon(new ImageIcon(getClass().getResource("/icon/Send Notification Feature Button.png")));
+        PublishPostButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Send Notification Feature Button.png")));
 
     }
 
@@ -139,7 +146,7 @@ public class MOHMainView extends JFrame implements ActionListener
         SearchButton.setBounds(360+120 -60, 30+240, 133, 133);
         SearchButton.setBorder(null);
         SearchButton.setContentAreaFilled(false);
-        SearchButton.setIcon(new ImageIcon(getClass().getResource("/icon/Search Feature Button.png")));
+        SearchButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Search Feature Button.png")));
         SearchButton.addActionListener(this);
     }
 
@@ -149,7 +156,7 @@ public class MOHMainView extends JFrame implements ActionListener
         StatisticButton.setBounds(120 +60, 30+240+240, 133, 133);
         StatisticButton.setBorder(null);
         StatisticButton.setContentAreaFilled(false);
-        StatisticButton.setIcon(new ImageIcon(getClass().getResource("/icon/Statistic Feature Button.png")));
+        StatisticButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Statistic Feature Button.png")));
     }
 
     private void initLogoutButton()
@@ -158,7 +165,7 @@ public class MOHMainView extends JFrame implements ActionListener
         LogoutButton.setBounds(105, 580, 160, 56);
         LogoutButton.setBorder(null);
         LogoutButton.setContentAreaFilled(false);
-        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("/icon/Logout Button.png"));
+        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Logout Button.png"));
         LogoutButton.setIcon(LoginIcon);
         LogoutButton.addActionListener(this);
     }
@@ -186,7 +193,7 @@ public class MOHMainView extends JFrame implements ActionListener
         this.setBackground(new Color(dv.ViewBackgroundColor()));
 
         //set Frame icon
-        this.setIconImage(new ImageIcon(getClass().getResource("/icon/Virus.png")).getImage());
+        this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
 
         //set layout
         this.setLayout(null);
@@ -232,7 +239,9 @@ public class MOHMainView extends JFrame implements ActionListener
     {
         if (e.getSource() == SearchButton)
         {
-
+            this.getContentPane().removeAll();
+            this.add(searchOrgView);
+            this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
     }
 
