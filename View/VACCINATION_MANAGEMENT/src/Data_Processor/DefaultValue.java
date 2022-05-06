@@ -10,6 +10,10 @@ public class DefaultValue
     private String username = "test_project";
     private String password = "test_project";
 
+    private String DB_URL1 = "jdbc:oracle:thin:@localhost:1521:orcl";
+    private String username1 = "vaccination";
+    private String password1 = "vaccination";
+
     public String getDB_URL() {
         return DB_URL;
     }
@@ -34,6 +38,30 @@ public class DefaultValue
         this.password = password;
     }
 
+    public String getDB_URL1() {
+        return DB_URL1;
+    }
+
+    public void setDB_URL1(String DB_URL1) {
+        this.DB_URL1 = DB_URL1;
+    }
+
+    public String getUsername1() {
+        return username1;
+    }
+
+    public void setUsername1(String username1) {
+        this.username1 = username1;
+    }
+
+    public String getPassword1() {
+        return password1;
+    }
+
+    public void setPassword1(String password1) {
+        this.password1 = password1;
+    }
+
     public int LabelFontSize()
     {
         return 20;
@@ -44,7 +72,7 @@ public class DefaultValue
         return 200;
     }
 
-    public int LabelHeigth()
+    public int LabelHeight()
     {
         return 30;
     }
@@ -54,7 +82,7 @@ public class DefaultValue
         return 200;
     }
 
-    public int FieldHeigth()
+    public int FieldHeight()
     {
         return 30;
     }
@@ -64,7 +92,7 @@ public class DefaultValue
         return 1080;
     }
 
-    public int FrameHeigth()
+    public int FrameHeight()
     {
         return 720;
     }
@@ -192,5 +220,59 @@ public class DefaultValue
     public String sysdate()
     {
         return toOracleDateFormat(java.time.LocalDateTime.now().toString().substring(0, 10));
+    }
+
+    public String getDoseTypeName(String DoseType)
+    {
+        if (DoseType == "basic")
+            return "Cơ bản";
+
+        if (DoseType == "booster")
+            return "Tăng cường";
+
+        if (DoseType == "repeat")
+            return "Nhắc lại";
+
+        return "";
+    }
+
+    public String getTimeName(int Time)
+    {
+        if (Time == 0)
+            return "Sáng";
+
+        if (Time == 1)
+            return "Trưa";
+
+        if (Time == 2)
+            return "Tối";
+
+        return "";
+    }
+
+    public String getStatusName(int Status)
+    {
+        if (Status == 0)
+            return "Đã đăng ký";
+        if (Status == 1)
+            return "Đã điểm danh";
+        if (Status == 2)
+            return "Đã tiêm";
+        if (Status == 3)
+            return "Đã hủy";
+
+        return "";
+    }
+
+    public String getGenderName(int Gender)
+    {
+        if (Gender == 0)
+            return "Nữ";
+        if (Gender == 1)
+            return "Nam";
+        if (Gender == 2)
+            return "Khác";
+
+        return "";
     }
 }
