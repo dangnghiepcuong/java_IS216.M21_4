@@ -14,9 +14,11 @@ import org.jdatepicker.util.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.event.AncestorEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -36,50 +38,31 @@ public class RegisterAccView extends JFrame implements ActionListener
     private JLabel FirstNameLabel;
     private JLabel IDLabel;
     private JLabel BirthdayLabel;
-
     private JLabel GenderLabel;
-
     private JLabel HomeTownLabel;
-
     private JLabel ProvinceLabel;
-
     private JLabel DistrictLabel;
-
     private JLabel TownLabel;
-
     private JLabel StreetLabel;
-
     private JLabel EmailLabel;
     private JTextField UsernameTextField;
     private JPasswordField PasswordField;
     private JPasswordField RepeatPasswordField;
-
     private JTextField LastNameTextField;
-
     private JTextField FirstNameTextField;
-
     private JTextField IDTextField;
-
     private JTextField StreetTextField;
-
     private JTextField EmailTextField;
-
     private JButton RegisterAccButton;
-
     private Choice GenderChoice;
-
     private Choice HomeTownChoice;
-
     private Choice ProvinceChoice;
-
     private Choice DistrictChoice;
-
     private Choice TownChoice;
     private JDatePickerImpl BirthdayField;
-
     private JPanel AccInfoPanel;
-
     private JPanel PersonalInfoPanel;
+    private Person personalUser;
 
     private void initAccInfoPanel()
     {
@@ -90,10 +73,10 @@ public class RegisterAccView extends JFrame implements ActionListener
         AccInfoPanel.setLayout(null);
 
         //set position and area
-        AccInfoPanel.setBounds(0, 0,DefaultFrameWidth()-DefaultFrameHeigth(),DefaultFrameHeigth() );
-        AccInfoPanel.setPreferredSize(new Dimension(DefaultFrameWidth()-DefaultFrameHeigth(),DefaultFrameHeigth()));
-
-        AccInfoPanel.setBorder(border());
+        AccInfoPanel.setBounds(0, 0,dv.FrameWidth()-dv.FrameHeight(),dv.FrameHeight() );
+        AccInfoPanel.setPreferredSize(new Dimension(dv.FrameWidth()-dv.FrameHeight(),dv.FrameHeight()));
+        AccInfoPanel.setBackground(new Color(dv.ViewBackgroundColor()));
+        AccInfoPanel.setBorder(dv.border());
 
         //init UsernameLabel
         initUsernameLabel();
@@ -133,12 +116,12 @@ public class RegisterAccView extends JFrame implements ActionListener
 
         //set layout
         PersonalInfoPanel.setLayout(null);
-        PersonalInfoPanel.setPreferredSize(new Dimension(DefaultFrameHeigth(),DefaultFrameHeigth()));
+        PersonalInfoPanel.setPreferredSize(new Dimension(dv.FrameHeight(),dv.FrameHeight()));
 
         //set position and area
-        PersonalInfoPanel.setBounds(DefaultFrameWidth()-DefaultFrameHeigth(),0,DefaultFrameHeigth(),DefaultFrameHeigth());
-
-        PersonalInfoPanel.setBorder(border());
+        PersonalInfoPanel.setBounds(dv.FrameWidth()-dv.FrameHeight(),0,dv.FrameHeight(),dv.FrameHeight());
+        PersonalInfoPanel.setBackground(new Color(dv.ViewBackgroundColor()));
+        PersonalInfoPanel.setBorder(dv.border());
 
         initLastNameLabel();
         PersonalInfoPanel.add(LastNameLabel);
@@ -224,7 +207,7 @@ public class RegisterAccView extends JFrame implements ActionListener
         UsernameLabel.setText("Số điện thoại");
 
         //set label text style
-        UsernameLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        UsernameLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         //set label text color
         UsernameLabel.setForeground(new Color(0x666666));
@@ -239,13 +222,13 @@ public class RegisterAccView extends JFrame implements ActionListener
         UsernameTextField = new JTextField();
 
         //set position
-        UsernameTextField.setBounds(70, 80+DefaultLabelHeigth(), 220, 30);
+        UsernameTextField.setBounds(70, 80+dv.LabelHeight(), 220, 30);
 
         //set cursor
         UsernameTextField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
 
         //set field font
-        UsernameTextField.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
+        UsernameTextField.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
 
         //set text field color
         UsernameTextField.setForeground(new Color(0x333333));
@@ -262,13 +245,13 @@ public class RegisterAccView extends JFrame implements ActionListener
         PasswordLabel = new JLabel();
 
         //set position and area
-        PasswordLabel.setBounds(70, 90 + DefaultFieldHeigth() + DefaultLabelHeigth(), 270, 30);
+        PasswordLabel.setBounds(70, 90 + dv.FieldHeight() + dv.LabelHeight(), 270, 30);
 
         //set label text
         PasswordLabel.setText("Mật khẩu");
 
         //set label text style
-        PasswordLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        PasswordLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         //set label text color
         PasswordLabel.setForeground(new Color(0x666666));
@@ -285,13 +268,13 @@ public class RegisterAccView extends JFrame implements ActionListener
         PasswordField = new JPasswordField();
 
         //set position and area
-        PasswordField.setBounds(70, 90 + DefaultFieldHeigth() + 2 * DefaultLabelHeigth(), 220, 30);
+        PasswordField.setBounds(70, 90 + dv.FieldHeight() + 2 * dv.LabelHeight(), 220, 30);
 
         //set cursor
         PasswordField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
 
         //set field font
-        PasswordField.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
+        PasswordField.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
 
         //set text field color
         PasswordField.setForeground(new Color(0x333333));
@@ -308,13 +291,13 @@ public class RegisterAccView extends JFrame implements ActionListener
         RepeatPasswordLabel = new JLabel();
 
         //set position and area
-        RepeatPasswordLabel.setBounds(70, 100 + 3*DefaultFieldHeigth() + DefaultLabelHeigth(), 240, 30);
+        RepeatPasswordLabel.setBounds(70, 100 + 3*dv.FieldHeight() + dv.LabelHeight(), 240, 30);
 
         //set label text
         RepeatPasswordLabel.setText("Nhập lại mật khẩu");
 
         //set label text style
-        RepeatPasswordLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        RepeatPasswordLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         //set label text color
         RepeatPasswordLabel.setForeground(new Color(0x666666));
@@ -330,13 +313,13 @@ public class RegisterAccView extends JFrame implements ActionListener
         RepeatPasswordField = new JPasswordField();
 
         //set position and area
-        RepeatPasswordField.setBounds(70, 100 + 3*DefaultFieldHeigth() + 2 * DefaultLabelHeigth(), 220, 30);
+        RepeatPasswordField.setBounds(70, 100 + 3*dv.FieldHeight() + 2 * dv.LabelHeight(), 220, 30);
 
         //set cursor
         RepeatPasswordField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
 
         //set field font
-        RepeatPasswordField.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
+        RepeatPasswordField.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
 
         //set text field color
         RepeatPasswordField.setForeground(new Color(0x333333));
@@ -362,10 +345,12 @@ public class RegisterAccView extends JFrame implements ActionListener
 
 
         //create an icon
-        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("/icon/RegisterAcc.png"));
+        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/RegisterAcc.png"));
 
         //set label icon
         RegisterAccButton.setIcon(LoginIcon);
+
+        RegisterAccButton.addActionListener(this);
     }
 
     private void initLastNameLabel()
@@ -380,7 +365,7 @@ public class RegisterAccView extends JFrame implements ActionListener
         LastNameLabel.setText("Họ và tên đệm");
 
         //set label text style
-        LastNameLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        LastNameLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         //set label text color
         LastNameLabel.setForeground(new Color(0x666666));
@@ -395,13 +380,13 @@ public class RegisterAccView extends JFrame implements ActionListener
         LastNameTextField = new JTextField();
 
         //set position and area
-        LastNameTextField.setBounds(70, 80 + DefaultLabelHeigth(), 220, 30);
+        LastNameTextField.setBounds(70, 80 + dv.LabelHeight(), 220, 30);
 
         //set cursor
         LastNameTextField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
 
         //set field font
-        LastNameTextField.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
+        LastNameTextField.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
 
         //set text field color
         LastNameTextField.setForeground(new Color(0x333333));
@@ -424,7 +409,7 @@ public class RegisterAccView extends JFrame implements ActionListener
         FirstNameLabel.setText("Tên");
 
         //set label text style
-        FirstNameLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        FirstNameLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         //set label text color
         FirstNameLabel.setForeground(new Color(0x666666));
@@ -439,13 +424,13 @@ public class RegisterAccView extends JFrame implements ActionListener
         FirstNameTextField = new JTextField();
 
         //set position and area
-        FirstNameTextField.setBounds(70+220+25, 80 + DefaultLabelHeigth(), 150, 30);
+        FirstNameTextField.setBounds(70+220+25, 80 + dv.LabelHeight(), 150, 30);
 
         //set cursor
         FirstNameTextField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
 
         //set field font
-        FirstNameTextField.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
+        FirstNameTextField.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
 
         //set text field color
         FirstNameTextField.setForeground(new Color(0x333333));
@@ -462,13 +447,13 @@ public class RegisterAccView extends JFrame implements ActionListener
         IDLabel = new JLabel();
 
         //set position and area
-        IDLabel.setBounds(70, 90 + DefaultLabelHeigth()+DefaultFieldHeigth(), 240, 30);
+        IDLabel.setBounds(70, 90 + dv.LabelHeight()+dv.FieldHeight(), 240, 30);
 
         //set label text
         IDLabel.setText("Mã định danh");
 
         //set label text style
-        IDLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        IDLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         //set label text color
         IDLabel.setForeground(new Color(0x666666));
@@ -484,13 +469,13 @@ public class RegisterAccView extends JFrame implements ActionListener
         IDTextField = new JTextField();
 
         //set position and area
-        IDTextField.setBounds(70, 90 + 2*DefaultLabelHeigth()+DefaultFieldHeigth(), 220, 30);
+        IDTextField.setBounds(70, 90 + 2*dv.LabelHeight()+dv.FieldHeight(), 220, 30);
 
         //set cursor
         IDTextField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
 
         //set field font
-        IDTextField.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
+        IDTextField.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
 
         //set text field color
         IDTextField.setForeground(new Color(0x333333));
@@ -506,13 +491,13 @@ public class RegisterAccView extends JFrame implements ActionListener
         //create
         BirthdayLabel = new JLabel();
 
-        BirthdayLabel.setBounds(70, 100 + 2*DefaultLabelHeigth()+2*DefaultFieldHeigth(),220,30);
+        BirthdayLabel.setBounds(70, 100 + 2*dv.LabelHeight()+2*dv.FieldHeight(),220,30);
 
         //set label text
         BirthdayLabel.setText("Ngày tháng năm sinh");
 
         //set label text style
-        BirthdayLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        BirthdayLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         //set label text color
         BirthdayLabel.setForeground(new Color(0x666666));
@@ -550,14 +535,16 @@ public class RegisterAccView extends JFrame implements ActionListener
         JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
         BirthdayField = new JDatePickerImpl(datePanel, new DateLabelFormatter());
 
-        BirthdayField.setBounds(70, 100 + 3*DefaultLabelHeigth()+2*DefaultFieldHeigth(),170,30);
+        BirthdayField.setBounds(70, 100 + 3*dv.LabelHeight()+2*dv.FieldHeight(),170,30);
 
         JFormattedTextField textField = BirthdayField.getJFormattedTextField();
-        textField.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
-        textField.setBounds(70, 100 + 3*DefaultLabelHeigth()+2*DefaultFieldHeigth(),170,30);
+        textField.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
+        textField.setBounds(70, 100 + 3*dv.LabelHeight()+2*dv.FieldHeight(),170,30);
         textField.setBackground(Color.WHITE);
 
         BirthdayField.setForeground(new Color(dv.BlackTextColor()));
+        BirthdayField.setVisible(true);
+        BirthdayField.setEnabled(true);
     }
     private void initGenderLabel()
     {
@@ -567,14 +554,14 @@ public class RegisterAccView extends JFrame implements ActionListener
         GenderLabel = new JLabel();
 
         //set label position and frame area
-        GenderLabel.setBounds(70 + 25 + 220, 100 + 2*DefaultLabelHeigth()+2*DefaultFieldHeigth(), 240, 30);
+        GenderLabel.setBounds(70 + 25 + 220, 100 + 2*dv.LabelHeight()+2*dv.FieldHeight(), 240, 30);
         GenderLabel.setPreferredSize(new Dimension(240,30));
 
         //set label text
         GenderLabel.setText("Giới tính");
 
         //set label text style
-        GenderLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        GenderLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         //set label text color
         GenderLabel.setForeground(new Color(0x666666));
@@ -586,9 +573,9 @@ public class RegisterAccView extends JFrame implements ActionListener
     {
         GenderChoice = new Choice();
 
-        GenderChoice.setBounds(70 + 25 + 220, 100 + 3*DefaultLabelHeigth()+2*DefaultFieldHeigth(), 80, 30);
+        GenderChoice.setBounds(70 + 25 + 220, 100 + 3*dv.LabelHeight()+2*dv.FieldHeight(), 80, 30);
 
-        GenderChoice.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        GenderChoice.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         GenderChoice.setForeground(new Color(0x666666));
 
@@ -607,14 +594,14 @@ public class RegisterAccView extends JFrame implements ActionListener
         HomeTownLabel = new JLabel();
 
         //set label position and frame area
-        HomeTownLabel.setBounds(70, 110 + 3*DefaultLabelHeigth()+3*DefaultFieldHeigth(), 240, 30);
+        HomeTownLabel.setBounds(70, 110 + 3*dv.LabelHeight()+3*dv.FieldHeight(), 240, 30);
         HomeTownLabel.setPreferredSize(new Dimension(240,30));
 
         //set label text
         HomeTownLabel.setText("Quê quán");
 
         //set label text style
-        HomeTownLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        HomeTownLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         //set label text color
         HomeTownLabel.setForeground(new Color(0x666666));
@@ -627,9 +614,9 @@ public class RegisterAccView extends JFrame implements ActionListener
     {
         HomeTownChoice = new Choice();
 
-        HomeTownChoice.setBounds(70, 110 + 4*DefaultLabelHeigth()+3*DefaultFieldHeigth(), 170, 30);
+        HomeTownChoice.setBounds(70, 110 + 4*dv.LabelHeight()+3*dv.FieldHeight(), 170, 30);
 
-        HomeTownChoice.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        HomeTownChoice.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         HomeTownChoice.setForeground(new Color(0x666666));
 
@@ -648,14 +635,14 @@ public class RegisterAccView extends JFrame implements ActionListener
         ProvinceLabel = new JLabel();
 
         //set label position and frame area
-        ProvinceLabel.setBounds(70, 120 + 4*DefaultLabelHeigth()+4*DefaultFieldHeigth(), 240, 30);
+        ProvinceLabel.setBounds(70, 120 + 4*dv.LabelHeight()+4*dv.FieldHeight(), 240, 30);
         ProvinceLabel.setPreferredSize(new Dimension(240,30));
 
         //set label text
         ProvinceLabel.setText("Tỉnh/thành phố cư trú");
 
         //set label text style
-        ProvinceLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        ProvinceLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         //set label text color
         ProvinceLabel.setForeground(new Color(0x666666));
@@ -668,9 +655,9 @@ public class RegisterAccView extends JFrame implements ActionListener
     {
         ProvinceChoice = new Choice();
 
-        ProvinceChoice.setBounds(70, 120 + 5*DefaultLabelHeigth()+4*DefaultFieldHeigth(), 170, 30);
+        ProvinceChoice.setBounds(70, 120 + 5*dv.LabelHeight()+4*dv.FieldHeight(), 170, 30);
 
-        ProvinceChoice.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        ProvinceChoice.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         ProvinceChoice.setForeground(new Color(0x666666));
 
@@ -690,14 +677,14 @@ public class RegisterAccView extends JFrame implements ActionListener
         DistrictLabel = new JLabel();
 
         //set label position and frame area
-        DistrictLabel.setBounds(70 + 25 +170, 120 + 4*DefaultLabelHeigth()+4*DefaultFieldHeigth(), 240, 30);
+        DistrictLabel.setBounds(70 + 25 +170, 120 + 4*dv.LabelHeight()+4*dv.FieldHeight(), 240, 30);
         DistrictLabel.setPreferredSize(new Dimension(240,30));
 
         //set label text
         DistrictLabel.setText("Quận/huyện cư trú");
 
         //set label text style
-        DistrictLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        DistrictLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         //set label text color
         DistrictLabel.setForeground(new Color(0x666666));
@@ -710,9 +697,9 @@ public class RegisterAccView extends JFrame implements ActionListener
     {
         DistrictChoice = new Choice();
 
-        DistrictChoice.setBounds(70+25+170, 120 + 5*DefaultLabelHeigth()+4*DefaultFieldHeigth(), 170, 30);
+        DistrictChoice.setBounds(70+25+170, 120 + 5*dv.LabelHeight()+4*dv.FieldHeight(), 170, 30);
 
-        DistrictChoice.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        DistrictChoice.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         DistrictChoice.setForeground(new Color(0x666666));
 
@@ -732,14 +719,14 @@ public class RegisterAccView extends JFrame implements ActionListener
         TownLabel = new JLabel();
 
         //set label position and frame area
-        TownLabel.setBounds(70 + 50 +2*170, 120 + 4*DefaultLabelHeigth()+4*DefaultFieldHeigth(), 240, 30);
+        TownLabel.setBounds(70 + 50 +2*170, 120 + 4*dv.LabelHeight()+4*dv.FieldHeight(), 240, 30);
         TownLabel.setPreferredSize(new Dimension(240,30));
 
         //set label text
         TownLabel.setText("Phường/xã cư trú");
 
         //set label text style
-        TownLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        TownLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         //set label text color
         TownLabel.setForeground(new Color(0x666666));
@@ -752,9 +739,9 @@ public class RegisterAccView extends JFrame implements ActionListener
     {
         TownChoice = new Choice();
 
-        TownChoice.setBounds(70+50+2*170, 120 + 5*DefaultLabelHeigth()+4*DefaultFieldHeigth(), 170, 30);
+        TownChoice.setBounds(70+50+2*170, 120 + 5*dv.LabelHeight()+4*dv.FieldHeight(), 170, 30);
 
-        TownChoice.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        TownChoice.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         TownChoice.setForeground(new Color(0x666666));
 
@@ -775,14 +762,14 @@ public class RegisterAccView extends JFrame implements ActionListener
         StreetLabel = new JLabel();
 
         //set label position and frame area
-        StreetLabel.setBounds(70, 130 + 5*DefaultLabelHeigth()+5*DefaultFieldHeigth(), 240, 30);
+        StreetLabel.setBounds(70, 130 + 5*dv.LabelHeight()+5*dv.FieldHeight(), 240, 30);
         StreetLabel.setPreferredSize(new Dimension(240,30));
 
         //set label text
         StreetLabel.setText("Số nhà, tên đường, khu phố/ấp");
 
         //set label text style
-        StreetLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        StreetLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         //set label text color
         StreetLabel.setForeground(new Color(0x666666));
@@ -797,13 +784,13 @@ public class RegisterAccView extends JFrame implements ActionListener
         StreetTextField = new JTextField();
 
         //set position and area
-        StreetTextField.setBounds(70, 130 + 6*DefaultLabelHeigth()+5*DefaultFieldHeigth(), 300, 30);
+        StreetTextField.setBounds(70, 130 + 6*dv.LabelHeight()+5*dv.FieldHeight(), 300, 30);
 
         //set cursor
         StreetTextField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
 
         //set field font
-        StreetTextField.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
+        StreetTextField.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
 
         //set text field color
         StreetTextField.setForeground(new Color(0x333333));
@@ -822,14 +809,14 @@ public class RegisterAccView extends JFrame implements ActionListener
         EmailLabel = new JLabel();
 
         //set label position and frame area
-        EmailLabel.setBounds(70, 140 + 6*DefaultLabelHeigth()+6*DefaultFieldHeigth(), 240, 30);
+        EmailLabel.setBounds(70, 140 + 6*dv.LabelHeight()+6*dv.FieldHeight(), 240, 30);
         EmailLabel.setPreferredSize(new Dimension(240,30));
 
         //set label text
         EmailLabel.setText("Email");
 
         //set label text style
-        EmailLabel.setFont(new Font("SVN-Arial", 0, DefaultLabelFontSize()));
+        EmailLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
 
         //set label text color
         EmailLabel.setForeground(new Color(0x666666));
@@ -844,13 +831,13 @@ public class RegisterAccView extends JFrame implements ActionListener
         EmailTextField = new JTextField();
 
         //set position and area
-        EmailTextField.setBounds(70, 140 + 7*DefaultLabelHeigth()+6*DefaultFieldHeigth(), 220, 30);
+        EmailTextField.setBounds(70, 140 + 7*dv.LabelHeight()+6*dv.FieldHeight(), 220, 30);
 
         //set cursor
         EmailTextField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
 
         //set field font
-        EmailTextField.setFont(new Font("SVN-Arial", Font.PLAIN, DefaultLabelFontSize()));
+        EmailTextField.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
 
         //set text field color
         EmailTextField.setForeground(new Color(0x333333));
@@ -867,7 +854,7 @@ public class RegisterAccView extends JFrame implements ActionListener
         this.setTitle("Đăng ký");
 
         //set frame size
-        this.setSize(DefaultFrameWidth(), DefaultFrameHeigth());
+        this.setSize(dv.FrameWidth(), dv.FrameHeight());
         //this.setSize(1080, 720); --Main View
 
         //set do not allow frame resizing
@@ -880,10 +867,10 @@ public class RegisterAccView extends JFrame implements ActionListener
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //set frame background color
-        this.getContentPane().setBackground(new Color(0xFCFCFC));
+        this.setBackground(new Color(dv.ViewBackgroundColor()));
 
         //set Frame icon
-        this.setIconImage(new ImageIcon(getClass().getResource("/icon/Virus.png")).getImage());
+        this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
 
         //set layout
         this.setLayout(null);
@@ -892,58 +879,70 @@ public class RegisterAccView extends JFrame implements ActionListener
         initAccInfoPanel();
         this.add(AccInfoPanel);
 
+        this.repaint(0,0, dv.FrameWidth(), dv.FrameHeight());
+
         //set personal information Panel
         initPersonalInfoPanel();
         this.add(PersonalInfoPanel);
     }
+
+
     public RegisterAccView()
     {
         initFrameComponent();
-        this.validate();
+
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        if (e.getSource() == RegisterAccButton) {
+
+            JFormattedTextField textField = BirthdayField.getJFormattedTextField();
+
+            String InputID = IDTextField.getText();
+            String InputUsername = UsernameTextField.getText();
+            String InputPassword = String.valueOf(PasswordField.getPassword());
+            String InputRepeatPassword = String.valueOf(RepeatPasswordField.getPassword());
+            String InputLastName = LastNameTextField.getText();
+            String InputFirstName = FirstNameTextField.getText();
+            String InputBirthday = dv.toOracleDateFormat(textField.getText());
+            int InputGender = GenderChoice.getSelectedIndex();
+            String InputHomeTown = HomeTownChoice.getSelectedItem();
+            String InputProvince = ProvinceChoice.getSelectedItem();
+            String InputDistrict = DistrictChoice.getSelectedItem();
+            String InputTown = TownChoice.getSelectedItem();
+            String InputStreet = StreetTextField.getText();
+            String InputEmail = EmailTextField.getText();
+
+            if (InputPassword.equals(InputRepeatPassword) == false) {
+                System.out.println("Mật khẩu không trùng khớp!");
+                return;
+            }
+            String query = "exec PERSON_INSERT_RECORD('" + InputID + "', '" + InputLastName + "', '" +InputFirstName
+                    + "', '" + InputBirthday + "', '" + InputGender + "', '" + InputHomeTown + "', '" + InputProvince
+                    + "', '" + InputDistrict + "', '" + InputTown + "', '" + InputStreet + "', '" + InputUsername
+                    + "', '"  +InputEmail +  "', null);";
+
+            try {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL1(), dv.getUsername1(), dv.getPassword1());
+
+                PreparedStatement st = connection.prepareStatement(query);
+
+                ResultSet rs = st.executeQuery(query);
+
+                rs.next();
+
+            } catch (SQLException ex) {
+                System.out.println("Không thành công!");
+                throw new RuntimeException(ex);
+
+            }
+
+
+        }
     }
 
-    private int DefaultLabelFontSize()
-    {
-        return 18;
-    }
 
-    private int DefaultLabelWidth()
-    {
-        return 200;
-    }
 
-    private int DefaultLabelHeigth()
-    {
-        return 30;
-    }
-
-    private int DefaultFieldWidth()
-    {
-        return 200;
-    }
-
-    private int DefaultFieldHeigth()
-    {
-        return 30;
-    }
-
-    private int DefaultFrameWidth()
-    {
-        return 1080;
-    }
-
-    private int DefaultFrameHeigth()
-    {
-        return 720;
-    }
-
-    private Border border()
-    {
-        return BorderFactory.createLineBorder(Color.BLACK);
-    }
 }

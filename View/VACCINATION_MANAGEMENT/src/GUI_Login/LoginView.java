@@ -38,7 +38,7 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
         ViewSymbol = new JLabel();
 
         //create an icon
-        ImageIcon Virus = new ImageIcon(getClass().getResource("/icon/Virus.png"));
+        ImageIcon Virus = new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png"));
 
         //set position and area
         ViewSymbol.setBounds(130, 50, 100, 100);
@@ -56,7 +56,7 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
         UsernameLabel = new JLabel();
 
         //set label position and frame area
-        UsernameLabel.setBounds(70, 165, dv.LabelWidth(), dv.LabelHeigth());
+        UsernameLabel.setBounds(70, 165, dv.LabelWidth(), dv.LabelHeight());
 
         //set label text
         UsernameLabel.setText("SĐT/Tên tài khoản");
@@ -79,7 +79,7 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
         UsernameTextField = new JTextField();
 
         //set position and area
-        UsernameTextField.setBounds(70, 195, dv.FieldWidth(), dv.FieldHeigth());
+        UsernameTextField.setBounds(70, 195, dv.FieldWidth(), dv.FieldHeight());
 
         //set cursor
         UsernameTextField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
@@ -120,7 +120,7 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
         PasswordLabel.setVerticalTextPosition(JLabel.CENTER);
 
 
-        PasswordLabel.setBounds(70, 235, dv.LabelWidth(), dv.LabelHeigth());
+        PasswordLabel.setBounds(70, 235, dv.LabelWidth(), dv.LabelHeight());
     }
 
     private void initPasswordField()
@@ -144,7 +144,7 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
         PasswordField.setBackground(Color.WHITE);
 
         //set position
-        PasswordField.setBounds(70, 265, dv.FieldWidth(), dv.FieldHeigth());
+        PasswordField.setBounds(70, 265, dv.FieldWidth(), dv.FieldHeight());
 
     }
 
@@ -160,7 +160,7 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
 
         ForgotPasswordLabel.setForeground(new Color(dv.FieldLabelColor()));
 
-        ForgotPasswordLabel.setBounds(70, 270+dv.FieldHeigth(), 100, 25);
+        ForgotPasswordLabel.setBounds(70, 270+dv.FieldHeight(), 100, 25);
 
        //ForgotPasswordLabel.setBorder(dv.border());
 
@@ -181,7 +181,7 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
 
         RegisterAccountLabel.setHorizontalAlignment(JLabel.RIGHT);
 
-        RegisterAccountLabel.setBounds(69+100, 270+dv.FieldHeigth(), 100, 25);
+        RegisterAccountLabel.setBounds(69+100, 270+dv.FieldHeight(), 100, 25);
 
         //RegisterAccountLabel.setBorder(dv.border());
 
@@ -202,7 +202,7 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
         LoginButton.setContentAreaFilled(false);
 
         //create an icon
-        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("/icon/Login Button.png"));
+        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Login Button.png"));
 
         //set label icon
         LoginButton.setIcon(LoginIcon);
@@ -230,10 +230,10 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //set frame background color
-        this.getContentPane().setBackground(new Color(0xFCFCFC));
+        this.getContentPane().setBackground(new Color(dv.ViewBackgroundColor()));
 
         //set Frame icon
-        this.setIconImage(new ImageIcon(getClass().getResource("/icon/Virus.png")).getImage());
+        this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
 
         //set layout
         this.setLayout(null);
