@@ -209,7 +209,7 @@ public class MOHMainView extends JFrame implements ActionListener
     {
         //Frame
         //set frame title
-        this.setTitle("Quản lý tiêm chủng vaccine Covid-19 - Bộ Y tế");
+        this.setTitle("Quản lý tiêm chủng vaccine Covid-19: Đơn vị tiêm chủng");
 
         //set frame size
         this.setSize(dv.FrameWidth(), dv.FrameHeight());

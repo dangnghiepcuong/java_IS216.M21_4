@@ -211,7 +211,7 @@ public class ORGMainView extends JFrame implements ActionListener
     {
         //Frame
         //set frame title
-        this.setTitle("Quản lý tiêm chủng vaccine Covid-19 - Bộ Y tế");
+        this.setTitle("Quản lý tiêm chủng vaccine Covid-19: DDo");
 
         //set frame size
         this.setSize(dv.FrameWidth(), dv.FrameHeight());
