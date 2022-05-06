@@ -119,7 +119,7 @@ public class SearchOrgView extends JPanel implements ActionListener
     private void initSearchOrgButton() 
     {
         SearchOrgButton = new JButton();
-        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search.png"));
+        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Magnifying Glass Button_1.png"));
         SearchOrgButton.setIcon(SearchIcon);
 
         SearchOrgButton.setBounds(dv.AlignLeft(), 290, dv.FieldWidth(), SearchIcon.getIconHeight());

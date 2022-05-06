@@ -48,7 +48,7 @@ public class CitizenMainView extends JFrame implements ActionListener
     private void initBackButton()
     {
         BackButton = new JButton();
-        ImageIcon BackButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Back Button-Pink.png"));
+        ImageIcon BackButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Back Button_2.png"));
         BackButton.setIcon(BackButtonIcon);
 
         BackButton.setBounds(10, 10, BackButtonIcon.getIconWidth(), BackButtonIcon.getIconHeight());
@@ -69,6 +69,17 @@ public class CitizenMainView extends JFrame implements ActionListener
         LogoutButton.addActionListener(this);
     }
 
+    private void initInfoBackground()
+    {
+        ImageIcon InfoLayeredPaneBackground = new ImageIcon(getClass().getResource("/Data_Processor/icon/Personal Info Panel.png"));
+
+        InfoBackground = new JLabel(InfoLayeredPaneBackground);
+
+        InfoBackground.setBounds(0,0, dv.FrameWidth()-dv.FrameHeight() + 8, dv.FrameHeight());
+
+        InfoBackground.setHorizontalAlignment(JLabel.LEFT);
+    }
+
     private void initInfoLayeredPane()
     {
         InfoLayeredPane = new JLayeredPane();
@@ -76,8 +87,6 @@ public class CitizenMainView extends JFrame implements ActionListener
         InfoLayeredPane.setBounds(0,0,dv.FrameWidth()-dv.FrameHeight() + 8, dv.FrameHeight());
 
         InfoLayeredPane.setLayout(null);
-
-        InfoLayeredPane.setOpaque(true);
 
         initInfoBackground();
         InfoLayeredPane.add(InfoBackground, Integer.valueOf(0));
@@ -123,17 +132,6 @@ public class CitizenMainView extends JFrame implements ActionListener
         InfoLayeredPane.repaint(0,0, dv.FrameWidth()-dv.FrameHeight() + 8, dv.FrameHeight());
     }
 
-    private void initInfoBackground()
-    {
-        ImageIcon InfoLayeredPaneBackground = new ImageIcon(getClass().getResource("/Data_Processor/icon/Personal Info Panel.png"));
-
-        InfoBackground = new JLabel(InfoLayeredPaneBackground);
-
-        InfoBackground.setBounds(0,0, dv.FrameWidth()-dv.FrameHeight() + 8, dv.FrameHeight());
-
-        InfoBackground.setHorizontalAlignment(JLabel.LEFT);
-    }
-
     private void initInfoSettingButton()
     {
         InfoSettingButton = new JButton();
@@ -142,6 +140,23 @@ public class CitizenMainView extends JFrame implements ActionListener
         InfoSettingButton.setContentAreaFilled(false);
         InfoSettingButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Personal Info Feature Button.png")));
         InfoSettingButton.addActionListener(this);
+
+        JLabel ButtonLabel = new JLabel();
+        ButtonLabel.setBounds(0, 160, 240, 30);
+        ButtonLabel.setText("Thông tin");
+        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        JLabel ButtonLabel2 = new JLabel();
+        ButtonLabel2.setBounds(0, 160 +25, 240, 30);
+        ButtonLabel2.setText("cá nhân");
+        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        FeatureLayeredPane.add(ButtonLabel);
+        FeatureLayeredPane.add(ButtonLabel2);
     }
 
     private void initSearchButton()
@@ -152,6 +167,22 @@ public class CitizenMainView extends JFrame implements ActionListener
         SearchButton.setContentAreaFilled(false);
         SearchButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Search Feature Button.png")));
         SearchButton.addActionListener(this);
+
+        JLabel ButtonLabel = new JLabel();
+        ButtonLabel.setBounds(240, 160, 240, 30);
+        ButtonLabel.setText("Tìm kiếm đơn vị");
+        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        JLabel ButtonLabel2 = new JLabel();
+        ButtonLabel2.setBounds(240, 160 +25, 240, 30);
+        ButtonLabel2.setText("tiêm chủng");
+        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel2_1.setBorder(dv.border());
+        FeatureLayeredPane.add(ButtonLabel);
+        FeatureLayeredPane.add(ButtonLabel2);
     }
 
     private void initNotificationButton()
@@ -162,46 +193,122 @@ public class CitizenMainView extends JFrame implements ActionListener
         NotificationButton.setContentAreaFilled(false);
         NotificationButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Notification Feature Button.png")));
         NotificationButton.addActionListener(this);
+
+        JLabel ButtonLabel = new JLabel();
+        ButtonLabel.setBounds(240*2 -15, 160, 240-20, 30);
+        ButtonLabel.setText("Thông báo");
+        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        JLabel ButtonLabel2 = new JLabel();
+        ButtonLabel2.setBounds(240*2 -15, 160 +25, 240-20, 30);
+        ButtonLabel2.setText("- tin tức");
+        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        FeatureLayeredPane.add(ButtonLabel);
+        FeatureLayeredPane.add(ButtonLabel2);
     }
 
     private void initFillFormButton()
     {
         FillFormButton = new JButton();
-        FillFormButton.setBounds(60, 240+30, 133, 133);
+        FillFormButton.setBounds(60, 240, 133, 133);
         FillFormButton.setBorder(null);
         FillFormButton.setContentAreaFilled(false);
         FillFormButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Fill Form Feature Button.png")));
         FillFormButton.addActionListener(this);
+
+        JLabel ButtonLabel = new JLabel();
+        ButtonLabel.setBounds(0, 240+130, 240, 30);
+        ButtonLabel.setText("Khai báo y tế");
+        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+        FeatureLayeredPane.add(ButtonLabel);
     }
 
     private void initManageVaccinationButton()
     {
         ManageVaccinationButton = new JButton();
-        ManageVaccinationButton.setBounds(240 + 30+15, 240 + 30, 133, 133);
+        ManageVaccinationButton.setBounds(240 + 30+15, 240 , 133, 133);
         ManageVaccinationButton.setBorder(null);
         ManageVaccinationButton.setContentAreaFilled(false);
         ManageVaccinationButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Manage Vaccination Feature Button.png")));
         ManageVaccinationButton.addActionListener(this);
+
+        JLabel ButtonLabel = new JLabel();
+        ButtonLabel.setBounds(240 -10, 240+130, 240, 30);
+        ButtonLabel.setText("Đăng ký");
+        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        JLabel ButtonLabel2 = new JLabel();
+        ButtonLabel2.setBounds(240 -10, 240+130 +25, 240, 30);
+        ButtonLabel2.setText("tiêm chủng");
+        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        FeatureLayeredPane.add(ButtonLabel);
+        FeatureLayeredPane.add(ButtonLabel2);
     }
 
     private void initUpdateInjectionButton()
     {
         UpdateInjectionButton = new JButton();
-        UpdateInjectionButton.setBounds(240*2+30, 240 + 30, 133, 133);
+        UpdateInjectionButton.setBounds(240*2+30, 240, 133, 133);
         UpdateInjectionButton.setBorder(null);
         UpdateInjectionButton.setContentAreaFilled(false);
         UpdateInjectionButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Update Injection Feature Button.png")));
         UpdateInjectionButton.addActionListener(this);
+
+        JLabel ButtonLabel = new JLabel();
+        ButtonLabel.setBounds(240*2 -15, 240+130, 240 -20, 30);
+        ButtonLabel.setText("Cập nhật");
+        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        JLabel ButtonLabel2 = new JLabel();
+        ButtonLabel2.setBounds(240*2 -15, 240+130 +25, 240 -20, 30);
+        ButtonLabel2.setText("mũi tiêm");
+        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        FeatureLayeredPane.add(ButtonLabel);
+        FeatureLayeredPane.add(ButtonLabel2);
     }
 
     private void initCertificateButton()
     {
         CertificateButton = new JButton();
-        CertificateButton.setBounds(60, 240*2 + 30, 133, 133);
+        CertificateButton.setBounds(60, 240*2-30, 133, 133);
         CertificateButton.setBorder(null);
         CertificateButton.setContentAreaFilled(false);
         CertificateButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Certificate Feature Button.png")));
         CertificateButton.addActionListener(this);
+
+        JLabel ButtonLabel = new JLabel();
+        ButtonLabel.setBounds(10, 240*2-30 +130, 240, 30);
+        ButtonLabel.setText("Chứng nhận");
+        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        JLabel ButtonLabel2 = new JLabel();
+        ButtonLabel2.setBounds(10, 240*2-30 +130 +25, 240, 30);
+        ButtonLabel2.setText("tiêm chủng");
+        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        FeatureLayeredPane.add(ButtonLabel);
+        FeatureLayeredPane.add(ButtonLabel2);
     }
 
     private void initFeatureLayeredPane()
@@ -209,7 +316,6 @@ public class CitizenMainView extends JFrame implements ActionListener
         FeatureLayeredPane = new JLayeredPane();
         FeatureLayeredPane.setBounds(360, 0, dv.FrameWidth() - 360, dv.FrameHeight());
         FeatureLayeredPane.setLayout(null);
-        FeatureLayeredPane.setBackground(new Color(dv.ViewBackgroundColor()));
 
         initInfoSettingButton();
         FeatureLayeredPane.add(InfoSettingButton);
@@ -239,7 +345,6 @@ public class CitizenMainView extends JFrame implements ActionListener
         MainPanel = new JPanel();
         MainPanel.setBounds(0,0,dv.FrameWidth(),dv.FrameHeight());
         MainPanel.setLayout(null);
-        MainPanel.setOpaque(true);
     }
 
     private void initMainLayeredPane()
@@ -247,7 +352,6 @@ public class CitizenMainView extends JFrame implements ActionListener
         MainLayeredPane = new JLayeredPane();
         MainLayeredPane.setBounds(0, 0, dv.FrameWidth(), dv.FrameHeight());
         MainLayeredPane.setLayout(null);
-        MainLayeredPane.setOpaque(true);
     }
 
     public CitizenMainView()
@@ -257,8 +361,7 @@ public class CitizenMainView extends JFrame implements ActionListener
         this.setTitle("Quản lý tiêm chủng vaccine Covid-19: Công dân");
 
         //set frame size
-        this.setSize(dv.FrameWidth(), dv.FrameHeight());
-        //this.setSize(1080, 720); --Main View
+        this.setBounds(260, 90, dv.FrameWidth(), dv.FrameHeight());
 
         //set do not allow frame resizing
         this.setResizable(false);
@@ -270,7 +373,8 @@ public class CitizenMainView extends JFrame implements ActionListener
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //set frame background color
-        this.setBackground(new Color(dv.ViewBackgroundColor()));
+        //this.setBackground(new Color(dv.ViewBackgroundColor()));
+        this.setBackground(Color.WHITE);
 
         //set Frame icon
         this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());

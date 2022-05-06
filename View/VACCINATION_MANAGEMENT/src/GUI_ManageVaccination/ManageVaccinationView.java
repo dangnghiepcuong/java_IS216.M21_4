@@ -73,7 +73,7 @@ public class ManageVaccinationView extends JPanel implements ActionListener
     private void initFilterButton()
     {
         FilterButton = new JButton();
-        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search.png"));
+        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Magnifying Glass Button_1.png"));
         FilterButton.setIcon(SearchIcon);
 
         FilterButton.setBounds(dv.AlignLeft(), 150, dv.FieldWidth(), SearchIcon.getIconHeight());
