@@ -27,6 +27,7 @@ import javax.swing.*;
 
 
 import javax.swing.border.Border;
+import javax.swing.event.AncestorEvent;
 
 /**
  *
@@ -372,6 +373,7 @@ public class RegisterAccView extends JFrame implements ActionListener
 
         //set label icon
         RegisterAccButton.setIcon(LoginIcon);
+
     }
 
     private void initLastNameLabel()
@@ -908,10 +910,6 @@ public class RegisterAccView extends JFrame implements ActionListener
         this.validate();
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 
     private int DefaultLabelFontSize()
     {
