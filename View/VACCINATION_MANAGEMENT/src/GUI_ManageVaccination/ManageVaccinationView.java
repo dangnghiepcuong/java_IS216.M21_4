@@ -1,6 +1,9 @@
-package GUI_SearchOrg;
+package GUI_ManageVaccination;
 
-import Data_Processor.*;
+import Data_Processor.DefaultValue;
+import Data_Processor.RegisteredScheds;
+import Data_Processor.Schedule;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,10 +16,10 @@ import java.sql.*;
  *
  * @author NghiepCuong
  */
-public class SearchOrgView extends JPanel implements ActionListener
+public class ManageVaccinationView extends JPanel implements ActionListener
 {
     private DefaultValue dv = new DefaultValue();
-    private Organization org[] = new Organization[100000];
+    private RegisteredScheds reg_Scheds[] = new RegisteredScheds[100000];
 
     private JLabel ProvinceLabel;
     private JLabel DistrictLabel;
@@ -116,7 +119,7 @@ public class SearchOrgView extends JPanel implements ActionListener
         TownChoice.add("Trúc Bạch");
     }
 
-    private void initSearchOrgButton() 
+    private void initSearchOrgButton()
     {
         SearchOrgButton = new JButton();
         ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search.png"));
@@ -132,53 +135,47 @@ public class SearchOrgView extends JPanel implements ActionListener
     private void initOrgPanel(int i)
     {
         //Org info
-        JLabel OrgName = new JLabel("Tên đơn vị: " + org[i].getName());
+        JLabel OrgName = new JLabel("Người đăng ký: " + reg_Scheds[i].getPersonalID());
         OrgName.setFont(new Font("SVN-Arial", 3, 18));
         OrgName.setForeground(new Color(dv.FeatureButtonColor()));
         OrgName.setBounds(30,1,605,30);
         OrgName.setHorizontalAlignment(JLabel.LEFT);
         //OrgName.setBorder(dv.border());
 
-        JLabel OrgProvince = new JLabel("Tỉnh/TP: " + dv.getProvinceName(org[i].getProvince()));
+        JLabel OrgProvince = new JLabel("Đơn vị tiêm: " + dv.getProvinceName(reg_Scheds[i].getOrg().getName()));
         OrgProvince.setFont(new Font("SVN-Arial", 0, 16));
         OrgProvince.setForeground(new Color(dv.BlackTextColor()));
         OrgProvince.setBounds(30,32,250,25);
         OrgProvince.setHorizontalAlignment(JLabel.LEFT);
         //OrgProvince.setBorder(dv.border());
 
-        JLabel OrgDistrict = new JLabel("Quận/Huyện: " + org[i].getDistrict());
+        JLabel OrgDistrict = new JLabel("Loại mũi tiêm: " + dv.getDoseTypeName(reg_Scheds[i].getDoseType()));
         OrgDistrict.setFont(new Font("SVN-Arial", 0, 16));
         OrgDistrict.setForeground(new Color(dv.BlackTextColor()));
         OrgDistrict.setBounds(30, 32+25+2,350,25);
         OrgDistrict.setHorizontalAlignment(JLabel.LEFT);
         //OrgDistrict.setBorder(dv.border());
 
-        JLabel OrgTown  = new JLabel("Xã/phường/thị trấn: " + org[i].getTown());
+        JLabel OrgTown  = new JLabel("Buổi tiêm: " + dv.getTimeName(reg_Scheds[i].getTime()));
         OrgTown.setFont(new Font("SVN-Arial", 0, 16));
         OrgTown.setForeground(new Color(dv.BlackTextColor()));
         OrgTown.setBounds(30,(32+25+2)+25+2,350,25);
         OrgTown.setHorizontalAlignment(JLabel.LEFT);
         //OrgTown.setBorder(dv.border());
 
-        JLabel OrgStreet  = new JLabel("Đ/c: " + org[i].getStreet());
+        JLabel OrgStreet  = new JLabel("STT: " + reg_Scheds[i].getNO());
         OrgStreet.setFont(new Font("SVN-Arial", 0, 16));
         OrgStreet.setForeground(new Color(dv.BlackTextColor()));
         OrgStreet.setBounds(285,32,350,25);
         OrgStreet.setHorizontalAlignment(JLabel.LEFT);
         //OrgStreet.setBorder(dv.border());
 
-        JLabel OrgAvaiScheds = new JLabel("Số lịch tiêm hiện có: " + org[i].getAvaiScheds());
+        JLabel OrgAvaiScheds = new JLabel("Trạng thái: " + reg_Scheds[i].getStatus());
         OrgAvaiScheds.setFont(new Font("SVN-Arial", 0, 16));
         OrgAvaiScheds.setForeground(new Color(dv.BlackTextColor()));
         OrgAvaiScheds.setBounds(385,(32+25)+2,250,25);
         OrgAvaiScheds.setHorizontalAlignment(JLabel.LEFT);
         //OrgAvaiScheds.setBorder(dv.border());
-
-        /*JLabel OrgTotalScheds = new JLabel("Số lịch tiêm đã tổ chức: ");
-        OrgTotalScheds.setFont(new Font("SVN-Arial", 0, 16));
-        OrgTotalScheds.setBounds(385,((32+25)+2)+25+2,250,25);
-        OrgTotalScheds.setHorizontalAlignment(JLabel.LEFT);
-        OrgTotalScheds.setBorder(dv.border());*/
 
         //create OrgPanel Panel
         OrgPanel[i] = new JPanel();
@@ -261,7 +258,7 @@ public class SearchOrgView extends JPanel implements ActionListener
         ScrollPaneOrgList.setBounds(0, 0, 680, 630); //320-40
     }
 
-    private void initSchedPanel(int i, Schedule sched, Organization SelectedOrg)
+    private void initSchedPanel(int i, Schedule sched, RegisteredScheds SelectedOrg)
     {
         //Org info
         JLabel OrgName = new JLabel("Tên đơn vị: " + SelectedOrg.getName());
@@ -315,7 +312,7 @@ public class SearchOrgView extends JPanel implements ActionListener
         NightTimeButton.setHorizontalAlignment(JLabel.LEFT);
         NightTimeButton.setContentAreaFilled(false);
         //NightTimeButton.setBorder(dv.border());
-        
+
         ButtonGroup TimeGroupButton = new ButtonGroup();
         TimeGroupButton.add(DayTimeButton);
         TimeGroupButton.add(NoonTimeButton);
@@ -348,7 +345,7 @@ public class SearchOrgView extends JPanel implements ActionListener
         SchedPanel[i].add(SchedRegisterButton);
     }
 
-    private void initSchedListPanel(Organization SelectedOrg)
+    private void initSchedListPanel(RegisteredScheds SelectedOrg)
     {
 
         Schedule sched[] = new Schedule[50];
@@ -410,7 +407,7 @@ public class SearchOrgView extends JPanel implements ActionListener
 
     }
 
-    private void initScrollPaneSchedList(Organization SelectedOrg)
+    private void initScrollPaneSchedList(RegisteredScheds SelectedOrg)
     {
         initSchedListPanel(SelectedOrg);
 
@@ -439,26 +436,26 @@ public class SearchOrgView extends JPanel implements ActionListener
 
         //set frame title
         //this.setTitle("Tìm kiếm đơn vị tiêm chủng");
-        
+
         //set frame size
         this.setSize(dv.FrameWidth(), dv.FrameHeight());
         //this.setSize(1080, 720); --Main View
-        
+
         //set do not allow frame resizing
         //this.setResizable(false);
-        
+
         //set frame visible on screen
         this.setVisible(true);
-        
+
         //set frame close on X button
         //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+
         //set frame background color
         //this.getContentPane().setBackground(new Color(dv.ViewBackgroundColor()));
         this.setBackground(new Color(dv.ViewBackgroundColor()));
 
         this.setLayout(null);
-        
+
         //init ProvinceLabel
         initProvinceLabel();
         this.add(ProvinceLabel);
@@ -494,7 +491,7 @@ public class SearchOrgView extends JPanel implements ActionListener
         this.repaint(0,0, dv.FrameWidth(), dv.FrameHeight());
     }
 
-    public SearchOrgView()
+    public ManageVaccinationView()
     {
         initFrameComponent();
         this.validate();
@@ -517,7 +514,7 @@ public class SearchOrgView extends JPanel implements ActionListener
 
             //Select out the specified ORGs
             query = "select ORG.ID, Name, Province, District, Town, Street, COUNT(SCHED.ID)"
-                    + " from ORGANIZATION ORG left join SCHEDULE SCHED on ORG.ID = SCHED.OrgID";
+                    + " from Registered_Scheds ORG left join SCHEDULE SCHED on ORG.ID = SCHED.OrgID";
 
             if (ProvinceChoice.getSelectedIndex() > 0)
                 query = query + " where ORG.Province = '" + ProvinceCode + "'";
@@ -554,7 +551,7 @@ public class SearchOrgView extends JPanel implements ActionListener
 
                 while (rs.next())
                 {
-                    org[i] = new Organization();
+                    org[i] = new RegisteredScheds();
                     org[i].setID(rs.getString(1));
                     org[i].setName(rs.getString("Name"));
                     org[i].setProvince(rs.getString("Province"));

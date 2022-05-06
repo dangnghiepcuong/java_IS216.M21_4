@@ -1,4 +1,4 @@
-package doancuoiky;
+package Data_Processor;
 
 import java.util.ArrayList;
 
@@ -6,10 +6,10 @@ import java.util.ArrayList;
  *
  * @author DELL
  */
-public class Registered_Scheds {
-    private ArrayList<Schedule> RegList;
+public class RegisteredScheds {
     private String PersonalID;
     private Schedule SchedID;
+    private Organization Org;
     private String DoseType;
     private int Time;
     private int NO;
@@ -17,27 +17,19 @@ public class Registered_Scheds {
     private byte Image;
     private String Note;
 
-    public Registered_Scheds() {
+    public RegisteredScheds() {
     }
 
-    public Registered_Scheds(ArrayList<Schedule> RegList, String PersonalID, Schedule SchedID, String DoseType, int Time, int NO, int Status, byte Image, String Note) {
-        this.RegList = RegList;
+    public RegisteredScheds(String PersonalID, Schedule SchedID, Organization Org, String DoseType, int Time, int NO, int Status, byte Image, String Note) {
         this.PersonalID = PersonalID;
         this.SchedID = SchedID;
+        this.Org = Org;
         this.DoseType = DoseType;
         this.Time = Time;
         this.NO = NO;
         this.Status = Status;
         this.Image = Image;
         this.Note = Note;
-    }
-
-    public ArrayList<Schedule> getRegList() {
-        return RegList;
-    }
-
-    public void setRegList(ArrayList<Schedule> RegList) {
-        this.RegList = RegList;
     }
 
     public String getPersonalID() {
@@ -54,6 +46,14 @@ public class Registered_Scheds {
 
     public void setSchedID(Schedule SchedID) {
         this.SchedID = SchedID;
+    }
+
+    public Organization getOrg() {
+        return Org;
+    }
+
+    public void setOrg(Organization org) {
+        Org = org;
     }
 
     public String getDoseType() {
@@ -103,6 +103,4 @@ public class Registered_Scheds {
     public void setNote(String Note) {
         this.Note = Note;
     }
-    
-    
 }
