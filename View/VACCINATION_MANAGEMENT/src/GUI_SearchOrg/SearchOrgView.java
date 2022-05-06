@@ -2,7 +2,6 @@ package GUI_SearchOrg;
 
 import Data_Processor.*;
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,43 +41,22 @@ public class SearchOrgView extends JPanel implements ActionListener
 
     private void initProvinceLabel()
     {
-        //create new label
         ProvinceLabel = new JLabel();
-
-        //set position and area
-        ProvinceLabel.setBounds(dv.AlignLeft(), 10, dv.LabelWidth(), dv.LabelHeight());
-
-        //set label text style
+        ProvinceLabel.setBounds(dv.AlignLeft(), 40, dv.LabelWidth(), dv.LabelHeight());
         ProvinceLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
-
-        //set label text color
         ProvinceLabel.setForeground(new Color(0x666666));
-
-        //set label text
         ProvinceLabel.setText("Tỉnh/thành phố:");
-
-        //set label size
         ProvinceLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
     }
 
     private void initProvinceChoice()
     {
-        //create Username text field
         ProvinceChoice = new Choice();
-
-        //set position
-        ProvinceChoice.setBounds(dv.AlignLeft(), 40, dv.FieldWidth(), dv.FieldHeight());
-
-        //set lít font
+        ProvinceChoice.setBounds(dv.AlignLeft(), 80, dv.FieldWidth(), dv.FieldHeight());
         ProvinceChoice.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
-
-        //set lít color
         ProvinceChoice.setForeground(new Color(dv.BlackTextColor()));
-
-         //set lít background color
         ProvinceChoice.setBackground(Color.WHITE);
 
-        //set choice
         ProvinceChoice.add("*");
         ProvinceChoice.add("Bình Dương");
         ProvinceChoice.add("Hồ Chí Minh");
@@ -87,42 +65,21 @@ public class SearchOrgView extends JPanel implements ActionListener
 
     private void initDistrictLabel()
     {
-        //create
         DistrictLabel = new JLabel();
-
-        //set position and area
-        DistrictLabel.setBounds(dv.AlignLeft(), 80, dv.LabelWidth(), dv.LabelHeight());
-
-        //set text style
+        DistrictLabel.setBounds(dv.AlignLeft(), 120, dv.LabelWidth(), dv.LabelHeight());
         DistrictLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
-
-        //set text color
         DistrictLabel.setForeground(new Color(0x666666));
-
-        //set text content
         DistrictLabel.setText("Quận/Huyện:");
-
-        //set size
         DistrictLabel.setSize(dv.LabelWidth(), dv.LabelHeight());
     }
 
     private void initDistrictChoice()
     {
-        //create
         DistrictChoice = new Choice();
-
-        //set position
-        DistrictChoice.setBounds(dv.AlignLeft(), 110, dv.FieldWidth(), dv.FieldHeight());
-
-        //set font
+        DistrictChoice.setBounds(dv.AlignLeft(), 150, dv.FieldWidth(), dv.FieldHeight());
         DistrictChoice.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
-
-        //set text color
         DistrictChoice.setForeground(new Color(0x333333));
-
-        //set background color
         DistrictChoice.setBackground(Color.WHITE);
-
 
         //set choice
         DistrictChoice.add("*");
@@ -135,43 +92,22 @@ public class SearchOrgView extends JPanel implements ActionListener
 
     private void initTownLabel()
     {
-        //create
         TownLabel = new JLabel();
-
-        //set label position and frame area
-        TownLabel.setBounds(dv.AlignLeft(), 150, dv.LabelWidth(), dv.LabelHeight());
-
-        //set label text style
+        TownLabel.setBounds(dv.AlignLeft(), 190, dv.LabelWidth(), dv.LabelHeight());
         TownLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
-
-        //set label text color
         TownLabel.setForeground(new Color(0x666666));
-
-        //set label size
         TownLabel.setSize(dv.LabelWidth(), dv.LabelHeight());
-
-        //set label text
         TownLabel.setText("Xã/phường/thị trấn:");
     }
 
     private void initTownChoice()
     {
-        //create
         TownChoice = new Choice();
-
-        //set position
-        TownChoice.setBounds(dv.AlignLeft(), 180, dv.FieldWidth(), dv.FieldHeight());
-
-        //set text color
+        TownChoice.setBounds(dv.AlignLeft(), 220, dv.FieldWidth(), dv.FieldHeight());
         TownChoice.setForeground(new Color(0x333333));
-
-        //set font
         TownChoice.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
-
-        //set background color
         TownChoice.setBackground(Color.WHITE);
 
-        //set choice
         TownChoice.add("*");
         TownChoice.add("Dầu Tiếng");
         TownChoice.add("Lái Thiêu");
@@ -186,7 +122,7 @@ public class SearchOrgView extends JPanel implements ActionListener
         ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search.png"));
         SearchOrgButton.setIcon(SearchIcon);
 
-        SearchOrgButton.setBounds(dv.AlignLeft(), 250, dv.FieldWidth(), SearchIcon.getIconHeight());
+        SearchOrgButton.setBounds(dv.AlignLeft(), 290, dv.FieldWidth(), SearchIcon.getIconHeight());
         SearchOrgButton.setBorder(null);
         SearchOrgButton.setContentAreaFilled(false);
 
