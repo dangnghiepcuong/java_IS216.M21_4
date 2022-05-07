@@ -909,7 +909,7 @@ public class RegisterAccView extends JFrame implements ActionListener
             String InputBirthday = dv.toOracleDateFormat(textField.getText());
             int InputGender = GenderChoice.getSelectedIndex();
             String InputHomeTown = HomeTownChoice.getSelectedItem();
-            String InputProvince = ProvinceChoice.getSelectedItem();
+            String InputProvince = dv.getProvinceCode(ProvinceChoice.getSelectedItem());
             String InputDistrict = DistrictChoice.getSelectedItem();
             String InputTown = TownChoice.getSelectedItem();
             String InputStreet = StreetTextField.getText();
@@ -919,30 +919,64 @@ public class RegisterAccView extends JFrame implements ActionListener
                 System.out.println("Mật khẩu không trùng khớp!");
                 return;
             }
-            String query = "exec PERSON_INSERT_RECORD('" + InputID + "', '" + InputLastName + "', '" +InputFirstName
-                    + "', '" + InputBirthday + "', '" + InputGender + "', '" + InputHomeTown + "', '" + InputProvince
+
+            String query1 = "exec ACC_INSERT_RECORD('" + InputUsername + "', '" + InputPassword + "', 2, 1);";
+
+            String query2 = "exec PERSON_INSERT_RECORD('" + InputID + "', '" + InputLastName + "', '" +InputFirstName
+                    + "', '" + InputBirthday + "', " + InputGender + ", '" + InputHomeTown + "', '" + InputProvince
                     + "', '" + InputDistrict + "', '" + InputTown + "', '" + InputStreet + "', '" + InputUsername
-                    + "', '"  +InputEmail +  "', null);";
+                    + "', '"  +InputEmail +  "');";
 
+            CallableStatement cs = null;
+            CallableStatement cs1 = null;
+            Connection connection1 = null;
+            Connection connection2 = null;
+            /*try {
+                    DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+                    connection1 = DriverManager.getConnection(dv.getDB_URL1(), dv.getUsername1(), dv.getPassword1());
+                    connection1.setAutoCommit((false));
+
+                    String sql = "{call ACC_INSERT_RECORD(?,?,?,?)}";
+                    cs = connection1.prepareCall(sql);
+                    cs.setString(1, InputUsername);
+                    cs.setString(2, InputPassword);
+                    cs.setInt(3, 2);
+                    cs.setInt(4,1);
+                    cs.executeQuery();
+
+                    connection1.rollback();
+
+                } catch (Exception ex) {
+                    System.out.println("Tài khoản đã tồn tại!");
+                    ex.printStackTrace();
+            }*/
             try {
-                Connection connection = DriverManager.getConnection(dv.getDB_URL1(), dv.getUsername1(), dv.getPassword1());
+                DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+                connection2 = DriverManager.getConnection(dv.getDB_URL1(), dv.getUsername1(), dv.getPassword1());
+                //connection2.setAutoCommit((false));
 
-                PreparedStatement st = connection.prepareStatement(query);
+                String sql1 = "{call PERSON_INSERT_RECORD(?,?,?,?,?,?,?,?,?,?,?,?)}";
+                cs1 = connection2.prepareCall(sql1);
+                cs1.setString(1, InputID);
+                cs1.setString(2, InputLastName);
+                cs1.setString(3, InputFirstName);
+                cs1.setString(4,InputBirthday);
+                cs1.setInt(5, InputGender);
+                cs1.setString(6,InputHomeTown);
+                cs1.setString(7,InputProvince);
+                cs1.setString(8,InputDistrict);
+                cs1.setString(9,InputTown);
+                cs1.setString(10,InputStreet);
+                cs1.setString(11,InputUsername);
+                cs1.setString(12,InputEmail);
+                cs1.executeQuery();
 
-                ResultSet rs = st.executeQuery(query);
+                //connection2.rollback();
 
-                rs.next();
-
-            } catch (SQLException ex) {
+            } catch (Exception ex) {
                 System.out.println("Không thành công!");
-                throw new RuntimeException(ex);
-
+                ex.printStackTrace();
             }
-
-
         }
     }
-
-
-
 }
