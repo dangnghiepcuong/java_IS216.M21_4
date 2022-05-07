@@ -275,4 +275,19 @@ public class DefaultValue
 
         return "";
     }
+
+    public int getYear(String date)
+    {
+        return Integer.parseInt(date.substring(0,4));
+    }
+
+    public int getMonth(String date)
+    {
+        return Integer.parseInt(date.substring(5,7));
+    }
+
+    public int getDay(String date)
+    {
+        return Integer.parseInt(date.substring(8,10));
+    }
 }

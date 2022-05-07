@@ -73,7 +73,7 @@ public class ManageVaccinationView extends JPanel implements ActionListener
     private void initFilterButton()
     {
         FilterButton = new JButton();
-        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search.png"));
+        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Magnifying Glass Button_1.png"));
         FilterButton.setIcon(SearchIcon);
 
         FilterButton.setBounds(dv.AlignLeft(), 150, dv.FieldWidth(), SearchIcon.getIconHeight());
@@ -145,9 +145,6 @@ public class ManageVaccinationView extends JPanel implements ActionListener
         int nRegScheds = 0;
         int i = 0;
 
-        personalUser = new Person();
-        personalUser.setID("20520418");
-
         query = "select DoseType, Time, NO, Status, Image, OnDate, VaccineID, Serial, Name, Province, District, Town, Street" +
                 " from REGISTER REG, SCHEDULE SCHED, ORGANIZATION ORG" +
                 " where '" + personalUser.getID() + "' = REG.PersonalID" +
@@ -201,7 +198,7 @@ public class ManageVaccinationView extends JPanel implements ActionListener
 
         RegSchedListPanel = new JPanel();
 
-        RegSchedListPanel.setPreferredSize(new Dimension(680, 120));
+        RegSchedListPanel.setPreferredSize(new Dimension(680, 120*nRegScheds+nRegScheds*10));
 
         RegSchedListPanel.setLayout(new FlowLayout());
 
@@ -282,8 +279,9 @@ public class ManageVaccinationView extends JPanel implements ActionListener
         this.repaint(0,0, dv.FrameWidth(), dv.FrameHeight());
     }
 
-    public ManageVaccinationView()
+    public ManageVaccinationView(Person person)
     {
+        personalUser = person;
         initFrameComponent();
         this.validate();
     }
