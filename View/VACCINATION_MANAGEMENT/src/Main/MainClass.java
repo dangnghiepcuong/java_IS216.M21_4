@@ -11,11 +11,6 @@ import GUI_Main.*;
  */
 public class MainClass
 {
-    private static MOHMainView mohMainView;
-    private static CitizenMainView citizenMainView;
 
-    public static void main(String args[])
-    {
-        citizenMainView = new CitizenMainView();
-    }
+
 }
