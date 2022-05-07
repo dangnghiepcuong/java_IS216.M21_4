@@ -198,7 +198,7 @@ public class ManageVaccinationView extends JPanel implements ActionListener
 
         RegSchedListPanel = new JPanel();
 
-        RegSchedListPanel.setPreferredSize(new Dimension(680, 120*nRegScheds+nRegScheds*10));
+        RegSchedListPanel.setPreferredSize(new Dimension(640, 120*nRegScheds +nRegScheds*10));
 
         RegSchedListPanel.setLayout(new FlowLayout());
 
