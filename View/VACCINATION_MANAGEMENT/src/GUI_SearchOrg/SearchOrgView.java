@@ -174,17 +174,12 @@ public class SearchOrgView extends JPanel implements ActionListener
         OrgAvaiScheds.setHorizontalAlignment(JLabel.LEFT);
         //OrgAvaiScheds.setBorder(dv.border());
 
-        /*JLabel OrgTotalScheds = new JLabel("Số lịch tiêm đã tổ chức: ");
-        OrgTotalScheds.setFont(new Font("SVN-Arial", 0, 16));
-        OrgTotalScheds.setBounds(385,((32+25)+2)+25+2,250,25);
-        OrgTotalScheds.setHorizontalAlignment(JLabel.LEFT);
-        OrgTotalScheds.setBorder(dv.border());*/
 
         //create OrgPanel Panel
         OrgPanel[i] = new JPanel();
         //set layout
         OrgPanel[i].setLayout(null);
-        OrgPanel[i].setPreferredSize(new Dimension(660,120));
+        OrgPanel[i].setPreferredSize(new Dimension(640,120));
         //set Background color
         OrgPanel[i].setBackground(Color.WHITE);
 
@@ -239,7 +234,7 @@ public class SearchOrgView extends JPanel implements ActionListener
     {
         OrgListPanel = new JPanel();
 
-        OrgListPanel.setPreferredSize(new Dimension(680, 120*nORG));
+        OrgListPanel.setPreferredSize(new Dimension(660, 120*nORG));
 
         OrgListPanel.setLayout((new FlowLayout()));
 
@@ -260,6 +255,12 @@ public class SearchOrgView extends JPanel implements ActionListener
         //set Bounds
         ScrollPaneOrgList.setBounds(0, 0, 680, 630); //320-40
     }
+
+
+
+
+
+
 
     private void initSchedPanel(int i, Schedule sched, Organization SelectedOrg)
     {
@@ -331,7 +332,7 @@ public class SearchOrgView extends JPanel implements ActionListener
         SchedPanel[i] = new JPanel();
 
         SchedPanel[i].setLayout(null);
-        SchedPanel[i].setPreferredSize(new Dimension(660,120));
+        SchedPanel[i].setPreferredSize(new Dimension(640,120));
         //set Background color
         SchedPanel[i].setBackground(Color.WHITE);
 
@@ -376,7 +377,7 @@ public class SearchOrgView extends JPanel implements ActionListener
             {
                 sched[i] = new Schedule();
                 sched[i].setID(rs.getString("ID"));
-                sched[i].setOrgID(rs.getString("OrgID"));
+                sched[i].getOrg().setID(rs.getString("OrgID"));
                 sched[i].setOnDate(rs.getString("OnDate"));
                 sched[i].setVaccineID(rs.getString("VaccineID"));
                 sched[i].setSerial(rs.getString("Serial"));
@@ -396,7 +397,7 @@ public class SearchOrgView extends JPanel implements ActionListener
 
         SchedListPanel = new JPanel();
 
-        SchedListPanel.setPreferredSize(new Dimension(680, 120));
+        SchedListPanel.setPreferredSize(new Dimension(660, 120));
 
         SchedListPanel.setLayout(new FlowLayout());
 
@@ -534,7 +535,7 @@ public class SearchOrgView extends JPanel implements ActionListener
             else
                 query = query + " and ORG.Town like '%'";
 
-            query += " and OnDate >= '" + dv.sysdate() + "'";
+            //query += " and OnDate >= '" + dv.sysdate() + "'";
             query += " group by ORG.ID, Name, Province, District, Town, Street";
             query += " order by Province, District, Town";
 
@@ -574,8 +575,9 @@ public class SearchOrgView extends JPanel implements ActionListener
                 //init Scroll Pane of Orgs
                 initScrollPaneOrgList(n);
                 //add Scroll Pane of Orgs to TOP of Layered Area
-                LayeredPaneArea.add(ScrollPaneOrgList, Integer.valueOf(1));
+                LayeredPaneArea.add(ScrollPaneOrgList, Integer.valueOf(0));
                 //Delete scroll pane of sched
+                SchedListPanel = null;
                 ScrollPaneSchedList = null;
             }
             catch (SQLException exception)

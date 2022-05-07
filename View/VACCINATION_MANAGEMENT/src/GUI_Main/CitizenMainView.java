@@ -3,6 +3,7 @@ package GUI_Main;
 import Data_Processor.Account;
 import Data_Processor.DefaultValue;
 import Data_Processor.Person;
+import GUI_Login.LoginView;
 import GUI_ManageVaccination.ManageVaccinationView;
 import GUI_SearchOrg.SearchOrgView;
 
@@ -10,6 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.sql.*;
 
 public class CitizenMainView extends JFrame implements ActionListener
@@ -32,18 +34,18 @@ public class CitizenMainView extends JFrame implements ActionListener
     private JButton UpdateInjectionButton;
     private JButton CertificateButton;
 
-    private JButton BackButton;
-    private JButton LogoutButton;
-
     /*Data Stored Class*/
     private DefaultValue dv = new DefaultValue();
-    private Account userAccount = new Account();
+    //private Account userAccount = new Account();
     private Person personalUser = new Person();
 
     /*Other Views*/
+    private  LoginView loginView;
     private SearchOrgView searchOrgView;
     private ManageVaccinationView manageVaccinationView;
 
+    private JButton LogoutButton;
+    private JButton BackButton;
 
     private void initBackButton()
     {
@@ -354,7 +356,7 @@ public class CitizenMainView extends JFrame implements ActionListener
         MainLayeredPane.setLayout(null);
     }
 
-    public CitizenMainView()
+    public CitizenMainView(String Username)
     {
         //Frame
         //set frame title
@@ -374,7 +376,7 @@ public class CitizenMainView extends JFrame implements ActionListener
 
         //set frame background color
         //this.setBackground(new Color(dv.ViewBackgroundColor()));
-        this.setBackground(Color.WHITE);
+        //this.setBackground(Color.WHITE);
 
         //set Frame icon
         this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
@@ -383,10 +385,7 @@ public class CitizenMainView extends JFrame implements ActionListener
         this.setLayout(null);
 
 
-        userAccount.setUsername("20520418");
-        userAccount.setRole(0);
-
-        String query = "select * from PERSON where PERSON.ID = '" +  userAccount.getUsername() + "'";
+        String query = "select * from PERSON where PERSON.Phone = '" +  Username + "'";
 
         try {
             Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
@@ -444,6 +443,12 @@ public class CitizenMainView extends JFrame implements ActionListener
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
 
+        if (e.getSource() == LogoutButton)
+        {
+            loginView = new LoginView();
+            this.dispose();
+        }
+
         if (e.getSource() == SearchButton)
         {
             searchOrgView = new SearchOrgView();
@@ -457,7 +462,7 @@ public class CitizenMainView extends JFrame implements ActionListener
 
         if(e.getSource() == ManageVaccinationButton)
         {
-            manageVaccinationView = new ManageVaccinationView();
+            manageVaccinationView = new ManageVaccinationView(personalUser);
             MainLayeredPane.add(manageVaccinationView, Integer.valueOf(1));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
 

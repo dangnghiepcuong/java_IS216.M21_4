@@ -1,6 +1,7 @@
 package GUI_Main;
 
 import Data_Processor.*;
+import GUI_Login.LoginView;
 import GUI_SearchOrg.SearchOrgView;
 
 import javax.swing.*;
@@ -28,22 +29,21 @@ public class MOHMainView extends JFrame implements ActionListener
     private JButton SearchButton;
     private JButton StatisticButton;
 
+    private JButton BackButton;
     private JButton LogoutButton;
 
-    private Account userAccount = new Account();
     private Organization orgUser = new Organization();
 
+    private LoginView loginView;
     private SearchOrgView searchOrgView;
-
-    private JButton BackButton;
 
     private void initBackButton()
     {
         BackButton = new JButton();
-        ImageIcon BackButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Back Button-Pink.png"));
+        ImageIcon BackButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Back Button_2.png"));
         BackButton.setIcon(BackButtonIcon);
 
-        BackButton.setBounds(0, 0, BackButtonIcon.getIconWidth(), BackButtonIcon.getIconHeight());
+        BackButton.setBounds(10, 10, BackButtonIcon.getIconWidth(), BackButtonIcon.getIconHeight());
         BackButton.setBorder(null);
         BackButton.setContentAreaFilled(false);
 
@@ -134,48 +134,131 @@ public class MOHMainView extends JFrame implements ActionListener
     private void initInfoSettingButton()
     {
         InfoSettingButton = new JButton();
-        InfoSettingButton.setBounds(120 +60, 30, 133, 133);
+        InfoSettingButton.setBounds(60, 30, 133, 133);
         InfoSettingButton.setBorder(null);
         InfoSettingButton.setContentAreaFilled(false);
         InfoSettingButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Org Info Feature Button.png")));
+
+        JLabel ButtonLabel = new JLabel();
+        ButtonLabel.setBounds(0, 160, 240, 30);
+        ButtonLabel.setText("Thông tin");
+        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        JLabel ButtonLabel2 = new JLabel();
+        ButtonLabel2.setBounds(0, 160 +25, 240, 30);
+        ButtonLabel2.setText("đơn vị");
+        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        FeatureLayeredPane.add(ButtonLabel);
+        FeatureLayeredPane.add(ButtonLabel2);
     }
 
     private void initCreateOrgAccButton()
     {
         CreateOrgAccButton = new JButton();
-        CreateOrgAccButton.setBounds(360+120 -60, 30, 133, 133);
+        CreateOrgAccButton.setBounds(240 + 30+15, 30, 133, 133);
         CreateOrgAccButton.setBorder(null);
         CreateOrgAccButton.setContentAreaFilled(false);
         CreateOrgAccButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Create Org Acc Feature Button.png")));
+
+        JLabel ButtonLabel = new JLabel();
+        ButtonLabel.setBounds(240, 160, 240, 30);
+        ButtonLabel.setText("Tạo tài khoản");
+        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        JLabel ButtonLabel2 = new JLabel();
+        ButtonLabel2.setBounds(240, 160 +25, 240, 30);
+        ButtonLabel2.setText("đơn vị");
+        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel2_1.setBorder(dv.border());
+        FeatureLayeredPane.add(ButtonLabel);
+        FeatureLayeredPane.add(ButtonLabel2);
     }
 
     private void initPublishPostButton()
     {
         PublishPostButton = new JButton();
-        PublishPostButton.setBounds(120 +60, 30+240, 133, 133);
+        PublishPostButton.setBounds(240*2+30, 30, 133,133);
         PublishPostButton.setBorder(null);
         PublishPostButton.setContentAreaFilled(false);
         PublishPostButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Send Notification Feature Button.png")));
 
+        JLabel ButtonLabel = new JLabel();
+        ButtonLabel.setBounds(240*2 -15, 160, 240-20, 30);
+        ButtonLabel.setText("Gửi thông tin");
+        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        JLabel ButtonLabel2 = new JLabel();
+        ButtonLabel2.setBounds(240*2 -15, 160 +25, 240-20, 30);
+        ButtonLabel2.setText("- thông báo");
+        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        FeatureLayeredPane.add(ButtonLabel);
+        FeatureLayeredPane.add(ButtonLabel2);
     }
 
     private void initSearchButton()
     {
         SearchButton = new JButton();
-        SearchButton.setBounds(360+120 -60, 30+240, 133, 133);
+        SearchButton.setBounds(60, 240, 133, 133);
         SearchButton.setBorder(null);
         SearchButton.setContentAreaFilled(false);
         SearchButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Search Feature Button.png")));
         SearchButton.addActionListener(this);
+
+        JLabel ButtonLabel = new JLabel();
+        ButtonLabel.setBounds(0, 240+130, 240, 30);
+        ButtonLabel.setText("Tìm kiếm");
+        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        JLabel ButtonLabel2 = new JLabel();
+        ButtonLabel2.setBounds(0, 240+130 +25, 240, 30);
+        ButtonLabel2.setText("thông tin");
+        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        FeatureLayeredPane.add(ButtonLabel);
+        FeatureLayeredPane.add(ButtonLabel2);
     }
 
     private void initStatisticButton()
     {
         StatisticButton = new JButton();
-        StatisticButton.setBounds(120 +60, 30+240+240, 133, 133);
+        StatisticButton.setBounds(240 + 30+15, 240 , 133, 133);
         StatisticButton.setBorder(null);
         StatisticButton.setContentAreaFilled(false);
         StatisticButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Statistic Feature Button.png")));
+
+        JLabel ButtonLabel = new JLabel();
+        ButtonLabel.setBounds(240 -10, 240+130, 240, 30);
+        ButtonLabel.setText("Thống kê");
+        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        JLabel ButtonLabel2 = new JLabel();
+        ButtonLabel2.setBounds(240 -10, 240+130 +25, 240, 30);
+        ButtonLabel2.setText("số liệu");
+        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        FeatureLayeredPane.add(ButtonLabel);
+        FeatureLayeredPane.add(ButtonLabel2);
     }
 
     private void initLogoutButton()
@@ -205,14 +288,14 @@ public class MOHMainView extends JFrame implements ActionListener
         MainLayeredPane.setOpaque(true);
     }
 
-    public MOHMainView()
+    public MOHMainView(String Username)
     {
         //Frame
         //set frame title
-        this.setTitle("Quản lý tiêm chủng vaccine Covid-19: Đơn vị tiêm chủng");
+        this.setTitle("Quản lý tiêm chủng vaccine Covid-19: Bộ Y tế");
 
         //set frame size
-        this.setSize(dv.FrameWidth(), dv.FrameHeight());
+        this.setBounds(260, 90, dv.FrameWidth(), dv.FrameHeight());
         //this.setSize(1080, 720); --Main View
 
         //set do not allow frame resizing
@@ -234,10 +317,7 @@ public class MOHMainView extends JFrame implements ActionListener
         this.setLayout(null);
 
 
-        userAccount.setUsername("MOH");
-        userAccount.setRole(0);
-
-        String query = "select * from ORGANIZATION ORG where ORG.ID = '" +  userAccount.getUsername() + "'";
+        String query = "select * from ORGANIZATION ORG where ORG.ID = '" +  Username + "'";
 
         try {
             Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
@@ -279,6 +359,20 @@ public class MOHMainView extends JFrame implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
+        if(e.getSource() == BackButton)
+        {
+            searchOrgView = null;
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(MainPanel, Integer.valueOf(0));
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+        }
+
+        if (e.getSource() == LogoutButton)
+        {
+            loginView = new LoginView();
+            this.dispose();
+        }
+
         if (e.getSource() == SearchButton)
         {
             searchOrgView = new SearchOrgView();
@@ -288,14 +382,6 @@ public class MOHMainView extends JFrame implements ActionListener
             //init BackButton
             initBackButton();
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
-        }
-
-        if(e.getSource() == BackButton)
-        {
-            searchOrgView = null;
-            MainLayeredPane.removeAll();
-            MainLayeredPane.add(MainPanel, Integer.valueOf(0));
-            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
     }
 

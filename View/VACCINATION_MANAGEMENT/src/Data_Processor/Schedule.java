@@ -10,7 +10,7 @@ package Data_Processor;/*
  */
 public class Schedule {
     private String ID;
-    private String OrgID;
+    private Organization Org = new Organization();
     private String OnDate;
     private String VaccineID;
     private String Serial;
@@ -25,9 +25,9 @@ public class Schedule {
     public Schedule() {
     }
 
-    public Schedule(String ID, String OrgID, String OnDate, String VaccineID, String Serial, int LimitDay, int LimitNoon, int LimitNight, int DayRegistered, int NoonRegistered, int NightRegistered, String Note) {
+    public Schedule(String ID, Organization Org, String OnDate, String VaccineID, String Serial, int LimitDay, int LimitNoon, int LimitNight, int DayRegistered, int NoonRegistered, int NightRegistered, String Note) {
         this.ID = ID;
-        this.OrgID = OrgID;
+        this.Org = Org;
         this.OnDate = OnDate;
         this.VaccineID = VaccineID;
         this.Serial = Serial;
@@ -48,12 +48,12 @@ public class Schedule {
         this.ID = ID;
     }
 
-    public String getOrgID() {
-        return OrgID;
+    public Organization getOrg() {
+        return Org;
     }
 
-    public void setOrgID(String OrgID) {
-        this.OrgID = OrgID;
+    public void setOrg(Organization Org) {
+        this.Org = Org;
     }
 
     public String getOnDate() {
