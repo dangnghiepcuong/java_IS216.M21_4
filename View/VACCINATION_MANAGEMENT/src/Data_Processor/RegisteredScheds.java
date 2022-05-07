@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * @author DELL
  */
 public class RegisteredScheds {
-    private String PersonalID;
+    private Person Citizen = new Person();
     private Schedule Sched = new Schedule();
     private Organization Org = new Organization();
     private String DoseType;
@@ -20,8 +20,8 @@ public class RegisteredScheds {
     public RegisteredScheds() {
     }
 
-    public RegisteredScheds(String PersonalID, Schedule Sched, Organization Org, String DoseType, int Time, int NO, int Status, byte Image, String Note) {
-        this.PersonalID = PersonalID;
+    public RegisteredScheds(Person Citizen, Schedule Sched, Organization Org, String DoseType, int Time, int NO, int Status, byte Image, String Note) {
+        this.Citizen = Citizen;
         this.Sched = Sched;
         this.Org = Org;
         this.DoseType = DoseType;
@@ -32,12 +32,12 @@ public class RegisteredScheds {
         this.Note = Note;
     }
 
-    public String getPersonalID() {
-        return PersonalID;
+    public Person getCitizen() {
+        return Citizen;
     }
 
-    public void setPersonalID(String PersonalID) {
-        this.PersonalID = PersonalID;
+    public void setCitizen(Person Citizen) {
+        this.Citizen = Citizen;
     }
 
     public Schedule getSched() {

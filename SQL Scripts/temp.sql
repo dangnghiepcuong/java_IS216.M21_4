@@ -97,4 +97,9 @@ and REG.SchedID = SCHED.ID
 and SCHED.OrgID = ORG.ID 
 order by Status asc, OnDate desc
 
+select PersonalID, LastName, FirstName, Gender, Phone, Time, NO, DoseType, Status, Image 
+from REGISTER REG, PERSON 
+where REG.PersonalID = PERSON.ID and REG.SchedID = 'null'
+
+
 commit;

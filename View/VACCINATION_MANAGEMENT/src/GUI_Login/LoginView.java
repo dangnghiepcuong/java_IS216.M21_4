@@ -1,6 +1,9 @@
 package GUI_Login;
 
 import Data_Processor.*;
+import GUI_Main.CitizenMainView;
+import GUI_Main.MOHMainView;
+import GUI_Main.ORGMainView;
 /*
 COLOR HEX CODE
 màu xám dành cho nền: F2F2F2
@@ -15,6 +18,7 @@ import javax.swing.event.AncestorListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.sql.*;
 
 /**
@@ -28,185 +32,95 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
     private JTextField UsernameTextField;
     private JPasswordField PasswordField;
     private JButton LoginButton;
-    private JPanel ViewSymbolPanel;
+    //private JPanel ViewSymbolPanel;
     private DefaultValue dv = new DefaultValue();
     private JLabel ForgotPasswordLabel;
     private  JLabel RegisterAccountLabel;
 
+    private Account acc = new Account();
+
     private void initViewSymbol()
     {
         ViewSymbol = new JLabel();
-
-        //create an icon
         ImageIcon Virus = new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png"));
-
-        //set position and area
         ViewSymbol.setBounds(130, 50, 100, 100);
-
-        //set label icon
         ViewSymbol.setIcon(Virus);
-
-        //set alignment
         ViewSymbol.setHorizontalAlignment(JLabel.CENTER);
     }
 
     private void initUsernameLabel()
     {
-        //create new label
         UsernameLabel = new JLabel();
-
-        //set label position and frame area
-        UsernameLabel.setBounds(70, 165, dv.LabelWidth(), dv.LabelHeight());
-
-        //set label text
+        UsernameLabel.setBounds(80, 165, dv.LabelWidth(), dv.LabelHeight());
         UsernameLabel.setText("SĐT/Tên tài khoản");
-
-        //set label text style
         UsernameLabel.setFont(new Font("SVN-Arial", 3, 20));
-
-        //set label text color
         UsernameLabel.setForeground(new Color(0x666666));
-
-        //set alignment
         UsernameLabel.setHorizontalAlignment(JLabel.LEFT);
         UsernameLabel.setVerticalAlignment(JLabel.CENTER);
-
     }
 
     private void initUsernameTextField()
     {
-        //create Username text field
         UsernameTextField = new JTextField();
-
-        //set position and area
-        UsernameTextField.setBounds(70, 195, dv.FieldWidth(), dv.FieldHeight());
-
-        //set cursor
+        UsernameTextField.setBounds(80, 195, dv.FieldWidth(), dv.FieldHeight());
         UsernameTextField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
-
-        //set field font
         UsernameTextField.setFont(new Font("SVN-Arial", Font.PLAIN, 16));
-
-        //set text field color
         UsernameTextField.setForeground(new Color(0x333333));
-
-        //set field background color
         UsernameTextField.setBackground(Color.WHITE);
-
     }
 
     private void initPasswordLabel()
     {
-        //create new label
         PasswordLabel = new JLabel();
-
-        //set label text
+        PasswordLabel.setBounds(80, 235, dv.LabelWidth(), dv.LabelHeight());
         PasswordLabel.setText("Mật khẩu");
-
-        //set label text style
         PasswordLabel.setFont(new Font("SVN-Arial", 3, 20));
-
-        //PasswordLabel.setLabelFor();
-        //PasswordLabel.setAutoscrolls(false);
-
-        //set label size
-        PasswordLabel.setSize(240,30);
-
-//      //set label text color
         PasswordLabel.setForeground(new Color(0x666666));
-
-        //set label position
         PasswordLabel.setHorizontalTextPosition(JLabel.LEFT);
         PasswordLabel.setVerticalTextPosition(JLabel.CENTER);
-
-
-        PasswordLabel.setBounds(70, 235, dv.LabelWidth(), dv.LabelHeight());
     }
 
     private void initPasswordField()
     {
-        //create Username text field
         PasswordField = new JPasswordField();
-
-        //set cursor
+        PasswordField.setBounds(80, 265, dv.FieldWidth(), dv.FieldHeight());
         PasswordField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
-
-        //set field font
         PasswordField.setFont(new Font("SVN-Arial", Font.PLAIN, 16));
-
-        //set field size
-        PasswordField.setSize(240,30);
-
-        //set text field color
         PasswordField.setForeground(new Color(dv.FieldLabelColor()));
-
-        //set field background color
         PasswordField.setBackground(Color.WHITE);
-
-        //set position
-        PasswordField.setBounds(70, 265, dv.FieldWidth(), dv.FieldHeight());
-
     }
 
     private void initForgotPasswordLabel()
     {
         ForgotPasswordLabel = new JLabel();
-
+        ForgotPasswordLabel.setBounds(80, 270+dv.FieldHeight(), 120, 25);
         ForgotPasswordLabel.setText("Quên mật khẩu");
-
         ForgotPasswordLabel.setFont(new Font("SVN-Arial",Font.ITALIC, 12));
-
-        ForgotPasswordLabel.setSize(150, 25);
-
         ForgotPasswordLabel.setForeground(new Color(dv.FieldLabelColor()));
-
-        ForgotPasswordLabel.setBounds(70, 270+dv.FieldHeight(), 100, 25);
-
-       //ForgotPasswordLabel.setBorder(dv.border());
-
         ForgotPasswordLabel.addAncestorListener(this);
+        //ForgotPasswordLabel.setBorder(dv.border());
     }
 
     private void initRegisterAccountLabel()
     {
         RegisterAccountLabel = new JLabel();
-
+        RegisterAccountLabel.setBounds(80+120-1, 270+dv.FieldHeight(), 80, 25);
         RegisterAccountLabel.setText("Đăng ký");
-
         RegisterAccountLabel.setFont(new Font("SVN-Arial",Font.ITALIC, 12));
-
-        RegisterAccountLabel.setSize(150, 25);
-
         RegisterAccountLabel.setForeground(new Color(dv.FieldLabelColor()));
-
         RegisterAccountLabel.setHorizontalAlignment(JLabel.RIGHT);
-
-        RegisterAccountLabel.setBounds(69+100, 270+dv.FieldHeight(), 100, 25);
-
-        //RegisterAccountLabel.setBorder(dv.border());
-
         RegisterAccountLabel.addAncestorListener(this);
+        //RegisterAccountLabel.setBorder(dv.border());
     }
 
     private void initLoginButton()
     {
-        //create login button
         LoginButton = new JButton();
-
-        //set position
-        LoginButton.setBounds(100, 380, 150, 49);
-
-        //set no border
+        LoginButton.setBounds(105, 380, 150, 49);
         LoginButton.setBorder(null);
-
         LoginButton.setContentAreaFilled(false);
-
-        //create an icon
         ImageIcon LoginIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Login Button.png"));
-
-        //set label icon
         LoginButton.setIcon(LoginIcon);
-
         LoginButton.addActionListener(this);
     }
 
@@ -217,7 +131,7 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
         this.setTitle("Đăng nhập");
 
         //set frame size
-        this.setSize(380, 520);
+        this.setBounds((1600-380)/2, (900-520)/2, 380, 520);
         //this.setSize(1080, 720); --Main View
 
         //set do not allow frame resizing
@@ -290,10 +204,6 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
                 return;
             }
 
-            String Username = "";
-            String Password = "";
-            int Role = 0;
-
 
             String query = "select *" +
                     " from ACCOUNT" +
@@ -308,9 +218,9 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
                 ResultSet rs = st.executeQuery(query);
 
                 rs.next();
-                Username = rs.getString("Username");
-                Password = rs.getString("Password");
-                Role = rs.getInt("Role");
+                acc.setUsername(rs.getString("Username"));
+                acc.setPassword(rs.getString("Password"));
+                acc.setRole(rs.getInt("Role"));
 
             } catch (SQLException ex) {
 
@@ -319,18 +229,21 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
                 throw new RuntimeException(ex);
             }
 
-            if (Password.equals(InputPassword) == false)
+            if (acc.getPassword().equals(InputPassword) == false)
                 System.out.println("Mật khẩu không đúng!");
             else
-                switch (Role) {
+                switch (acc.getRole()) {
                     case 0:
-                        System.out.println("Giao dien MOH");
+                        this.dispose();
+                        MOHMainView mohMainView = new MOHMainView(acc.getUsername());
                         break;
                     case 1:
-                        System.out.println("Giao dien dvtc");
+                        this.dispose();
+                        ORGMainView orgMainView = new ORGMainView(acc.getUsername());
                         break;
                     case 2:
-                        System.out.println("Giao dien nguoi dung");
+                        this.dispose();
+                        CitizenMainView citizenMainView = new CitizenMainView(acc.getUsername());
                         break;
                     default:
                         break;
@@ -351,5 +264,10 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
     @Override
     public void ancestorMoved(AncestorEvent event) {
 
+    }
+
+    public static void main(String args[])
+    {
+        LoginView loginView = new LoginView();
     }
 }
