@@ -1,9 +1,8 @@
 package GUI_Login;
 
 import Data_Processor.*;
-import GUI_Main.CitizenMainView;
-import GUI_Main.MOHMainView;
-import GUI_Main.ORGMainView;
+import GUI_Main.*;
+import GUI_RegisterAcc.RegisterAccView;
 /*
 COLOR HEX CODE
 màu xám dành cho nền: F2F2F2
@@ -16,16 +15,14 @@ import javax.swing.*;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.sql.*;
 
 /**
  *
  * @author NghiepCuong
  */
-public class LoginView extends JFrame implements ActionListener, AncestorListener {
+public class LoginView extends JFrame implements ActionListener, MouseListener {
     private JLabel ViewSymbol;
     private JLabel UsernameLabel;
     private JLabel PasswordLabel;
@@ -97,7 +94,7 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
         ForgotPasswordLabel.setText("Quên mật khẩu");
         ForgotPasswordLabel.setFont(new Font("SVN-Arial",Font.ITALIC, 12));
         ForgotPasswordLabel.setForeground(new Color(dv.FieldLabelColor()));
-        ForgotPasswordLabel.addAncestorListener(this);
+        ForgotPasswordLabel.addMouseListener(this);
         //ForgotPasswordLabel.setBorder(dv.border());
     }
 
@@ -109,7 +106,7 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
         RegisterAccountLabel.setFont(new Font("SVN-Arial",Font.ITALIC, 12));
         RegisterAccountLabel.setForeground(new Color(dv.FieldLabelColor()));
         RegisterAccountLabel.setHorizontalAlignment(JLabel.RIGHT);
-        RegisterAccountLabel.addAncestorListener(this);
+        RegisterAccountLabel.addMouseListener(this);
         //RegisterAccountLabel.setBorder(dv.border());
     }
 
@@ -198,7 +195,7 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
         if (e.getSource() == LoginButton) {
             String InputUsername = UsernameTextField.getText();
             String InputPassword = String.valueOf(PasswordField.getPassword());
-            
+
 
             if (InputUsername.equals("") || InputPassword.equals("")) {
                 System.out.println("Nhập vào tài khoản/mật khẩu!");
@@ -252,23 +249,40 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
         }
     }
 
-    @Override
-    public void ancestorAdded(AncestorEvent event) {
-
-    }
-
-    @Override
-    public void ancestorRemoved(AncestorEvent event) {
-
-    }
-
-    @Override
-    public void ancestorMoved(AncestorEvent event) {
-
-    }
 
     public static void main(String args[])
     {
         LoginView loginView = new LoginView();
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e)
+    {
+        if (e.getSource() == RegisterAccountLabel)
+        {
+            this.dispose();
+            RegisterAccView registerAccView = new RegisterAccView();
+        }
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }
