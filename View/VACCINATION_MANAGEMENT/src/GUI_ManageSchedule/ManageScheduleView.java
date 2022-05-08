@@ -55,7 +55,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
     {
         SchedFilterLabel = new JLabel();
         SchedFilterLabel.setBounds(0, 0, dv.LabelWidth()+50, dv.LabelHeight());
-        SchedFilterLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
+        SchedFilterLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         SchedFilterLabel.setForeground(new Color(0x666666));
         SchedFilterLabel.setText("Bộ lọc lịch tiêm:");
         SchedFilterLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
@@ -65,7 +65,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
     {
         SchedFilterChoice = new Choice();
         SchedFilterChoice.setBounds(0, 40, dv.FieldWidth(), dv.FieldHeight());
-        SchedFilterChoice.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
+        SchedFilterChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         SchedFilterChoice.setForeground(new Color(dv.BlackTextColor()));
         SchedFilterChoice.setBackground(Color.WHITE);
 
@@ -105,10 +105,10 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
     private void initSchedPanel(int i, Schedule Sched)
     {
-        MouseListener handleMouseAction = new MouseListener()
+        ActionListener handleRegistion = new ActionListener()
         {
             @Override
-            public void mouseClicked(MouseEvent e)
+            public void actionPerformed(ActionEvent e)
             {
                 LayeredPaneArea.removeAll();
                 SchedListPanel = null;
@@ -123,41 +123,21 @@ public class ManageScheduleView extends JPanel implements ActionListener
                 LayeredPaneArea.add(ScrollPaneRegList, Integer.valueOf(1));
                 LayeredPaneArea.repaint(320, 40, 680, 630);
 
-                initRegFilterPanel();;
+                initRegFilterPanel();
                 getParent().add(RegFilterPanel);
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
             }
         };
 
         //OnDate, VaccineID, Serial, LimitDay, LimitNoon,LimitNight, DayRegistered, NoonRegistered, NightRegistered
         JLabel OrgName = new JLabel("Tên đơn vị: " + orgUser.getName());
-        OrgName.setFont(new Font("SVN-Arial", 3, 18));
+        OrgName.setFont(new Font(dv.fontName(), 3, 18));
         OrgName.setForeground(new Color(dv.FeatureButtonColor()));
         OrgName.setBounds(30,1,605,30);
         OrgName.setHorizontalAlignment(JLabel.LEFT);
 
         JLabel OnDateVaccine = new JLabel("Lịch tiêm ngày: " + Sched.getOnDate().substring(0, 10)
                 + "          Vaccine: " + Sched.getVaccineID() + " - " + Sched.getSerial());
-        OnDateVaccine.setFont(new Font("SVN-Arial", 1, 16));
+        OnDateVaccine.setFont(new Font(dv.fontName(), 1, 16));
         OnDateVaccine.setForeground(new Color(dv.BlackTextColor()));
         OnDateVaccine.setBounds(30,32,600,25);
         OnDateVaccine.setHorizontalAlignment(JLabel.LEFT);
@@ -165,7 +145,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         JLabel Time = new JLabel("Buổi sáng: " + Sched.getDayRegistered() + "/" + Sched.getLimitDay()
                 + "          Buổi trưa: " + Sched.getNoonRegistered() + "/" + Sched.getLimitNoon()
                 + "          Buổi tối: " + Sched.getNightRegistered() + "/" + Sched.getLimitNight());
-        Time.setFont(new Font("SVN-Arial", 0, 16));
+        Time.setFont(new Font(dv.fontName(), 0, 16));
         Time.setForeground(new Color(dv.BlackTextColor()));
         Time.setBounds(30, 32+25+2,600,25);
         Time.setHorizontalAlignment(JLabel.LEFT);
@@ -175,7 +155,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         SchedRegistionButton.setBorder(null);
         SchedRegistionButton.setContentAreaFilled(false);
         SchedRegistionButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Sched Registion Button.png")));
-        SchedRegistionButton.addMouseListener(handleMouseAction);
+        SchedRegistionButton.addActionListener(handleRegistion);
 
         SchedPanel[i] = new JPanel();
         SchedPanel[i].setLayout(null);
@@ -196,17 +176,36 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
         if (SchedOnDate.isAfter(sysdate))
         {
+
+            ActionListener handleUpdate = new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+
+                }
+            };
             JButton UpdateSchedButton = new JButton();
             UpdateSchedButton.setBounds(30 + 160 + 30, 32+25*2+2, 150+7, 30+6);
             UpdateSchedButton.setBorder(null);
             UpdateSchedButton.setContentAreaFilled(false);
             UpdateSchedButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Update Sched Button.png")));
+            UpdateSchedButton.addActionListener(handleUpdate);
 
+            ActionListener handleCancel = new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+
+                }
+            };
             JButton CancelSchedButton = new JButton();
             CancelSchedButton.setBounds( 160 + 30 + 200, 32+25*2+2, 150+7, 30+6);
             CancelSchedButton.setBorder(null);
             CancelSchedButton.setContentAreaFilled(false);
             CancelSchedButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Cancel Sched Button.png")));
+            CancelSchedButton.addActionListener(handleCancel);
 
             SchedPanel[i].add(UpdateSchedButton);
             SchedPanel[i].add(CancelSchedButton);
@@ -289,11 +288,12 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
 
 
+
     private void initRegFilterLabel()
     {
         RegFilterLabel = new JLabel();
         RegFilterLabel.setBounds(0, 0, dv.LabelWidth()+50, dv.LabelHeight());
-        RegFilterLabel.setFont(new Font("SVN-Arial", 0, dv.LabelFontSize()));
+        RegFilterLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         RegFilterLabel.setForeground(new Color(0x666666));
         RegFilterLabel.setText("Bộ lọc lịch tiêm:");
         RegFilterLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
@@ -303,7 +303,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
     {
         RegFilterChoice = new Choice();
         RegFilterChoice.setBounds(0, 40, dv.FieldWidth(), dv.FieldHeight());
-        RegFilterChoice.setFont(new Font("SVN-Arial", Font.PLAIN, dv.LabelFontSize()));
+        RegFilterChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         RegFilterChoice.setForeground(new Color(dv.BlackTextColor()));
         RegFilterChoice.setBackground(Color.WHITE);
 
@@ -347,29 +347,29 @@ public class ManageScheduleView extends JPanel implements ActionListener
         JLabel CitizenName = new JLabel("Đối tượng: " + Reg.getCitizen().getFullName() + " - "
                 + dv.getGenderName(Reg.getCitizen().getGender())  + " - " + dv.getYear(Reg.getCitizen().getBirthday())
                 + " (ID: *" + Reg.getCitizen().getID().substring(Reg.getCitizen().getID().length() - 4, Reg.getCitizen().getID().length()) + ")");
-        CitizenName.setFont(new Font("SVN-Arial", 3, 18));
+        CitizenName.setFont(new Font(dv.fontName(), 3, 18));
         CitizenName.setForeground(new Color(dv.FeatureButtonColor()));
         CitizenName.setBounds(30,1,605,30);
         CitizenName.setHorizontalAlignment(JLabel.LEFT);
 
         JLabel Phone = new JLabel("SĐT: " + Reg.getCitizen().getPhone());
-        Phone.setFont(new Font("SVN-Arial", 1, 16));
+        Phone.setFont(new Font(dv.fontName(), 1, 16));
         Phone.setForeground(new Color(dv.BlackTextColor()));
-        Phone.setBounds(30,32,600,25);
+        Phone.setBounds(30,32,200,25);
         Phone.setHorizontalAlignment(JLabel.LEFT);
 
         JLabel OnDateVaccine = new JLabel("Lịch tiêm ngày: " + Reg.getSched().getOnDate().substring(0, 10)
-                + "          Vaccine: " + Reg.getSched().getVaccineID() + " - " + Reg.getSched().getSerial());
-        OnDateVaccine.setFont(new Font("SVN-Arial", 1, 16));
+                + "  -  Vaccine: " + Reg.getSched().getVaccineID() + " - " + Reg.getSched().getSerial());
+        OnDateVaccine.setFont(new Font(dv.fontName(), 1, 16));
         OnDateVaccine.setForeground(new Color(dv.BlackTextColor()));
-        OnDateVaccine.setBounds(30,32+25+2,600,25);
+        OnDateVaccine.setBounds(30,32+25+2,400,25);
         OnDateVaccine.setHorizontalAlignment(JLabel.LEFT);
 
         JLabel TimeNOStatus = new JLabel("Buổi: " + dv.getTimeName(Reg.getTime())
                 + "          STT: " + Reg.getNO() + "          Tình trạng: " + dv.getStatusName(Reg.getStatus()));
-        TimeNOStatus.setFont(new Font("SVN-Arial", 0, 16));
+        TimeNOStatus.setFont(new Font(dv.fontName(), 0, 16));
         TimeNOStatus.setForeground(new Color(dv.BlackTextColor()));
-        TimeNOStatus.setBounds(30, 32+25*2+2,600,25);
+        TimeNOStatus.setBounds(30, 32+25*2+2,380,25);
         TimeNOStatus.setHorizontalAlignment(JLabel.LEFT);
 
         RegPanel[i] = new JPanel();
@@ -381,6 +381,41 @@ public class ManageScheduleView extends JPanel implements ActionListener
         RegPanel[i].add(Phone);
         RegPanel[i].add(OnDateVaccine);
         RegPanel[i].add(TimeNOStatus);
+
+        if (Reg.getStatus() < 2)
+        {
+            Choice StatusChoice = new Choice();
+            StatusChoice.setBounds(450, 32+2, 120, 30);
+            StatusChoice.setFont(new Font(dv.fontName(), 0, 16));
+            StatusChoice.setForeground(new Color(dv.BlackTextColor()));
+            StatusChoice.setBackground(Color.WHITE);
+            StatusChoice.add("Điểm danh");
+            StatusChoice.add("Đã tiêm");
+            StatusChoice.add("Hủy");
+
+            ActionListener handleUpdate = new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+
+                }
+            };
+
+            JButton UpdateStatusButton = new JButton();
+            UpdateStatusButton.setForeground(new Color(dv.BlackTextColor()));
+            UpdateStatusButton.setBounds(450,32*2,120,38);
+            UpdateStatusButton.setContentAreaFilled(false);
+            UpdateStatusButton.setBorder(null);
+            UpdateStatusButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/SchedRegister.png")));
+            UpdateStatusButton.addActionListener(handleUpdate);
+
+            RegPanel[i].add(StatusChoice);
+            RegPanel[i].add(UpdateStatusButton);
+        }
+
+
+
     }
 
     private void initRegListPanel(Schedule Sched)
