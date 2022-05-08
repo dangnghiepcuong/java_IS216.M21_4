@@ -63,12 +63,22 @@ public class DefaultValue
         this.password1 = password1;
     }
 
-    public void checkStringInputValue(String InputValue, JFrame frame, String Message)
+    public void checkStringInputValue(String InputValue, String title, String Message)
     {
         if (InputValue.equals(""))
         {
             JOptionPane MessageFrame = new JOptionPane();
-            MessageFrame.showMessageDialog(frame,  Message, "20017", JOptionPane.WARNING_MESSAGE,
+            MessageFrame.showMessageDialog(null,  Message, title, JOptionPane.WARNING_MESSAGE,
+                    new ImageIcon(getClass().getResource("/Data_Processor/icon/Warning Icon.png")));
+        }
+    }
+
+    public void checkisNumberInputValue(String InputValue, String title, String Message)
+    {
+        if (true)
+        {
+            JOptionPane MessageFrame = new JOptionPane();
+            MessageFrame.showMessageDialog(null,  Message, title, JOptionPane.WARNING_MESSAGE,
                     new ImageIcon(getClass().getResource("/Data_Processor/icon/Warning Icon.png")));
         }
     }

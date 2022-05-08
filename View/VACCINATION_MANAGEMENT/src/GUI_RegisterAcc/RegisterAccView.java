@@ -355,8 +355,8 @@ public class RegisterAccView extends JFrame implements ActionListener
 
             return "";
         }
-
     }
+
     private void initBirthdayField()
     {
         UtilDateModel model=new UtilDateModel();
@@ -375,6 +375,7 @@ public class RegisterAccView extends JFrame implements ActionListener
         BirthdayField.setVisible(true);
         BirthdayField.setEnabled(true);
     }
+
     private void initGenderLabel()
     {
         GenderLabel = new JLabel();
@@ -612,12 +613,13 @@ public class RegisterAccView extends JFrame implements ActionListener
             String InputStreet = StreetTextField.getText();
             String InputEmail = EmailTextField.getText();
 
-            dv.checkStringInputValue(InputUsername, this, "Cần nhập tên tài khoản!");
-            dv.checkStringInputValue(InputPassword, this,"Cần nhập mật khẩu!");
-            dv.checkStringInputValue(InputRepeatPassword, this,"Cần nhập lại mật khẩu!");
-            dv.checkStringInputValue(InputID, this,"Cần nhập mã định danh cá nhân!");
-            dv.checkStringInputValue(InputFirstName, this,"Cần nhập tên công dân!");
-            dv.checkStringInputValue(InputBirthday, this,"Cần nhập ngày sinh!");
+            dv.checkStringInputValue(InputUsername, "Cảnh báo!", "Cần nhập tên tài khoản!");
+            dv.checkStringInputValue(InputPassword, "Cảnh báo!","Cần nhập mật khẩu!");
+            dv.checkStringInputValue(InputRepeatPassword, "Cảnh báo!","Cần nhập lại mật khẩu!");
+            dv.checkStringInputValue(InputID, "Cảnh báo!","Cần nhập mã định danh cá nhân!");
+            dv.checkStringInputValue(InputFirstName, "Cảnh báo!","Cần nhập tên công dân!");
+            dv.checkStringInputValue(InputBirthday, "Cảnh báo!","Cần nhập ngày sinh!");
+            dv.checkStringInputValue(InputProvince, "Cảnh báo!", "Cần nhập tỉnh cư trú!");
 
             if (InputPassword.equals(InputRepeatPassword) == false)
             {
@@ -648,6 +650,8 @@ public class RegisterAccView extends JFrame implements ActionListener
 
                 cst.execute();
 
+                System.out.println(InputBirthday);
+
                 cst = connection.prepareCall(plsql2);
                 cst.setString("par_ID", InputID);
                 cst.setString("par_LastName", InputLastName);
@@ -670,35 +674,12 @@ public class RegisterAccView extends JFrame implements ActionListener
             catch (SQLException ex) {
                 System.out.println("Không thành công!");
 
-                dv.popupDialog(this, ex.getErrorCode(), 300, 150, ex.getMessage());
+                dv.popupOption(null, "Không thành công", "Lỗi!", 2);
 
                 throw new RuntimeException(ex);
             }
 
-            JDialog RegistionSuccessfulDialog = new JDialog(this,"Registion Successful!");
-            RegistionSuccessfulDialog.setAlwaysOnTop(true);
-            RegistionSuccessfulDialog.setModal(true);
-            RegistionSuccessfulDialog.setModalityType (Dialog.ModalityType.APPLICATION_MODAL);
-            RegistionSuccessfulDialog.setBounds((this.getWidth()-400)/2,(this.getHeight()-400)/2,400,200);
-            RegistionSuccessfulDialog.setVisible(true);
-            RegistionSuccessfulDialog.setBackground(new Color(dv.ViewBackgroundColor()));
-
-            JLabel DialogLabel = new JLabel("Đăng ký tài khoản thành công!");
-            DialogLabel.setFont(new Font(dv.fontName(), 0, 14));
-            DialogLabel.setForeground(Color.BLACK);
-            DialogLabel.setBounds(0,0,400,150);
-            DialogLabel.setHorizontalAlignment(JLabel.CENTER);
-
-            JButton DialogButton = new JButton();
-            DialogButton.setBounds(
-                    (RegistionSuccessfulDialog.getWidth()-60)/2, RegistionSuccessfulDialog.getHeight()-(50+10), 50, 35);
-            DialogButton.setBorder(null);
-            DialogButton.setContentAreaFilled(false);
-            DialogButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/OK Button.png")));
-
-            RegistionSuccessfulDialog.setLayout(null);
-            RegistionSuccessfulDialog.add(DialogLabel);
-            RegistionSuccessfulDialog.add(DialogButton);
+            dv.popupOption(null, "Đăng ký thành công!", "Thông báo!", 0);
         }
     }
 
