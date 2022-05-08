@@ -316,7 +316,7 @@ public class SearchOrgView extends JPanel implements ActionListener
         TimeChoice.setBounds(470, 32, 80, 30);
         TimeChoice.setFont(new Font(dv.fontName(), 0, 16));
         TimeChoice.setForeground(new Color(dv.BlackTextColor()));
-        TimeChoice.setBackground(Color.WHITE);
+        //TimeChoice.setBackground(Color.WHITE);
         TimeChoice.add("Sáng");
         TimeChoice.add("Trưa");
         TimeChoice.add("Tối");
@@ -355,11 +355,14 @@ public class SearchOrgView extends JPanel implements ActionListener
         };
 
         JButton SchedRegisterButton = new JButton();
+        ImageIcon SchedRegisterButtonIcon = new ImageIcon(getClass().getResource(
+                "/Data_Processor/icon/Sched Register Button.png"));
         SchedRegisterButton.setForeground(new Color(dv.BlackTextColor()));
-        SchedRegisterButton.setBounds(470,32*2,120,38);
+        SchedRegisterButton.setBounds(470,32*2,
+                SchedRegisterButtonIcon.getIconWidth(),SchedRegisterButtonIcon.getIconHeight());
         SchedRegisterButton.setContentAreaFilled(false);
         SchedRegisterButton.setBorder(null);
-        SchedRegisterButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/SchedRegister.png")));
+        SchedRegisterButton.setIcon(SchedRegisterButtonIcon);
         SchedRegisterButton.addActionListener(handleMouseAction);
 
         SchedPanel[i] = new JPanel();
@@ -428,7 +431,7 @@ public class SearchOrgView extends JPanel implements ActionListener
 
         SchedListPanel = new JPanel();
 
-        SchedListPanel.setPreferredSize(new Dimension(660, 120));
+        SchedListPanel.setPreferredSize(new Dimension(660, 120*nSched + nSched*10));
 
         SchedListPanel.setLayout(new FlowLayout());
 
