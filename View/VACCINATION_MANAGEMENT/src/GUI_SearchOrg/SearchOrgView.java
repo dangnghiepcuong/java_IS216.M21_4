@@ -326,7 +326,7 @@ public class SearchOrgView extends JPanel implements ActionListener
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                int answer = dv.popupConfirmOption(null,"Xác nhận đăng ký tiêm chủng?", "Thông báo!");
+                int answer = dv.popupConfirmOption(null,"Xác nhận đăng ký tiêm chủng?", "Xác nhận!");
 
                 if (answer == JOptionPane.YES_OPTION)
                 {
