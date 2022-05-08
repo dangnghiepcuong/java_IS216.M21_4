@@ -110,11 +110,11 @@ phone = '123'
 or phone = '123'
 or phone = '321'
 or phone = '456'
-or phone = '0962306645'
+or phone = '0339770525'
 or phone = '1234';
 
 delete account where 
-username = '0962306645'
+username = '0339770525'
 or username = '123'
 or username = '321'
 or username = '456'
