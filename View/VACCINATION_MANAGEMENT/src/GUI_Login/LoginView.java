@@ -50,7 +50,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
         UsernameLabel = new JLabel();
         UsernameLabel.setBounds(80, 165, dv.LabelWidth(), dv.LabelHeight());
         UsernameLabel.setText("SĐT/Tên tài khoản");
-        UsernameLabel.setFont(new Font("SVN-Arial", 3, 20));
+        UsernameLabel.setFont(new Font(dv.fontName(), 3, 20));
         UsernameLabel.setForeground(new Color(0x666666));
         UsernameLabel.setHorizontalAlignment(JLabel.LEFT);
         UsernameLabel.setVerticalAlignment(JLabel.CENTER);
@@ -61,7 +61,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
         UsernameTextField = new JTextField();
         UsernameTextField.setBounds(80, 195, dv.FieldWidth(), dv.FieldHeight());
         UsernameTextField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
-        UsernameTextField.setFont(new Font("SVN-Arial", Font.PLAIN, 16));
+        UsernameTextField.setFont(new Font(dv.fontName(), Font.PLAIN, 16));
         UsernameTextField.setForeground(new Color(0x333333));
         UsernameTextField.setBackground(Color.WHITE);
     }
@@ -71,7 +71,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
         PasswordLabel = new JLabel();
         PasswordLabel.setBounds(80, 235, dv.LabelWidth(), dv.LabelHeight());
         PasswordLabel.setText("Mật khẩu");
-        PasswordLabel.setFont(new Font("SVN-Arial", 3, 20));
+        PasswordLabel.setFont(new Font(dv.fontName(), 3, 20));
         PasswordLabel.setForeground(new Color(0x666666));
         PasswordLabel.setHorizontalTextPosition(JLabel.LEFT);
         PasswordLabel.setVerticalTextPosition(JLabel.CENTER);
@@ -82,7 +82,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
         PasswordField = new JPasswordField();
         PasswordField.setBounds(80, 265, dv.FieldWidth(), dv.FieldHeight());
         PasswordField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
-        PasswordField.setFont(new Font("SVN-Arial", Font.PLAIN, 16));
+        PasswordField.setFont(new Font(dv.fontName(), Font.PLAIN, 16));
         PasswordField.setForeground(new Color(dv.FieldLabelColor()));
         PasswordField.setBackground(Color.WHITE);
     }
@@ -92,7 +92,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
         ForgotPasswordLabel = new JLabel();
         ForgotPasswordLabel.setBounds(80, 270+dv.FieldHeight(), 120, 25);
         ForgotPasswordLabel.setText("Quên mật khẩu");
-        ForgotPasswordLabel.setFont(new Font("SVN-Arial",Font.ITALIC, 12));
+        ForgotPasswordLabel.setFont(new Font(dv.fontName(),Font.ITALIC, 12));
         ForgotPasswordLabel.setForeground(new Color(dv.FieldLabelColor()));
         ForgotPasswordLabel.addMouseListener(this);
         //ForgotPasswordLabel.setBorder(dv.border());
@@ -103,7 +103,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
         RegisterAccountLabel = new JLabel();
         RegisterAccountLabel.setBounds(80+120-1, 270+dv.FieldHeight(), 80, 25);
         RegisterAccountLabel.setText("Đăng ký");
-        RegisterAccountLabel.setFont(new Font("SVN-Arial",Font.ITALIC, 12));
+        RegisterAccountLabel.setFont(new Font(dv.fontName(),Font.ITALIC, 12));
         RegisterAccountLabel.setForeground(new Color(dv.FieldLabelColor()));
         RegisterAccountLabel.setHorizontalAlignment(JLabel.RIGHT);
         RegisterAccountLabel.addMouseListener(this);
@@ -112,11 +112,11 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
 
     private void initLoginButton()
     {
+        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Login Button.png"));
         LoginButton = new JButton();
-        LoginButton.setBounds(105, 380, 150, 49);
+        LoginButton.setBounds(105, 380, LoginIcon.getIconWidth(), LoginIcon.getIconHeight());
         LoginButton.setBorder(null);
         LoginButton.setContentAreaFilled(false);
-        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Login Button.png"));
         LoginButton.setIcon(LoginIcon);
         LoginButton.addActionListener(this);
     }
@@ -198,7 +198,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
 
 
             if (InputUsername.equals("") || InputPassword.equals("")) {
-                System.out.println("Nhập vào tài khoản/mật khẩu!");
+                dv.popupOption(this, "Nhập vào tài khoản/mật khẩu!", "Cảnh báo!", 1);
                 return;
             }
 
@@ -221,14 +221,15 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
                 acc.setRole(rs.getInt("Role"));
 
             } catch (SQLException ex) {
-
-                System.out.println("Tài khoản không tồn tại!");
-
+                dv.popupOption(this, "Tài khoản không tồn tại!", String.valueOf(ex.getErrorCode()), 2);
                 throw new RuntimeException(ex);
             }
 
             if (acc.getPassword().equals(InputPassword) == false)
-                System.out.println("Mật khẩu không đúng!");
+            {
+                dv.popupOption(this, "Mật khẩu không đúng!", "Cảnh báo!", 1);
+                return;
+            }
             else
                 switch (acc.getRole()) {
                     case 0:

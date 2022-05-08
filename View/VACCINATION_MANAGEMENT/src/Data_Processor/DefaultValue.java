@@ -3,6 +3,7 @@ package Data_Processor;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.Dialog.*;
 
 public class DefaultValue
 {
@@ -60,6 +61,102 @@ public class DefaultValue
 
     public void setPassword1(String password1) {
         this.password1 = password1;
+    }
+
+    public void checkStringInputValue(String InputValue, JFrame frame, String Message)
+    {
+        if (InputValue.equals(""))
+        {
+            JOptionPane MessageFrame = new JOptionPane();
+            MessageFrame.showMessageDialog(frame,  Message, "20017", JOptionPane.WARNING_MESSAGE,
+                    new ImageIcon(getClass().getResource("/Data_Processor/icon/Warning Icon.png")));
+        }
+    }
+
+    public int popupConfirmOption(JFrame frame, String Message, String title) {
+        JOptionPane OptionFrame = new JOptionPane();
+
+        String responses[] = {"Có", "Không"};
+
+
+        ImageIcon icon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Question Icon.png"));
+
+        return OptionFrame.showOptionDialog(frame, Message, title,
+                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, icon, responses, 0);
+
+    }
+
+    public JOptionPane popupOption(JFrame frame, String Message, String title, int Option)
+    {
+        JOptionPane OptionFrame = new JOptionPane();
+
+        String responses[] = {"Có", "Không"};
+
+        switch (Option)
+        {
+            case 0:
+                OptionFrame.showMessageDialog(frame, Message, title, JOptionPane.INFORMATION_MESSAGE,
+                        new ImageIcon(getClass().getResource("/Data_Processor/icon/Infomation Icon.png")));
+                break;
+            case 1:
+                OptionFrame.showMessageDialog(frame, Message, title, JOptionPane.WARNING_MESSAGE,
+                        new ImageIcon(getClass().getResource("/Data_Processor/icon/Warning Icon.png")));
+                break;
+            case 2:
+                OptionFrame.showMessageDialog(frame, Message, title, JOptionPane.ERROR_MESSAGE,
+                        new ImageIcon(getClass().getResource("/Data_Processor/icon/Error Icon.png")));
+                break;
+            default:
+                return OptionFrame;
+        }
+
+        return OptionFrame;
+    }
+
+    public JDialog popupDialog (JFrame frame, int ErrorCode, int w, int h, String ErrorMessage)
+    {
+        JDialog Dialog = new JDialog(frame, String.valueOf(ErrorCode));
+        Dialog.setAlwaysOnTop(true);
+        Dialog.setModal(true);
+        Dialog.setModalityType (ModalityType.APPLICATION_MODAL);
+        Dialog.setSize(w,h);
+        Dialog.setBounds((1600-w)/2,(900-h)/2,w,h);
+
+        Dialog.setResizable(false);
+        Dialog.setVisible(true);
+        Dialog.setBackground(new Color(this.ViewBackgroundColor()));
+        Dialog.setUndecorated(true);
+
+        JLabel DialogLabel = new JLabel(ErrorMessage);
+        DialogLabel.setFont(new Font(this.fontName(), 0, 14));
+        DialogLabel.setForeground(Color.BLACK);
+        DialogLabel.setBounds(0,0,w,h-50);
+        DialogLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        JButton DialogButton = new JButton();
+        DialogButton.setBounds(
+                (Dialog.getWidth()-60)/2, Dialog.getHeight()-(50+10), 50, 35);
+        DialogButton.setBorder(null);
+        DialogButton.setContentAreaFilled(false);
+        DialogButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/OK Button.png")));
+
+        Box b = Box.createHorizontalBox();
+        b.add(Box.createHorizontalGlue());
+        b.add(DialogLabel, BorderLayout.CENTER);
+        b.add(Box.createHorizontalGlue());
+
+//        Dialog.setLayout(null);
+        Dialog.add(b);
+        Dialog.add(DialogButton);
+        Dialog.pack();
+        Dialog.setLocationRelativeTo(null);
+
+        return Dialog;
+    }
+
+    public String fontName()
+    {
+        return "SVN-Arial";
     }
 
     public int LabelFontSize()
@@ -176,11 +273,11 @@ public class DefaultValue
     {
         for (int i = 1; i < 10; i++)
             if (province[i].equals(Name))
-                return "0"+i+"";
+                return "0"+i;
 
         for (int i = 10; i <= 64; i++)
             if (province[i].equals(Name))
-                return ""+i+"";
+                return ""+i;
 
         return "";
     }
