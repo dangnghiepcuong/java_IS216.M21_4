@@ -294,6 +294,14 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
         SchedListPanel.setLayout(new FlowLayout());
 
+        JLabel SchedListLabel = new JLabel("DANH SÁCH LỊCH TIÊM:");
+        SchedListLabel.setPreferredSize(new Dimension(640,50));
+        SchedListLabel.setFont(new Font(dv.fontName(), 1, 20));
+        SchedListLabel.setForeground(new Color(dv.FeatureButtonColor()));
+        SchedListLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        SchedListPanel.add(SchedListLabel);
+
         for (i = 0; i<nScheds; i++)
         {
             initSchedPanel(i, Scheds[i]);
@@ -493,10 +501,16 @@ public class ManageScheduleView extends JPanel implements ActionListener
         nReg = i;
 
         RegListPanel = new JPanel();
-
         RegListPanel.setPreferredSize(new Dimension(660, 150*nReg+nReg*10));
-
         RegListPanel.setLayout(new FlowLayout());
+
+        JLabel RegListLabel = new JLabel("DANH SÁCH CÁC LƯỢT ĐĂNG KÝ:");
+        RegListLabel.setPreferredSize(new Dimension(640,50));
+        RegListLabel.setFont(new Font(dv.fontName(), 1, 20));
+        RegListLabel.setForeground(new Color(dv.FeatureButtonColor()));
+        RegListLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        RegListPanel.add(RegListLabel);
 
         for (i = 0; i<nReg; i++)
         {
@@ -545,60 +559,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
         }
     }
 
-    private void initOnDateField()
-    {
-
-    }
-
-    private void initVaccineLabel()
-    {
-
-    }
-
-    private void initVaccineChoice()
-    {
-
-    }
-
-    private void initSerialLabel()
-    {
-
-    }
-
-    private void initSerialTextField()
-    {
-
-    }
-
-    private void initLimitDayLabel()
-    {
-
-    }
-
-    private void initLimitDayTextField()
-    {
-
-    }
-
-    private void initLimitNoonLabel()
-    {
-
-    }
-
-    private void initLimitNoonTextField()
-    {
-
-    }
-
-    private void initLimitNightLabel()
-    {
-
-    }
-
-    private void initLimitNightTextField()
-    {
-
-    }
 
     private void initAddNewSchedButton()
     {
@@ -613,6 +573,12 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
     private void initCreateSchedPanel()
     {
+        JLabel CreateSchedLabel = new JLabel("TẠO LỊCH TIÊM CHỦNG");
+        CreateSchedLabel.setPreferredSize(new Dimension(300, 35));
+        CreateSchedLabel.setFont(new Font(dv.fontName(), 1, 20));
+        CreateSchedLabel.setForeground(new Color(dv.FeatureButtonColor()));
+        CreateSchedLabel.setHorizontalAlignment(JLabel.CENTER);
+
         JLabel OnDateLabel = new JLabel("Ngày thực hiện lịch tiêm: ");
         OnDateLabel.setPreferredSize(new Dimension(200, 30));
         OnDateLabel.setFont(new Font(dv.fontName(), 0, 16));
@@ -677,6 +643,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
         nVacc = i;
 
+        VaccineChoice.add("");
         for (i = 0; i<nVacc; i++)
         {
             VaccineChoice.add(vacc[i].getID());
@@ -727,7 +694,42 @@ public class ManageScheduleView extends JPanel implements ActionListener
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                String InputOnDate = OnDateField.getJFormattedTextField().getText();
+                String InputVaccineID = VaccineChoice.getSelectedItem();
+                String InputSerial = SerialTextField.getText();
 
+                if (dv.checkStringInputValue(InputOnDate,
+                    "Cảnh báo!", "Nhập ngày lịch tiêm!") != -2)
+                    return;
+                if (dv.checkStringInputValue(InputVaccineID,
+                    "Cảnh báo!", "Chọn loại vaccine!") != -2)
+                    return;
+                if(dv.checkStringInputValue(InputSerial,
+                    "Cảnh báo!", "Nhập số lô vaccine!") != -2)
+                    return;
+
+                int InputLimitDay = 0;
+                try {
+                    InputLimitDay = Integer.parseInt(LimitDayTextField.getText());
+                } catch (NumberFormatException ex) {
+                    InputLimitDay = 0;
+                }
+
+                int InputLimitNoon = 0;
+                try {
+
+                    InputLimitNoon = Integer.parseInt(LimitNoonTextField.getText());
+                } catch (NumberFormatException ex) {
+                    InputLimitNoon = 0;
+                }
+
+                int InputLimitNight = 0;
+                try {
+
+                    InputLimitNight = Integer.parseInt(LimitNightTextField.getText());
+                } catch (NumberFormatException ex) {
+                    InputLimitNight = 0;
+                }
 
                 int answer = dv.popupConfirmOption(null,"Xác nhận tạo lịch tiêm chủng?", "Xác nhận!");
 
@@ -742,12 +744,12 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
                         CallableStatement cst = connection.prepareCall(plsql);
                         cst.setString("par_OrgID", orgUser.getID());
-                        cst.setString("par_OnDate", dv.toOracleDateFormat(OnDateField.getJFormattedTextField().getText()));
-                        cst.setString("par_VaccineID", VaccineChoice.getSelectedItem());
-                        cst.setString("par_Serial", SerialTextField.getText());
-                        cst.setInt("par_LimitDay", Integer.parseInt(LimitDayTextField.getText()));
-                        cst.setInt("par_LimitNoon", Integer.parseInt(LimitNoonTextField.getText()));
-                        cst.setInt("par_LimitNight", Integer.parseInt(LimitNightTextField.getText()));
+                        cst.setString("par_OnDate", dv.toOracleDateFormat(InputOnDate));
+                        cst.setString("par_VaccineID", InputVaccineID);
+                        cst.setString("par_Serial", InputSerial);
+                        cst.setInt("par_LimitDay", InputLimitDay);
+                        cst.setInt("par_LimitNoon", InputLimitNoon);
+                        cst.setInt("par_LimitNight", InputLimitNight);
                         cst.setString("par_Note", "");
 
                         cst.execute();
@@ -766,6 +768,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         JButton CreateSchedButton = new JButton();
         CreateSchedButton.setPreferredSize(new Dimension(CreateSchedButtonIcon.getIconWidth(), CreateSchedButtonIcon.getIconHeight()));
         CreateSchedButton.setContentAreaFilled(false);
+        CreateSchedButton.setBorder(null);
         CreateSchedButton.setIcon(CreateSchedButtonIcon);
         CreateSchedButton.addActionListener(handleCreateSched);
 
@@ -777,56 +780,60 @@ public class ManageScheduleView extends JPanel implements ActionListener
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
 
-
+        c.insets = new Insets(0,0,20,0);
         c.gridy = 0;
+        CreateSchedPanel.add(CreateSchedLabel, c);
+
+        c.insets = new Insets(0, 0, 0, 0);
+        c.gridy = 1;
         CreateSchedPanel.add(OnDateLabel,c);
 
-        c.insets = new Insets(0,0,20,0);
-        c.gridy = 1;
+        c.insets = new Insets(0,0,15,0);
+        c.gridy = 2;
         CreateSchedPanel.add(OnDateField,c);
 
         c.insets = new Insets(0, 0, 0, 0);
-        c.gridy = 2;
+        c.gridy = 3;
         CreateSchedPanel.add(VaccineLabel,c);
 
-        c.insets = new Insets(0,0,20,0);
-        c.gridy = 3;
+        c.insets = new Insets(0,0,15,0);
+        c.gridy = 4;
         CreateSchedPanel.add(VaccineChoice,c);
 
         c.insets = new Insets(0, 0, 0, 0);
-        c.gridy = 4;
+        c.gridy = 5;
         CreateSchedPanel.add(SerialLabel,c);
 
-        c.insets = new Insets(0,0,20,0);
-        c.gridy = 5;
+        c.insets = new Insets(0,0,15,0);
+        c.gridy = 6;
         CreateSchedPanel.add(SerialTextField,c);
 
         c.insets = new Insets(0, 0, 0, 0);
-        c.gridy = 6;
+        c.gridy = 7;
         CreateSchedPanel.add(LimitDayLabel,c);
 
-        c.insets = new Insets(0,0,20,0);
-        c.gridy = 7;
+        c.insets = new Insets(0,0,15,0);
+        c.gridy = 8;
         CreateSchedPanel.add(LimitDayTextField,c);
 
         c.insets = new Insets(0, 0, 0, 0);
-        c.gridy = 8;
+        c.gridy = 9;
         CreateSchedPanel.add(LimitNoonLabel,c);
 
-        c.insets = new Insets(0,0,20,0);
-        c.gridy = 9;
+        c.insets = new Insets(0,0,15,0);
+        c.gridy = 10;
         CreateSchedPanel.add(LimitNoonTextField,c);
 
         c.insets = new Insets(0, 0, 0, 0);
-        c.gridy = 10;
+        c.gridy = 11;
         CreateSchedPanel.add(LimitNightLabel,c);
 
-        c.insets = new Insets(0,0,20,0);
-        c.gridy = 11;
+        c.insets = new Insets(0,0,15,0);
+        c.gridy = 12;
         CreateSchedPanel.add(LimitNightTextField,c);
 
         c.insets = new Insets(0, 0, 0, 0);
-        c.gridy = 12;
+        c.gridy = 13;
         CreateSchedPanel.add(CreateSchedButton, c);
     }
 

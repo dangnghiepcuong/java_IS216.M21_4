@@ -63,27 +63,46 @@ public class DefaultValue
         this.password1 = password1;
     }
 
-    public void checkStringInputValue(String InputValue, String title, String Message)
+    public int checkStringInputValue(String InputValue, String title, String Message)
     {
         if (InputValue.equals(""))
         {
-            JOptionPane MessageFrame = new JOptionPane();
-            MessageFrame.showMessageDialog(null,  Message, title, JOptionPane.WARNING_MESSAGE,
-                    new ImageIcon(getClass().getResource("/Data_Processor/icon/Warning Icon.png")));
+            JOptionPane OptionFrame = new JOptionPane();
+
+            String responses[] = {"OK!"};
+
+            ImageIcon icon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Warning Icon.png"));
+
+            return OptionFrame.showOptionDialog(null, Message, title,
+                    JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE, icon, responses, 0);
         }
+
+        return -2;
     }
 
-    public void checkisNumberInputValue(String InputValue, String title, String Message)
+    public int checkisNumberInputValue(String InputValue, String title, String Message)
     {
-        if (true)
+        JOptionPane OptionFrame = new JOptionPane();
+
+        String responses[] = {"OK!"};
+
+        try
         {
-            JOptionPane MessageFrame = new JOptionPane();
-            MessageFrame.showMessageDialog(null,  Message, title, JOptionPane.WARNING_MESSAGE,
-                    new ImageIcon(getClass().getResource("/Data_Processor/icon/Warning Icon.png")));
+            int value = Integer.parseInt(InputValue);
         }
+        catch (NumberFormatException ex)
+        {
+            ImageIcon icon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Warning Icon.png"));
+
+            return OptionFrame.showOptionDialog(null, Message, title,
+                    JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE, icon, responses, 0);
+        }
+
+        return -2;
     }
 
-    public int popupConfirmOption(JFrame frame, String Message, String title) {
+    public int popupConfirmOption(JFrame frame, String Message, String title)
+    {
         JOptionPane OptionFrame = new JOptionPane();
 
         String responses[] = {"Có", "Không"};

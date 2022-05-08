@@ -607,28 +607,37 @@ public class RegisterAccView extends JFrame implements ActionListener
             String InputBirthday = textField.getText();
             int InputGender = GenderChoice.getSelectedIndex();
             String InputHomeTown = HomeTownChoice.getSelectedItem();
-            String InputProvince = dv.getProvinceCode(ProvinceChoice.getSelectedItem());
+            String InputProvince = ProvinceChoice.getSelectedItem();
             String InputDistrict = DistrictChoice.getSelectedItem();
             String InputTown = TownChoice.getSelectedItem();
             String InputStreet = StreetTextField.getText();
             String InputEmail = EmailTextField.getText();
 
-            dv.checkStringInputValue(InputUsername, "Cảnh báo!", "Cần nhập tên tài khoản!");
-            dv.checkStringInputValue(InputPassword, "Cảnh báo!","Cần nhập mật khẩu!");
-            dv.checkStringInputValue(InputRepeatPassword, "Cảnh báo!","Cần nhập lại mật khẩu!");
-            dv.checkStringInputValue(InputID, "Cảnh báo!","Cần nhập mã định danh cá nhân!");
-            dv.checkStringInputValue(InputFirstName, "Cảnh báo!","Cần nhập tên công dân!");
-            dv.checkStringInputValue(InputBirthday, "Cảnh báo!","Cần nhập ngày sinh!");
-            dv.checkStringInputValue(InputProvince, "Cảnh báo!", "Cần nhập tỉnh cư trú!");
+            if ( dv.checkStringInputValue(InputUsername, "Cảnh báo!", "Nhập tên tài khoản!") != -2 )
+                return;
+            if ( dv.checkStringInputValue(InputPassword, "Cảnh báo!","Nhập mật khẩu!") != -2 )
+                return;
+            if ( dv.checkStringInputValue(InputRepeatPassword, "Cảnh báo!","Nhập lại mật khẩu!") != -2 )
+                return;
+            if ( dv.checkStringInputValue(InputID, "Cảnh báo!","Nhập mã định danh cá nhân!") != -2 )
+                return;
+            if ( dv.checkStringInputValue(InputFirstName, "Cảnh báo!","Nhập tên công dân!") != -2 )
+                return;
+            if ( dv.checkStringInputValue(InputBirthday, "Cảnh báo!","Nhập ngày sinh!") != -2 )
+                return;
+            if ( dv.checkStringInputValue(InputProvince, "Cảnh báo!", "Nhập tỉnh cư trú!") != -2 )
+                return;
+            else
+                InputProvince = dv.getProvinceCode(InputProvince);
+            if (InputGender == 0)
+                InputGender = 3;
 
             if (InputPassword.equals(InputRepeatPassword) == false)
             {
                 System.out.println("Mật khẩu không trùng khớp!");
                 return;
             }
-
-
-
+            
             InputBirthday = dv.toOracleDateFormat(InputBirthday);
             InputGender -= 1;
 
@@ -649,8 +658,6 @@ public class RegisterAccView extends JFrame implements ActionListener
                 cst.setString(5, "");
 
                 cst.execute();
-
-                System.out.println(InputBirthday);
 
                 cst = connection.prepareCall(plsql2);
                 cst.setString("par_ID", InputID);
