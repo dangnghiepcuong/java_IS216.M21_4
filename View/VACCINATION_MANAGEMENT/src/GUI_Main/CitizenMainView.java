@@ -408,7 +408,6 @@ public class CitizenMainView extends JFrame implements ActionListener
             personalUser.setPhone(rs.getString("Phone"));
             personalUser.setEmail(rs.getString("Email"));
             personalUser.setGuardian(rs.getString("Guardian"));
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -463,7 +462,8 @@ public class CitizenMainView extends JFrame implements ActionListener
         if(e.getSource() == ManageVaccinationButton)
         {
             manageVaccinationView = new ManageVaccinationView(personalUser);
-            MainLayeredPane.add(manageVaccinationView, Integer.valueOf(1));
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(manageVaccinationView, Integer.valueOf(0));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
 
             //init BackButton
