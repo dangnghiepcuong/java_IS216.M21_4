@@ -32,7 +32,8 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
     //private JPanel ViewSymbolPanel;
     private DefaultValue dv = new DefaultValue();
     private JLabel ForgotPasswordLabel;
-    private  JLabel RegisterAccountLabel;
+    private JLabel RegisterAccountLabel;
+    private JLabel ExitViewLabel;
 
     private Account acc = new Account();
 
@@ -110,6 +111,18 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
         //RegisterAccountLabel.setBorder(dv.border());
     }
 
+    private void initExitViewLabel()
+    {
+        ExitViewLabel = new JLabel();
+        ExitViewLabel.setBounds(this.getWidth()-55, this.getHeight()-58, 40, 20);
+        ExitViewLabel.setText("Thoát");
+        ExitViewLabel.setFont(new Font(dv.fontName(),Font.ITALIC, 12));
+        ExitViewLabel.setForeground(new Color(dv.FieldLabelColor()));
+        ExitViewLabel.setHorizontalAlignment(JLabel.CENTER);
+//        ExitViewLabel.setBorder(dv.border());
+        ExitViewLabel.addMouseListener(this);
+    }
+
     private void initLoginButton()
     {
         ImageIcon LoginIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Login Button.png"));
@@ -180,6 +193,10 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
         //init LoginButton
         initLoginButton();
         this.add(LoginButton);
+
+        //init ExitViewLabel
+        initExitViewLabel();
+        this.add(ExitViewLabel);
 
         this.repaint();
     }
@@ -265,6 +282,10 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
             RegisterAccView registerAccView = new RegisterAccView();
         }
 
+        if (e.getSource() == ExitViewLabel)
+        {
+            this.dispose();
+        }
     }
 
     @Override

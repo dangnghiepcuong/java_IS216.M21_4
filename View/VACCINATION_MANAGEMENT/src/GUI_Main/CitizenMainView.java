@@ -478,8 +478,8 @@ public class CitizenMainView extends JFrame implements ActionListener
         {
             userInformationView = null;
             MainLayeredPane.removeAll();
-            CitizenMainView citizenMainView = new CitizenMainView(personalUser.getPhone());
             this.dispose();
+            CitizenMainView citizenMainView = new CitizenMainView(personalUser.getPhone());
         }
 
         if (e.getSource() == VaccinationRegButton)
@@ -499,11 +499,15 @@ public class CitizenMainView extends JFrame implements ActionListener
 
         if (e.getSource() == InfoSettingButton)
         {
-            userInformationView = new UserInformationView();
-            MainLayeredPane.add(userInformationView, Integer.valueOf(1));
+            MainLayeredPane.removeAll();
+
+            userInformationView = new UserInformationView(personalUser);
+            MainLayeredPane.add(userInformationView, Integer.valueOf(0));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
             initBackInfoButton();
             MainLayeredPane.add(BackInfoButton, Integer.valueOf(5));
+
+            //personalUser = userInformationView.getPersonalUser();
         }
 
         if (e.getSource() == SearchButton)
