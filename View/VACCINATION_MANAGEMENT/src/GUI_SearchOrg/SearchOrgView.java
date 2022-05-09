@@ -146,7 +146,7 @@ public class SearchOrgView extends JPanel implements ActionListener
         initSearchOrgButton();
 
         OrgFilterPanel = new JPanel();
-        OrgFilterPanel.setBounds(dv.AlignLeft(), dv.AlignTop(), dv.LabelWidth()+50, 300);
+        OrgFilterPanel.setBounds(dv.AlignLeft(), dv.AlignTop(), dv.LabelWidth()+50, 350);
         OrgFilterPanel.setLayout(null);
         OrgFilterPanel.setBackground(new Color(dv.ViewBackgroundColor()));
 
