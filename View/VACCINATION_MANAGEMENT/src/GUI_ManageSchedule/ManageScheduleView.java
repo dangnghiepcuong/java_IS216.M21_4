@@ -53,19 +53,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
     private JButton AddNewSchedButton;
     private JPanel CreateSchedPanel;
 
-    /*private JLabel OnDateLabel;
-    private JDatePickerImpl OnDateField;
-    private JLabel VaccineLabel;
-    private Choice VaccineChoice;
-    private JLabel SerialLabel;
-    private JTextField SerialTextField;
-    private JLabel LimitDayLabel;
-    private JTextField LimitDayTextField;
-    private JLabel LimitNoonLabel;
-    private JTextField LimitNoonTextField;
-    private JLabel LimitNightLabel;
-    private JTextField LimitNightTextField;*/
-
 
     private JLayeredPane LayeredPaneArea;
 
@@ -199,8 +186,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
         LocalDate SchedOnDate = LocalDate.of(dv.getYear(Sched.getOnDate()), dv.getMonth(Sched.getOnDate()), dv.getDay(Sched.getOnDate()));
 
         LocalDate sysdate = LocalDate.from(java.time.LocalDateTime.now());
-
-        System.out.println(SchedOnDate + " " + sysdate);
 
         if (SchedOnDate.isAfter(sysdate))
         {

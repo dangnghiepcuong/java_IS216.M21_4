@@ -63,7 +63,7 @@ public class CitizenMainView extends JFrame implements ActionListener
     {
         ImageIcon VaccRegIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Vaccination Reg Button.png"));
         VaccinationRegButton = new JButton();
-        VaccinationRegButton.setBounds((320-VaccRegIcon.getIconWidth())/2, 250, VaccRegIcon.getIconWidth(), VaccRegIcon.getIconHeight());
+        VaccinationRegButton.setBounds((320-VaccRegIcon.getIconWidth())/2, 300, VaccRegIcon.getIconWidth(), VaccRegIcon.getIconHeight());
         VaccinationRegButton.setBorder(null);
         VaccinationRegButton.setContentAreaFilled(false);
         VaccinationRegButton.setIcon(VaccRegIcon);
