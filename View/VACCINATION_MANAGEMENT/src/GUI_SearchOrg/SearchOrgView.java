@@ -18,6 +18,7 @@ public class SearchOrgView extends JPanel implements ActionListener
     private DefaultValue dv = new DefaultValue();
     private Organization org[] = new Organization[100000];
 
+    private JPanel OrgFilterPanel;
     private JLabel ProvinceLabel;
     private JLabel DistrictLabel;
     private JLabel TownLabel;
@@ -47,7 +48,7 @@ public class SearchOrgView extends JPanel implements ActionListener
     private void initProvinceLabel()
     {
         ProvinceLabel = new JLabel();
-        ProvinceLabel.setBounds(dv.AlignLeft(), dv.AlignTop(), dv.LabelWidth(), dv.LabelHeight());
+        ProvinceLabel.setBounds(0, 0, dv.LabelWidth(), dv.LabelHeight());
         ProvinceLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         ProvinceLabel.setForeground(new Color(0x666666));
         ProvinceLabel.setText("Tỉnh/thành phố:");
@@ -57,7 +58,7 @@ public class SearchOrgView extends JPanel implements ActionListener
     private void initProvinceChoice()
     {
         ProvinceChoice = new Choice();
-        ProvinceChoice.setBounds(dv.AlignLeft(), dv.AlignTop() +40, dv.FieldWidth(), dv.FieldHeight());
+        ProvinceChoice.setBounds(0, 40, dv.FieldWidth(), dv.FieldHeight());
         ProvinceChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         ProvinceChoice.setForeground(new Color(dv.BlackTextColor()));
         ProvinceChoice.setBackground(Color.WHITE);
@@ -71,7 +72,7 @@ public class SearchOrgView extends JPanel implements ActionListener
     private void initDistrictLabel()
     {
         DistrictLabel = new JLabel();
-        DistrictLabel.setBounds(dv.AlignLeft(), dv.AlignTop() +80, dv.LabelWidth(), dv.LabelHeight());
+        DistrictLabel.setBounds(0, 80, dv.LabelWidth(), dv.LabelHeight());
         DistrictLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         DistrictLabel.setForeground(new Color(0x666666));
         DistrictLabel.setText("Quận/Huyện:");
@@ -81,7 +82,7 @@ public class SearchOrgView extends JPanel implements ActionListener
     private void initDistrictChoice()
     {
         DistrictChoice = new Choice();
-        DistrictChoice.setBounds(dv.AlignLeft(), dv.AlignTop() +110, dv.FieldWidth(), dv.FieldHeight());
+        DistrictChoice.setBounds(0, 110, dv.FieldWidth(), dv.FieldHeight());
         DistrictChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         DistrictChoice.setForeground(new Color(0x333333));
         DistrictChoice.setBackground(Color.WHITE);
@@ -98,7 +99,7 @@ public class SearchOrgView extends JPanel implements ActionListener
     private void initTownLabel()
     {
         TownLabel = new JLabel();
-        TownLabel.setBounds(dv.AlignLeft(), dv.AlignTop() +150, dv.LabelWidth(), dv.LabelHeight());
+        TownLabel.setBounds(0, 150, dv.LabelWidth(), dv.LabelHeight());
         TownLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         TownLabel.setForeground(new Color(0x666666));
         TownLabel.setSize(dv.LabelWidth(), dv.LabelHeight());
@@ -108,7 +109,7 @@ public class SearchOrgView extends JPanel implements ActionListener
     private void initTownChoice()
     {
         TownChoice = new Choice();
-        TownChoice.setBounds(dv.AlignLeft(), dv.AlignTop() +180, dv.FieldWidth(), dv.FieldHeight());
+        TownChoice.setBounds(0, 180, dv.FieldWidth(), dv.FieldHeight());
         TownChoice.setForeground(new Color(0x333333));
         TownChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         TownChoice.setBackground(Color.WHITE);
@@ -127,14 +128,36 @@ public class SearchOrgView extends JPanel implements ActionListener
         ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Magnifying Glass Button_1.png"));
         SearchOrgButton.setIcon(SearchIcon);
 
-        SearchOrgButton.setBounds(dv.AlignLeft(), dv.AlignTop() +250, dv.FieldWidth(), SearchIcon.getIconHeight());
+        SearchOrgButton.setBounds(0, 250, dv.FieldWidth(), SearchIcon.getIconHeight());
         SearchOrgButton.setBorder(null);
         SearchOrgButton.setContentAreaFilled(false);
 
         SearchOrgButton.addActionListener(this);
     }
 
+    private void initOrgFilterPanel()
+    {
+        initProvinceLabel();
+        initProvinceChoice();
+        initDistrictLabel();
+        initDistrictChoice();
+        initTownLabel();
+        initTownChoice();
+        initSearchOrgButton();
 
+        OrgFilterPanel = new JPanel();
+        OrgFilterPanel.setBounds(dv.AlignLeft(), dv.AlignTop(), dv.LabelWidth()+50, 300);
+        OrgFilterPanel.setLayout(null);
+        OrgFilterPanel.setBackground(new Color(dv.ViewBackgroundColor()));
+
+        OrgFilterPanel.add(ProvinceLabel);
+        OrgFilterPanel.add(ProvinceChoice);
+        OrgFilterPanel.add(DistrictLabel);
+        OrgFilterPanel.add(DistrictChoice);
+        OrgFilterPanel.add(TownLabel);
+        OrgFilterPanel.add(TownChoice);
+        OrgFilterPanel.add(SearchOrgButton);
+    }
 
 
 /*
@@ -514,33 +537,9 @@ public class SearchOrgView extends JPanel implements ActionListener
 
         this.setLayout(null);
         
-        //init ProvinceLabel
-        initProvinceLabel();
-        this.add(ProvinceLabel);
-
-        //init ProvinceChoice
-        initProvinceChoice();
-        this.add(ProvinceChoice);
-
-        //init DistrictLabel;
-        initDistrictLabel();
-        this.add(DistrictLabel);
-
-        //init DistrictChoice
-        initDistrictChoice();
-        this.add(DistrictChoice);
-
-        //init TownLabel;
-        initTownLabel();
-        this.add(TownLabel);
-
-        //init TownChoice
-        initTownChoice();
-        this.add(TownChoice);
-
-        //init SearchOrgButton
-        initSearchOrgButton();
-        this.add(SearchOrgButton);
+        //init OrgFilterPanel
+        initOrgFilterPanel();
+        this.add(OrgFilterPanel);
 
         //init LayeredPane
         initLayeredPaneArea();
@@ -627,7 +626,7 @@ public class SearchOrgView extends JPanel implements ActionListener
 
                 //init OrgListLabel
                 JLabel OrgListLabel = new JLabel("DANH SÁCH CÁC ĐƠN VỊ TIÊM CHỦNG ("
-                        + ProvinceChoice.getSelectedItem() + ", " + DistrictChoice.getSelectedItem() + ", " + TownChoice.getSelectedItem()+"):");
+                        + ProvinceChoice.getSelectedItem() + "-" + DistrictChoice.getSelectedItem() + "-" + TownChoice.getSelectedItem()+"):");
                 OrgListLabel.setBounds(0,0,640,40);
                 OrgListLabel.setFont(new Font(dv.fontName(), 1, 20));
                 OrgListLabel.setForeground(new Color(dv.FeatureButtonColor()));

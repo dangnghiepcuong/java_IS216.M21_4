@@ -95,7 +95,7 @@ public class ManageVaccinationView extends JPanel implements ActionListener
         initFilterButton();
 
         RegFilterPanel = new JPanel();
-        RegFilterPanel.setBounds(dv.AlignLeft(), 40, dv.LabelWidth()+50, 110 + 56);
+        RegFilterPanel.setBounds(dv.AlignLeft(), dv.AlignTop(), dv.LabelWidth()+50, 110 + 56);
         RegFilterPanel.setLayout(null);
         RegFilterPanel.setBackground(new Color(dv.ViewBackgroundColor()));
 
@@ -235,7 +235,7 @@ public class ManageVaccinationView extends JPanel implements ActionListener
         ScrollPaneRegList = new JScrollPane(RegListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         //set Bounds
-        ScrollPaneRegList.setBounds(0, 0, 680, 630); //320 40
+        ScrollPaneRegList.setBounds(0, 40, 680, 590); //320 40
     }
 
     private void initLayeredPaneArea()
@@ -281,12 +281,20 @@ public class ManageVaccinationView extends JPanel implements ActionListener
         this.add(RegFilterPanel);
 
         //init RegList
+        JLabel RegListLabel = new JLabel("DANH SÁCH LỊCH TIÊM ĐÃ ĐĂNG KÝ (" + personalUser.getFullName() + "):");
+        RegListLabel.setBounds(0,0,640,40);
+        RegListLabel.setFont(new Font(dv.fontName(), 1, 20));
+        RegListLabel.setForeground(new Color(dv.FeatureButtonColor()));
+        RegListLabel.setHorizontalAlignment(JLabel.CENTER);
+
         initRegListPanel(0);
+        initScrollPaneRegList();
 
         //init LayeredPaneArea
-        initScrollPaneRegList();
         initLayeredPaneArea();
-        LayeredPaneArea.add(ScrollPaneRegList);
+
+        LayeredPaneArea.add(RegListLabel, Integer.valueOf(0));
+        LayeredPaneArea.add(ScrollPaneRegList, Integer.valueOf(0));
         this.add(LayeredPaneArea);
 
         this.repaint(0,0, dv.FrameWidth(), dv.FrameHeight());
