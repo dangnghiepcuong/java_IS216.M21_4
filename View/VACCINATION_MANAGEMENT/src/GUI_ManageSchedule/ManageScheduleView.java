@@ -63,7 +63,9 @@ public class ManageScheduleView extends JPanel implements ActionListener
     public void setOrgUser(Organization orgUser) {
         this.orgUser = orgUser;
     }
+    /*
 
+*/
     private void initSchedFilterLabel()
     {
         SchedFilterLabel = new JLabel();
@@ -397,7 +399,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         if (Reg.getStatus() < 2)
         {
             Choice StatusChoice = new Choice();
-            StatusChoice.setBounds(450, 32+2, 120, 30);
+            StatusChoice.setBounds(500, 32+2, 120, 30);
             StatusChoice.setFont(new Font(dv.fontName(), 0, 16));
             StatusChoice.setForeground(new Color(dv.BlackTextColor()));
             StatusChoice.setBackground(Color.WHITE);
@@ -410,14 +412,14 @@ public class ManageScheduleView extends JPanel implements ActionListener
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
-
+                    
                 }
             };
 
             JButton UpdateStatusButton = new JButton();
             ImageIcon UpdateStatusButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Update Status Button.png"));
             UpdateStatusButton.setForeground(new Color(dv.BlackTextColor()));
-            UpdateStatusButton.setBounds(450,32*2+5,UpdateStatusButtonIcon.getIconWidth(),UpdateStatusButtonIcon.getIconHeight());
+            UpdateStatusButton.setBounds(500,32*2+5,UpdateStatusButtonIcon.getIconWidth(),UpdateStatusButtonIcon.getIconHeight());
             UpdateStatusButton.setContentAreaFilled(false);
             UpdateStatusButton.setBorder(null);
             UpdateStatusButton.setIcon(UpdateStatusButtonIcon);
@@ -850,7 +852,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         initAddNewSchedButton();
         this.add(AddNewSchedButton);
 
-        //init RegSchedList
+        //init SchedListPanel
         initSchedListPanel(0);
 
         //init LayeredPaneArea
