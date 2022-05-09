@@ -1,6 +1,10 @@
 package GUI_ManageSchedule;
 
 import Data_Processor.*;
+import GUI_RegisterAcc.RegisterAccView;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,8 +13,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Properties;
 
 /**
  *
@@ -40,6 +48,11 @@ public class ManageScheduleView extends JPanel implements ActionListener
     private JScrollPane ScrollPaneRegList;
     private JPanel RegListPanel;
     private JPanel RegPanel[] = new JPanel[3000];
+
+    /*Create Schedule*/
+    private JButton AddNewSchedButton;
+    private JPanel CreateSchedPanel;
+
 
     private JLayeredPane LayeredPaneArea;
 
@@ -113,14 +126,17 @@ public class ManageScheduleView extends JPanel implements ActionListener
                 LayeredPaneArea.removeAll();
                 SchedListPanel = null;
                 ScrollPaneSchedList = null;
-                LayeredPaneArea.repaint(320, 40, 680, 630);
+
+                JLabel RegListLabel = new JLabel("DANH SÁCH CÁC LƯỢT ĐĂNG KÝ:");
+                RegListLabel.setBounds(0,0,640,40);
+                RegListLabel.setFont(new Font(dv.fontName(), 1, 20));
+                RegListLabel.setForeground(new Color(dv.FeatureButtonColor()));
+                RegListLabel.setHorizontalAlignment(JLabel.CENTER);
 
                 initScrollPaneRegList(Sched);
 
-//                LayeredPaneArea.add(ScrollPaneSchedList, Integer.valueOf(0));
-//                LayeredPaneArea.repaint(320, 40, 680, 630);
-
-                LayeredPaneArea.add(ScrollPaneRegList, Integer.valueOf(1));
+                LayeredPaneArea.add(RegListLabel, Integer.valueOf(0));
+                LayeredPaneArea.add(ScrollPaneRegList, Integer.valueOf(0));
                 LayeredPaneArea.repaint(320, 40, 680, 630);
 
                 initRegFilterPanel();
@@ -128,18 +144,18 @@ public class ManageScheduleView extends JPanel implements ActionListener
             }
         };
 
-        //OnDate, VaccineID, Serial, LimitDay, LimitNoon,LimitNight, DayRegistered, NoonRegistered, NightRegistered
-        JLabel OrgName = new JLabel("Tên đơn vị: " + orgUser.getName());
+
+        /*JLabel OrgName = new JLabel("Tên đơn vị: " + orgUser.getName());
         OrgName.setFont(new Font(dv.fontName(), 3, 18));
         OrgName.setForeground(new Color(dv.FeatureButtonColor()));
         OrgName.setBounds(30,1,605,30);
-        OrgName.setHorizontalAlignment(JLabel.LEFT);
+        OrgName.setHorizontalAlignment(JLabel.LEFT);*/
 
         JLabel OnDateVaccine = new JLabel("Lịch tiêm ngày: " + Sched.getOnDate().substring(0, 10)
                 + "          Vaccine: " + Sched.getVaccineID() + " - " + Sched.getSerial());
-        OnDateVaccine.setFont(new Font(dv.fontName(), 1, 16));
+        OnDateVaccine.setFont(new Font(dv.fontName(), 1, 20));
         OnDateVaccine.setForeground(new Color(dv.BlackTextColor()));
-        OnDateVaccine.setBounds(30,32,600,25);
+        OnDateVaccine.setBounds(30,3,600,30);
         OnDateVaccine.setHorizontalAlignment(JLabel.LEFT);
 
         JLabel Time = new JLabel("Buổi sáng: " + Sched.getDayRegistered() + "/" + Sched.getLimitDay()
@@ -147,11 +163,11 @@ public class ManageScheduleView extends JPanel implements ActionListener
                 + "          Buổi tối: " + Sched.getNightRegistered() + "/" + Sched.getLimitNight());
         Time.setFont(new Font(dv.fontName(), 0, 16));
         Time.setForeground(new Color(dv.BlackTextColor()));
-        Time.setBounds(30, 32+25+2,600,25);
+        Time.setBounds(30, 40+2,600,25);
         Time.setHorizontalAlignment(JLabel.LEFT);
 
         JButton SchedRegistionButton = new JButton();
-        SchedRegistionButton.setBounds(30, 32+25*2+2, 150+7, 30+6);
+        SchedRegistionButton.setBounds(30, 80, 150+7, 30+6);
         SchedRegistionButton.setBorder(null);
         SchedRegistionButton.setContentAreaFilled(false);
         SchedRegistionButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Sched Registion Button.png")));
@@ -160,10 +176,9 @@ public class ManageScheduleView extends JPanel implements ActionListener
         SchedPanel[i] = new JPanel();
         SchedPanel[i].setLayout(null);
         SchedPanel[i].setPreferredSize(new Dimension(640,120));
-        //set Background color
         SchedPanel[i].setBackground(Color.WHITE);
 
-        SchedPanel[i].add(OrgName);
+//        SchedPanel[i].add(OrgName);
         SchedPanel[i].add(OnDateVaccine);
         SchedPanel[i].add(Time);
         SchedPanel[i].add(SchedRegistionButton);
@@ -172,11 +187,8 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
         LocalDate sysdate = LocalDate.from(java.time.LocalDateTime.now());
 
-        System.out.println(SchedOnDate + " " + sysdate);
-
         if (SchedOnDate.isAfter(sysdate))
         {
-
             ActionListener handleUpdate = new ActionListener()
             {
                 @Override
@@ -186,7 +198,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                 }
             };
             JButton UpdateSchedButton = new JButton();
-            UpdateSchedButton.setBounds(30 + 160 + 30, 32+25*2+2, 150+7, 30+6);
+            UpdateSchedButton.setBounds(30 + 160 + 30, 80, 150+7, 30+6);
             UpdateSchedButton.setBorder(null);
             UpdateSchedButton.setContentAreaFilled(false);
             UpdateSchedButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Update Sched Button.png")));
@@ -201,7 +213,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                 }
             };
             JButton CancelSchedButton = new JButton();
-            CancelSchedButton.setBounds( 160 + 30 + 200, 32+25*2+2, 150+7, 30+6);
+            CancelSchedButton.setBounds( 160 + 30 + 200, 80, 150+7, 30+6);
             CancelSchedButton.setBorder(null);
             CancelSchedButton.setContentAreaFilled(false);
             CancelSchedButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Cancel Sched Button.png")));
@@ -282,7 +294,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         ScrollPaneSchedList = new JScrollPane(SchedListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         //set Bounds
-        ScrollPaneSchedList.setBounds(0, 0, 680, 630); //320 40
+        ScrollPaneSchedList.setBounds(0, 40, 680, 590); //320 40
     }
 
 
@@ -403,11 +415,12 @@ public class ManageScheduleView extends JPanel implements ActionListener
             };
 
             JButton UpdateStatusButton = new JButton();
+            ImageIcon UpdateStatusButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Update Status Button.png"));
             UpdateStatusButton.setForeground(new Color(dv.BlackTextColor()));
-            UpdateStatusButton.setBounds(450,32*2,120,38);
+            UpdateStatusButton.setBounds(450,32*2+5,UpdateStatusButtonIcon.getIconWidth(),UpdateStatusButtonIcon.getIconHeight());
             UpdateStatusButton.setContentAreaFilled(false);
             UpdateStatusButton.setBorder(null);
-            UpdateStatusButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/SchedRegister.png")));
+            UpdateStatusButton.setIcon(UpdateStatusButtonIcon);
             UpdateStatusButton.addActionListener(handleUpdate);
 
             RegPanel[i].add(StatusChoice);
@@ -466,9 +479,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         nReg = i;
 
         RegListPanel = new JPanel();
-
         RegListPanel.setPreferredSize(new Dimension(660, 150*nReg+nReg*10));
-
         RegListPanel.setLayout(new FlowLayout());
 
         for (i = 0; i<nReg; i++)
@@ -485,7 +496,315 @@ public class ManageScheduleView extends JPanel implements ActionListener
         ScrollPaneRegList = new JScrollPane(RegListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         //set Bounds
-        ScrollPaneRegList.setBounds(0, 0, 680, 630); //320 40
+        ScrollPaneRegList.setBounds(0, 40, 680, 590); //320 40
+    }
+
+
+
+
+
+    private void initOnDateLabel()
+    {
+
+    }
+
+    public class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
+
+        private String datePattern = "yyyy-MM-dd";
+        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+
+        @Override
+        public Object stringToValue(String text) throws ParseException {
+            return dateFormatter.parseObject(text);
+        }
+
+        @Override
+        public String valueToString(Object value) throws ParseException {
+            if (value != null) {
+                Calendar cal = (Calendar) value;
+                return dateFormatter.format(cal.getTime());
+            }
+
+            return "";
+        }
+    }
+
+
+    private void initAddNewSchedButton()
+    {
+        ImageIcon AddNewButton = new ImageIcon(getClass().getResource("/Data_Processor/icon/Add New Button.png"));
+        AddNewSchedButton = new JButton();
+        AddNewSchedButton.setBounds(125, 300, AddNewButton.getIconWidth(), AddNewButton.getIconHeight());
+        AddNewSchedButton.setBorder(null);
+        AddNewSchedButton.setContentAreaFilled(false);
+        AddNewSchedButton.setIcon(AddNewButton);
+        AddNewSchedButton.addActionListener(this);
+    }
+
+    private void initCreateSchedPanel()
+    {
+        JLabel CreateSchedLabel = new JLabel("TẠO LỊCH TIÊM CHỦNG (" + orgUser.getName() + ")");
+        CreateSchedLabel.setPreferredSize(new Dimension(600, 35));
+        CreateSchedLabel.setFont(new Font(dv.fontName(), 1, 20));
+        CreateSchedLabel.setForeground(new Color(dv.FeatureButtonColor()));
+        CreateSchedLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        JLabel OnDateLabel = new JLabel("Ngày thực hiện lịch tiêm: ");
+        OnDateLabel.setPreferredSize(new Dimension(200, 30));
+        OnDateLabel.setFont(new Font(dv.fontName(), 0, 16));
+        OnDateLabel.setForeground(new Color(dv.BlackTextColor()));
+
+        UtilDateModel model=new UtilDateModel();
+        Properties p = new Properties();
+        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+        JDatePickerImpl OnDateField = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+
+        OnDateField.setPreferredSize(new Dimension(150, 30));
+
+        JFormattedTextField textField = OnDateField.getJFormattedTextField();
+        textField.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        textField.setPreferredSize(new Dimension(150, 30));
+        textField.setBackground(Color.WHITE);
+
+        OnDateField.setForeground(new Color(dv.BlackTextColor()));
+        OnDateField.setVisible(true);
+        OnDateField.setEnabled(true);
+
+        JLabel VaccineLabel = new JLabel("Loại vaccine sử dụng:");
+        VaccineLabel.setPreferredSize(new Dimension(200, 30));
+        VaccineLabel.setFont(new Font(dv.fontName(), 0 ,16));
+        VaccineLabel.setForeground(new Color(dv.BlackTextColor()));
+
+        Vaccine vacc[] = new Vaccine[10];
+
+        int i = 0;
+        int nVacc = 0;
+
+        String query = "select * from VACCINE";
+
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+            PreparedStatement st = connection.prepareStatement(query);
+
+            ResultSet rs = st.executeQuery(query);
+
+            while(rs.next())
+            {
+                vacc[i] = new Vaccine();
+                vacc[i].setID(rs.getString("ID"));
+                vacc[i].setName(rs.getString("Name"));
+                vacc[i].setTechnology(rs.getString("Technology"));
+                vacc[i].setCountry(rs.getString("Country"));
+                vacc[i].setNote(rs.getString("Note"));
+                i++;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Choice VaccineChoice = new Choice();
+        VaccineChoice.setPreferredSize(new Dimension(200, 30));
+        VaccineChoice.setFont(new Font(dv.fontName(), 0, 16));
+        VaccineChoice.setForeground(new Color(dv.BlackTextColor()));
+        VaccineChoice.setBackground(Color.WHITE);
+
+        nVacc = i;
+
+        VaccineChoice.add("");
+        for (i = 0; i<nVacc; i++)
+        {
+            VaccineChoice.add(vacc[i].getID());
+        }
+
+        JLabel SerialLabel = new JLabel("Series vaccine:");
+        SerialLabel.setPreferredSize(new Dimension(200, 30));
+        SerialLabel.setFont(new Font(dv.fontName(), 0 ,16));
+        SerialLabel.setForeground(new Color(dv.BlackTextColor()));
+
+        JTextField SerialTextField = new JTextField();
+        SerialTextField.setPreferredSize(new Dimension(200, 30));
+        SerialTextField.setFont(new Font(dv.fontName(), 0 ,16));
+        SerialTextField.setForeground(new Color(dv.BlackTextColor()));
+
+        JLabel LimitDayLabel = new JLabel("Giới hạn số lượt đăng ký buổi sáng:");
+        LimitDayLabel.setPreferredSize(new Dimension(250, 30));
+        LimitDayLabel.setFont(new Font(dv.fontName(), 0 ,16));
+        LimitDayLabel.setForeground(new Color(dv.BlackTextColor()));
+
+        JTextField LimitDayTextField = new JTextField();
+        LimitDayTextField.setPreferredSize(new Dimension(200, 30));
+        LimitDayTextField.setFont(new Font(dv.fontName(), 0 ,16));
+        LimitDayTextField.setForeground(new Color(dv.BlackTextColor()));
+
+        JLabel LimitNoonLabel = new JLabel("Giới hạn số lượt đăng ký buổi trưa:");
+        LimitNoonLabel.setPreferredSize(new Dimension(250, 30));
+        LimitNoonLabel.setFont(new Font(dv.fontName(), 0 ,16));
+        LimitNoonLabel.setForeground(new Color(dv.BlackTextColor()));
+
+        JTextField LimitNoonTextField = new JTextField();
+        LimitNoonTextField.setPreferredSize(new Dimension(200, 30));
+        LimitNoonTextField.setFont(new Font(dv.fontName(), 0 ,16));
+        LimitNoonTextField.setForeground(new Color(dv.BlackTextColor()));
+
+        JLabel LimitNightLabel = new JLabel("Giới hạn số lượt đăng ký buổi tối:");
+        LimitNightLabel.setPreferredSize(new Dimension(250, 30));
+        LimitNightLabel.setFont(new Font(dv.fontName(), 0 ,16));
+        LimitNightLabel.setForeground(new Color(dv.BlackTextColor()));
+
+        JTextField LimitNightTextField = new JTextField();
+        LimitNightTextField.setPreferredSize(new Dimension(200, 30));
+        LimitNightTextField.setFont(new Font(dv.fontName(), 0 ,16));
+        LimitNightTextField.setForeground(new Color(dv.BlackTextColor()));
+
+        ActionListener handleCreateSched = new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                String InputOnDate = OnDateField.getJFormattedTextField().getText();
+                String InputVaccineID = VaccineChoice.getSelectedItem();
+                String InputSerial = SerialTextField.getText();
+
+                if (dv.checkStringInputValue(InputOnDate,
+                    "Cảnh báo!", "Nhập ngày lịch tiêm!") != -2)
+                    return;
+                if (dv.checkStringInputValue(InputVaccineID,
+                    "Cảnh báo!", "Chọn loại vaccine!") != -2)
+                    return;
+                if(dv.checkStringInputValue(InputSerial,
+                    "Cảnh báo!", "Nhập số lô vaccine!") != -2)
+                    return;
+
+                int InputLimitDay = 0;
+                try {
+                    InputLimitDay = Integer.parseInt(LimitDayTextField.getText());
+                } catch (NumberFormatException ex) {
+                    InputLimitDay = 0;
+                }
+
+                int InputLimitNoon = 0;
+                try {
+
+                    InputLimitNoon = Integer.parseInt(LimitNoonTextField.getText());
+                } catch (NumberFormatException ex) {
+                    InputLimitNoon = 0;
+                }
+
+                int InputLimitNight = 0;
+                try {
+
+                    InputLimitNight = Integer.parseInt(LimitNightTextField.getText());
+                } catch (NumberFormatException ex) {
+                    InputLimitNight = 0;
+                }
+
+                int answer = dv.popupConfirmOption(null,"Xác nhận tạo lịch tiêm chủng?", "Xác nhận!");
+
+                if (answer == JOptionPane.YES_OPTION)
+                {
+                    String plsql = "{call SCHED_INSERT_RECORD(?,?,?,?,?,?,?,?)}";
+
+
+                    Connection connection = null;
+                    try {
+                        connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                        CallableStatement cst = connection.prepareCall(plsql);
+                        cst.setString("par_OrgID", orgUser.getID());
+                        cst.setString("par_OnDate", dv.toOracleDateFormat(InputOnDate));
+                        cst.setString("par_VaccineID", InputVaccineID);
+                        cst.setString("par_Serial", InputSerial);
+                        cst.setInt("par_LimitDay", InputLimitDay);
+                        cst.setInt("par_LimitNoon", InputLimitNoon);
+                        cst.setInt("par_LimitNight", InputLimitNight);
+                        cst.setString("par_Note", "");
+
+                        cst.execute();
+                    } catch (SQLException ex)
+                    {
+                        dv.popupOption(null,  ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+                        ex.printStackTrace();
+                    }
+
+                    dv.popupOption(null, "Tạo lịch tiêm chủng thành công!", "Thông báo!", 0);
+                }
+            }
+        };
+
+        ImageIcon CreateSchedButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Add New Button.png"));
+        JButton CreateSchedButton = new JButton();
+        CreateSchedButton.setPreferredSize(new Dimension(CreateSchedButtonIcon.getIconWidth(), CreateSchedButtonIcon.getIconHeight()));
+        CreateSchedButton.setContentAreaFilled(false);
+        CreateSchedButton.setBorder(null);
+        CreateSchedButton.setIcon(CreateSchedButtonIcon);
+        CreateSchedButton.addActionListener(handleCreateSched);
+
+        CreateSchedPanel = new JPanel();
+        CreateSchedPanel.setBounds(0, 0, 660, 630);
+        CreateSchedPanel.setLayout(new GridBagLayout());
+        CreateSchedPanel.setBorder(dv.border());
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+
+        c.insets = new Insets(0,0,20,0);
+        c.gridy = 0;
+        CreateSchedPanel.add(CreateSchedLabel, c);
+
+        c.insets = new Insets(0, 0, 0, 0);
+        c.gridy = 1;
+        CreateSchedPanel.add(OnDateLabel,c);
+
+        c.insets = new Insets(0,0,15,0);
+        c.gridy = 2;
+        CreateSchedPanel.add(OnDateField,c);
+
+        c.insets = new Insets(0, 0, 0, 0);
+        c.gridy = 3;
+        CreateSchedPanel.add(VaccineLabel,c);
+
+        c.insets = new Insets(0,0,15,0);
+        c.gridy = 4;
+        CreateSchedPanel.add(VaccineChoice,c);
+
+        c.insets = new Insets(0, 0, 0, 0);
+        c.gridy = 5;
+        CreateSchedPanel.add(SerialLabel,c);
+
+        c.insets = new Insets(0,0,15,0);
+        c.gridy = 6;
+        CreateSchedPanel.add(SerialTextField,c);
+
+        c.insets = new Insets(0, 0, 0, 0);
+        c.gridy = 7;
+        CreateSchedPanel.add(LimitDayLabel,c);
+
+        c.insets = new Insets(0,0,15,0);
+        c.gridy = 8;
+        CreateSchedPanel.add(LimitDayTextField,c);
+
+        c.insets = new Insets(0, 0, 0, 0);
+        c.gridy = 9;
+        CreateSchedPanel.add(LimitNoonLabel,c);
+
+        c.insets = new Insets(0,0,15,0);
+        c.gridy = 10;
+        CreateSchedPanel.add(LimitNoonTextField,c);
+
+        c.insets = new Insets(0, 0, 0, 0);
+        c.gridy = 11;
+        CreateSchedPanel.add(LimitNightLabel,c);
+
+        c.insets = new Insets(0,0,15,0);
+        c.gridy = 12;
+        CreateSchedPanel.add(LimitNightTextField,c);
+
+        c.insets = new Insets(0, 0, 0, 0);
+        c.gridy = 13;
+        CreateSchedPanel.add(CreateSchedButton, c);
     }
 
     private void initLayeredPaneArea()
@@ -527,13 +846,26 @@ public class ManageScheduleView extends JPanel implements ActionListener
         initSchedFilterPanel();
         this.add(SchedFilterPanel);
 
+        //init AddNewSchedButton
+        initAddNewSchedButton();
+        this.add(AddNewSchedButton);
+
         //init RegSchedList
         initSchedListPanel(0);
 
         //init LayeredPaneArea
+        JLabel SchedListLabel = new JLabel("DANH SÁCH LỊCH TIÊM (" + orgUser.getName() + "):");
+        SchedListLabel.setBounds(0,0,640,40);
+        SchedListLabel.setFont(new Font(dv.fontName(), 1, 20));
+        SchedListLabel.setForeground(new Color(dv.FeatureButtonColor()));
+        SchedListLabel.setHorizontalAlignment(JLabel.CENTER);
+
         initScrollPaneSchedList(0);
+
         initLayeredPaneArea();
-        LayeredPaneArea.add(ScrollPaneSchedList);
+
+        LayeredPaneArea.add(SchedListLabel, Integer.valueOf(0));
+        LayeredPaneArea.add(ScrollPaneSchedList, Integer.valueOf(0));
         this.add(LayeredPaneArea);
 
         this.repaint(0,0, dv.FrameWidth(), dv.FrameHeight());
@@ -551,15 +883,41 @@ public class ManageScheduleView extends JPanel implements ActionListener
     {
         if (e.getSource() == SchedFilterButton)
         {
+            CreateSchedPanel = null;
             LayeredPaneArea.removeAll();
+            LayeredPaneArea.repaint(320, 40, 680, 630);
+
+            JLabel SchedListLabel = new JLabel("DANH SÁCH LỊCH TIÊM:");
+            SchedListLabel.setBounds(0,0,640,40);
+            SchedListLabel.setFont(new Font(dv.fontName(), 1, 20));
+            SchedListLabel.setForeground(new Color(dv.FeatureButtonColor()));
+            SchedListLabel.setHorizontalAlignment(JLabel.CENTER);
 
             initScrollPaneSchedList(SchedFilterChoice.getSelectedIndex());
 
+            LayeredPaneArea.add(SchedListLabel, Integer.valueOf(0));
             LayeredPaneArea.add(ScrollPaneSchedList, Integer.valueOf(0));
             LayeredPaneArea.repaint(320, 40, 680, 630);
 
             RegListPanel = null;
             ScrollPaneRegList = null;
+        }
+
+        if (e.getSource() == AddNewSchedButton)
+        {
+            SchedListPanel = null;
+            ScrollPaneSchedList = null;
+
+            RegListPanel = null;
+            ScrollPaneRegList = null;
+
+            LayeredPaneArea.removeAll();
+
+            initCreateSchedPanel();
+
+            LayeredPaneArea.add(CreateSchedPanel, Integer.valueOf(0));
+
+            LayeredPaneArea.repaint(320, 40, 680, 630);
         }
 
     }

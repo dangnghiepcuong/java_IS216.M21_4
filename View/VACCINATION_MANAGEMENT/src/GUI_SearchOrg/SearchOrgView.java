@@ -18,6 +18,7 @@ public class SearchOrgView extends JPanel implements ActionListener
     private DefaultValue dv = new DefaultValue();
     private Organization org[] = new Organization[100000];
 
+    private JPanel OrgFilterPanel;
     private JLabel ProvinceLabel;
     private JLabel DistrictLabel;
     private JLabel TownLabel;
@@ -39,10 +40,15 @@ public class SearchOrgView extends JPanel implements ActionListener
 
     private Person personalUser = new Person();
 
+
+/*
+                                INIT A FILTER OF ORGANIZATION
+                                ADD IS TO THE SEARCHORGVIEW PANEL
+*/
     private void initProvinceLabel()
     {
         ProvinceLabel = new JLabel();
-        ProvinceLabel.setBounds(dv.AlignLeft(), 40, dv.LabelWidth(), dv.LabelHeight());
+        ProvinceLabel.setBounds(0, 0, dv.LabelWidth(), dv.LabelHeight());
         ProvinceLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         ProvinceLabel.setForeground(new Color(0x666666));
         ProvinceLabel.setText("Tỉnh/thành phố:");
@@ -52,12 +58,12 @@ public class SearchOrgView extends JPanel implements ActionListener
     private void initProvinceChoice()
     {
         ProvinceChoice = new Choice();
-        ProvinceChoice.setBounds(dv.AlignLeft(), 80, dv.FieldWidth(), dv.FieldHeight());
+        ProvinceChoice.setBounds(0, 40, dv.FieldWidth(), dv.FieldHeight());
         ProvinceChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         ProvinceChoice.setForeground(new Color(dv.BlackTextColor()));
         ProvinceChoice.setBackground(Color.WHITE);
 
-        ProvinceChoice.add("*");
+        ProvinceChoice.add("");
         ProvinceChoice.add("Bình Dương");
         ProvinceChoice.add("Hồ Chí Minh");
         ProvinceChoice.add("Hà Nội");
@@ -66,7 +72,7 @@ public class SearchOrgView extends JPanel implements ActionListener
     private void initDistrictLabel()
     {
         DistrictLabel = new JLabel();
-        DistrictLabel.setBounds(dv.AlignLeft(), 120, dv.LabelWidth(), dv.LabelHeight());
+        DistrictLabel.setBounds(0, 80, dv.LabelWidth(), dv.LabelHeight());
         DistrictLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         DistrictLabel.setForeground(new Color(0x666666));
         DistrictLabel.setText("Quận/Huyện:");
@@ -76,13 +82,13 @@ public class SearchOrgView extends JPanel implements ActionListener
     private void initDistrictChoice()
     {
         DistrictChoice = new Choice();
-        DistrictChoice.setBounds(dv.AlignLeft(), 150, dv.FieldWidth(), dv.FieldHeight());
+        DistrictChoice.setBounds(0, 110, dv.FieldWidth(), dv.FieldHeight());
         DistrictChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         DistrictChoice.setForeground(new Color(0x333333));
         DistrictChoice.setBackground(Color.WHITE);
 
         //set choice
-        DistrictChoice.add("*");
+        DistrictChoice.add("");
         DistrictChoice.add("Dầu Tiếng");
         DistrictChoice.add("Thuận An");
         DistrictChoice.add("Dĩ An");
@@ -93,7 +99,7 @@ public class SearchOrgView extends JPanel implements ActionListener
     private void initTownLabel()
     {
         TownLabel = new JLabel();
-        TownLabel.setBounds(dv.AlignLeft(), 190, dv.LabelWidth(), dv.LabelHeight());
+        TownLabel.setBounds(0, 150, dv.LabelWidth(), dv.LabelHeight());
         TownLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         TownLabel.setForeground(new Color(0x666666));
         TownLabel.setSize(dv.LabelWidth(), dv.LabelHeight());
@@ -103,12 +109,12 @@ public class SearchOrgView extends JPanel implements ActionListener
     private void initTownChoice()
     {
         TownChoice = new Choice();
-        TownChoice.setBounds(dv.AlignLeft(), 220, dv.FieldWidth(), dv.FieldHeight());
+        TownChoice.setBounds(0, 180, dv.FieldWidth(), dv.FieldHeight());
         TownChoice.setForeground(new Color(0x333333));
         TownChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         TownChoice.setBackground(Color.WHITE);
 
-        TownChoice.add("*");
+        TownChoice.add("");
         TownChoice.add("Dầu Tiếng");
         TownChoice.add("Lái Thiêu");
         TownChoice.add("Đông Hòa");
@@ -122,13 +128,43 @@ public class SearchOrgView extends JPanel implements ActionListener
         ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Magnifying Glass Button_1.png"));
         SearchOrgButton.setIcon(SearchIcon);
 
-        SearchOrgButton.setBounds(dv.AlignLeft(), 290, dv.FieldWidth(), SearchIcon.getIconHeight());
+        SearchOrgButton.setBounds(0, 250, dv.FieldWidth(), SearchIcon.getIconHeight());
         SearchOrgButton.setBorder(null);
         SearchOrgButton.setContentAreaFilled(false);
 
         SearchOrgButton.addActionListener(this);
     }
 
+    private void initOrgFilterPanel()
+    {
+        initProvinceLabel();
+        initProvinceChoice();
+        initDistrictLabel();
+        initDistrictChoice();
+        initTownLabel();
+        initTownChoice();
+        initSearchOrgButton();
+
+        OrgFilterPanel = new JPanel();
+        OrgFilterPanel.setBounds(dv.AlignLeft(), dv.AlignTop(), dv.LabelWidth()+50, 300);
+        OrgFilterPanel.setLayout(null);
+        OrgFilterPanel.setBackground(new Color(dv.ViewBackgroundColor()));
+
+        OrgFilterPanel.add(ProvinceLabel);
+        OrgFilterPanel.add(ProvinceChoice);
+        OrgFilterPanel.add(DistrictLabel);
+        OrgFilterPanel.add(DistrictChoice);
+        OrgFilterPanel.add(TownLabel);
+        OrgFilterPanel.add(TownChoice);
+        OrgFilterPanel.add(SearchOrgButton);
+    }
+
+
+/*
+                                INIT A ORGANIZATION LIST PANEL
+                                ADD IS TO A SCROLLPANE
+                                ADD THE SCROLLPANE TO THE LAYEREDPANE
+*/
     private void initOrgPanel(int i)
     {
         //Org info
@@ -196,13 +232,22 @@ public class SearchOrgView extends JPanel implements ActionListener
             @Override
             public void mouseClicked(MouseEvent e)
             {
-                System.out.println("clicked on " + OrgName.getText());
+                LayeredPaneArea.removeAll();
+
+                JLabel SchedListLabel = new JLabel("DANH SÁCH CÁC LỊCH TIÊM " + org[i].getName() + ":");
+                SchedListLabel.setBounds(0,0,640,40);
+                SchedListLabel.setFont(new Font(dv.fontName(), 1, 20));
+                SchedListLabel.setForeground(new Color(dv.FeatureButtonColor()));
+                SchedListLabel.setHorizontalAlignment(JLabel.CENTER);
+
                 initScrollPaneSchedList(org[i]);
 
-                LayeredPaneArea.removeAll();
-                LayeredPaneArea.add(ScrollPaneOrgList, Integer.valueOf(0));
-                LayeredPaneArea.add(ScrollPaneSchedList, Integer.valueOf(1));
+                LayeredPaneArea.add(SchedListLabel, Integer.valueOf(3));
+                LayeredPaneArea.add(ScrollPaneSchedList, Integer.valueOf(3));
                 LayeredPaneArea.repaint(320, 40, 680, 630);
+
+                ScrollPaneOrgList = null;
+                OrgListPanel = null;
             }
 
             @Override
@@ -253,15 +298,16 @@ public class SearchOrgView extends JPanel implements ActionListener
         ScrollPaneOrgList = new JScrollPane(OrgListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         //set Bounds
-        ScrollPaneOrgList.setBounds(0, 0, 680, 630); //320-40
+        ScrollPaneOrgList.setBounds(0, 40, 680, 590); //320-40
     }
 
 
 
-
-
-
-
+/*
+                                INIT A SCHEDULE LIST PANEL
+                                ADD IS TO A SCROLLPANE
+                                ADD THE SCROLLPANE TO THE LAYEREDPANE
+*/
     private void initSchedPanel(int i, Schedule sched, Organization SelectedOrg)
     {
         //Org info
@@ -316,17 +362,16 @@ public class SearchOrgView extends JPanel implements ActionListener
         TimeChoice.setBounds(470, 32, 80, 30);
         TimeChoice.setFont(new Font(dv.fontName(), 0, 16));
         TimeChoice.setForeground(new Color(dv.BlackTextColor()));
-        TimeChoice.setBackground(Color.WHITE);
         TimeChoice.add("Sáng");
         TimeChoice.add("Trưa");
         TimeChoice.add("Tối");
 
-        ActionListener handleMouseAction = new ActionListener()
+        ActionListener handleSchedRegister = new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                int answer = dv.popupConfirmOption(null,"Xác nhận đăng ký tiêm chủng?", "Thông báo!");
+                int answer = dv.popupConfirmOption(null,"Xác nhận đăng ký tiêm chủng?", "Xác nhận!");
 
                 if (answer == JOptionPane.YES_OPTION)
                 {
@@ -355,18 +400,20 @@ public class SearchOrgView extends JPanel implements ActionListener
         };
 
         JButton SchedRegisterButton = new JButton();
+        ImageIcon SchedRegisterButtonIcon = new ImageIcon(getClass().getResource(
+                "/Data_Processor/icon/Sched Register Button.png"));
         SchedRegisterButton.setForeground(new Color(dv.BlackTextColor()));
-        SchedRegisterButton.setBounds(470,32*2,120,38);
+        SchedRegisterButton.setBounds(470,32*2,
+                SchedRegisterButtonIcon.getIconWidth(),SchedRegisterButtonIcon.getIconHeight());
         SchedRegisterButton.setContentAreaFilled(false);
         SchedRegisterButton.setBorder(null);
-        SchedRegisterButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/SchedRegister.png")));
-        SchedRegisterButton.addActionListener(handleMouseAction);
+        SchedRegisterButton.setIcon(SchedRegisterButtonIcon);
+        SchedRegisterButton.addActionListener(handleSchedRegister);
 
         SchedPanel[i] = new JPanel();
 
         SchedPanel[i].setLayout(null);
         SchedPanel[i].setPreferredSize(new Dimension(640,120));
-        //set Background color
         SchedPanel[i].setBackground(Color.WHITE);
 
         SchedPanel[i].add(OrgName);
@@ -428,7 +475,7 @@ public class SearchOrgView extends JPanel implements ActionListener
 
         SchedListPanel = new JPanel();
 
-        SchedListPanel.setPreferredSize(new Dimension(660, 120));
+        SchedListPanel.setPreferredSize(new Dimension( 660, 120*nSched + nSched*10));
 
         SchedListPanel.setLayout(new FlowLayout());
 
@@ -438,8 +485,6 @@ public class SearchOrgView extends JPanel implements ActionListener
             SchedListPanel.add(SchedPanel[i]);
         }
 
-
-
     }
 
     private void initScrollPaneSchedList(Organization SelectedOrg)
@@ -447,10 +492,11 @@ public class SearchOrgView extends JPanel implements ActionListener
         initSchedListPanel(SelectedOrg);
 
         //create ScrollPaneOrgList Panel
-        ScrollPaneSchedList = new JScrollPane(SchedListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        //set Bounds
-        ScrollPaneSchedList.setBounds(0, 0, 680, 630); //320 40
+        ScrollPaneSchedList = new JScrollPane(SchedListPanel,
+                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        ScrollPaneSchedList.setBounds(0, 40, 680, 590);
+        /*ScrollPaneSchedList.add(SchedListPanel);
+        ScrollPaneSchedList.repaint(0, 40, 680, 590);*/
     }
 
     private void initLayeredPaneArea()
@@ -491,33 +537,9 @@ public class SearchOrgView extends JPanel implements ActionListener
 
         this.setLayout(null);
         
-        //init ProvinceLabel
-        initProvinceLabel();
-        this.add(ProvinceLabel);
-
-        //init ProvinceChoice
-        initProvinceChoice();
-        this.add(ProvinceChoice);
-
-        //init DistrictLabel;
-        initDistrictLabel();
-        this.add(DistrictLabel);
-
-        //init DistrictChoice
-        initDistrictChoice();
-        this.add(DistrictChoice);
-
-        //init TownLabel;
-        initTownLabel();
-        this.add(TownLabel);
-
-        //init TownChoice
-        initTownChoice();
-        this.add(TownChoice);
-
-        //init SearchOrgButton
-        initSearchOrgButton();
-        this.add(SearchOrgButton);
+        //init OrgFilterPanel
+        initOrgFilterPanel();
+        this.add(OrgFilterPanel);
 
         //init LayeredPane
         initLayeredPaneArea();
@@ -599,13 +621,23 @@ public class SearchOrgView extends JPanel implements ActionListener
                 }
                 n = i;
 
-                //init ScrollPaneOrgList
-
                 //clear the Layered Area
                 LayeredPaneArea.removeAll();
 
+                //init OrgListLabel
+                JLabel OrgListLabel = new JLabel("DANH SÁCH CÁC ĐƠN VỊ TIÊM CHỦNG ("
+                        + ProvinceChoice.getSelectedItem() + "-" + DistrictChoice.getSelectedItem() + "-" + TownChoice.getSelectedItem()+"):");
+                OrgListLabel.setBounds(0,0,640,40);
+                OrgListLabel.setFont(new Font(dv.fontName(), 1, 20));
+                OrgListLabel.setForeground(new Color(dv.FeatureButtonColor()));
+                OrgListLabel.setHorizontalAlignment(JLabel.CENTER);
+
                 //init Scroll Pane of Orgs
                 initScrollPaneOrgList(n);
+
+                //add Label
+                LayeredPaneArea.add(OrgListLabel, Integer.valueOf(0));
+
                 //add Scroll Pane of Orgs to TOP of Layered Area
                 LayeredPaneArea.add(ScrollPaneOrgList, Integer.valueOf(0));
                 //Delete scroll pane of sched

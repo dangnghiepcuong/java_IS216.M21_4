@@ -63,17 +63,46 @@ public class DefaultValue
         this.password1 = password1;
     }
 
-    public void checkStringInputValue(String InputValue, JFrame frame, String Message)
+    public int checkStringInputValue(String InputValue, String title, String Message)
     {
         if (InputValue.equals(""))
         {
-            JOptionPane MessageFrame = new JOptionPane();
-            MessageFrame.showMessageDialog(frame,  Message, "20017", JOptionPane.WARNING_MESSAGE,
-                    new ImageIcon(getClass().getResource("/Data_Processor/icon/Warning Icon.png")));
+            JOptionPane OptionFrame = new JOptionPane();
+
+            String responses[] = {"OK!"};
+
+            ImageIcon icon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Warning Icon.png"));
+
+            return OptionFrame.showOptionDialog(null, Message, title,
+                    JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE, icon, responses, 0);
         }
+
+        return -2;
     }
 
-    public int popupConfirmOption(JFrame frame, String Message, String title) {
+    public int checkisNumberInputValue(String InputValue, String title, String Message)
+    {
+        JOptionPane OptionFrame = new JOptionPane();
+
+        String responses[] = {"OK!"};
+
+        try
+        {
+            int value = Integer.parseInt(InputValue);
+        }
+        catch (NumberFormatException ex)
+        {
+            ImageIcon icon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Warning Icon.png"));
+
+            return OptionFrame.showOptionDialog(null, Message, title,
+                    JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE, icon, responses, 0);
+        }
+
+        return -2;
+    }
+
+    public int popupConfirmOption(JFrame frame, String Message, String title)
+    {
         JOptionPane OptionFrame = new JOptionPane();
 
         String responses[] = {"Có", "Không"};
@@ -113,7 +142,7 @@ public class DefaultValue
         return OptionFrame;
     }
 
-    public JDialog popupDialog (JFrame frame, int ErrorCode, int w, int h, String ErrorMessage)
+   /* public JDialog popupDialog (JFrame frame, int ErrorCode, int w, int h, String ErrorMessage)
     {
         JDialog Dialog = new JDialog(frame, String.valueOf(ErrorCode));
         Dialog.setAlwaysOnTop(true);
@@ -152,7 +181,7 @@ public class DefaultValue
         Dialog.setLocationRelativeTo(null);
 
         return Dialog;
-    }
+    }*/
 
     public String fontName()
     {
@@ -192,6 +221,11 @@ public class DefaultValue
     public int FrameHeight()
     {
         return 720;
+    }
+
+    public int AlignTop()
+    {
+        return 80;
     }
 
     public int AlignLeft()
