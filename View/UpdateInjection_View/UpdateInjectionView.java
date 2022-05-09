@@ -7,6 +7,7 @@ package GUI_UpdateInjection;
 import Data_Processor.Account;
 import java.security.cert.Certificate;
 import Data_Processor.DefaultValue;
+import Data_Processor.ImageHelper;
 import Data_Processor.Organization;
 import Data_Processor.Person;
 import Data_Processor.Schedule;
@@ -14,13 +15,14 @@ import Data_Processor.RegisteredScheds;
 import GUI_ManageVaccination.ManageVaccinationView;
 import GUI_SearchOrg.SearchOrgView;
 
-
+import java.awt.Image;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -36,6 +38,8 @@ import javax.swing.JScrollPane;
 
 
 import javax.swing.BorderFactory;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 
 /**
  *
@@ -51,6 +55,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
     private JLabel InfoBackground;
     private JLabel NameLabel;
     private JLabel LocationLabel;
+    private JLabel image;
     
     private JScrollPane ScrollPaneRegList;
     
@@ -197,6 +202,9 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         InfoLayeredPane.setLayout(null);
         InfoLayeredPane.setOpaque(true);
         //InfoLayeredPane.setBackground(Color.red);
+        
+        
+        
                
    }
    
@@ -217,6 +225,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         //InfoLabel.setBackground(Color.blue);
         
         LayerPanel.add(InfoLabel);
+        
    }
    
    
@@ -332,21 +341,22 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         UpLoadImageButton.setBounds(dv.AlignLeft()+350, 330, 50, 50);
         UpLoadImageButton.setBorder(null);
         UpLoadImageButton.setContentAreaFilled(false);
+        UpLoadImageButton.addActionListener(this);
         
-        PhotoImageButton = new JButton();
-        ImageIcon PhotoImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/add-photo.png"));
-        PhotoImageButton.setIcon(PhotoImage);
-        PhotoImageButton.setBounds(dv.AlignLeft(), 375, dv.FieldWidth(), UploadImage.getIconHeight());
-        PhotoImageButton.setBorder(null);
-        PhotoImageButton.setContentAreaFilled(false);
+//        PhotoImageButton = new JButton();
+//        ImageIcon PhotoImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/add-photo.png"));
+//        PhotoImageButton.setIcon(PhotoImage);
+//        PhotoImageButton.setBounds(dv.AlignLeft(), 375, dv.FieldWidth(), UploadImage.getIconHeight());
+//        PhotoImageButton.setBorder(null);
+//        PhotoImageButton.setContentAreaFilled(false);
         
         
-        ContinuteButton = new JButton();
-        ImageIcon ContinuteImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/OK Button.png"));
-        ContinuteButton.setIcon(ContinuteImage);
-        ContinuteButton.setBounds(dv.AlignLeft()+150, 450, dv.FieldWidth(), ContinuteImage.getIconHeight());
-        ContinuteButton.setBorder(null);
-        ContinuteButton.setContentAreaFilled(false);
+//        ContinuteButton = new JButton();
+//        ImageIcon ContinuteImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/OK Button.png"));
+//        ContinuteButton.setIcon(ContinuteImage);
+//        ContinuteButton.setBounds(dv.AlignLeft()+150, 450, dv.FieldWidth(), ContinuteImage.getIconHeight());
+//        ContinuteButton.setBorder(null);
+//        ContinuteButton.setContentAreaFilled(false);
         
         ConfirmButton = new JButton();
         ImageIcon ConfirmImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/Confirm Button.png"));
@@ -399,7 +409,48 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
     }
    
    
-   
+    private void ActionUpLoadImage( )
+    {
+        JFileChooser chooser=new JFileChooser();
+        chooser.setFileFilter(new FileFilter() 
+        {
+                    @Override
+                    public boolean accept(File f)
+                    {
+                        if(f.isDirectory())
+                            return true;
+                        else
+                            return f.getName().toLowerCase().endsWith(".jpg");
+                    }   
+                 
+                    @Override
+                    public String getDescription()
+                    {
+                        return "Image File (*.jpg)";
+                    }                   
+                }
+        );
+        if(chooser.showOpenDialog(this) ==JFileChooser.CANCEL_OPTION)
+            return;
+        
+        File file=chooser.getSelectedFile();
+        try
+        {
+            ImageIcon imageicon=new ImageIcon(file.getPath());
+            Image img=ImageHelper.reSize(imageicon.getImage(), 4, 3);
+            JLabel image = new JLabel(imageicon); 
+            
+            image.setBounds(90,140,300,400);
+            image.setHorizontalAlignment(JLabel.CENTER);
+            InfoLayeredPane.add(image,Integer.valueOf(2));
+            
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            
+        }
+    }
 
    
    
@@ -416,6 +467,13 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
             else
                 return;
         }
+        
+        if (e.getSource() == UpLoadImageButton)
+        {
+            ActionUpLoadImage();
+        }
+        
+        
         
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
