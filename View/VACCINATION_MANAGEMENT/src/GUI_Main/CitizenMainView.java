@@ -6,6 +6,7 @@ import Data_Processor.Person;
 import GUI_Login.LoginView;
 import GUI_ManageVaccination.ManageVaccinationView;
 import GUI_SearchOrg.SearchOrgView;
+import GUI_UserInformation.UserInformationView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,11 +42,13 @@ public class CitizenMainView extends JFrame implements ActionListener
 
     /*Other Views*/
     private  LoginView loginView;
+    private UserInformationView userInformationView;
     private SearchOrgView searchOrgView;
     private ManageVaccinationView manageVaccinationView;
 
     private JButton LogoutButton;
     private JButton BackButton;
+    private JButton BackInfoButton;
 
     private void initBackButton()
     {
@@ -58,6 +61,19 @@ public class CitizenMainView extends JFrame implements ActionListener
         BackButton.setContentAreaFilled(false);
 
         BackButton.addActionListener(this);
+    }
+
+    private void initBackInfoButton()
+    {
+        BackInfoButton = new JButton();
+        ImageIcon BackInfoButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Back Button_2.png"));
+        BackInfoButton.setIcon(BackInfoButtonIcon);
+
+        BackInfoButton.setBounds(10, 10, BackInfoButtonIcon.getIconWidth(), BackInfoButtonIcon.getIconHeight());
+        BackInfoButton.setBorder(null);
+        BackInfoButton.setContentAreaFilled(false);
+
+        BackInfoButton.addActionListener(this);
     }
 
     private void initLogoutButton()
@@ -443,10 +459,27 @@ public class CitizenMainView extends JFrame implements ActionListener
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
 
+        if(e.getSource() == BackInfoButton)
+        {
+            userInformationView = null;
+            MainLayeredPane.removeAll();
+            CitizenMainView citizenMainView = new CitizenMainView(personalUser.getPhone());
+            this.dispose();
+        }
+
         if (e.getSource() == LogoutButton)
         {
             loginView = new LoginView();
             this.dispose();
+        }
+
+        if (e.getSource() == InfoSettingButton)
+        {
+            userInformationView = new UserInformationView();
+            MainLayeredPane.add(userInformationView, Integer.valueOf(1));
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+            initBackInfoButton();
+            MainLayeredPane.add(BackInfoButton, Integer.valueOf(5));
         }
 
         if (e.getSource() == SearchButton)

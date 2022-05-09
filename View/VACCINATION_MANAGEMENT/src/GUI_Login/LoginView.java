@@ -199,6 +199,7 @@ public class LoginView extends JFrame implements ActionListener, AncestorListene
             String InputUsername = UsernameTextField.getText();
             String InputPassword = String.valueOf(PasswordField.getPassword());
 
+
             if (InputUsername.equals("") || InputPassword.equals("")) {
                 System.out.println("Nhập vào tài khoản/mật khẩu!");
                 return;

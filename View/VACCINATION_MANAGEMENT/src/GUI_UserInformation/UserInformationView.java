@@ -1,4 +1,4 @@
-package GUI_RegisterAcc;
+package GUI_UserInformation;
 
 /*
 COLOR HEX CODE
@@ -8,17 +8,20 @@ màu xám hơi đậm dành cho label: 666666
 màu đen dành cho text nhập vào: 333333
 */
 
-import Data_Processor.*;
-import org.jdatepicker.impl.*;
-import org.jdatepicker.util.*;
+import Data_Processor.DefaultValue;
+import Data_Processor.Person;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.event.AncestorEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.*;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -28,7 +31,7 @@ import java.util.Properties;
  *
  * @author LeHoangDuyen
  */
-public class RegisterAccView extends JFrame implements ActionListener
+public class UserInformationView extends JPanel implements ActionListener
 {
     DefaultValue dv = new DefaultValue();
     private JLabel UsernameLabel;
@@ -378,6 +381,8 @@ public class RegisterAccView extends JFrame implements ActionListener
     {
         //create
         LastNameTextField = new JTextField();
+
+        LastNameTextField.setText("");
 
         //set position and area
         LastNameTextField.setBounds(70, 80 + dv.LabelHeight(), 220, 30);
@@ -851,26 +856,26 @@ public class RegisterAccView extends JFrame implements ActionListener
     {
         //Frame
         //set frame title
-        this.setTitle("Đăng ký");
+        //this.setTitle("Đăng ký");
 
         //set frame size
         this.setSize(dv.FrameWidth(), dv.FrameHeight());
         //this.setSize(1080, 720); --Main View
 
         //set do not allow frame resizing
-        this.setResizable(false);
+        //this.setResizable(false);
 
         //set frame visible on screen
-        this.setVisible(true);
+        //this.setVisible(true);
 
         //set frame close on X button
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //set frame background color
         this.setBackground(new Color(dv.ViewBackgroundColor()));
 
         //set Frame icon
-        this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
+        //this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
 
         //set layout
         this.setLayout(null);
@@ -887,7 +892,7 @@ public class RegisterAccView extends JFrame implements ActionListener
     }
 
 
-    public RegisterAccView()
+    public UserInformationView()
     {
         initFrameComponent();
 
