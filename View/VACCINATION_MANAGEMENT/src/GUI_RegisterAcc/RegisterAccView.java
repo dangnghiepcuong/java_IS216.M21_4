@@ -637,7 +637,7 @@ public class RegisterAccView extends JFrame implements ActionListener
                 System.out.println("Mật khẩu không trùng khớp!");
                 return;
             }
-            
+
             InputBirthday = dv.toOracleDateFormat(InputBirthday);
             InputGender -= 1;
 

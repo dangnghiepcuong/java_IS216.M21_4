@@ -142,7 +142,7 @@ public class DefaultValue
         return OptionFrame;
     }
 
-    public JDialog popupDialog (JFrame frame, int ErrorCode, int w, int h, String ErrorMessage)
+   /* public JDialog popupDialog (JFrame frame, int ErrorCode, int w, int h, String ErrorMessage)
     {
         JDialog Dialog = new JDialog(frame, String.valueOf(ErrorCode));
         Dialog.setAlwaysOnTop(true);
@@ -181,7 +181,7 @@ public class DefaultValue
         Dialog.setLocationRelativeTo(null);
 
         return Dialog;
-    }
+    }*/
 
     public String fontName()
     {
@@ -221,6 +221,11 @@ public class DefaultValue
     public int FrameHeight()
     {
         return 720;
+    }
+
+    public int AlignTop()
+    {
+        return 80;
     }
 
     public int AlignLeft()
