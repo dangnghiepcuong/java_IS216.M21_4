@@ -89,6 +89,14 @@ public class RegisterAccView extends JFrame implements ActionListener
         AccInfoPanel.setBackground(new Color(dv.ViewBackgroundColor()));
         AccInfoPanel.setBorder(dv.border());
 
+        JLabel AccInfoLabel = new JLabel("THÔNG TIN TÀI KHOẢN");
+        AccInfoLabel.setBounds((AccInfoPanel.getWidth()-300)/2, 40, 300, 30);
+        AccInfoLabel.setFont(new Font(dv.fontName(), 1, 20));
+        AccInfoLabel.setForeground(new Color(dv.FeatureButtonColor()));
+        AccInfoLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        AccInfoPanel.add(AccInfoLabel);
+
         //init BackButton
         initBackButton();
         AccInfoPanel.add(BackButton);
@@ -132,6 +140,14 @@ public class RegisterAccView extends JFrame implements ActionListener
         PersonalInfoPanel.setBounds(dv.FrameWidth()-dv.FrameHeight(),0,dv.FrameHeight(),dv.FrameHeight());
         PersonalInfoPanel.setBackground(new Color(dv.ViewBackgroundColor()));
         PersonalInfoPanel.setBorder(dv.border());
+
+        JLabel PersonalInfoLabel = new JLabel("THÔNG TIN CÁ NHÂN");
+        PersonalInfoLabel.setBounds((PersonalInfoPanel.getWidth()-300)/2, 40, 300, 30);
+        PersonalInfoLabel.setFont(new Font(dv.fontName(), 1, 20));
+        PersonalInfoLabel.setForeground(new Color(dv.FeatureButtonColor()));
+        PersonalInfoLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        PersonalInfoPanel.add(PersonalInfoLabel);
 
         initLastNameLabel();
         PersonalInfoPanel.add(LastNameLabel);

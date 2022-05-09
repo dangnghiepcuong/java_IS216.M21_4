@@ -478,8 +478,8 @@ public class CitizenMainView extends JFrame implements ActionListener
         {
             userInformationView = null;
             MainLayeredPane.removeAll();
-            CitizenMainView citizenMainView = new CitizenMainView(userInformationView.getPersonalUser().getPhone());
             this.dispose();
+            CitizenMainView citizenMainView = new CitizenMainView(personalUser.getPhone());
         }
 
         if (e.getSource() == VaccinationRegButton)
