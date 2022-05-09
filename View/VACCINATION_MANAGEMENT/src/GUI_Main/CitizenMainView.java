@@ -6,6 +6,7 @@ import Data_Processor.Person;
 import GUI_Login.LoginView;
 import GUI_ManageVaccination.ManageVaccinationView;
 import GUI_SearchOrg.SearchOrgView;
+import GUI_UserInformation.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,11 +40,13 @@ public class CitizenMainView extends JFrame implements ActionListener
 
     /*Other Views*/
     private  LoginView loginView;
+    private UserInformationView userInformationView;
     private SearchOrgView searchOrgView;
     private ManageVaccinationView manageVaccinationView;
 
     private JButton LogoutButton;
     private JButton BackButton;
+    private JButton BackInfoButton;
     private JButton VaccinationRegButton;
 
     private void initBackButton()
@@ -57,6 +60,19 @@ public class CitizenMainView extends JFrame implements ActionListener
         BackButton.setContentAreaFilled(false);
 
         BackButton.addActionListener(this);
+    }
+
+    private void initBackInfoButton()
+    {
+        BackInfoButton = new JButton();
+        ImageIcon BackInfoButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Back Button_2.png"));
+        BackInfoButton.setIcon(BackInfoButtonIcon);
+
+        BackInfoButton.setBounds(10, 10, BackInfoButtonIcon.getIconWidth(), BackInfoButtonIcon.getIconHeight());
+        BackInfoButton.setBorder(null);
+        BackInfoButton.setContentAreaFilled(false);
+
+        BackInfoButton.addActionListener(this);
     }
 
     private void initVaccinationRegButton()
@@ -443,6 +459,12 @@ public class CitizenMainView extends JFrame implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
+        if (e.getSource() == LogoutButton)
+        {
+            loginView = new LoginView();
+            this.dispose();
+        }
+
         if(e.getSource() == BackButton)
         {
             searchOrgView = null;
@@ -450,6 +472,14 @@ public class CitizenMainView extends JFrame implements ActionListener
             MainLayeredPane.removeAll();
             MainLayeredPane.add(MainPanel, Integer.valueOf(0));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+        }
+
+        if(e.getSource() == BackInfoButton)
+        {
+            userInformationView = null;
+            MainLayeredPane.removeAll();
+            CitizenMainView citizenMainView = new CitizenMainView(personalUser.getPhone());
+            this.dispose();
         }
 
         if (e.getSource() == VaccinationRegButton)
@@ -467,10 +497,13 @@ public class CitizenMainView extends JFrame implements ActionListener
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }
 
-        if (e.getSource() == LogoutButton)
+        if (e.getSource() == InfoSettingButton)
         {
-            loginView = new LoginView();
-            this.dispose();
+            userInformationView = new UserInformationView();
+            MainLayeredPane.add(userInformationView, Integer.valueOf(1));
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+            initBackInfoButton();
+            MainLayeredPane.add(BackInfoButton, Integer.valueOf(5));
         }
 
         if (e.getSource() == SearchButton)

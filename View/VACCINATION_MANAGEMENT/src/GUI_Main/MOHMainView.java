@@ -62,7 +62,7 @@ public class MOHMainView extends JFrame implements ActionListener
 
         initInfoBackground();
         InfoLayeredPane.add(InfoBackground, Integer.valueOf(0));
-        
+
         JLabel InfoLabel = new JLabel("THÔNG TIN CƠ BẢN");
         InfoLabel.setBounds(0,40,360,35);
         InfoLabel.setFont(new Font(dv.fontName(),Font.BOLD, 24));
