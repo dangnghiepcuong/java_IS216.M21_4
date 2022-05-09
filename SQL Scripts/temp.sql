@@ -101,5 +101,27 @@ select PersonalID, LastName, FirstName, Gender, Phone, Time, NO, DoseType, Statu
 from REGISTER REG, PERSON 
 where REG.PersonalID = PERSON.ID and REG.SchedID = 'null'
 
+exec ACC_INSERT_RECORD ('1','1',2,1,'');
+
+commit
+
+delete person where 
+phone = '123'
+or phone = '123'
+or phone = '321'
+or phone = '456'
+or phone = '0339770525'
+or phone = '1234';
+
+delete account where 
+username = '0339770525'
+or username = '123'
+or username = '321'
+or username = '456'
+or username = '1234';
+commit;
+
+select * from HEALTH
+where HEALTH.PersonalID = '281332982'
 
 commit;

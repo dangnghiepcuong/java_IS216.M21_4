@@ -71,7 +71,7 @@ public class ORGMainView extends JFrame implements ActionListener
 
         JLabel InfoLabel = new JLabel("THÔNG TIN CƠ BẢN");
         InfoLabel.setBounds(0,40,360,35);
-        InfoLabel.setFont(new Font("SVN-Arial",Font.BOLD, 24));
+        InfoLabel.setFont(new Font(dv.fontName(),Font.BOLD, 24));
         InfoLabel.setHorizontalAlignment(JLabel.CENTER);
 
         ImageIcon AvatarImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/Avatar.png"));
@@ -81,12 +81,12 @@ public class ORGMainView extends JFrame implements ActionListener
 
         JLabel Name = new JLabel(orgUser.getName());
         Name.setBounds(0, 300, 360, 35);
-        Name.setFont(new Font("SVN-Arial",Font.BOLD, 24));
+        Name.setFont(new Font(dv.fontName(),Font.BOLD, 24));
         Name.setHorizontalAlignment(JLabel.CENTER);
 
         ImageIcon LocationImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/Location.png"));
         JLabel Location = new JLabel(dv.getProvinceName(orgUser.getProvince()));
-        Location.setFont(new Font("SVN-Arial",Font.BOLD, 20));
+        Location.setFont(new Font(dv.fontName(),Font.BOLD, 20));
         Location.setIcon(LocationImage);
         Location.setBounds(0,400,360,30);
         Location.setHorizontalAlignment(JLabel.CENTER);
@@ -149,14 +149,14 @@ public class ORGMainView extends JFrame implements ActionListener
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(0, 160, 240, 30);
         ButtonLabel.setText("Thông tin");
-        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
         JLabel ButtonLabel2 = new JLabel();
         ButtonLabel2.setBounds(0, 160 +25, 240, 30);
         ButtonLabel2.setText("đơn vị");
-        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -176,14 +176,14 @@ public class ORGMainView extends JFrame implements ActionListener
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(240, 160, 240, 30);
         ButtonLabel.setText("Quản lý");
-        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
         JLabel ButtonLabel2 = new JLabel();
         ButtonLabel2.setBounds(240, 160 +25, 240, 30);
         ButtonLabel2.setText("lịch tiêm chủng");
-        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel2_1.setBorder(dv.border());
         FeatureLayeredPane.add(ButtonLabel);
@@ -202,14 +202,14 @@ public class ORGMainView extends JFrame implements ActionListener
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(240*2 -15, 160, 240-20, 30);
         ButtonLabel.setText("Gửi thông báo");
-        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
         JLabel ButtonLabel2 = new JLabel();
         ButtonLabel2.setBounds(240*2 -15, 160 +25, 240-20, 30);
         ButtonLabel2.setText("địa phương");
-        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -229,14 +229,14 @@ public class ORGMainView extends JFrame implements ActionListener
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(0, 240+130, 240, 30);
         ButtonLabel.setText("Tìm kiếm");
-        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
         JLabel ButtonLabel2 = new JLabel();
         ButtonLabel2.setBounds(0, 240+130 +25, 240, 30);
         ButtonLabel2.setText("thông tin");
-        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -256,14 +256,14 @@ public class ORGMainView extends JFrame implements ActionListener
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(240 -10, 240+130, 240, 30);
         ButtonLabel.setText("Thống kê");
-        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
         JLabel ButtonLabel2 = new JLabel();
         ButtonLabel2.setBounds(240 -10, 240+130 +25, 240, 30);
         ButtonLabel2.setText("số liệu");
-        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -384,7 +384,7 @@ public class ORGMainView extends JFrame implements ActionListener
             this.dispose();
         }
 
-        if (e.getSource() == SearchButton)
+        /*if (e.getSource() == SearchButton)
         {
             this.setTitle("Tìm kiếm");
             searchOrgView = new SearchOrgView();
@@ -395,7 +395,7 @@ public class ORGMainView extends JFrame implements ActionListener
             //init BackButton
             initBackButton();
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
-        }
+        }*/
 
         if (e.getSource() == ManageSchedButton)
         {

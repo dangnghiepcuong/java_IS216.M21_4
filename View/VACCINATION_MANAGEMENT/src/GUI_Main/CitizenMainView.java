@@ -6,7 +6,6 @@ import Data_Processor.Person;
 import GUI_Login.LoginView;
 import GUI_ManageVaccination.ManageVaccinationView;
 import GUI_SearchOrg.SearchOrgView;
-import GUI_UserInformation.UserInformationView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,8 +22,6 @@ public class CitizenMainView extends JFrame implements ActionListener
 
     private JLayeredPane InfoLayeredPane;
     private JLabel InfoBackground;
-    private JLabel NameLabel;
-    private JLabel LocationLabel;
 
     private JLayeredPane FeatureLayeredPane;
     private JButton InfoSettingButton;
@@ -42,13 +39,12 @@ public class CitizenMainView extends JFrame implements ActionListener
 
     /*Other Views*/
     private  LoginView loginView;
-    private UserInformationView userInformationView;
     private SearchOrgView searchOrgView;
     private ManageVaccinationView manageVaccinationView;
 
     private JButton LogoutButton;
     private JButton BackButton;
-    private JButton BackInfoButton;
+    private JButton VaccinationRegButton;
 
     private void initBackButton()
     {
@@ -63,17 +59,15 @@ public class CitizenMainView extends JFrame implements ActionListener
         BackButton.addActionListener(this);
     }
 
-    private void initBackInfoButton()
+    private void initVaccinationRegButton()
     {
-        BackInfoButton = new JButton();
-        ImageIcon BackInfoButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Back Button_2.png"));
-        BackInfoButton.setIcon(BackInfoButtonIcon);
-
-        BackInfoButton.setBounds(10, 10, BackInfoButtonIcon.getIconWidth(), BackInfoButtonIcon.getIconHeight());
-        BackInfoButton.setBorder(null);
-        BackInfoButton.setContentAreaFilled(false);
-
-        BackInfoButton.addActionListener(this);
+        ImageIcon VaccRegIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Vaccination Reg Button.png"));
+        VaccinationRegButton = new JButton();
+        VaccinationRegButton.setBounds((320-VaccRegIcon.getIconWidth())/2, 300, VaccRegIcon.getIconWidth(), VaccRegIcon.getIconHeight());
+        VaccinationRegButton.setBorder(null);
+        VaccinationRegButton.setContentAreaFilled(false);
+        VaccinationRegButton.setIcon(VaccRegIcon);
+        VaccinationRegButton.addActionListener(this);
     }
 
     private void initLogoutButton()
@@ -111,7 +105,7 @@ public class CitizenMainView extends JFrame implements ActionListener
 
         JLabel InfoLabel = new JLabel("THÔNG TIN CƠ BẢN");
         InfoLabel.setBounds(0,40,360,35);
-        InfoLabel.setFont(new Font("SVN-Arial",Font.BOLD, 24));
+        InfoLabel.setFont(new Font(dv.fontName(),Font.BOLD, 24));
         InfoLabel.setHorizontalAlignment(JLabel.CENTER);
 
         ImageIcon AvatarImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/Avatar.png"));
@@ -121,18 +115,18 @@ public class CitizenMainView extends JFrame implements ActionListener
 
         JLabel Name = new JLabel(personalUser.getFullName());
         Name.setBounds(0, 300, 360, 35);
-        Name.setFont(new Font("SVN-Arial",Font.BOLD, 24));
+        Name.setFont(new Font(dv.fontName(),Font.BOLD, 24));
         Name.setHorizontalAlignment(JLabel.CENTER);
 
         JLabel BasicInfo = new JLabel(dv.getGenderName(personalUser.getGender()) + " - "
                 + dv.toOracleDateFormat(personalUser.getBirthday()).substring(7,11));
         BasicInfo.setBounds(0, 350, 360, 35);
-        BasicInfo.setFont(new Font("SVN-Arial",Font.BOLD, 20));
+        BasicInfo.setFont(new Font(dv.fontName(),Font.BOLD, 20));
         BasicInfo.setHorizontalAlignment(JLabel.CENTER);
 
         ImageIcon LocationImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/Location.png"));
         JLabel Location = new JLabel(dv.getProvinceName(personalUser.getProvince()));
-        Location.setFont(new Font("SVN-Arial",Font.BOLD, 20));
+        Location.setFont(new Font(dv.fontName(),Font.BOLD, 20));
         Location.setIcon(LocationImage);
         Location.setBounds(0,400,360,30);
         Location.setHorizontalAlignment(JLabel.CENTER);
@@ -162,14 +156,14 @@ public class CitizenMainView extends JFrame implements ActionListener
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(0, 160, 240, 30);
         ButtonLabel.setText("Thông tin");
-        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
         JLabel ButtonLabel2 = new JLabel();
         ButtonLabel2.setBounds(0, 160 +25, 240, 30);
         ButtonLabel2.setText("cá nhân");
-        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -189,14 +183,14 @@ public class CitizenMainView extends JFrame implements ActionListener
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(240, 160, 240, 30);
         ButtonLabel.setText("Tìm kiếm đơn vị");
-        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
         JLabel ButtonLabel2 = new JLabel();
         ButtonLabel2.setBounds(240, 160 +25, 240, 30);
         ButtonLabel2.setText("tiêm chủng");
-        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel2_1.setBorder(dv.border());
         FeatureLayeredPane.add(ButtonLabel);
@@ -215,14 +209,14 @@ public class CitizenMainView extends JFrame implements ActionListener
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(240*2 -15, 160, 240-20, 30);
         ButtonLabel.setText("Thông báo");
-        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
         JLabel ButtonLabel2 = new JLabel();
         ButtonLabel2.setBounds(240*2 -15, 160 +25, 240-20, 30);
         ButtonLabel2.setText("- tin tức");
-        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -242,7 +236,7 @@ public class CitizenMainView extends JFrame implements ActionListener
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(0, 240+130, 240, 30);
         ButtonLabel.setText("Khai báo y tế");
-        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
         FeatureLayeredPane.add(ButtonLabel);
@@ -260,14 +254,14 @@ public class CitizenMainView extends JFrame implements ActionListener
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(240 -10, 240+130, 240, 30);
         ButtonLabel.setText("Đăng ký");
-        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
         JLabel ButtonLabel2 = new JLabel();
         ButtonLabel2.setBounds(240 -10, 240+130 +25, 240, 30);
         ButtonLabel2.setText("tiêm chủng");
-        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -287,14 +281,14 @@ public class CitizenMainView extends JFrame implements ActionListener
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(240*2 -15, 240+130, 240 -20, 30);
         ButtonLabel.setText("Cập nhật");
-        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
         JLabel ButtonLabel2 = new JLabel();
         ButtonLabel2.setBounds(240*2 -15, 240+130 +25, 240 -20, 30);
         ButtonLabel2.setText("mũi tiêm");
-        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -314,14 +308,14 @@ public class CitizenMainView extends JFrame implements ActionListener
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(10, 240*2-30 +130, 240, 30);
         ButtonLabel.setText("Chứng nhận");
-        ButtonLabel.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
         JLabel ButtonLabel2 = new JLabel();
         ButtonLabel2.setBounds(10, 240*2-30 +130 +25, 240, 30);
         ButtonLabel2.setText("tiêm chủng");
-        ButtonLabel2.setFont(new Font("SVN-Arial", 1, 20));
+        ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -424,7 +418,6 @@ public class CitizenMainView extends JFrame implements ActionListener
             personalUser.setPhone(rs.getString("Phone"));
             personalUser.setEmail(rs.getString("Email"));
             personalUser.setGuardian(rs.getString("Guardian"));
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -459,12 +452,19 @@ public class CitizenMainView extends JFrame implements ActionListener
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
 
-        if(e.getSource() == BackInfoButton)
+        if (e.getSource() == VaccinationRegButton)
         {
-            userInformationView = null;
+            manageVaccinationView = null;
             MainLayeredPane.removeAll();
-            CitizenMainView citizenMainView = new CitizenMainView(personalUser.getPhone());
-            this.dispose();
+
+            searchOrgView = new SearchOrgView(personalUser);
+            MainLayeredPane.add(searchOrgView, Integer.valueOf(1));
+
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+
+            //init BackButton
+            initBackButton();
+            MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }
 
         if (e.getSource() == LogoutButton)
@@ -473,18 +473,9 @@ public class CitizenMainView extends JFrame implements ActionListener
             this.dispose();
         }
 
-        if (e.getSource() == InfoSettingButton)
-        {
-            userInformationView = new UserInformationView();
-            MainLayeredPane.add(userInformationView, Integer.valueOf(1));
-            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
-            initBackInfoButton();
-            MainLayeredPane.add(BackInfoButton, Integer.valueOf(5));
-        }
-
         if (e.getSource() == SearchButton)
         {
-            searchOrgView = new SearchOrgView();
+            searchOrgView = new SearchOrgView(personalUser);
             MainLayeredPane.add(searchOrgView, Integer.valueOf(1));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
 
@@ -496,7 +487,12 @@ public class CitizenMainView extends JFrame implements ActionListener
         if(e.getSource() == ManageVaccinationButton)
         {
             manageVaccinationView = new ManageVaccinationView(personalUser);
-            MainLayeredPane.add(manageVaccinationView, Integer.valueOf(1));
+            MainLayeredPane.removeAll();
+
+            MainLayeredPane.add(manageVaccinationView, Integer.valueOf(0));
+            initVaccinationRegButton();
+            MainLayeredPane.add(VaccinationRegButton, Integer.valueOf(1));
+
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
 
             //init BackButton
