@@ -132,6 +132,10 @@ update ACCOUNT ACC
 set Status = 1
 where ACC.Username = 'MOH'; 
 
+update ACCOUNT ACC
+set Status = 1
+where ACC.Username = '44001'; 
+
 commit;
 
 

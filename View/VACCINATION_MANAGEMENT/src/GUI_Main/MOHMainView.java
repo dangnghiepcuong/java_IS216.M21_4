@@ -1,8 +1,10 @@
 package GUI_Main;
 
 import Data_Processor.*;
+import GUI_CreateOrgAccView.CreateOrgAccView;
 import GUI_Login.LoginView;
 import GUI_SearchOrg.SearchOrgView;
+import com.sun.tools.javac.Main;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,8 +21,6 @@ public class MOHMainView extends JFrame implements ActionListener
     private DefaultValue dv = new DefaultValue();
     private JLayeredPane InfoLayeredPane;
     private JLabel InfoBackground;
-    private JLabel NameLabel;
-    private JLabel LocationLabel;
 
     private JLayeredPane FeatureLayeredPane;
     private JButton InfoSettingButton;
@@ -36,6 +36,7 @@ public class MOHMainView extends JFrame implements ActionListener
 
     private LoginView loginView;
     private SearchOrgView searchOrgView;
+    private CreateOrgAccView createOrgAccView;
 
     private void initBackButton()
     {
@@ -161,6 +162,7 @@ public class MOHMainView extends JFrame implements ActionListener
         CreateOrgAccButton.setBorder(null);
         CreateOrgAccButton.setContentAreaFilled(false);
         CreateOrgAccButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Create Org Acc Feature Button.png")));
+        CreateOrgAccButton.addActionListener(this);
 
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(240, 160, 240, 30);
@@ -335,6 +337,8 @@ public class MOHMainView extends JFrame implements ActionListener
             e.printStackTrace();
         }
 
+        initBackButton();
+
         initMainLayeredPane();
         initMainPanel();
 
@@ -400,6 +404,18 @@ public class MOHMainView extends JFrame implements ActionListener
 
             loginView = new LoginView();
             this.dispose();
+        }
+
+        if (e.getSource() == CreateOrgAccButton)
+        {
+            createOrgAccView = new CreateOrgAccView();
+
+            MainLayeredPane.removeAll();
+
+            MainLayeredPane.add(createOrgAccView, Integer.valueOf(0));
+            MainLayeredPane.add(BackButton, Integer.valueOf(1));
+
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
 
         /*if (e.getSource() == SearchButton)
