@@ -15,9 +15,12 @@ import java.sql.*;
  */
 public class SearchOrgView extends JPanel implements ActionListener
 {
+    //Enities used to store the selected out data from database in this view
     private DefaultValue dv = new DefaultValue();
     private Organization org[] = new Organization[100000];
+    private Person personalUser = new Person();
 
+    //Components used in this view
     private JPanel OrgFilterPanel;
     private JLabel ProvinceLabel;
     private JLabel DistrictLabel;
@@ -37,8 +40,6 @@ public class SearchOrgView extends JPanel implements ActionListener
     private JPanel SchedPanel[] = new JPanel[50];
 
     private JLayeredPane LayeredPaneArea;
-
-    private Person personalUser = new Person();
 
 
 /*
@@ -227,6 +228,9 @@ public class SearchOrgView extends JPanel implements ActionListener
         OrgPanel[i].add(OrgAvaiScheds);
         //OrgPanel[i].add(OrgDetailButton[i]);
 
+        /*
+            INITIALIZED THE SPECIFIED SCHEDULE LIST OF THE SELECTED ORGANIZATION
+        */
         MouseListener handleMouseAction = new MouseListener()
         {
             @Override
@@ -271,7 +275,6 @@ public class SearchOrgView extends JPanel implements ActionListener
             }
         };
 
-        //OrgDetailButton[i].addMouseListener(this);
         OrgPanel[i].addMouseListener(handleMouseAction);
     }
 
@@ -366,6 +369,10 @@ public class SearchOrgView extends JPanel implements ActionListener
         TimeChoice.add("Trưa");
         TimeChoice.add("Tối");
 
+        /*
+            HANDLE REGISTER A VACCINATION SCHEDULE ACTION
+        */
+
         ActionListener handleSchedRegister = new ActionListener()
         {
             @Override
@@ -375,21 +382,50 @@ public class SearchOrgView extends JPanel implements ActionListener
 
                 if (answer == JOptionPane.YES_OPTION)
                 {
-                    String plsql = "{call REG_INSERT_RECORD(?,?,?)}";
+                    String plsql = "{call REG_BEFORE_INSERT_RECORD(?,?,?)}";
 
+                    String plsql2 = "{call REG_INSERT_RECORD(?,?,?,?)}";
 
                     Connection connection = null;
                     try {
                         connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
+                        /*
+                            CALL PROC TO GET THE RIGHT DOSETYPE OR ASK THE USER IF THIS IS THE 3RD INJECTION
+                        */
+                        int BoosterAvai = 0;
+                        String par_DoseType = "";
+
+                        //CALL PROC
                         CallableStatement cst = connection.prepareCall(plsql);
                         cst.setString("par_PersonalID", personalUser.getID());
-                        cst.setString("par_SchedID", sched.getID());
-                        cst.setInt("par_Time", TimeChoice.getSelectedIndex());
+                        cst.setInt("par_BoosterAvai", BoosterAvai);
+                        cst.setString("par_DoseType", par_DoseType);
 
-                        System.out.println(personalUser.getID() + " " + sched.getID());
+                        //ASK USER IF THIS IS THE 3RD INJECTION
+                        if (BoosterAvai == 1)
+                        {
+                            answer = dv.popupConfirmOption(null, "Bạn đang đăng ký mũi tiêm thứ 3, đây là mũi bổ sung hay nhắc lại?",
+                                    "Chọn loại mũi tiêm đăng ký");
 
-                        cst.execute();
+                            if (answer  == 0)
+                                par_DoseType = "booster";
+                            else if (answer == 1)
+                                par_DoseType = "repeat";
+                            else
+                                return;
+                        }
+
+                        /*
+                            REGISTER ACTION
+                        */
+                        CallableStatement cst2 = connection.prepareCall(plsql2);
+                        cst2.setString("par_PersonalID", personalUser.getID());
+                        cst2.setString("par_SchedID", sched.getID());
+                        cst2.setInt("par_Time", TimeChoice.getSelectedIndex());
+                        cst2.setString("par_DoseType", par_DoseType);
+
+                        cst2.execute();
                     } catch (SQLException ex) {
                         dv.popupOption(null,  ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
                         ex.printStackTrace();
@@ -429,7 +465,9 @@ public class SearchOrgView extends JPanel implements ActionListener
 
     private void initSchedListPanel(Organization SelectedOrg)
     {
-
+        /*
+                SELECT OUT THE INFO OF THE ORGANIZATION'S SPECIFIED SCHEDULES
+        */
         Schedule sched[] = new Schedule[50];
         String query = "";
 
@@ -491,12 +529,9 @@ public class SearchOrgView extends JPanel implements ActionListener
     {
         initSchedListPanel(SelectedOrg);
 
-        //create ScrollPaneOrgList Panel
         ScrollPaneSchedList = new JScrollPane(SchedListPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneSchedList.setBounds(0, 40, 680, 590);
-        /*ScrollPaneSchedList.add(SchedListPanel);
-        ScrollPaneSchedList.repaint(0, 40, 680, 590);*/
     }
 
     private void initLayeredPaneArea()
@@ -560,11 +595,15 @@ public class SearchOrgView extends JPanel implements ActionListener
     {
         int n = 0;
 
-        //Pressed SearchOrgButton
+        /*
+            HANDLE ON SEARCH ORG BUTTON CLICKING
+        */
         if (e.getSource() == SearchOrgButton)
         {
+            /*
+                SELECT OUT THE INFO OF THE ORGANIZATION'S SPECIFIED SCHEDULES
+            */
             String query = "";
-
             //Select out the code of chosen province
             String ProvinceCode = "";
 
@@ -598,7 +637,6 @@ public class SearchOrgView extends JPanel implements ActionListener
             try
             {
                 Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-                //Statement st = connection.createStatement();
 
                 PreparedStatement st = connection.prepareStatement(query);
 

@@ -209,6 +209,8 @@ public class DefaultValue
         return 0xfffafa;
     }
 
+    public int SpecifiedAreaBackgroundColor() {return 0xF2F2F2;}
+
     public int FeatureButtonColor()
     {
         return 0xFF9292;

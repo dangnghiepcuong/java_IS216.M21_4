@@ -466,7 +466,7 @@ public class CitizenMainView extends JFrame implements ActionListener
 
                     PreparedStatement st = connection.prepareStatement(query);
 
-                    st.executeQuery(query);
+                    st.executeUpdate(query);
                 } catch (SQLException ex) {
                     dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
                     ex.printStackTrace();
@@ -489,7 +489,7 @@ public class CitizenMainView extends JFrame implements ActionListener
 
                 PreparedStatement st = connection.prepareStatement(query);
 
-                st.executeQuery(query);
+                st.executeUpdate(query);
             } catch (SQLException ex) {
                 dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
                 ex.printStackTrace();
