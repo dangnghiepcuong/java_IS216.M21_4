@@ -413,7 +413,33 @@ public class ManageScheduleView extends JPanel implements ActionListener
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
-                    
+                    if ( dv.popupConfirmOption(null,"Xác nhận cập nhật trạng thái lượt đăng ký?", "Xác nhận?") != 0)
+                        return;
+
+                    String plsql = "{call REG_UPDATE_STATUS(?, ?, ?)}";
+
+                    try {
+                        Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                        CallableStatement cst = connection.prepareCall(plsql);
+
+                        cst.setString("par_PersonalID", Reg.getCitizen().getID());
+                        cst.setString("par_SchedID", Reg.getSched().getID());
+                        cst.setInt("par_Status", StatusChoice.getSelectedIndex()+1);
+
+                        cst.execute();
+
+                    }
+                    catch (SQLException ex)
+                    {
+                        dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
+                    }
+
+                    Reg.setStatus(StatusChoice.getSelectedIndex()+1);
+                    TimeNOStatus.setText("Buổi: " + dv.getTimeName(Reg.getTime())
+                            + "          STT: " + Reg.getNO() + "          Tình trạng: " + dv.getStatusName(Reg.getStatus()));
+
+                    LayeredPaneArea.repaint(320, 40, 680, 630);
                 }
             };
 

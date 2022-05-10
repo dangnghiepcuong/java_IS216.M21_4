@@ -660,7 +660,6 @@ public class RegisterAccView extends JFrame implements ActionListener
 
             String plsql = "{call ACC_INSERT_RECORD(?,?,?,?,?)}";
 
-
             String plsql2 = "{call PERSON_INSERT_RECORD(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 
             try {
