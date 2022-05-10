@@ -1,27 +1,68 @@
-/*1. Tạo ra Bộ Y tế. --*/
-INSERT INTO REGION(Code,Name,Note) VALUES('01', 'Hà Nội', NULL  );
-INSERT INTO REGION(Code,Name,Note) VALUES('02', 'Hồ Chí Minh', NULL  );
-INSERT INTO REGION(Code,Name,Note) VALUES('44', 'Bình Dương', NULL  );
-INSERT INTO REGION(Code,Name,Note) VALUES('25', 'Nam Định', NULL  );
-INSERT INTO REGION(Code,Name,Note) VALUES('48', 'Đồng Nai', NULL  );
-INSERT INTO REGION(Code,Name,Note) VALUES('39', 'Phú Yên', NULL  );
 
-insert into ACCOUNT values ('MOH', '123', 0, 1, NULL);
-select * from account;
-
-insert into ORGANIZATION values ('MOH', 'Bộ Y tế', '01', 'Ba Đình', 'Giảng Võ', '138A', NULL);
-select * from organization;
-
-
-/*2. Thêm thông tin vaccine và quy định tiêm chủng. --Kiểm tra mã vaccine không được trùng */
-exec VAC_INSERT_RECORD('Astra', 'Astra Zeneca', 'Vector Virus', 'Vuong Quoc Anh'); 
-exec VAC_INSERT_RECORD('Vero', 'Vero Cell', 'Bat hoat', 'Trung Quoc');
-exec VAC_INSERT_RECORD('Sputnik', 'Sputnik V', 'Tai to hop', 'Lien Bang Nga');
-exec VAC_INSERT_RECORD('Pfizer', 'Corminaty', 'mRNA', 'Hoa Ky');
-exec VAC_INSERT_RECORD('Moderna', 'Moderna', 'mRNA', 'Hoa Ky');
-
-select * from vaccine;
-exec VAC_INSERT_RECORD('Astra', 'Astra Zeneca', 'Vector Virus', 'Vuong Quoc Anh');
+INSERT INTO REGION(Code, Name, Note) VALUES ('01', 'Hà Nội', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('02', 'Hồ Chí Minh', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('03', 'Hải Phòng', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('04', 'Đà Nẵng', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('05', 'Hà Giang', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('06', 'Cao Bằng', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('07', 'Lai Châu', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('08', 'Lào Cai', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('09', 'Tuyên Quang', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('10', 'Lạng Sơn', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('11', 'Bắc Kạn', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('12', 'Thái Nguyên', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('13', 'Yên Bái', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('14', 'Sơn La', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('15', 'Phú Thọ', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('16', 'Vĩnh Phúc', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('17', 'Quảng Ninh', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('18', 'Bắc Giang', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('19', 'Bắc Ninh', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('20', '', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('21', 'Hải Dương', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('22', 'Hưng Yên', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('23', 'Hòa Bình', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('24', 'Hà Nam', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('25', 'Nam Định', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('26', 'Thái Bình', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('27', 'Ninh Bình', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('28', 'Thanh Hóa', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('29', 'Nghệ An', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('30', 'Hà Tĩnh', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('31', 'Quảng Bình', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('32', 'Quảng Trị', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('33', 'Thừa Thiên - Huế', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('34', 'Quảng Nam', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('35', 'Quảng Ngãi', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('36', 'Kon Tum', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('37', 'Bình Định', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('38', 'Giai Lai', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('39', 'Phú Yên', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('40', 'Đắk Lắk', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('41', 'Khánh Hòa', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('42', 'Lâm Đồng', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('43', 'Bình Phước', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('44', 'Bình Dương', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('45', 'Ninh Thuận', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('46', 'Tây Ninh', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('47', 'Bình Thuận', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('48', 'Đồng Nai', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('49', 'Long An', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('50', 'Đồng Tháp', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('51', 'An Giang', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('52', 'Bà Rịa - Vũng Tàu', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('53', 'Tiền Giang', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('54', 'Kiên Giang', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('55', 'Cần Thơ', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('56', 'Bến Tre', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('57', 'Vĩnh Long', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('58', 'Trà Vinh', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('59', 'Sóc Trăng', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('60', 'Bạc Liêu', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('61', 'Cà Mau', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('62', 'Điện Biên', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('63', 'Đắk Nông', NULL);
+INSERT INTO REGION(Code, Name, Note) VALUES ('64', 'Hậu Giang', NULL);
 
 
 INSERT INTO PARAMETER(InjectionNO,VaccineID,DoseType,MinDistance,DiffDoses,NextDose,Note) VALUES(1, 'Astra', 'basic', 56, 0, 'Astra, Pfizer, Moderna', 'M?i ?ang ??ng ký là m?i 2 (c? b?n)'  );
@@ -63,6 +104,27 @@ INSERT INTO PARAMETER(InjectionNO,VaccineID,DoseType,MinDistance,DiffDoses,NextD
 INSERT INTO PARAMETER(InjectionNO,VaccineID,DoseType,MinDistance,DiffDoses,NextDose,Note) VALUES(3, 'Moderna', 'repeat', NULL, 1, NULL, NULL  );
 INSERT INTO PARAMETER(InjectionNO,VaccineID,DoseType,MinDistance,DiffDoses,NextDose,Note) VALUES(4, 'Moderna', 'repeat', NULL, 0, NULL, NULL  );
 INSERT INTO PARAMETER(InjectionNO,VaccineID,DoseType,MinDistance,DiffDoses,NextDose,Note) VALUES(4, 'Moderna', 'repeat', NULL, 1, NULL, NULL  );
+
+/*1. Tạo ra Bộ Y tế. --*/
+insert into ACCOUNT values ('MOH', '123', 0, 1, NULL);
+select * from account;
+
+insert into ORGANIZATION values ('MOH', 'Bộ Y tế', '01', 'Ba Đình', 'Giảng Võ', '138A', NULL);
+select * from organization;
+
+
+/*2. Thêm thông tin vaccine và quy định tiêm chủng. --Kiểm tra mã vaccine không được trùng */
+exec VAC_INSERT_RECORD('Astra', 'Astra Zeneca', 'Vector Virus', 'Vuong Quoc Anh'); 
+exec VAC_INSERT_RECORD('Vero', 'Vero Cell', 'Bat hoat', 'Trung Quoc');
+exec VAC_INSERT_RECORD('Sputnik', 'Sputnik V', 'Tai to hop', 'Lien Bang Nga');
+exec VAC_INSERT_RECORD('Pfizer', 'Corminaty', 'mRNA', 'Hoa Ky');
+exec VAC_INSERT_RECORD('Moderna', 'Moderna', 'mRNA', 'Hoa Ky');
+
+select * from vaccine;
+exec VAC_INSERT_RECORD('Astra', 'Astra Zeneca', 'Vector Virus', 'Vuong Quoc Anh');
+
+
+
 
 /*3. Tạo ra các đơn vị tiêm chủng. --Kiểm tra hàm sinh ID tự động cho ORG */
 exec ACC_CREATE_ORG( 5, '44'); 

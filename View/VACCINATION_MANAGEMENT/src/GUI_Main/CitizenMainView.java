@@ -374,6 +374,7 @@ public class CitizenMainView extends JFrame implements ActionListener
     {
         MainPanel = new JPanel();
         MainPanel.setBounds(0,0,dv.FrameWidth(),dv.FrameHeight());
+        MainPanel.setBackground(new Color(dv.ViewBackgroundColor()));
         MainPanel.setLayout(null);
     }
 
@@ -381,6 +382,7 @@ public class CitizenMainView extends JFrame implements ActionListener
     {
         MainLayeredPane = new JLayeredPane();
         MainLayeredPane.setBounds(0, 0, dv.FrameWidth(), dv.FrameHeight());
+        MainLayeredPane.setBackground(new Color(dv.ViewBackgroundColor()));
         MainLayeredPane.setLayout(null);
     }
 
@@ -468,7 +470,7 @@ public class CitizenMainView extends JFrame implements ActionListener
 
                     st.executeUpdate(query);
                 } catch (SQLException ex) {
-                    dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
+                    dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(),2);
                     ex.printStackTrace();
                 }
             }
@@ -491,7 +493,7 @@ public class CitizenMainView extends JFrame implements ActionListener
 
                 st.executeUpdate(query);
             } catch (SQLException ex) {
-                dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
+                dv.popupOption(null, ex.getMessage(),"Lỗi " + ex.getErrorCode(),2);
                 ex.printStackTrace();
             }
 

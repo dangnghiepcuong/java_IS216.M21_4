@@ -83,7 +83,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
         SchedFilterChoice.setBounds(0, 40, dv.FieldWidth(), dv.FieldHeight());
         SchedFilterChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         SchedFilterChoice.setForeground(new Color(dv.BlackTextColor()));
-        SchedFilterChoice.setBackground(Color.WHITE);
 
         SchedFilterChoice.add("Tất cả");
         SchedFilterChoice.add("Đã lên lịch");
@@ -110,7 +109,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         initSchedFilterButton();
 
         SchedFilterPanel = new JPanel();
-        SchedFilterPanel.setBounds(dv.AlignLeft(), 40, dv.LabelWidth()+50, 110 + 56);
+        SchedFilterPanel.setBounds(dv.AlignLeft(), 80, dv.LabelWidth()+50, 110 + 56);
         SchedFilterPanel.setLayout(null);
         SchedFilterPanel.setBackground(new Color(dv.ViewBackgroundColor()));
 
@@ -278,9 +277,8 @@ public class ManageScheduleView extends JPanel implements ActionListener
         nScheds = i;
 
         SchedListPanel = new JPanel();
-
         SchedListPanel.setPreferredSize(new Dimension(660, 120*nScheds+nScheds*10));
-
+        SchedListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         SchedListPanel.setLayout(new FlowLayout());
 
         for (i = 0; i<nScheds; i++)
@@ -295,8 +293,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         initSchedListPanel(OnDateFilter);
 
         ScrollPaneSchedList = new JScrollPane(SchedListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        //set Bounds
+        ScrollPaneSchedList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneSchedList.setBounds(0, 40, 680, 590); //320 40
     }
 
@@ -320,7 +317,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
         RegFilterChoice.setBounds(0, 40, dv.FieldWidth(), dv.FieldHeight());
         RegFilterChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         RegFilterChoice.setForeground(new Color(dv.BlackTextColor()));
-        RegFilterChoice.setBackground(Color.WHITE);
 
         RegFilterChoice.add("Tất cả");
         RegFilterChoice.add("Đã lên lịch");
@@ -403,7 +399,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
             StatusChoice.setBounds(500, 32+2, 120, 30);
             StatusChoice.setFont(new Font(dv.fontName(), 0, 16));
             StatusChoice.setForeground(new Color(dv.BlackTextColor()));
-            StatusChoice.setBackground(Color.WHITE);
             StatusChoice.add("Điểm danh");
             StatusChoice.add("Đã tiêm");
             StatusChoice.add("Hủy");
@@ -432,7 +427,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                     }
                     catch (SQLException ex)
                     {
-                        dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
+                        dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(),2);
                     }
 
                     Reg.setStatus(StatusChoice.getSelectedIndex()+1);
@@ -506,6 +501,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
         RegListPanel = new JPanel();
         RegListPanel.setPreferredSize(new Dimension(660, 150*nReg+nReg*10));
+        RegListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         RegListPanel.setLayout(new FlowLayout());
 
         for (i = 0; i<nReg; i++)
@@ -520,8 +516,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         initRegListPanel(Sched);
 
         ScrollPaneRegList = new JScrollPane(RegListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        //set Bounds
+        ScrollPaneRegList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneRegList.setBounds(0, 40, 680, 590); //320 40
     }
 
@@ -565,12 +560,12 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
     private void initAddNewSchedButton()
     {
-        ImageIcon AddNewButton = new ImageIcon(getClass().getResource("/Data_Processor/icon/Add New Button.png"));
+        ImageIcon AddNewSchedButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Add New Sched Button.png"));
         AddNewSchedButton = new JButton();
-        AddNewSchedButton.setBounds(125, 300, AddNewButton.getIconWidth(), AddNewButton.getIconHeight());
+        AddNewSchedButton.setBounds((320-AddNewSchedButtonIcon.getIconWidth())/2, 300, AddNewSchedButtonIcon.getIconWidth(), AddNewSchedButtonIcon.getIconHeight());
         AddNewSchedButton.setBorder(null);
         AddNewSchedButton.setContentAreaFilled(false);
-        AddNewSchedButton.setIcon(AddNewButton);
+        AddNewSchedButton.setIcon(AddNewSchedButtonIcon);
         AddNewSchedButton.addActionListener(this);
     }
 
@@ -597,7 +592,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
         JFormattedTextField textField = OnDateField.getJFormattedTextField();
         textField.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         textField.setPreferredSize(new Dimension(150, 30));
-        textField.setBackground(Color.WHITE);
 
         OnDateField.setForeground(new Color(dv.BlackTextColor()));
         OnDateField.setVisible(true);
@@ -642,7 +636,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
         VaccineChoice.setPreferredSize(new Dimension(200, 30));
         VaccineChoice.setFont(new Font(dv.fontName(), 0, 16));
         VaccineChoice.setForeground(new Color(dv.BlackTextColor()));
-        VaccineChoice.setBackground(Color.WHITE);
 
         nVacc = i;
 
@@ -758,7 +751,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         cst.execute();
                     } catch (SQLException ex)
                     {
-                        dv.popupOption(null,  ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+                        dv.popupOption(null,  ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
                         ex.printStackTrace();
                     }
 
@@ -777,13 +770,14 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
         CreateSchedPanel = new JPanel();
         CreateSchedPanel.setBounds(0, 0, 660, 630);
+        CreateSchedPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         CreateSchedPanel.setLayout(new GridBagLayout());
         CreateSchedPanel.setBorder(dv.border());
 
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
 
-        c.insets = new Insets(0,0,20,0);
+        c.insets = new Insets(0,0,15,0);
         c.gridy = 0;
         CreateSchedPanel.add(CreateSchedLabel, c);
 
@@ -791,7 +785,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         c.gridy = 1;
         CreateSchedPanel.add(OnDateLabel,c);
 
-        c.insets = new Insets(0,0,15,0);
+        c.insets = new Insets(0,0,10,0);
         c.gridy = 2;
         CreateSchedPanel.add(OnDateField,c);
 
@@ -799,7 +793,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         c.gridy = 3;
         CreateSchedPanel.add(VaccineLabel,c);
 
-        c.insets = new Insets(0,0,15,0);
+        c.insets = new Insets(0,0,10,0);
         c.gridy = 4;
         CreateSchedPanel.add(VaccineChoice,c);
 
@@ -807,7 +801,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         c.gridy = 5;
         CreateSchedPanel.add(SerialLabel,c);
 
-        c.insets = new Insets(0,0,15,0);
+        c.insets = new Insets(0,0,10,0);
         c.gridy = 6;
         CreateSchedPanel.add(SerialTextField,c);
 
@@ -815,7 +809,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         c.gridy = 7;
         CreateSchedPanel.add(LimitDayLabel,c);
 
-        c.insets = new Insets(0,0,15,0);
+        c.insets = new Insets(0,0,10,0);
         c.gridy = 8;
         CreateSchedPanel.add(LimitDayTextField,c);
 
@@ -823,7 +817,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         c.gridy = 9;
         CreateSchedPanel.add(LimitNoonLabel,c);
 
-        c.insets = new Insets(0,0,15,0);
+        c.insets = new Insets(0,0,10,0);
         c.gridy = 10;
         CreateSchedPanel.add(LimitNoonTextField,c);
 
@@ -831,7 +825,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         c.gridy = 11;
         CreateSchedPanel.add(LimitNightLabel,c);
 
-        c.insets = new Insets(0,0,15,0);
+        c.insets = new Insets(0,0,10,0);
         c.gridy = 12;
         CreateSchedPanel.add(LimitNightTextField,c);
 
@@ -844,8 +838,9 @@ public class ManageScheduleView extends JPanel implements ActionListener
     {
         LayeredPaneArea = new JLayeredPane();
         LayeredPaneArea.setLayout(null);
+        LayeredPaneArea.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         LayeredPaneArea.setBounds(320, 40, 680, 630);
-        LayeredPaneArea.repaint(320, 40, 680, 630);
+//        LayeredPaneArea.repaint(320, 80, 680, 630);
     }
 
     private void initFrameComponent()
@@ -880,8 +875,8 @@ public class ManageScheduleView extends JPanel implements ActionListener
         this.add(SchedFilterPanel);
 
         //initAddNewSchedLabel
-        initAddNewSchedLabel();
-        this.add(AddNewSchedLabel);
+//        initAddNewSchedLabel();
+//        this.add(AddNewSchedLabel);
 
         //init AddNewSchedButton
         initAddNewSchedButton();
@@ -924,7 +919,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
             LayeredPaneArea.removeAll();
             LayeredPaneArea.repaint(320, 40, 680, 630);
 
-            JLabel SchedListLabel = new JLabel("DANH SÁCH LỊCH TIÊM:");
+            JLabel SchedListLabel = new JLabel("DANH SÁCH LỊCH TIÊM (" + orgUser.getName() + ")");
             SchedListLabel.setBounds(0,0,640,40);
             SchedListLabel.setFont(new Font(dv.fontName(), 1, 20));
             SchedListLabel.setForeground(new Color(dv.FeatureButtonColor()));

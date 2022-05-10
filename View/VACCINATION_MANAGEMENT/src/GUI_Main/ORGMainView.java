@@ -287,7 +287,7 @@ public class ORGMainView extends JFrame implements ActionListener
         MainPanel = new JPanel();
         MainPanel.setBounds(0,0,dv.FrameWidth(),dv.FrameHeight());
         MainPanel.setLayout(null);
-        MainPanel.setOpaque(true);
+        MainPanel.setBackground(new Color(dv.ViewBackgroundColor()));
     }
 
     private void initMainLayeredPane()
@@ -295,7 +295,7 @@ public class ORGMainView extends JFrame implements ActionListener
         MainLayeredPane = new JLayeredPane();
         MainLayeredPane.setBounds(0, 0, dv.FrameWidth(), dv.FrameHeight());
         MainLayeredPane.setLayout(null);
-        MainLayeredPane.setOpaque(true);
+        MainLayeredPane.setBackground(new Color(dv.ViewBackgroundColor()));
     }
 
     public ORGMainView(String Username)
@@ -360,6 +360,25 @@ public class ORGMainView extends JFrame implements ActionListener
 
         this.add(MainLayeredPane);
 
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent)
+            {
+                String query = "update ACCOUNT ACC set Status = 1 where ACC.Username = '" + orgUser.getID() + "'";
+
+                try {
+                    Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                    PreparedStatement st = connection.prepareStatement(query);
+
+                    st.executeUpdate(query);
+                } catch (SQLException ex) {
+                    dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(),2);
+                    ex.printStackTrace();
+                }
+            }
+        });
+
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
 
     }
@@ -380,6 +399,19 @@ public class ORGMainView extends JFrame implements ActionListener
 
         if (e.getSource() == LogoutButton)
         {
+            String query = "update ACCOUNT ACC set Status = 1 where ACC.Username = '" + orgUser.getID() + "'";
+
+            try {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                PreparedStatement st = connection.prepareStatement(query);
+
+                st.executeUpdate(query);
+            } catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(),"Lỗi " + ex.getErrorCode(),2);
+                ex.printStackTrace();
+            }
+
             loginView = new LoginView();
             this.dispose();
         }

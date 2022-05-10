@@ -204,6 +204,12 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
     public LoginView()
     {
         initFrameComponent();
+
+        for (int i = 1; i<10; i++)
+            System.out.println("INSERT INTO REGION(Code, Name, Note) VALUES ('0" + i + "', '" + dv.getProvinceList()[i] + "', NULL);");
+
+        for (int i = 10; i<=64; i++)
+            System.out.println("INSERT INTO REGION(Code, Name, Note) VALUES ('" + i + "', '" + dv.getProvinceList()[i] + "', NULL);");
     }
 
     @Override
@@ -239,7 +245,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
                 acc.setStatus(rs.getInt("Status"));
 
             } catch (SQLException ex) {
-                dv.popupOption(this, "Tài khoản không tồn tại!", String.valueOf(ex.getErrorCode()), 2);
+                dv.popupOption(this, "Tài khoản không tồn tại!", "Lỗi " + ex.getErrorCode(), 2);
                 throw new RuntimeException(ex);
             }
 
@@ -257,7 +263,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
 
             if (acc.getStatus() == 2)
             {
-                dv.popupOption(this, "Tài khoản đang được đăng nhập!", "Lỗi!", 2);
+                dv.popupOption(this, "Tài khoản đang được đăng nhập!", "Lỗi ", 2);
                 return;
             }
 
@@ -272,7 +278,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
 
                     st.executeQuery(query);
                 } catch (SQLException ex) {
-                    dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
+                    dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(),2);
                     ex.printStackTrace();
                 }
 

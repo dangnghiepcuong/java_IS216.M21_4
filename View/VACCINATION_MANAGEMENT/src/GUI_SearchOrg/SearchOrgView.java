@@ -34,7 +34,6 @@ public class SearchOrgView extends JPanel implements ActionListener
     private JPanel OrgListPanel;
     private JPanel OrgPanel[] = new JPanel[100000];
 
-    private JFrame OrgDetailView;
     private JScrollPane ScrollPaneSchedList;
     private JPanel SchedListPanel;
     private JPanel SchedPanel[] = new JPanel[50];
@@ -281,9 +280,8 @@ public class SearchOrgView extends JPanel implements ActionListener
     private void initOrgListPanel(int nORG)
     {
         OrgListPanel = new JPanel();
-
         OrgListPanel.setPreferredSize(new Dimension(660, 120*nORG));
-
+        OrgListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         OrgListPanel.setLayout((new FlowLayout()));
 
         for (int i = 0; i < nORG; i++)
@@ -297,10 +295,8 @@ public class SearchOrgView extends JPanel implements ActionListener
     {
         initOrgListPanel(nORG);
 
-        //create ScrollPaneOrgList Panel
         ScrollPaneOrgList = new JScrollPane(OrgListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        //set Bounds
+        ScrollPaneOrgList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneOrgList.setBounds(0, 40, 680, 590); //320-40
     }
 
@@ -427,7 +423,7 @@ public class SearchOrgView extends JPanel implements ActionListener
 
                         cst2.execute();
                     } catch (SQLException ex) {
-                        dv.popupOption(null,  ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+                        dv.popupOption(null,  ex.getMessage(),"Lỗi " + ex.getErrorCode(), 2);
                         ex.printStackTrace();
                     }
                 }
@@ -512,9 +508,8 @@ public class SearchOrgView extends JPanel implements ActionListener
         nSched = i;
 
         SchedListPanel = new JPanel();
-
         SchedListPanel.setPreferredSize(new Dimension( 660, 120*nSched + nSched*10));
-
+        SchedListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         SchedListPanel.setLayout(new FlowLayout());
 
         for (i = 0; i<nSched; i++)
@@ -531,17 +526,16 @@ public class SearchOrgView extends JPanel implements ActionListener
 
         ScrollPaneSchedList = new JScrollPane(SchedListPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        ScrollPaneSchedList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneSchedList.setBounds(0, 40, 680, 590);
     }
 
     private void initLayeredPaneArea()
     {
         LayeredPaneArea = new JLayeredPane();
-
         LayeredPaneArea.setLayout(null);
-
         LayeredPaneArea.setBounds(320, 40, 680, 630);
-
+        LayeredPaneArea.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         LayeredPaneArea.repaint(320, 40, 680, 630);
     }
 
