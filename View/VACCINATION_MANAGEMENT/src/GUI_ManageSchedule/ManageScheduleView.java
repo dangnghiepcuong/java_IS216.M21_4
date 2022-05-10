@@ -50,6 +50,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
     private JPanel RegPanel[] = new JPanel[3000];
 
     /*Create Schedule*/
+    private JLabel AddNewSchedLabel;
     private JButton AddNewSchedButton;
     private JPanel CreateSchedPanel;
 
@@ -530,7 +531,14 @@ public class ManageScheduleView extends JPanel implements ActionListener
             return "";
         }
     }
-
+    
+    private void initAddNewSchedLabel()
+    {
+        AddNewSchedLabel = new JLabel("Thêm lịch tiêm mới");
+        AddNewSchedLabel.setBounds(70, 260, 200, 30);
+        AddNewSchedLabel.setFont(new Font(dv.fontName(), 1, 18));
+        AddNewSchedLabel.setForeground(new Color(dv.BlackTextColor()));
+    }
 
     private void initAddNewSchedButton()
     {
@@ -736,7 +744,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
             }
         };
 
-        ImageIcon CreateSchedButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Add New Button.png"));
+        ImageIcon CreateSchedButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Confirm Button.png"));
         JButton CreateSchedButton = new JButton();
         CreateSchedButton.setPreferredSize(new Dimension(CreateSchedButtonIcon.getIconWidth(), CreateSchedButtonIcon.getIconHeight()));
         CreateSchedButton.setContentAreaFilled(false);
@@ -847,6 +855,10 @@ public class ManageScheduleView extends JPanel implements ActionListener
         //initSchedFilterPanel
         initSchedFilterPanel();
         this.add(SchedFilterPanel);
+
+        //initAddNewSchedLabel
+        initAddNewSchedLabel();
+        this.add(AddNewSchedLabel);
 
         //init AddNewSchedButton
         initAddNewSchedButton();
