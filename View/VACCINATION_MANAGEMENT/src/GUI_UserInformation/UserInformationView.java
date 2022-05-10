@@ -294,7 +294,7 @@ public class UserInformationView extends JPanel implements ActionListener
     private void initRegisterAccButton()
     {
 
-        ImageIcon RegisterButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Register Button.png"));
+        ImageIcon RegisterButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Update Button.png"));
         RegisterAccButton = new JButton();
         RegisterAccButton.setBounds(105, 450, RegisterButtonIcon.getIconWidth(), RegisterButtonIcon.getIconHeight());
         RegisterAccButton.setBorder(null);
@@ -431,6 +431,8 @@ public class UserInformationView extends JPanel implements ActionListener
         GenderChoice.add("Nữ");
         GenderChoice.add("Nam");
         GenderChoice.add("Khác");
+
+        GenderChoice.setName(dv.getGenderName(personalUser.getGender()));
     }
 
     private void initHomeTownLabel()

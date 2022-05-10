@@ -499,8 +499,10 @@ public class CitizenMainView extends JFrame implements ActionListener
 
         if (e.getSource() == InfoSettingButton)
         {
+            MainLayeredPane.removeAll();
+
             userInformationView = new UserInformationView(personalUser);
-            MainLayeredPane.add(userInformationView, Integer.valueOf(1));
+            MainLayeredPane.add(userInformationView, Integer.valueOf(0));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
             initBackInfoButton();
             MainLayeredPane.add(BackInfoButton, Integer.valueOf(5));

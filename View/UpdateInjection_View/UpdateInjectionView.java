@@ -7,6 +7,7 @@ package GUI_UpdateInjection;
 import Data_Processor.Account;
 import java.security.cert.Certificate;
 import Data_Processor.DefaultValue;
+import Data_Processor.ImageHelper;
 import Data_Processor.Organization;
 import Data_Processor.Person;
 import Data_Processor.Schedule;
@@ -14,13 +15,14 @@ import Data_Processor.RegisteredScheds;
 import GUI_ManageVaccination.ManageVaccinationView;
 import GUI_SearchOrg.SearchOrgView;
 
-
+import java.awt.Image;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -36,6 +38,8 @@ import javax.swing.JScrollPane;
 
 
 import javax.swing.BorderFactory;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 
 /**
  *
@@ -51,12 +55,17 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
     private JLabel InfoBackground;
     private JLabel NameLabel;
     private JLabel LocationLabel;
+    private JLabel image;
+    
+    private JScrollPane ScrollPaneRegList;
     
     private JLayeredPane InfoInjectionPanel; 
     private JLayeredPane LayerPanel; 
     private JButton UpLoadImageButton;
     private JButton PhotoImageButton;
     private JButton ContinuteButton;
+    private JButton ConfirmButton;
+    private JButton CancelButton;
     
     private JLayeredPane SchedAttendance;
 
@@ -155,12 +164,16 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         initInfoInjectionPanel(Username);
         initLayerPanel();
         
+        initScrollPaneRegList();
+        
         this.add(MainLayeredPane);
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         MainLayeredPane.add(MainPanel,Integer.valueOf(0));   
         MainPanel.add(InfoLayeredPane);
-        MainPanel.add(InfoInjectionPanel);
+        //MainPanel.add(InfoInjectionPanel);
         MainPanel.add(LayerPanel);
+        
+        MainPanel.add(ScrollPaneRegList);
         
                 
         
@@ -182,66 +195,37 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
        MainPanel.setOpaque(true);
    }
    
-    private void initUpLoadImageButton() 
-    {
-        UpLoadImageButton = new JButton();
-        ImageIcon UploadIcon = new ImageIcon(getClass().getResource("D:\\TH_Java\\VACCINATION_MANAGEMENT\\src\\Data_Processor\\icon\\image-gallery.jpg"));
-        UpLoadImageButton.setIcon(UploadIcon);
-
-        UpLoadImageButton.setBounds(dv.AlignLeft(), 290, dv.FieldWidth(), UploadIcon.getIconHeight());
-        UpLoadImageButton.setBorder(null);
-        UpLoadImageButton.setContentAreaFilled(false);
-
-        UpLoadImageButton.addActionListener(this);
-        
-        
-    }
-   
    private void initInfoLayerPanel()
    {
         InfoLayeredPane = new JLayeredPane();
-        InfoLayeredPane.setBounds(0,0,dv.FrameWidth()-dv.FrameHeight() + 8, dv.FrameHeight());
+        InfoLayeredPane.setBounds(0,0,450, dv.FrameHeight());
         InfoLayeredPane.setLayout(null);
         InfoLayeredPane.setOpaque(true);
-        
-
-       
+        //InfoLayeredPane.setBackground(Color.red);
         
         
         
-//        
-        //initSearchOrgButton();
-        //InfoLayeredPane.add(UpLoadImageButton);
-//        JLabel AddressInfo = new JLabel(personalUser.getTown()+"-"+personalUser.getDistrict()+"-"+personalUser.getHomeTown());
-//        AddressInfo.setBounds(0, 400, 360, 35);
-//        AddressInfo.setFont(new Font("SVN-Arial",Font.BOLD, 20));
-//        AddressInfo.setHorizontalAlignment(JLabel.CENTER);
-        
-        
- //       InfoLayeredPane.add(ContinuteButton,Integer.valueOf(1));
-//        InfoLayeredPane.add(Name,Integer.valueOf(1));
-//        InfoLayeredPane.add(sID,Integer.valueOf(1));
-//        InfoLayeredPane.add(doseNo,Integer.valueOf(1));
-        
+               
    }
    
    
    public void initLayerPanel()
    {
         LayerPanel = new JLayeredPane();
-        LayerPanel.setBounds(368,0,712, 140);
+        LayerPanel.setBounds(450,0,712, 140);
         LayerPanel.setLayout(null);
         LayerPanel.setOpaque(true);
-        //LayerPanel.setBackground(Color.red);
+        //LayerPanel.setBackground(Color.blue);
         
-        JLabel InfoLabel=new JLabel("THÔNG TIN ĐĂNG KÝ TIÊM CHỦNG");
-        InfoLabel.setBounds(0, 0, 712, 100);
+        JLabel InfoLabel=new JLabel("CẬP NHẬT THÔNG TIN TIÊM CHỦNG");
+        InfoLabel.setBounds(0, 20, 630, 100);
         InfoLabel.setFont(new Font("SVN-Arial",Font.BOLD, 24));
         InfoLabel.setHorizontalAlignment(JLabel.CENTER);
         InfoLabel.setForeground(new Color(dv.FeatureButtonColor()));
         //InfoLabel.setBackground(Color.blue);
         
         LayerPanel.add(InfoLabel);
+        
    }
    
    
@@ -253,13 +237,13 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         InfoInjectionPanel.setOpaque(true);
         InfoInjectionPanel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
         
-        InfoInjectionPanel.setBackground(Color.white);
+        InfoInjectionPanel.setBackground(new Color(dv.ViewBackgroundColor()));
         
         
         //InfoInjectionPanel.setBorder(border);
         
         String query = "select *" +
-                        "from PERSON, Register, Schedule, Organization\n" +
+                        "from Register, Schedule, Organization, PERSON\n" +
                         "where Person.ID = Register.PersonalID and\n" +
                         "      register.schedid=Schedule.id and\n" +
                         "      Schedule.OrgID=Organization.ID and\n" +
@@ -274,15 +258,8 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
             
             
             rs.next();
-            
-            personalUser.setID(rs.getString("ID"));
-            personalUser.setFirstName(rs.getString("FirstName"));
-            personalUser.setLastName(rs.getString("LastName"));       
-            personalUser.setPhone(rs.getString("Phone"));
-            personalUser.setGuardian(rs.getString("Guardian"));
-            
             organization.setName(rs.getString("Name"));
-                 
+            organization.setID(rs.getString("ID"));
             schedule.setVaccineID(rs.getString("VaccineID"));
             schedule.setSerial(rs.getString("Serial"));
             
@@ -298,62 +275,62 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
             e.printStackTrace();
         }
         
-        
-//        JLabel InfoLabel=new JLabel("THÔNG TIN ĐĂNG KÝ TIÊM CHỦNG");
-//        InfoLabel.setBounds(0, 40, 712, 100);
-//        InfoLabel.setFont(new Font("SVN-Arial",Font.BOLD, 24));
-//        InfoLabel.setHorizontalAlignment(JLabel.CENTER);
-//        InfoLabel.setBackground(Color.blue);
+
 
         JLabel Name=new JLabel("Họ tên: "+personalUser.getFullName());
-        Name.setBounds(50,50,360,35);
+        Name.setBounds(50,30,360,35);
         Name.setFont(new Font("SVN-Arial",Font.PLAIN,20));
         Name.setHorizontalAlignment(JLabel.LEFT);
         
         JLabel sID=new JLabel("CMND/CCCD: "+personalUser.getID());
-        sID.setBounds(50,85,360,35);
+        sID.setBounds(50,65,360,35);
         sID.setFont(new Font("SVN-Arial",Font.PLAIN,20));
         sID.setHorizontalAlignment(JLabel.LEFT);
         
         JLabel SDT=new JLabel("SĐT: "+personalUser.getPhone());
-        SDT.setBounds(50,120,360,35);
+        SDT.setBounds(50,100,360,35);
         SDT.setFont(new Font("SVN-Arial",Font.PLAIN,20));
         SDT.setHorizontalAlignment(JLabel.LEFT);
 
         JLabel NameOrg=new JLabel("Tên đơn vị: " + organization.getName());
-        NameOrg.setBounds(50, 155, 712, 35);
+        NameOrg.setBounds(50, 135, 712, 35);
         NameOrg.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
         NameOrg.setHorizontalAlignment(JLabel.LEFT);
         
+        JLabel IDOrg=new JLabel("Mã đơn vị: " + organization.getID());
+        IDOrg.setBounds(50, 170, 712, 35);
+        IDOrg.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
+        IDOrg.setHorizontalAlignment(JLabel.LEFT);
+        
         JLabel Vaccine=new JLabel("Vaccine: " + schedule.getVaccineID()+" - "+schedule.getSerial());
-        Vaccine.setBounds(50, 190, 356, 35);
+        Vaccine.setBounds(50, 205, 356, 35);
         Vaccine.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
         Vaccine.setHorizontalAlignment(JLabel.LEFT);
         
         JLabel doseType=new JLabel("Loại: "+dv.getDoseTypeName(register.getDoseType()));
-        doseType.setBounds(406, 190, 356, 35);
+        doseType.setBounds(406, 205, 356, 35);
         doseType.setFont(new Font("SVN-Arial",Font.PLAIN,20));
         doseType.setHorizontalAlignment(JLabel.LEFT);
         
         JLabel Address = new JLabel("Đ/c: " + dv.getProvinceName(register.getOrg().getProvince())  + ", "
                 + register.getOrg().getDistrict() + ", " + register.getOrg().getTown() + ", " + register.getOrg().getStreet());  
-        Address.setBounds(50,225,712,35);
+        Address.setBounds(50,240,712,35);
         Address.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
         Address.setHorizontalAlignment(JLabel.LEFT);
         
         JLabel OnDateTime = new JLabel("Lịch tiêm ngày: " + register.getSched().getOnDate()
                 + "          Buổi: " + dv.getTimeName(register.getTime())  + "          STT: " + register.getNO());
         OnDateTime.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
-        OnDateTime.setBounds(50,260,712,35);
+        OnDateTime.setBounds(50,275,712,35);
         OnDateTime.setHorizontalAlignment(JLabel.LEFT);
         
         JLabel Status = new JLabel("Tình trạng: "+ dv.getStatusName(register.getStatus()));
         Status.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
-        Status.setBounds(50,295,712,35);
+        Status.setBounds(50,310,712,35);
         Status.setHorizontalAlignment(JLabel.LEFT);
         
         JLabel Type=new JLabel("Giấy chứng nhận tiêm chủng vaccine: ");
-        Type.setBounds(50,330,360,35);
+        Type.setBounds(50,345,360,35);
         Type.setFont(new Font("SVN-Arial",Font.PLAIN,20));
         Type.setHorizontalAlignment(JLabel.LEFT);
         
@@ -361,42 +338,60 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         UpLoadImageButton = new JButton();
         ImageIcon UploadImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/image-gallery.png"));
         UpLoadImageButton.setIcon(UploadImage);
-        UpLoadImageButton.setBounds(dv.AlignLeft()+75, 375, dv.FieldWidth(), UploadImage.getIconHeight());
+        UpLoadImageButton.setBounds(dv.AlignLeft()+350, 330, 50, 50);
         UpLoadImageButton.setBorder(null);
         UpLoadImageButton.setContentAreaFilled(false);
+        UpLoadImageButton.addActionListener(this);
         
-        PhotoImageButton = new JButton();
-        ImageIcon PhotoImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/add-photo.png"));
-        PhotoImageButton.setIcon(PhotoImage);
-        PhotoImageButton.setBounds(dv.AlignLeft()+225, 375, dv.FieldWidth(), UploadImage.getIconHeight());
-        PhotoImageButton.setBorder(null);
-        PhotoImageButton.setContentAreaFilled(false);
-        
-        
-        ContinuteButton = new JButton();
-        ImageIcon ContinuteImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/OK Button.png"));
-        ContinuteButton.setIcon(ContinuteImage);
-        ContinuteButton.setBounds(dv.AlignLeft()+150, 450, dv.FieldWidth(), ContinuteImage.getIconHeight());
-        ContinuteButton.setBorder(null);
-        ContinuteButton.setContentAreaFilled(false);
+//        PhotoImageButton = new JButton();
+//        ImageIcon PhotoImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/add-photo.png"));
+//        PhotoImageButton.setIcon(PhotoImage);
+//        PhotoImageButton.setBounds(dv.AlignLeft(), 375, dv.FieldWidth(), UploadImage.getIconHeight());
+//        PhotoImageButton.setBorder(null);
+//        PhotoImageButton.setContentAreaFilled(false);
         
         
+//        ContinuteButton = new JButton();
+//        ImageIcon ContinuteImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/OK Button.png"));
+//        ContinuteButton.setIcon(ContinuteImage);
+//        ContinuteButton.setBounds(dv.AlignLeft()+150, 450, dv.FieldWidth(), ContinuteImage.getIconHeight());
+//        ContinuteButton.setBorder(null);
+//        ContinuteButton.setContentAreaFilled(false);
         
+        ConfirmButton = new JButton();
+        ImageIcon ConfirmImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/Confirm Button.png"));
+        ConfirmButton.setIcon(ConfirmImage);
+        ConfirmButton.setBounds(dv.AlignLeft()+145, 450, dv.FieldWidth(), ConfirmImage.getIconHeight());
+        ConfirmButton.setBorder(null);
+        ConfirmButton.setContentAreaFilled(false);
+        ConfirmButton.addActionListener(this);
+        
+        JLabel Warning=new JLabel("<html>Khai báo thông tin sai là vi phạm pháp luật Việt Nam và có thể xử lý hình sự.");
+        //Warning.setText("");
+        Warning.setBounds(50,380,440,60);
+        Warning.setFont(new Font("SVN-Arial",Font.ITALIC,18));
+        Warning.setHorizontalAlignment(JLabel.CENTER);
+        Warning.setForeground(Color.red);
+        
+        
+        
+        //Text
         InfoInjectionPanel.add(Name,Integer.valueOf(2));
         InfoInjectionPanel.add(sID,Integer.valueOf(2));
-        InfoInjectionPanel.add(SDT,Integer.valueOf(2));
-        
+        InfoInjectionPanel.add(SDT,Integer.valueOf(2));        
         InfoInjectionPanel.add(NameOrg,Integer.valueOf(2));
+        InfoInjectionPanel.add(IDOrg,Integer.valueOf(2));
         InfoInjectionPanel.add(Vaccine,Integer.valueOf(2));
         InfoInjectionPanel.add(doseType,Integer.valueOf(2));
         InfoInjectionPanel.add(OnDateTime,Integer.valueOf(2));
         InfoInjectionPanel.add(Address,Integer.valueOf(2));
-        InfoInjectionPanel.add(Status,Integer.valueOf(2));
-        
+        InfoInjectionPanel.add(Status,Integer.valueOf(2));       
         InfoInjectionPanel.add(Type,Integer.valueOf(1));
-        InfoInjectionPanel.add(UpLoadImageButton,Integer.valueOf(1));
-        InfoInjectionPanel.add(PhotoImageButton,Integer.valueOf(1));
-        InfoInjectionPanel.add(ContinuteButton,Integer.valueOf(2));
+        InfoInjectionPanel.add(Warning,Integer.valueOf(1));
+          
+        //Button
+        InfoInjectionPanel.add(UpLoadImageButton,Integer.valueOf(1));    
+        InfoInjectionPanel.add(ConfirmButton,Integer.valueOf(2));
        
         
         
@@ -404,7 +399,58 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
    }
    
    
+   private void initScrollPaneRegList()//1
+    {
+        ScrollPaneRegList = new JScrollPane(InfoInjectionPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        //set Bounds
+        ScrollPaneRegList.setBounds(450,140,600, dv.FrameHeight()-215);; //320 40
+        //ScrollPaneRegList.setBackground(Color.yellow);
+    }
    
+   
+    private void ActionUpLoadImage( )
+    {
+        JFileChooser chooser=new JFileChooser();
+        chooser.setFileFilter(new FileFilter() 
+        {
+                    @Override
+                    public boolean accept(File f)
+                    {
+                        if(f.isDirectory())
+                            return true;
+                        else
+                            return f.getName().toLowerCase().endsWith(".jpg");
+                    }   
+                 
+                    @Override
+                    public String getDescription()
+                    {
+                        return "Image File (*.jpg)";
+                    }                   
+                }
+        );
+        if(chooser.showOpenDialog(this) ==JFileChooser.CANCEL_OPTION)
+            return;
+        
+        File file=chooser.getSelectedFile();
+        try
+        {
+            ImageIcon imageicon=new ImageIcon(file.getPath());
+            Image img=ImageHelper.reSize(imageicon.getImage(), 4, 3);
+            JLabel image = new JLabel(imageicon); 
+            
+            image.setBounds(90,140,300,400);
+            image.setHorizontalAlignment(JLabel.CENTER);
+            InfoLayeredPane.add(image,Integer.valueOf(2));
+            
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            
+        }
+    }
 
    
    
@@ -413,6 +459,22 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        
+        if (e.getSource() == ConfirmButton)
+        {
+            if ( dv.popupConfirmOption(null, "Xác nhận cập nhật giấy chứng nhận mũi tiêm?", "Xác nhận?") == 0)
+                dv.popupOption(null, "Cập nhật thành công!", "Thông báo!", 0);
+            else
+                return;
+        }
+        
+        if (e.getSource() == UpLoadImageButton)
+        {
+            ActionUpLoadImage();
+        }
+        
+        
+        
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
    
