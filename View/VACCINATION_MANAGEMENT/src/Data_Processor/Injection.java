@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package doancuoiky;
+package Data_Processor;
 
 /**
  *
@@ -13,6 +13,7 @@ public class Injection {
     private int InjNo;
     private Schedule Sched = new Schedule();
     private Organization Org = new Organization();
+    private RegisteredScheds Reg = new RegisteredScheds();
     private String DoseType;
     private String Note;
 
@@ -66,7 +67,20 @@ public class Injection {
     public void setNote(String Note) {
         this.Note = Note;
     }
-    
-    
-    
+
+    public Organization getOrg() {
+        return Org;
+    }
+
+    public void setOrg(Organization org) {
+        Org = org;
+    }
+
+    public RegisteredScheds getReg() {
+        return Reg;
+    }
+
+    public void setReg(RegisteredScheds reg) {
+        Reg = reg;
+    }
 }

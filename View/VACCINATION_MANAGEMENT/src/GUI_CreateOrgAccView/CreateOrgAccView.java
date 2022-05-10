@@ -43,7 +43,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         ProvinceFilterLabel.setBounds(0, 0, dv.LabelWidth()+50, dv.LabelHeight());
         ProvinceFilterLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         ProvinceFilterLabel.setForeground(new Color(0x666666));
-        ProvinceFilterLabel.setText("Bộ lọc tỉnh/thành phố:");
+        ProvinceFilterLabel.setText("Bộ lọc tỉnh/TP:");
         ProvinceFilterLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
     }
 

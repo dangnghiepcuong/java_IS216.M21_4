@@ -919,7 +919,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
             LayeredPaneArea.removeAll();
             LayeredPaneArea.repaint(320, 40, 680, 630);
 
-            JLabel SchedListLabel = new JLabel("DANH SÁCH LỊCH TIÊM (" + orgUser.getName() + ")");
+            JLabel SchedListLabel = new JLabel("DANH SÁCH LỊCH TIÊM (" + orgUser.getName() + "):");
             SchedListLabel.setBounds(0,0,640,40);
             SchedListLabel.setFont(new Font(dv.fontName(), 1, 20));
             SchedListLabel.setForeground(new Color(dv.FeatureButtonColor()));

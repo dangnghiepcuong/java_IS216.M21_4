@@ -100,7 +100,7 @@ public class MOHMainView extends JFrame implements ActionListener
         FeatureLayeredPane = new JLayeredPane();
         FeatureLayeredPane.setBounds(360, 0, dv.FrameWidth() - 360, dv.FrameHeight());
         FeatureLayeredPane.setLayout(null);
-        FeatureLayeredPane.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+        FeatureLayeredPane.setBackground(new Color(dv.ViewBackgroundColor()));
 
         initInfoSettingButton();
         FeatureLayeredPane.add(InfoSettingButton);
@@ -276,7 +276,7 @@ public class MOHMainView extends JFrame implements ActionListener
         MainPanel = new JPanel();
         MainPanel.setBounds(0,0,dv.FrameWidth(),dv.FrameHeight());
         MainPanel.setLayout(null);
-        MainPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+        MainPanel.setBackground(new Color(dv.ViewBackgroundColor()));
     }
 
     private void initMainLayeredPane()
@@ -284,7 +284,7 @@ public class MOHMainView extends JFrame implements ActionListener
         MainLayeredPane = new JLayeredPane();
         MainLayeredPane.setBounds(0, 0, dv.FrameWidth(), dv.FrameHeight());
         MainLayeredPane.setLayout(null);
-        MainLayeredPane.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+        MainLayeredPane.setBackground(new Color(dv.ViewBackgroundColor()));
     }
 
     public MOHMainView(String Username)

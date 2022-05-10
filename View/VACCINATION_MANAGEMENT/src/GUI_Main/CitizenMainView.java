@@ -442,6 +442,9 @@ public class CitizenMainView extends JFrame implements ActionListener
             e.printStackTrace();
         }
 
+        //init BackButton
+        initBackButton();
+
         initMainLayeredPane();
         initMainPanel();
 
@@ -505,6 +508,8 @@ public class CitizenMainView extends JFrame implements ActionListener
         {
             searchOrgView = null;
             manageVaccinationView = null;
+            updateInjectionView = null;
+
             MainLayeredPane.removeAll();
             MainLayeredPane.add(MainPanel, Integer.valueOf(0));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
@@ -528,8 +533,6 @@ public class CitizenMainView extends JFrame implements ActionListener
 
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
 
-            //init BackButton
-            initBackButton();
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }
 
@@ -540,6 +543,7 @@ public class CitizenMainView extends JFrame implements ActionListener
             userInformationView = new UserInformationView(personalUser);
             MainLayeredPane.add(userInformationView, Integer.valueOf(0));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+
             initBackInfoButton();
             MainLayeredPane.add(BackInfoButton, Integer.valueOf(5));
         }
@@ -550,8 +554,7 @@ public class CitizenMainView extends JFrame implements ActionListener
             MainLayeredPane.add(searchOrgView, Integer.valueOf(1));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
 
-            //init BackButton
-            initBackButton();
+
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }
 
@@ -566,14 +569,18 @@ public class CitizenMainView extends JFrame implements ActionListener
 
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
 
-            //init BackButton
-            initBackButton();
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }
 
         if (e.getSource() == UpdateInjectionButton)
         {
             updateInjectionView = new UpdateInjectionView(personalUser);
+
+            MainLayeredPane.removeAll();
+
+            MainLayeredPane.add(updateInjectionView, Integer.valueOf(1));
+
+            MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }
     }
 
