@@ -536,6 +536,11 @@ public class CitizenMainView extends JFrame implements ActionListener
             initBackButton();
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }
+
+        if (e.getSource() == UpdateInjectionButton)
+        {
+            updateInjectionView = new UpdateInjectionView(personalUser);
+        }
     }
 
 }

@@ -64,9 +64,9 @@ public class SearchOrgView extends JPanel implements ActionListener
         ProvinceChoice.setBackground(Color.WHITE);
 
         ProvinceChoice.add("");
-        ProvinceChoice.add("Bình Dương");
-        ProvinceChoice.add("Hồ Chí Minh");
-        ProvinceChoice.add("Hà Nội");
+        for (int i = 1; i <= 64; i++)
+            if (i != 20)
+                ProvinceChoice.add(dv.getProvinceList()[i]);
     }
 
     private void initDistrictLabel()
