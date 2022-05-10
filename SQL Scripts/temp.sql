@@ -128,4 +128,10 @@ update ACCOUNT ACC
 set Status = 1
 where ACC.Username = '0332743065'; 
 
+update ACCOUNT ACC
+set Status = 1
+where ACC.Username = 'MOH'; 
+
 commit;
+
+

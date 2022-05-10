@@ -374,6 +374,7 @@ public class CitizenMainView extends JFrame implements ActionListener
     {
         MainPanel = new JPanel();
         MainPanel.setBounds(0,0,dv.FrameWidth(),dv.FrameHeight());
+        MainPanel.setBackground(new Color(dv.ViewBackgroundColor()));
         MainPanel.setLayout(null);
     }
 
@@ -381,6 +382,7 @@ public class CitizenMainView extends JFrame implements ActionListener
     {
         MainLayeredPane = new JLayeredPane();
         MainLayeredPane.setBounds(0, 0, dv.FrameWidth(), dv.FrameHeight());
+        MainLayeredPane.setBackground(new Color(dv.ViewBackgroundColor()));
         MainLayeredPane.setLayout(null);
     }
 

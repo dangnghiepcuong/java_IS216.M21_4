@@ -53,12 +53,9 @@ public class MOHMainView extends JFrame implements ActionListener
     private void initInfoLayeredPane()
     {
         InfoLayeredPane = new JLayeredPane();
-
         InfoLayeredPane.setBounds(0,0,dv.FrameWidth()-dv.FrameHeight() + 8, dv.FrameHeight());
-
         InfoLayeredPane.setLayout(null);
 
-        InfoLayeredPane.setOpaque(true);
 
         initInfoBackground();
         InfoLayeredPane.add(InfoBackground, Integer.valueOf(0));
@@ -102,7 +99,7 @@ public class MOHMainView extends JFrame implements ActionListener
         FeatureLayeredPane = new JLayeredPane();
         FeatureLayeredPane.setBounds(360, 0, dv.FrameWidth() - 360, dv.FrameHeight());
         FeatureLayeredPane.setLayout(null);
-        FeatureLayeredPane.setBackground(new Color(dv.ViewBackgroundColor()));
+        FeatureLayeredPane.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
 
         initInfoSettingButton();
         FeatureLayeredPane.add(InfoSettingButton);
@@ -277,7 +274,7 @@ public class MOHMainView extends JFrame implements ActionListener
         MainPanel = new JPanel();
         MainPanel.setBounds(0,0,dv.FrameWidth(),dv.FrameHeight());
         MainPanel.setLayout(null);
-        MainPanel.setOpaque(true);
+        MainPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
     }
 
     private void initMainLayeredPane()
@@ -285,7 +282,7 @@ public class MOHMainView extends JFrame implements ActionListener
         MainLayeredPane = new JLayeredPane();
         MainLayeredPane.setBounds(0, 0, dv.FrameWidth(), dv.FrameHeight());
         MainLayeredPane.setLayout(null);
-        MainLayeredPane.setOpaque(true);
+        MainLayeredPane.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
     }
 
     public MOHMainView(String Username)
@@ -351,6 +348,25 @@ public class MOHMainView extends JFrame implements ActionListener
 
         this.add(MainLayeredPane);
 
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent)
+            {
+                String query = "update ACCOUNT ACC set Status = 1 where ACC.Username = '" + orgUser.getID() + "'";
+
+                try {
+                    Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                    PreparedStatement st = connection.prepareStatement(query);
+
+                    st.executeUpdate(query);
+                } catch (SQLException ex) {
+                    dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(),2);
+                    ex.printStackTrace();
+                }
+            }
+        });
+
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
 
     }
@@ -369,6 +385,19 @@ public class MOHMainView extends JFrame implements ActionListener
 
         if (e.getSource() == LogoutButton)
         {
+            String query = "update ACCOUNT ACC set Status = 1 where ACC.Username = '" + orgUser.getID() + "'";
+
+            try {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                PreparedStatement st = connection.prepareStatement(query);
+
+                st.executeUpdate(query);
+            } catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(),"Lỗi " + ex.getErrorCode(),2);
+                ex.printStackTrace();
+            }
+
             loginView = new LoginView();
             this.dispose();
         }

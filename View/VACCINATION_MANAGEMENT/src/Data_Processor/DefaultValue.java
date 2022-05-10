@@ -206,10 +206,10 @@ public class DefaultValue
 
     public int ViewBackgroundColor()
     {
-        return 0xfffafa;
+        return 0xFFFAFA;
     }
 
-    public int SpecifiedAreaBackgroundColor() {return 0xF2F2F2;}
+    public int SpecifiedAreaBackgroundColor() {return 0xF3F6FB;}
 
     public int FeatureButtonColor()
     {
