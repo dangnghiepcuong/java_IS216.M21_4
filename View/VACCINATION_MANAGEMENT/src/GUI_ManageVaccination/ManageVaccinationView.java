@@ -218,9 +218,8 @@ public class ManageVaccinationView extends JPanel implements ActionListener
         nRegs = i;
 
         RegListPanel = new JPanel();
-
         RegListPanel.setPreferredSize(new Dimension(660, 120*nRegs +nRegs*10));
-
+        RegListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         RegListPanel.setLayout(new FlowLayout());
 
         for (i = 0; i<nRegs; i++)
@@ -233,19 +232,16 @@ public class ManageVaccinationView extends JPanel implements ActionListener
     private void initScrollPaneRegList()
     {
         ScrollPaneRegList = new JScrollPane(RegListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        //set Bounds
         ScrollPaneRegList.setBounds(0, 40, 680, 590); //320 40
+        ScrollPaneRegList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
     }
 
     private void initLayeredPaneArea()
     {
         LayeredPaneArea = new JLayeredPane();
-
         LayeredPaneArea.setLayout(null);
-
         LayeredPaneArea.setBounds(320, 40, 680, 630);
-
+        LayeredPaneArea.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         LayeredPaneArea.repaint(320, 40, 680, 630);
     }
 
