@@ -67,14 +67,16 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
     /*Other Views*/
     private SearchOrgView searchOrgView;
     private ManageVaccinationView manageVaccinationView;
-    
+
+    /*Object Class*/
+
     //Stored Sum_Injection
     private int Total_Injection;
     
     
-   public UpdateInjectionView(String Username)
+   public UpdateInjectionView(Person person)
    {
-
+        personalUser = person;
         //set frame size
         this.setSize(dv.FrameWidth(), dv.FrameHeight());
         //this.setSize(1080, 720); --Main View
@@ -87,13 +89,13 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         
        
         String query = "select * "
-                        + "from PERSON join Register on Person.ID=Register.PersonalID "
-                        + "where PERSON.Phone = '" +  Username + "'"
+                        + "from REGISTER REG "
+                        + "where REG.PersonalID = '" + personalUser.getID() + "'"
                         + "Order by SchedID DESC";
         
         String query1 = "select count(*) as Total "
-                        + "from PERSON join Register on Person.ID=Register.PersonalID "
-                        + "where PERSON.Phone = '" +  Username + "' and Status = 2";
+                        + "from REGISTER REG "
+                        + "where REG.PersonalID = '" + personalUser.getID() + "' and Status = 2";
                       
               
         try {
@@ -106,22 +108,8 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
             
             PreparedStatement st1 = connection.prepareStatement(query1);
             ResultSet rs1 = st1.executeQuery(query1);
-            
 
             rs.next();
-            personalUser.setID(rs.getString("ID"));
-            personalUser.setFirstName(rs.getString("FirstName"));
-            personalUser.setLastName(rs.getString("LastName"));
-            personalUser.setBirthday(rs.getString("Birthday"));
-            personalUser.setGender(rs.getInt("Gender"));
-            personalUser.setHomeTown(rs.getString("HomeTown"));
-            personalUser.setProvince(rs.getString("Province"));
-            personalUser.setDistrict(rs.getString("District"));
-            personalUser.setTown(rs.getString("Town"));
-            personalUser.setStreet(rs.getString("Street"));
-            personalUser.setPhone(rs.getString("Phone"));
-            personalUser.setEmail(rs.getString("Email"));
-            personalUser.setGuardian(rs.getString("Guardian"));
 
             register.setDoseType(rs.getString("Dosetype"));
             
@@ -129,14 +117,15 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
             Total_Injection=rs1.getInt("Total");
           
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            dv.popupOption(null,ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
+            ex.printStackTrace();
         }
         
         initMainLayeredPane();
         initMainPanel();
         initInfoLayerPanel();   
-        initInfoInjectionPanel(Username);
+        initInfoInjectionPanel();
         initLayerPanel();
         
         initScrollPaneRegList();
@@ -204,7 +193,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
    }
    
    
-   private void initInfoInjectionPanel(String Username)
+   private void initInfoInjectionPanel()
    {
         InfoInjectionPanel = new JLayeredPane();
         InfoInjectionPanel.setBounds(400,100,600, dv.FrameHeight()-200);
@@ -218,14 +207,12 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         //InfoInjectionPanel.setBorder(border);
         
         String query = "select *" +
-                        "from Register, Schedule, Organization, PERSON\n" +
-                        "where Person.ID = Register.PersonalID and\n" +
-                        "      register.schedid=Schedule.id and\n" +
-                        "      Schedule.OrgID=Organization.ID and\n" +
-                        "      PERSON.Phone = '" +  Username + "' and Status = 0";
+                        "from REGISTER REG, SCHEDULE SCHED, ORGANIZATION ORG " +
+                        "where REG.PersonalID = " + personalUser.getID() + " and" +
+                        "      REG.Schedid = SCHED.ID and\n" +
+                        "      SCHED.OrgID = ORG.ID and\n" +
+                        "      Status = 0";
         try {
-            
-            
             Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
             PreparedStatement st = connection.prepareStatement(query);
@@ -244,10 +231,9 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
             register.getOrg().setStreet(rs.getString("Street"));
             register.getSched().setOnDate(rs.getString("OnDate").substring(0,10));           
             register.setStatus(rs.getInt("Status"));
-            
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            dv.popupOption(null,ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
+            ex.printStackTrace();
         }
         
 
@@ -367,10 +353,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         //Button
         InfoInjectionPanel.add(UpLoadImageButton,Integer.valueOf(1));    
         InfoInjectionPanel.add(ConfirmButton,Integer.valueOf(2));
-       
-        
-        
-       
+
    }
    
    

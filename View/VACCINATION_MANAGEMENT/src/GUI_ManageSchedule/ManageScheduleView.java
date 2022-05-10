@@ -455,9 +455,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
             RegPanel[i].add(StatusChoice);
             RegPanel[i].add(UpdateStatusButton);
         }
-
-
-
     }
 
     private void initRegListPanel(Schedule Sched)

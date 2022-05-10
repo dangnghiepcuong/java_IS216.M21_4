@@ -246,7 +246,7 @@ public class DefaultValue
 
     public int ViewBackgroundColor()
     {
-        return 0xF2F2F2;
+        return 0xfffafa;
     }
 
     public int FeatureButtonColor()
@@ -264,53 +264,101 @@ public class DefaultValue
         return 0x333333;
     }
 
-    private String province[] = new String[65];
+    private String provinceList[] = new String[65];
+
+    public String[] getProvinceList() {
+        return provinceList;
+    }
+
+    public void setProvinceList(String[] provinceList) {
+        this.provinceList = provinceList;
+    }
 
     public DefaultValue()
     {
-        for (int i=1; i<=64; i++)
-            province[i] = new String();
+        for (int i = 1; i <= 64; i++)
+            provinceList[i] = new String();
 
-        province[1] = "Hà Nội";
-        province[2] = "Hồ Chí Minh";
-        province[3] = "Hải Phòng";
-        province[4] = "Đà Nẵng";
-        province[5] = "Hà Giang";
-        province[25] = "Nam Định";
-        province[39] = "Phú Yên";
-        province[43] = "Bình Phước";
-        province[44] = "Bình Dương";
-        province[45] = "Ninh Thuận";
-        province[46] = "Tây Ninh";
-        province[47] = "Bình Thuận";
-        province[48] = "Đồng Nai";
-        province[49] = "Long An";
-        province[50] = "Đồng Tháp";
-        province[51] = "An Giang";
-        province[52] = "Bà Rịa - Vũng Tàu";
-        province[53] = "Tiền Giang";
-        province[54] = "Kiên Giang";
-        province[55] = "Cần Thơ";
-        province[56] = "Bến Tre";
-        province[57] = "Vĩnh Long";
-        province[58] = "Trà Vinh";
-        province[59] = "Sóc Trăng";
+        provinceList[1] = "Hà Nội";
+        provinceList[2] = "Hồ Chí Minh";
+        provinceList[3] = "Hải Phòng";
+        provinceList[4] = "Đà Nẵng";
+        provinceList[5] = "Hà Giang";
+        provinceList[6] = "Cao Bằng";
+        provinceList[7] = "Lai Châu";
+        provinceList[8] = "Lào Cai";
+        provinceList[9] = "Tuyên Quang";
+        provinceList[10] = "Lạng Sơn";
+        provinceList[11] = "Bắc Kạn";
+        provinceList[12] = "Thái Nguyên";
+        provinceList[13] = "Yên Bái";
+        provinceList[14] = "Sơn La";
+        provinceList[15] = "Phú Thọ";
+        provinceList[16] = "Vĩnh Phúc";
+        provinceList[17] = "Quảng Ninh";
+        provinceList[18] = "Bắc Giang";
+        provinceList[19] = "Bắc Ninh";
+        provinceList[20] = "";
+        provinceList[21] = "Hải Dương";
+        provinceList[22] = "Hưng Yên";
+        provinceList[23] = "Hòa Bình";
+        provinceList[24] = "Hà Nam";
+        provinceList[25] = "Nam Định";
+        provinceList[26] = "Thái Bình";
+        provinceList[27] = "Ninh Bình";
+        provinceList[28] = "Thanh Hóa";
+        provinceList[29] = "Nghệ An";
+        provinceList[30] = "Hà Tĩnh";
+        provinceList[31] = "Quảng Bình";
+        provinceList[32] = "Quảng Trị";
+        provinceList[33] = "Thừa Thiên - Huế";
+        provinceList[34] = "Quảng Nam";
+        provinceList[35] = "Quảng Ngãi";
+        provinceList[36] = "Kon Tum";
+        provinceList[37] = "Bình Định";
+        provinceList[38] = "Giai Lai";
+        provinceList[39] = "Phú Yên";
+        provinceList[40] = "Đắk Lắk";
+        provinceList[41] = "Khánh Hòa";
+        provinceList[42] = "Lâm Đồng";
+        provinceList[43] = "Bình Phước";
+        provinceList[44] = "Bình Dương";
+        provinceList[45] = "Ninh Thuận";
+        provinceList[46] = "Tây Ninh";
+        provinceList[47] = "Bình Thuận";
+        provinceList[48] = "Đồng Nai";
+        provinceList[49] = "Long An";
+        provinceList[50] = "Đồng Tháp";
+        provinceList[51] = "An Giang";
+        provinceList[52] = "Bà Rịa - Vũng Tàu";
+        provinceList[53] = "Tiền Giang";
+        provinceList[54] = "Kiên Giang";
+        provinceList[55] = "Cần Thơ";
+        provinceList[56] = "Bến Tre";
+        provinceList[57] = "Vĩnh Long";
+        provinceList[58] = "Trà Vinh";
+        provinceList[59] = "Sóc Trăng";
+        provinceList[60] = "Bạc Liêu";
+        provinceList[61] = "Cà Mau";
+        provinceList[62] = "Điện Biên";
+        provinceList[63] = "Đắk Nông";
+        provinceList[64] = "Hậu Giang";
     }
 
     public String getProvinceName(String Code)
     {
         int index = Integer.parseInt(Code);
-        return province[index];
+        return provinceList[index];
     }
 
     public String getProvinceCode(String Name)
     {
         for (int i = 1; i < 10; i++)
-            if (province[i].equals(Name))
+            if (provinceList[i].equals(Name))
                 return "0"+i;
 
         for (int i = 10; i <= 64; i++)
-            if (province[i].equals(Name))
+            if (provinceList[i].equals(Name))
                 return ""+i;
 
         return "";

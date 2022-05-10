@@ -26,7 +26,7 @@ delete from parameter;
 delete from health;
 
 delete from injection;
-
+COMMIT
 delete from register;
 
 delete from schedule;

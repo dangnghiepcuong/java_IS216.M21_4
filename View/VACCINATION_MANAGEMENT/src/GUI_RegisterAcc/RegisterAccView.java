@@ -432,12 +432,9 @@ public class RegisterAccView extends JFrame implements ActionListener
         HomeTownChoice.setBackground(Color.WHITE);
 
         HomeTownChoice.add("");
-        HomeTownChoice.add("Bình Dương");
-        HomeTownChoice.add("Hồ Chí Minh");
-        HomeTownChoice.add("Hà Nội");
-        HomeTownChoice.add("Phú Yên");
-        HomeTownChoice.add("Đồng Nai");
-        HomeTownChoice.add("Bình Định");
+        for (int i = 1; i <= 64; i++)
+            if (i != 20)
+                HomeTownChoice.add(dv.getProvinceList()[i]);
     }
 
     private void initProvinceLabel()
@@ -458,12 +455,9 @@ public class RegisterAccView extends JFrame implements ActionListener
         ProvinceChoice.setBackground(Color.WHITE);
 
         ProvinceChoice.add("");
-        ProvinceChoice.add("Bình Dương");
-        ProvinceChoice.add("Hồ Chí Minh");
-        ProvinceChoice.add("Đồng Nai");
-        ProvinceChoice.add("Bình Định");
-        ProvinceChoice.add("Phú Yên");
-        ProvinceChoice.add("Hà Nội");
+        for (int i = 1; i <= 64; i++)
+            if (i != 20)
+                ProvinceChoice.add(dv.getProvinceList()[i]);
     }
 
     private void initDistrictLabel()
