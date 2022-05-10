@@ -419,11 +419,11 @@ public class UserInformationView extends JPanel implements ActionListener
         GenderChoice.setForeground(new Color(dv.FieldLabelColor()));
 
         GenderChoice.add(dv.getGenderName(personalUser.getGender()));
-        GenderChoice.add("Nữ");
-        GenderChoice.add("Nam");
-        GenderChoice.add("Khác");
 
-        GenderChoice.setName(dv.getGenderName(personalUser.getGender()));
+        for (int i = 0; i < dv.getGenderList().length; i++)
+            if (dv.getGenderList()[i].equals(personalUser.getGender()) == false)
+                GenderChoice.add(dv.getGenderList()[i]);
+
     }
 
     private void initHomeTownLabel()
@@ -532,7 +532,7 @@ public class UserInformationView extends JPanel implements ActionListener
 
     private void initStreetTextField()
     {
-        StreetTextField = new JTextField();
+        StreetTextField = new JTextField(personalUser.getStreet());
         StreetTextField.setBounds(50, 130 + 6*dv.LabelHeight()+5*dv.FieldHeight(), 560, 30);
         StreetTextField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         StreetTextField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
@@ -550,8 +550,8 @@ public class UserInformationView extends JPanel implements ActionListener
 
     private void initEmailTextField()
     {
-        EmailTextField = new JTextField();
-        EmailTextField.setBounds(50, 140 + 7*dv.LabelHeight()+6*dv.FieldHeight(), 220, 30);
+        EmailTextField = new JTextField(personalUser.getEmail());
+        EmailTextField.setBounds(50, 140 + 7*dv.LabelHeight()+6*dv.FieldHeight(), 350, 30);
         EmailTextField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         EmailTextField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         EmailTextField.setForeground(new Color(dv.BlackTextColor()));

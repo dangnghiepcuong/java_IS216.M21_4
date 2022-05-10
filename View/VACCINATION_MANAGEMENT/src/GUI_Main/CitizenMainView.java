@@ -455,6 +455,25 @@ public class CitizenMainView extends JFrame implements ActionListener
 
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
 
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent)
+            {
+                String query = "update ACCOUNT ACC set Status = 1 where ACC.Username = '" + personalUser.getPhone() + "'";
+
+                try {
+                    Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                    PreparedStatement st = connection.prepareStatement(query);
+
+                    st.executeQuery(query);
+                } catch (SQLException ex) {
+                    dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
+                    ex.printStackTrace();
+                }
+            }
+        });
+
     }
 
 
@@ -463,6 +482,19 @@ public class CitizenMainView extends JFrame implements ActionListener
     {
         if (e.getSource() == LogoutButton)
         {
+            String query = "update ACCOUNT ACC set Status = 1 where ACC.Username = '" + personalUser.getPhone() + "'";
+
+            try {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                PreparedStatement st = connection.prepareStatement(query);
+
+                st.executeQuery(query);
+            } catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
+                ex.printStackTrace();
+            }
+
             loginView = new LoginView();
             this.dispose();
         }
