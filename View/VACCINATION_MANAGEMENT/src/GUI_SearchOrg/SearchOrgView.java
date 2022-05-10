@@ -351,7 +351,7 @@ public class SearchOrgView extends JPanel implements ActionListener
         NoonTime.setBounds(250,(32+25)+2,150,25);
         NoonTime.setHorizontalAlignment(JLabel.LEFT);
 
-        JLabel NightTime = new JLabel("Buổi trưa: " + sched.getNightRegistered() + "/" + sched.getLimitNight());
+        JLabel NightTime = new JLabel("Buổi tối: " + sched.getNightRegistered() + "/" + sched.getLimitNight());
         NightTime.setFont(new Font(dv.fontName(), 0, 16));
         NightTime.setForeground(new Color(dv.BlackTextColor()));
         NightTime.setBounds(250,(32+25+2)+25+2,150,25);

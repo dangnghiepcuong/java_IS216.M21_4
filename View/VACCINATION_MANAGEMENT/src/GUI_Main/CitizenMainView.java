@@ -6,6 +6,7 @@ import Data_Processor.Person;
 import GUI_Login.LoginView;
 import GUI_ManageVaccination.ManageVaccinationView;
 import GUI_SearchOrg.SearchOrgView;
+import GUI_UpdateInjection.UpdateInjectionView;
 import GUI_UserInformation.*;
 
 import javax.swing.*;
@@ -43,6 +44,7 @@ public class CitizenMainView extends JFrame implements ActionListener
     private UserInformationView userInformationView;
     private SearchOrgView searchOrgView;
     private ManageVaccinationView manageVaccinationView;
+    private UpdateInjectionView updateInjectionView;
 
     private JButton LogoutButton;
     private JButton BackButton;
@@ -479,7 +481,7 @@ public class CitizenMainView extends JFrame implements ActionListener
             userInformationView = null;
             MainLayeredPane.removeAll();
             this.dispose();
-            CitizenMainView citizenMainView = new CitizenMainView(userInformationView.getPersonalUser().getPhone());
+            CitizenMainView citizenMainView = new CitizenMainView(personalUser.getPhone());
         }
 
         if (e.getSource() == VaccinationRegButton)
