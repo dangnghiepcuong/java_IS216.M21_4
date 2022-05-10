@@ -204,12 +204,6 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
     public LoginView()
     {
         initFrameComponent();
-
-        for (int i = 1; i<10; i++)
-            System.out.println("INSERT INTO REGION(Code, Name, Note) VALUES ('0" + i + "', '" + dv.getProvinceList()[i] + "', NULL);");
-
-        for (int i = 10; i<=64; i++)
-            System.out.println("INSERT INTO REGION(Code, Name, Note) VALUES ('" + i + "', '" + dv.getProvinceList()[i] + "', NULL);");
     }
 
     @Override
