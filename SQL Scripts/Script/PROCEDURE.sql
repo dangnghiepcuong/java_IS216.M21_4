@@ -13,8 +13,6 @@ begin
      insert into ACCOUNT(Username, Password, Role, status, Note) values 
      (par_Username, par_Password, par_Role, par_Status, par_Note);    
      
-     commit;
-     
      EXCEPTION
         when DUP_VAL_ON_INDEX
         then
@@ -34,8 +32,7 @@ begin
     --insert new ORGANIZATION
 	insert into ORGANIZATION(ID, Province, Note) 
 	values (par_ID, par_Province, par_Note);
-    
-    commit;
+
 end ORG_INSERT_RECORD;
 
 --------------------------------------------------------
@@ -209,8 +206,6 @@ begin
     values (par_ID, par_LastName, par_FirstName, par_Birthday, par_Gender,
     par_HomeTown, par_Province, par_District, par_Town, par_Street, par_Phone,
     par_Email, par_Guardian, par_Note);
-
-    commit;
 
     EXCEPTION
         when DUP_VAL_ON_INDEX
