@@ -142,46 +142,6 @@ public class DefaultValue
         return OptionFrame;
     }
 
-   /* public JDialog popupDialog (JFrame frame, int ErrorCode, int w, int h, String ErrorMessage)
-    {
-        JDialog Dialog = new JDialog(frame, String.valueOf(ErrorCode));
-        Dialog.setAlwaysOnTop(true);
-        Dialog.setModal(true);
-        Dialog.setModalityType (ModalityType.APPLICATION_MODAL);
-        Dialog.setSize(w,h);
-        Dialog.setBounds((1600-w)/2,(900-h)/2,w,h);
-
-        Dialog.setResizable(false);
-        Dialog.setVisible(true);
-        Dialog.setBackground(new Color(this.ViewBackgroundColor()));
-        Dialog.setUndecorated(true);
-
-        JLabel DialogLabel = new JLabel(ErrorMessage);
-        DialogLabel.setFont(new Font(this.fontName(), 0, 14));
-        DialogLabel.setForeground(Color.BLACK);
-        DialogLabel.setBounds(0,0,w,h-50);
-        DialogLabel.setHorizontalAlignment(JLabel.CENTER);
-
-        JButton DialogButton = new JButton();
-        DialogButton.setBounds(
-                (Dialog.getWidth()-60)/2, Dialog.getHeight()-(50+10), 50, 35);
-        DialogButton.setBorder(null);
-        DialogButton.setContentAreaFilled(false);
-        DialogButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/OK Button.png")));
-
-        Box b = Box.createHorizontalBox();
-        b.add(Box.createHorizontalGlue());
-        b.add(DialogLabel, BorderLayout.CENTER);
-        b.add(Box.createHorizontalGlue());
-
-//        Dialog.setLayout(null);
-        Dialog.add(b);
-        Dialog.add(DialogButton);
-        Dialog.pack();
-        Dialog.setLocationRelativeTo(null);
-
-        return Dialog;
-    }*/
 
     public String fontName()
     {
@@ -264,18 +224,12 @@ public class DefaultValue
         return 0x333333;
     }
 
-    private String provinceList[] = new String[65];
 
-    public String[] getProvinceList() {
-        return provinceList;
-    }
 
-    public void setProvinceList(String[] provinceList) {
-        this.provinceList = provinceList;
-    }
-
-    public DefaultValue()
+    public String[] getProvinceList()
     {
+        String provinceList[] = new String[65];
+
         for (int i = 1; i <= 64; i++)
             provinceList[i] = new String();
 
@@ -343,22 +297,31 @@ public class DefaultValue
         provinceList[62] = "Điện Biên";
         provinceList[63] = "Đắk Nông";
         provinceList[64] = "Hậu Giang";
+
+        return provinceList;
+    }
+
+
+
+    public DefaultValue()
+    {
+
     }
 
     public String getProvinceName(String Code)
     {
         int index = Integer.parseInt(Code);
-        return provinceList[index];
+        return this.getProvinceList()[index];
     }
 
     public String getProvinceCode(String Name)
     {
         for (int i = 1; i < 10; i++)
-            if (provinceList[i].equals(Name))
+            if (this.getProvinceList()[i].equals(Name))
                 return "0"+i;
 
         for (int i = 10; i <= 64; i++)
-            if (provinceList[i].equals(Name))
+            if (this.getProvinceList()[i].equals(Name))
                 return ""+i;
 
         return "";
@@ -443,6 +406,12 @@ public class DefaultValue
         return "";
     }
 
+    public String[] getGenderList()
+    {
+        String genderList[] = {"Nữ", "Nam", "Khác"};
+
+        return genderList;
+    }
 
     public String getGenderName(int Gender)
     {
