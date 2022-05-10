@@ -468,7 +468,7 @@ public class CitizenMainView extends JFrame implements ActionListener
 
                     st.executeUpdate(query);
                 } catch (SQLException ex) {
-                    dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
+                    dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(),2);
                     ex.printStackTrace();
                 }
             }
@@ -491,7 +491,7 @@ public class CitizenMainView extends JFrame implements ActionListener
 
                 st.executeUpdate(query);
             } catch (SQLException ex) {
-                dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
+                dv.popupOption(null, ex.getMessage(),"Lỗi " + ex.getErrorCode(),2);
                 ex.printStackTrace();
             }
 

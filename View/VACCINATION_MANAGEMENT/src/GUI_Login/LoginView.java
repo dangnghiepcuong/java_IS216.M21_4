@@ -239,7 +239,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
                 acc.setStatus(rs.getInt("Status"));
 
             } catch (SQLException ex) {
-                dv.popupOption(this, "Tài khoản không tồn tại!", String.valueOf(ex.getErrorCode()), 2);
+                dv.popupOption(this, "Tài khoản không tồn tại!", "Lỗi " + ex.getErrorCode(), 2);
                 throw new RuntimeException(ex);
             }
 
@@ -257,7 +257,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
 
             if (acc.getStatus() == 2)
             {
-                dv.popupOption(this, "Tài khoản đang được đăng nhập!", "Lỗi!", 2);
+                dv.popupOption(this, "Tài khoản đang được đăng nhập!", "Lỗi ", 2);
                 return;
             }
 
@@ -272,7 +272,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
 
                     st.executeQuery(query);
                 } catch (SQLException ex) {
-                    dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
+                    dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(),2);
                     ex.printStackTrace();
                 }
 

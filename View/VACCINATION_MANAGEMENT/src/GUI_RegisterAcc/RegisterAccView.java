@@ -688,9 +688,7 @@ public class RegisterAccView extends JFrame implements ActionListener
 
             }
             catch (SQLException ex) {
-                System.out.println("Không thành công!");
-
-                dv.popupOption(null, "Không thành công", "Lỗi!", 2);
+                dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
 
                 throw new RuntimeException(ex);
             }

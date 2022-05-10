@@ -432,7 +432,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                     }
                     catch (SQLException ex)
                     {
-                        dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
+                        dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(),2);
                     }
 
                     Reg.setStatus(StatusChoice.getSelectedIndex()+1);
@@ -758,7 +758,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         cst.execute();
                     } catch (SQLException ex)
                     {
-                        dv.popupOption(null,  ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+                        dv.popupOption(null,  ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
                         ex.printStackTrace();
                     }
 
