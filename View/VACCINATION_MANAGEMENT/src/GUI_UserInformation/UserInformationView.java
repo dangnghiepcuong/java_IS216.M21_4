@@ -66,6 +66,11 @@ public class UserInformationView extends JPanel implements ActionListener
     private JDatePickerImpl BirthdayField;
     private JPanel AccInfoPanel;
     private JPanel PersonalInfoPanel;
+
+    public Person getPersonalUser() {
+        return personalUser;
+    }
+
     private Person personalUser;
 
     private void initAccInfoPanel()

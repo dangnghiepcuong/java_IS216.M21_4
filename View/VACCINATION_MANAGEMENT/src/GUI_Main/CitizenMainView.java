@@ -479,7 +479,7 @@ public class CitizenMainView extends JFrame implements ActionListener
             userInformationView = null;
             MainLayeredPane.removeAll();
             this.dispose();
-            CitizenMainView citizenMainView = new CitizenMainView(personalUser.getPhone());
+            CitizenMainView citizenMainView = new CitizenMainView(userInformationView.getPersonalUser().getPhone());
         }
 
         if (e.getSource() == VaccinationRegButton)
@@ -504,8 +504,6 @@ public class CitizenMainView extends JFrame implements ActionListener
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
             initBackInfoButton();
             MainLayeredPane.add(BackInfoButton, Integer.valueOf(5));
-
-            //personalUser = userInformationView.getPersonalUser();
         }
 
         if (e.getSource() == SearchButton)
