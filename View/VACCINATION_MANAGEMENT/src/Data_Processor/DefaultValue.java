@@ -185,7 +185,7 @@ public class DefaultValue
 
     public String fontName()
     {
-        return "SVN-Arial";
+        return "Open Sans";
     }
 
     public int LabelFontSize()
