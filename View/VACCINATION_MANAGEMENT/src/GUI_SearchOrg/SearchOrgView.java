@@ -428,6 +428,7 @@ public class SearchOrgView extends JPanel implements ActionListener
                     }
                 }
 
+                dv.popupOption(null, "Đăng ký tiêm chủng thành công!", "Thông báo", 0);
             }
         };
 
@@ -605,7 +606,7 @@ public class SearchOrgView extends JPanel implements ActionListener
 
             //Select out the specified ORGs
             query = "select ORG.ID, Name, Province, District, Town, Street, COUNT(SCHED.ID)"
-                    + " from ORGANIZATION ORG left join SCHEDULE SCHED on ORG.ID = SCHED.OrgID";
+                    + " from ORGANIZATION ORG left outer join SCHEDULE SCHED on ORG.ID = SCHED.OrgID";
 
             if (ProvinceChoice.getSelectedIndex() > 0)
                 query = query + " where ORG.Province = '" + ProvinceCode + "'";
@@ -614,13 +615,13 @@ public class SearchOrgView extends JPanel implements ActionListener
 
             if (DistrictChoice.getSelectedIndex() > 0)
                 query = query + " and ORG.District = '" + DistrictChoice.getSelectedItem() + "'";
-            else
-                query = query + " and ORG.District like '%'";
+            /*else
+                query = query + " and ORG.District like '%'";*/
 
             if (TownChoice.getSelectedIndex() > 0)
                 query = query + " and ORG.Town = '" + TownChoice.getSelectedItem() + "'";
-            else
-                query = query + " and ORG.Town like '%'";
+            /*else
+                query = query + " and ORG.Town like '%'";*/
 
             //query += " and OnDate >= '" + dv.sysdate() + "'";
             query += " group by ORG.ID, Name, Province, District, Town, Street";
