@@ -146,11 +146,11 @@ public class CertificateView extends JPanel implements ActionListener{
        }
 
        if (cert.getCertType() == 0)
-           InjectionListPanel.setBackground(new Color(0xFF6961));
+           InjectionListPanel.setBackground(new Color(dv.RedPastel()));
        if (cert.getCertType() == 1)
-           InjectionListPanel.setBackground(new Color(0xFDFD96));
+           InjectionListPanel.setBackground(new Color(dv.YellowPastel()));
        if (cert.getCertType() == 2)
-           InjectionListPanel.setBackground(new Color(0x77DD77));
+           InjectionListPanel.setBackground(new Color(dv.GreenPastel()));
 
 
         nInj = i;

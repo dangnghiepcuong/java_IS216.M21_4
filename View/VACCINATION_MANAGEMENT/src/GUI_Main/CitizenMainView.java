@@ -4,11 +4,13 @@ import Data_Processor.Account;
 import Data_Processor.DefaultValue;
 import Data_Processor.Person;
 import GUI_CertificateView.CertificateView;
+import GUI_FillFormView.FillFormView;
 import GUI_Login.LoginView;
 import GUI_ManageVaccination.ManageVaccinationView;
 import GUI_SearchOrg.SearchOrgView;
 import GUI_UpdateInjection.UpdateInjectionView;
 import GUI_UserInformation.*;
+import com.sun.tools.javac.Main;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,6 +46,7 @@ public class CitizenMainView extends JFrame implements ActionListener
     private  LoginView loginView;
     private UserInformationView userInformationView;
     private SearchOrgView searchOrgView;
+    private FillFormView fillFormView;
     private ManageVaccinationView manageVaccinationView;
     private UpdateInjectionView updateInjectionView;
     private CertificateView certificateView;
@@ -508,10 +511,12 @@ public class CitizenMainView extends JFrame implements ActionListener
 
         if(e.getSource() == BackButton)
         {
+            userInformationView = null;
             searchOrgView = null;
+            fillFormView = null;
             manageVaccinationView = null;
             updateInjectionView = null;
-
+            certificateView = null;
             MainLayeredPane.removeAll();
             MainLayeredPane.add(MainPanel, Integer.valueOf(0));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
@@ -520,80 +525,68 @@ public class CitizenMainView extends JFrame implements ActionListener
         if(e.getSource() == BackInfoButton)
         {
             personalUser.setPhone(userInformationView.getPersonalUser().getPhone());
+            CitizenMainView citizenMainView = new CitizenMainView(personalUser.getPhone());
             userInformationView = null;
             MainLayeredPane.removeAll();
-            CitizenMainView citizenMainView = new CitizenMainView(personalUser.getPhone());
             this.dispose();
         }
 
         if (e.getSource() == VaccinationRegButton)
         {
-            manageVaccinationView = null;
-            MainLayeredPane.removeAll();
-
             searchOrgView = new SearchOrgView(personalUser);
+            MainLayeredPane.removeAll();
             MainLayeredPane.add(searchOrgView, Integer.valueOf(1));
-
-            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
-
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }
 
         if (e.getSource() == InfoSettingButton)
         {
-            MainLayeredPane.removeAll();
-
             userInformationView = new UserInformationView(personalUser);
-            MainLayeredPane.add(userInformationView, Integer.valueOf(0));
-            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
-
             initBackInfoButton();
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(userInformationView, Integer.valueOf(0));
             MainLayeredPane.add(BackInfoButton, Integer.valueOf(5));
         }
 
         if (e.getSource() == SearchButton)
         {
             searchOrgView = new SearchOrgView(personalUser);
+            MainLayeredPane.removeAll();
             MainLayeredPane.add(searchOrgView, Integer.valueOf(1));
-            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+            MainLayeredPane.add(BackButton, Integer.valueOf(5));
+        }
 
-
+        if (e.getSource() == FillFormButton)
+        {
+            fillFormView = new FillFormView(personalUser);
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(fillFormView, Integer.valueOf(0));
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }
 
         if(e.getSource() == ManageVaccinationButton)
         {
             manageVaccinationView = new ManageVaccinationView(personalUser);
-            MainLayeredPane.removeAll();
-
-            MainLayeredPane.add(manageVaccinationView, Integer.valueOf(0));
             initVaccinationRegButton();
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(manageVaccinationView, Integer.valueOf(0));
             MainLayeredPane.add(VaccinationRegButton, Integer.valueOf(1));
-
-            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
-
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }
 
         if (e.getSource() == UpdateInjectionButton)
         {
             updateInjectionView = new UpdateInjectionView(personalUser);
-
             MainLayeredPane.removeAll();
-
             MainLayeredPane.add(updateInjectionView, Integer.valueOf(0));
-
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }
 
         if (e.getSource() == CertificateButton)
         {
             certificateView = new CertificateView(personalUser);
-
             MainLayeredPane.removeAll();
-
             MainLayeredPane.add(certificateView, Integer.valueOf(0));
-
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }
     }

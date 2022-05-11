@@ -187,7 +187,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
         LocalDate SchedOnDate = LocalDate.of(dv.getYear(Sched.getOnDate()), dv.getMonth(Sched.getOnDate()), dv.getDay(Sched.getOnDate()));
 
-        LocalDate sysdate = dv.getSysdate();
+        LocalDate sysdate = LocalDate.parse(dv.oracleSysdate());
 
         if (SchedOnDate.isAfter(sysdate))
         {
