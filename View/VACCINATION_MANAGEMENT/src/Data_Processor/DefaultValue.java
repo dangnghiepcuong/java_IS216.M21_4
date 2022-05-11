@@ -5,6 +5,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.Dialog.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class DefaultValue
 {
@@ -368,7 +369,7 @@ public class DefaultValue
 
     public String oracleSysdate()
     {
-        return toOracleDateFormat(java.time.LocalDateTime.now().toString().substring(0, 10));
+        return toOracleDateFormat(LocalDateTime.now().toString().substring(0, 10));
     }
 
     public String toApplicationDate(String date)
@@ -401,6 +402,11 @@ public class DefaultValue
             Month = "12";
 
         return date.substring(0,2) + "-" + Month + "-" + date.substring(6,10);
+    }
+
+    public String todayString()
+    {
+        return LocalDateTime.now().toString().substring(0, 10);
     }
 
     public String getDoseTypeName(String DoseType)
