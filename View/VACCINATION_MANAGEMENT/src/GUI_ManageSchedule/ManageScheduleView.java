@@ -656,7 +656,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         SerialTextField.setForeground(new Color(dv.BlackTextColor()));
 
         JLabel LimitDayLabel = new JLabel("Giới hạn số lượt đăng ký buổi sáng:");
-        LimitDayLabel.setPreferredSize(new Dimension(250, 30));
+        LimitDayLabel.setPreferredSize(new Dimension(270, 30));
         LimitDayLabel.setFont(new Font(dv.fontName(), 0 ,16));
         LimitDayLabel.setForeground(new Color(dv.BlackTextColor()));
 
@@ -666,7 +666,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         LimitDayTextField.setForeground(new Color(dv.BlackTextColor()));
 
         JLabel LimitNoonLabel = new JLabel("Giới hạn số lượt đăng ký buổi trưa:");
-        LimitNoonLabel.setPreferredSize(new Dimension(250, 30));
+        LimitNoonLabel.setPreferredSize(new Dimension(270, 30));
         LimitNoonLabel.setFont(new Font(dv.fontName(), 0 ,16));
         LimitNoonLabel.setForeground(new Color(dv.BlackTextColor()));
 
@@ -676,7 +676,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         LimitNoonTextField.setForeground(new Color(dv.BlackTextColor()));
 
         JLabel LimitNightLabel = new JLabel("Giới hạn số lượt đăng ký buổi tối:");
-        LimitNightLabel.setPreferredSize(new Dimension(250, 30));
+        LimitNightLabel.setPreferredSize(new Dimension(270, 30));
         LimitNightLabel.setFont(new Font(dv.fontName(), 0 ,16));
         LimitNightLabel.setForeground(new Color(dv.BlackTextColor()));
 
