@@ -5,6 +5,7 @@ import Data_Processor.DefaultValue;
 import Data_Processor.Organization;
 import GUI_Login.LoginView;
 import GUI_ManageSchedule.ManageScheduleView;
+import GUI_OrgInformation.OrgInformationView;
 import GUI_SearchOrg.SearchOrgView;
 
 import javax.swing.*;
@@ -37,11 +38,13 @@ public class ORGMainView extends JFrame implements ActionListener
     private Organization orgUser = new Organization();
 
     private LoginView loginView;
+    private OrgInformationView orgInformationView;
     private SearchOrgView searchOrgView;
     private ManageScheduleView manageScheduleView;
 
     private JButton LogoutButton;
     private JButton BackButton;
+    private JButton BackInfoButton;
 
     private void initBackButton()
     {
@@ -54,6 +57,19 @@ public class ORGMainView extends JFrame implements ActionListener
         BackButton.setContentAreaFilled(false);
 
         BackButton.addActionListener(this);
+    }
+
+    private void initBackInfoButton()
+    {
+        BackInfoButton = new JButton();
+        ImageIcon BackInfoButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Back Button_2.png"));
+        BackInfoButton.setIcon(BackInfoButtonIcon);
+
+        BackInfoButton.setBounds(10, 10, BackInfoButtonIcon.getIconWidth(), BackInfoButtonIcon.getIconHeight());
+        BackInfoButton.setBorder(null);
+        BackInfoButton.setContentAreaFilled(false);
+
+        BackInfoButton.addActionListener(this);
     }
 
     private void initInfoLayeredPane()
@@ -397,6 +413,15 @@ public class ORGMainView extends JFrame implements ActionListener
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
 
+        if(e.getSource() == BackInfoButton)
+        {
+            orgUser.setID(orgInformationView.getOrgUser().getID());
+            orgInformationView = null;
+            MainLayeredPane.removeAll();
+            ORGMainView orgMainView = new ORGMainView(orgUser.getID());
+            this.dispose();
+        }
+
         if (e.getSource() == LogoutButton)
         {
             String query = "update ACCOUNT ACC set Status = 1 where ACC.Username = '" + orgUser.getID() + "'";
@@ -414,6 +439,20 @@ public class ORGMainView extends JFrame implements ActionListener
 
             loginView = new LoginView();
             this.dispose();
+        }
+
+        if (e.getSource() == InfoSettingButton)
+        {
+            orgInformationView = new OrgInformationView(orgUser);
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(orgInformationView, Integer.valueOf(0));
+
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+
+            //init BackButton
+            initBackInfoButton();
+            MainLayeredPane.add(BackInfoButton, Integer.valueOf(5));
+
         }
 
         /*if (e.getSource() == SearchButton)
