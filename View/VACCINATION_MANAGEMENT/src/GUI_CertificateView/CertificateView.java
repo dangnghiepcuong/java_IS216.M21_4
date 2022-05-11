@@ -49,38 +49,32 @@ public class CertificateView extends JPanel implements ActionListener{
     private Person personalUser = new Person();
     private Certificate cert = new Certificate();
 
-    //Stored Sum_Injection
-    private int Total_Injection;
-
-
-
-
 
    private void initInjectionPanel(int i, Injection Inj)
    {
-       JLabel NameOrg=new JLabel("Đơn vị tiêm chủng: " + Inj.getOrg().getName());
-       NameOrg.setBounds(20, 2, 600, 25);
-       NameOrg.setFont(new Font(dv.fontName(),2, 20));
-       NameOrg.setForeground(Color.WHITE);
-
-       JLabel InjNOType = new JLabel("Mũi: " + Inj.getInjNo()
-               + "          Loại: "+dv.getDoseTypeName(Inj.getDoseType()));
-       InjNOType.setBounds(20, 25, 400, 25);
-       InjNOType.setFont(new Font(dv.fontName(),0, 18));
-       InjNOType.setForeground(Color.WHITE);
+       JLabel NameOrg = new JLabel("Mũi: " + Inj.getInjNo()
+               + " ("+dv.getDoseTypeName(Inj.getDoseType()) +")");
+       NameOrg.setBounds(20, 2, 400, 25);
+       NameOrg.setFont(new Font(dv.fontName(),1, 20));
+       NameOrg.setForeground(new Color(dv.BlackTextColor()));
 
        JLabel Vaccine = new JLabel("Vaccine: " + Inj.getSched().getVaccineID()+" - "+ Inj.getSched().getSerial());
-       Vaccine.setBounds(20, 25*2, 350, 25);
-       Vaccine.setFont(new Font(dv.fontName(),0,18));
-       Vaccine.setForeground(Color.WHITE);
+       Vaccine.setBounds(20, 30, 350, 25);
+       Vaccine.setFont(new Font(dv.fontName(),2,20));
+       Vaccine.setForeground(new Color(dv.BlackTextColor()));
+
+       JLabel InjNOType=new JLabel("Đơn vị tiêm chủng: " + Inj.getOrg().getName());
+       InjNOType.setBounds(20, 30*2, 600, 25);
+       InjNOType.setFont(new Font(dv.fontName(),0, 18));
+       InjNOType.setForeground(new Color(dv.BlackTextColor()));
 
        JLabel OnDateTime = new JLabel("Lịch tiêm ngày: " + Inj.getSched().getOnDate());
        OnDateTime.setFont(new Font(dv.fontName(),0, 18));
-       OnDateTime.setBounds(20,25*3,500,25);
-       OnDateTime.setForeground(Color.WHITE);
+       OnDateTime.setBounds(20,30*3,500,25);
+       OnDateTime.setForeground(new Color(dv.BlackTextColor()));
 
        InjectionPanel[i] = new JPanel();
-       InjectionPanel[i].setPreferredSize(new Dimension(560, 100));
+       InjectionPanel[i].setPreferredSize(new Dimension(560, 120));
        InjectionPanel[i].setLayout(null);
        InjectionPanel[i].setBackground(null);
        InjectionPanel[i].setBorder(dv.border());

@@ -270,7 +270,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
 
                     PreparedStatement st = connection.prepareStatement(query);
 
-                    st.executeQuery(query);
+                    //st.executeQuery(query);
                 } catch (SQLException ex) {
                     dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(),2);
                     ex.printStackTrace();
