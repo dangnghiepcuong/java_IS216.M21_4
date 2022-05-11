@@ -3,6 +3,7 @@ package GUI_Main;
 import Data_Processor.Account;
 import Data_Processor.DefaultValue;
 import Data_Processor.Person;
+import GUI_FillForm.FillFormView;
 import GUI_Login.LoginView;
 import GUI_ManageVaccination.ManageVaccinationView;
 import GUI_SearchOrg.SearchOrgView;
@@ -43,6 +44,8 @@ public class CitizenMainView extends JFrame implements ActionListener
     private  LoginView loginView;
     private SearchOrgView searchOrgView;
     private ManageVaccinationView manageVaccinationView;
+
+    private FillFormView fillFormView;
 
     private JButton LogoutButton;
     private JButton BackButton;
@@ -460,6 +463,18 @@ public class CitizenMainView extends JFrame implements ActionListener
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }
 
+
+        if(e.getSource() == FillFormButton)
+        {
+            fillFormView = new FillFormView();
+
+            MainLayeredPane.add(manageVaccinationView, Integer.valueOf(1));
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+
+            //init BackButton
+            initBackButton();
+            MainLayeredPane.add(BackButton, Integer.valueOf(5));
+        }
         if(e.getSource() == ManageVaccinationButton)
         {
             manageVaccinationView = new ManageVaccinationView(personalUser);
