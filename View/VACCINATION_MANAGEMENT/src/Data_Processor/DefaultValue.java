@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.Dialog.*;
+import java.time.LocalDate;
 
 public class DefaultValue
 {
@@ -303,11 +304,15 @@ public class DefaultValue
         return provinceList;
     }
 
-
-
     public DefaultValue()
     {
 
+    }
+
+    public LocalDate getSysdate()
+    {
+        LocalDate sysdate = LocalDate.from(java.time.LocalDateTime.now());
+        return sysdate;
     }
 
     public String getProvinceName(String Code)
