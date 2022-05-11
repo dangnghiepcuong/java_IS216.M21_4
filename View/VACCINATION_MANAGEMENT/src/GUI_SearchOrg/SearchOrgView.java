@@ -1,6 +1,8 @@
 package GUI_SearchOrg;
 
 import Data_Processor.*;
+import oracle.sql.NUMBER;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -63,9 +65,10 @@ public class SearchOrgView extends JPanel implements ActionListener
         ProvinceChoice.setForeground(new Color(dv.BlackTextColor()));
         ProvinceChoice.setBackground(Color.WHITE);
 
+        ProvinceChoice.add(dv.getProvinceName(personalUser.getProvince()));
         ProvinceChoice.add("");
         for (int i = 1; i <= 64; i++)
-            if (i != 20)
+            if (i != 20 && dv.getProvinceList()[i] != dv.getProvinceName(personalUser.getProvince()))
                 ProvinceChoice.add(dv.getProvinceList()[i]);
     }
 
@@ -395,13 +398,19 @@ public class SearchOrgView extends JPanel implements ActionListener
                         //CALL PROC
                         CallableStatement cst = connection.prepareCall(plsql);
                         cst.setString("par_PersonalID", personalUser.getID());
-                        cst.setInt("par_BoosterAvai", BoosterAvai);
-                        cst.setString("par_DoseType", par_DoseType);
+                        cst.registerOutParameter("par_BoosterAvai", Types.NUMERIC);
+                        cst.registerOutParameter("par_DoseType", Types.VARCHAR);
+
+                        cst.execute();
+
+                        BoosterAvai = cst.getInt("par_BoosterAvai");
+                        par_DoseType = cst.getString("par_DoseType");
 
                         //ASK USER IF THIS IS THE 3RD INJECTION
                         if (BoosterAvai == 1)
                         {
-                            answer = dv.popupConfirmOption(null, "Bạn đang đăng ký mũi tiêm thứ 3, đây là mũi bổ sung hay nhắc lại?",
+                            answer = dv.popupConfirmOption(null, "Bạn đang đăng ký mũi tiêm thứ 3, " +
+                                            "đây là có phải là mũi bổ sung không? (Chọn 'Không' nếu đây là mũi nhắc lại)",
                                     "Chọn loại mũi tiêm đăng ký");
 
                             if (answer  == 0)
@@ -476,8 +485,9 @@ public class SearchOrgView extends JPanel implements ActionListener
 
         query = "select *" +
                 " from SCHEDULE SCHED" +
-                " where SCHED.OrgID = '" + SelectedOrg.getID() + "'" +
-                " and SCHED.OnDate >= TO_DATE('" + dv.oracleSysdate() + "')";
+                " where OrgID = '" + SelectedOrg.getID() + "'" +
+                " and OnDate >= TO_DATE('" + dv.oracleSysdate() + "')" +
+                " order by OnDate";
 
         System.out.println(query);
 
@@ -611,7 +621,7 @@ public class SearchOrgView extends JPanel implements ActionListener
             query = "select ORG.ID, Name, Province, District, Town, Street, COUNT(SCHED.ID)"
                     + " from ORGANIZATION ORG left outer join SCHEDULE SCHED on ORG.ID = SCHED.OrgID";
 
-            if (ProvinceChoice.getSelectedIndex() > 0)
+            if (ProvinceChoice.getSelectedIndex() != 1)
                 query = query + " where ORG.Province = '" + ProvinceCode + "'";
             else
                 query = query + " where ORG.Province like '%'";

@@ -181,7 +181,7 @@ public class ManageVaccinationView extends JPanel implements ActionListener
         if (StatusFilter == 4) //select choice: Da huy
             query += " and Status = 3";
 
-        query += " order by Status asc, OnDate desc";
+        query += " order by OnDate desc, Status";
 
         System.out.println(query);
 

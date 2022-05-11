@@ -109,7 +109,6 @@ public class DefaultValue
 
         String responses[] = {"Có", "Không"};
 
-
         ImageIcon icon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Question Icon.png"));
 
         return OptionFrame.showOptionDialog(frame, Message, title,
@@ -401,7 +400,7 @@ public class DefaultValue
         if (Month.equals("DEC"))
             Month = "12";
 
-        return date.substring(0,2) + "-" + Month + "-" + date.substring(6,10);
+        return date.substring(6,10) + "-" + Month + "-" + date.substring(0,2) ;
     }
 
     public String todayString()

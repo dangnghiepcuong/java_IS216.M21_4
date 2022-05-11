@@ -392,7 +392,7 @@ public class FillFormView extends JPanel implements ActionListener
 
                         CallableStatement cst = connection.prepareCall(plsql);
                         cst.setString("par_PersonalID", personalUser.getID());
-                        cst.setString("par_FilledDate", dv.oracleSysdate());
+                        cst.setString("par_FilledDate", dv.toOracleDateFormat(textField.getText()));
                         cst.setString("par_Healths", InputFirstQues + InputSecondQues + InputThirdQues + InputFourthQues);
                         cst.setString("par_Note", "");
 
