@@ -648,8 +648,6 @@ public class UserInformationView extends JPanel implements ActionListener
             String InputNewPassword = String.valueOf(NewPasswordField.getPassword());
             String InputRepeatNewPassword = String.valueOf(RepeatNewPasswordField.getPassword());
             String InputID = IDTextField.getText();
-            String InputLastName = LastNameTextField.getText();
-            String InputFirstName = FirstNameTextField.getText();
             String InputBirthday = textField.getText();
             int InputGender = GenderChoice.getSelectedIndex();
             String InputHomeTown =HomeTownChoice.getSelectedItem();
@@ -696,8 +694,6 @@ public class UserInformationView extends JPanel implements ActionListener
                 if ( dv.checkStringInputValue(InputNewPassword, "Cảnh báo!","Nhập mật khẩu mới!") != -2 )
                     return;*/
             if ( dv.checkStringInputValue(InputID, "Cảnh báo!","Nhập mã định danh cá nhân!") != -2 )
-                return;
-            if ( dv.checkStringInputValue(InputFirstName, "Cảnh báo!","Nhập tên công dân!") != -2 )
                 return;
             if ( dv.checkStringInputValue(InputBirthday, "Cảnh báo!","Nhập ngày sinh!") != -2 )
                 return;

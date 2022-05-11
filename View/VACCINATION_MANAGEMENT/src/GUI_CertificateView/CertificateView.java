@@ -124,11 +124,7 @@ public class CertificateView extends JPanel implements ActionListener{
             ex.printStackTrace();
         }
 
-       InjectionListPanel = new JPanel();
-       InjectionListPanel.setBounds(0,0,580, 590);
-       InjectionListPanel.setLayout(new FlowLayout());
 
-       int CertificateType = 0;
 
        query = "select * from CERTIFICATE CERT where PersonalID = '" + personalUser.getID() + "'";
        try {
@@ -143,8 +139,13 @@ public class CertificateView extends JPanel implements ActionListener{
        catch (SQLException ex)
        {
             dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+            return;
        }
 
+       nInj = i;
+
+       InjectionListPanel = new JPanel();
+       InjectionListPanel.setLayout(new FlowLayout());
        if (cert.getCertType() == 0)
            InjectionListPanel.setBackground(new Color(dv.RedPastel()));
        if (cert.getCertType() == 1)
@@ -152,8 +153,7 @@ public class CertificateView extends JPanel implements ActionListener{
        if (cert.getCertType() == 2)
            InjectionListPanel.setBackground(new Color(dv.GreenPastel()));
 
-
-        nInj = i;
+       InjectionListPanel.setPreferredSize(new Dimension(580, 120*nInj + nInj*10));
 
         for (i = 0; i<nInj; i++)
         {

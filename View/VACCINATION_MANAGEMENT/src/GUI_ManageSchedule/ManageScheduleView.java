@@ -185,9 +185,10 @@ public class ManageScheduleView extends JPanel implements ActionListener
         SchedPanel[i].add(Time);
         SchedPanel[i].add(SchedRegistionButton);
 
-        LocalDate SchedOnDate = LocalDate.of(dv.getYear(Sched.getOnDate()), dv.getMonth(Sched.getOnDate()), dv.getDay(Sched.getOnDate()));
+        LocalDate SchedOnDate = LocalDate.parse(Sched.getOnDate().substring(0, 10));
+//                LocalDate.of(dv.getYear(Sched.getOnDate()), dv.getMonth(Sched.getOnDate()), dv.getDay(Sched.getOnDate()));
 
-        LocalDate sysdate = LocalDate.parse(dv.oracleSysdate());
+        LocalDate sysdate = LocalDate.parse(dv.todayString());
 
         if (SchedOnDate.isAfter(sysdate))
         {
@@ -399,9 +400,18 @@ public class ManageScheduleView extends JPanel implements ActionListener
             StatusChoice.setBounds(500, 32+2, 120, 30);
             StatusChoice.setFont(new Font(dv.fontName(), 0, 16));
             StatusChoice.setForeground(new Color(dv.BlackTextColor()));
-            StatusChoice.add("Điểm danh");
-            StatusChoice.add("Đã tiêm");
-            StatusChoice.add("Hủy");
+
+            if (Reg.getStatus() == 0)
+            {
+                StatusChoice.add("Điểm danh");
+                StatusChoice.add("Hủy");
+            }
+
+            if (Reg.getStatus() == 1)
+            {
+                StatusChoice.add("Đã tiêm");
+                StatusChoice.add("Hủy");
+            }
 
             ActionListener handleUpdate = new ActionListener()
             {
@@ -428,6 +438,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                     catch (SQLException ex)
                     {
                         dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(),2);
+                        return;
                     }
 
                     Reg.setStatus(StatusChoice.getSelectedIndex()+1);

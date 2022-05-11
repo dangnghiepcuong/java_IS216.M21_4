@@ -20,13 +20,15 @@ select * from parameter;
 
 select * from region;
 
+select * from certificate;
+
 /* DELETE */
 delete from parameter;
 
 delete from health;
 
 delete from injection;
-COMMIT
+COMMIT;
 delete from register;
 
 delete from schedule;
@@ -129,4 +131,20 @@ set Status = 1 ;
 
 commit;
 
+select * from INJECTION where PersonalID = '281332982'
 
+delete from INJECTION where PersonalID = '281332982' and InjNO = 4
+rollback;
+select * from REGISTER where PersonalID = '281332982'
+
+delete from REGISTER where PersonalID = '281332982' and DoseType is null;
+
+update SCHEDULE 
+set NightRegistered = 0
+where OnDate = '17-AUG-2022';
+
+update REGISTER
+set Status = 2
+where DoseType = 'booster'
+
+commit;
