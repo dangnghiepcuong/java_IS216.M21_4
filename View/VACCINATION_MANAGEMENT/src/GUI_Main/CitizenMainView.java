@@ -519,10 +519,11 @@ public class CitizenMainView extends JFrame implements ActionListener
 
         if(e.getSource() == BackInfoButton)
         {
+            personalUser.setPhone(userInformationView.getPersonalUser().getPhone());
             userInformationView = null;
             MainLayeredPane.removeAll();
-            this.dispose();
             CitizenMainView citizenMainView = new CitizenMainView(personalUser.getPhone());
+            this.dispose();
         }
 
         if (e.getSource() == VaccinationRegButton)
