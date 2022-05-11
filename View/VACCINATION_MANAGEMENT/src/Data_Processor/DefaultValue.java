@@ -5,6 +5,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.Dialog.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class DefaultValue
 {
@@ -227,6 +228,12 @@ public class DefaultValue
         return 0x333333;
     }
 
+    public int GreenPastel() { return 0x77DD77; };
+
+    public int YellowPastel() { return 0xFDFD96; };
+
+    public int RedPastel() { return 0xFF6961; };
+
 
 
     public String[] getProvinceList()
@@ -309,12 +316,6 @@ public class DefaultValue
 
     }
 
-    public LocalDate getSysdate()
-    {
-        LocalDate sysdate = LocalDate.from(java.time.LocalDateTime.now());
-        return sysdate;
-    }
-
     public String getProvinceName(String Code)
     {
         int index = Integer.parseInt(Code);
@@ -366,9 +367,46 @@ public class DefaultValue
         return date.substring(8,10) + "-" + Month + "-" + date.substring(0,4);
     }
 
-    public String sysdate()
+    public String oracleSysdate()
     {
-        return toOracleDateFormat(java.time.LocalDateTime.now().toString().substring(0, 10));
+        return toOracleDateFormat(LocalDateTime.now().toString().substring(0, 10));
+    }
+
+    public String toApplicationDate(String date)
+    {
+        String Month = date.substring(5,8);
+
+        if (Month.equals("JAN"))
+            Month = "01";
+        if (Month.equals("FEB"))
+            Month = "02";
+        if (Month.equals("MAR"))
+            Month = "03";
+        if (Month.equals("APR"))
+            Month = "04";
+        if (Month.equals("MAY"))
+            Month = "05";
+        if (Month.equals("JUN"))
+            Month = "06";
+        if (Month.equals("JUL"))
+            Month = "07";
+        if (Month.equals("AUG"))
+            Month = "08";
+        if (Month.equals("SEP"))
+            Month = "09";
+        if (Month.equals("OCT"))
+            Month = "10";
+        if (Month.equals("NOV"))
+            Month = "11";
+        if (Month.equals("DEC"))
+            Month = "12";
+
+        return date.substring(0,2) + "-" + Month + "-" + date.substring(6,10);
+    }
+
+    public String todayString()
+    {
+        return LocalDateTime.now().toString().substring(0, 10);
     }
 
     public String getDoseTypeName(String DoseType)

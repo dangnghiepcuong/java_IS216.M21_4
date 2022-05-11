@@ -477,7 +477,7 @@ public class SearchOrgView extends JPanel implements ActionListener
         query = "select *" +
                 " from SCHEDULE SCHED" +
                 " where SCHED.OrgID = '" + SelectedOrg.getID() + "'" +
-                " and SCHED.OnDate >= TO_DATE('" + dv.sysdate() + "')";
+                " and SCHED.OnDate >= TO_DATE('" + dv.oracleSysdate() + "')";
 
         System.out.println(query);
 

@@ -187,7 +187,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
         LocalDate SchedOnDate = LocalDate.of(dv.getYear(Sched.getOnDate()), dv.getMonth(Sched.getOnDate()), dv.getDay(Sched.getOnDate()));
 
-        LocalDate sysdate = dv.getSysdate();
+        LocalDate sysdate = LocalDate.parse(dv.oracleSysdate());
 
         if (SchedOnDate.isAfter(sysdate))
         {
@@ -527,27 +527,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
     private void initOnDateLabel()
     {
 
-    }
-
-    public class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
-
-        private String datePattern = "yyyy-MM-dd";
-        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
-
-        @Override
-        public Object stringToValue(String text) throws ParseException {
-            return dateFormatter.parseObject(text);
-        }
-
-        @Override
-        public String valueToString(Object value) throws ParseException {
-            if (value != null) {
-                Calendar cal = (Calendar) value;
-                return dateFormatter.format(cal.getTime());
-            }
-
-            return "";
-        }
     }
     
     private void initAddNewSchedLabel()
