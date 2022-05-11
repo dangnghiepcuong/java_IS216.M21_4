@@ -84,7 +84,7 @@ public class UserInformationView extends JPanel implements ActionListener
         AccInfoPanel.setBorder(dv.border());
 
         JLabel AccInfoLabel = new JLabel("THÔNG TIN TÀI KHOẢN");
-        AccInfoLabel.setBounds((AccInfoPanel.getWidth()-300 -20)/2, 40, 300, 30);
+        AccInfoLabel.setBounds((AccInfoPanel.getWidth()-300 -20)/2, 80, 300, 30);
         AccInfoLabel.setFont(new Font(dv.fontName(), 1, 20));
         AccInfoLabel.setForeground(new Color(dv.FeatureButtonColor()));
         AccInfoLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -140,7 +140,7 @@ public class UserInformationView extends JPanel implements ActionListener
         PersonalInfoPanel.setBorder(dv.border());
 
         JLabel PersonalInfoLabel = new JLabel("THÔNG TIN CÁ NHÂN");
-        PersonalInfoLabel.setBounds((PersonalInfoPanel.getWidth()-300+30)/2, 40, 300, 30);
+        PersonalInfoLabel.setBounds((PersonalInfoPanel.getWidth()-300+30)/2, 80, 300, 30);
         PersonalInfoLabel.setFont(new Font(dv.fontName(), 1, 20));
         PersonalInfoLabel.setForeground(new Color(dv.FeatureButtonColor()));
         PersonalInfoLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -432,9 +432,8 @@ public class UserInformationView extends JPanel implements ActionListener
         GenderChoice.setForeground(new Color(dv.FieldLabelColor()));
 
         GenderChoice.add(dv.getGenderName(personalUser.getGender()));
-
         for (int i = 0; i < dv.getGenderList().length; i++)
-            if (dv.getGenderList()[i].equals(personalUser.getGender()) == false)
+            if (dv.getGenderList()[i].equals(dv.getGenderName(personalUser.getGender())) == false)
                 GenderChoice.add(dv.getGenderList()[i]);
 
     }
