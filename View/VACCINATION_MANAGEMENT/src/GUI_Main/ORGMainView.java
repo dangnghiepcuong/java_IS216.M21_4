@@ -79,8 +79,8 @@ public class ORGMainView extends JFrame implements ActionListener
         Avatar.setBounds(90,100,190,190);
         Avatar.setHorizontalAlignment(JLabel.CENTER);
 
-        JLabel Name = new JLabel(orgUser.getName());
-        Name.setBounds(0, 300, 360, 35);
+        JLabel Name = new JLabel("<html>" + orgUser.getName());
+        Name.setBounds(50, 300, 280, 70);
         Name.setFont(new Font(dv.fontName(),Font.BOLD, 24));
         Name.setHorizontalAlignment(JLabel.CENTER);
 

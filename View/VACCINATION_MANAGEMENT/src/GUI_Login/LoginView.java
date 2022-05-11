@@ -257,7 +257,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
 
             if (acc.getStatus() == 2)
             {
-                dv.popupOption(this, "Tài khoản đang được đăng nhập!", "Lỗi ", 2);
+                dv.popupOption(this, "Tài khoản đang được đăng nhập!", "Cảnh báo!", 1);
                 return;
             }
 
