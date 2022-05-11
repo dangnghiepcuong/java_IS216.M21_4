@@ -3,6 +3,7 @@ package GUI_Main;
 import Data_Processor.Account;
 import Data_Processor.DefaultValue;
 import Data_Processor.Person;
+import GUI_CertificateView.CertificateView;
 import GUI_Login.LoginView;
 import GUI_ManageVaccination.ManageVaccinationView;
 import GUI_SearchOrg.SearchOrgView;
@@ -45,6 +46,7 @@ public class CitizenMainView extends JFrame implements ActionListener
     private SearchOrgView searchOrgView;
     private ManageVaccinationView manageVaccinationView;
     private UpdateInjectionView updateInjectionView;
+    private CertificateView certificateView;
 
     private JButton LogoutButton;
     private JButton BackButton;
@@ -578,7 +580,18 @@ public class CitizenMainView extends JFrame implements ActionListener
 
             MainLayeredPane.removeAll();
 
-            MainLayeredPane.add(updateInjectionView, Integer.valueOf(1));
+            MainLayeredPane.add(updateInjectionView, Integer.valueOf(0));
+
+            MainLayeredPane.add(BackButton, Integer.valueOf(5));
+        }
+
+        if (e.getSource() == CertificateButton)
+        {
+            certificateView = new CertificateView(personalUser);
+
+            MainLayeredPane.removeAll();
+
+            MainLayeredPane.add(certificateView, Integer.valueOf(0));
 
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }

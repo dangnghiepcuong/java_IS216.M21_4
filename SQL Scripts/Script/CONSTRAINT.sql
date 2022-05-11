@@ -20,7 +20,7 @@
 
   ALTER TABLE "CERTIFICATE" ADD CONSTRAINT "PK_CERT" PRIMARY KEY ("PERSONALID") USING INDEX  ENABLE;
   ALTER TABLE "CERTIFICATE" ADD CONSTRAINT "CK_CERT_CERTTYPE" CHECK (CertType in (0,1,2)) ENABLE;
-  ALTER TABLE "CERTIFICATE" ADD CONSTRAINT "CK_CERT_DOSE" CHECK (Dose in (1,2,3,4)) ENABLE;    
+  ALTER TABLE "CERTIFICATE" ADD CONSTRAINT "CK_CERT_DOSE" CHECK (Dose in (0,1,2,3,4)) ENABLE;    
 --------------------------------------------------------
 --  Constraints for Table HEALTH
 --------------------------------------------------------

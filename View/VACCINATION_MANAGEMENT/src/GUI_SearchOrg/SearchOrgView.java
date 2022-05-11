@@ -168,7 +168,7 @@ public class SearchOrgView extends JPanel implements ActionListener
     private void initOrgPanel(int i)
     {
         //Org info
-        JLabel OrgName = new JLabel("Tên đơn vị: " + org[i].getName());
+        JLabel OrgName = new JLabel("Đơn vị: " + org[i].getName());
         OrgName.setFont(new Font(dv.fontName(), 3, 18));
         OrgName.setForeground(new Color(dv.FeatureButtonColor()));
         OrgName.setBounds(30,1,605,30);
@@ -425,8 +425,11 @@ public class SearchOrgView extends JPanel implements ActionListener
                     } catch (SQLException ex) {
                         dv.popupOption(null,  ex.getMessage(),"Lỗi " + ex.getErrorCode(), 2);
                         ex.printStackTrace();
+                        return;
                     }
                 }
+                else
+                    return;
 
                 dv.popupOption(null, "Đăng ký tiêm chủng thành công!", "Thông báo", 0);
             }

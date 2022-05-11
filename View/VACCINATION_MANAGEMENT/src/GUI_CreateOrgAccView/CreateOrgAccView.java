@@ -247,7 +247,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
             ProvinceChoice.add(dv.getProvinceList()[i]);
 
         JLabel QuantityLabel = new JLabel("Số lượng tài khoản cần tạo: ");
-        QuantityLabel.setPreferredSize(new Dimension(200, 30));
+        QuantityLabel.setPreferredSize(new Dimension(220, 30));
         QuantityLabel.setFont(new Font(dv.fontName(), 0 ,16));
         QuantityLabel.setForeground(new Color(dv.BlackTextColor()));
 
@@ -329,7 +329,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         c.gridy = 3;
         CreateOrgAccPanel.add(QuantityLabel,c);
 
-        c.insets = new Insets(0,0,10,0);
+        c.insets = new Insets(0,0,40,0);
         c.gridy = 4;
         CreateOrgAccPanel.add(QuantityTextField,c);
 

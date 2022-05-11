@@ -126,15 +126,15 @@ where HEALTH.PersonalID = '281332982'
 
 update ACCOUNT ACC
 set Status = 1
-where ACC.Username = '0332743065'; 
-
-update ACCOUNT ACC
-set Status = 1
 where ACC.Username = 'MOH'; 
 
 update ACCOUNT ACC
 set Status = 1
 where ACC.Username = '44001'; 
+
+update ACCOUNT ACC
+set Status = 1
+where ACC.Username = '0332743065'; 
 
 commit;
 
