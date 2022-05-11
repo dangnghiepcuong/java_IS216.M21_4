@@ -425,8 +425,11 @@ public class SearchOrgView extends JPanel implements ActionListener
                     } catch (SQLException ex) {
                         dv.popupOption(null,  ex.getMessage(),"Lỗi " + ex.getErrorCode(), 2);
                         ex.printStackTrace();
+                        return;
                     }
                 }
+                else
+                    return;
 
                 dv.popupOption(null, "Đăng ký tiêm chủng thành công!", "Thông báo", 0);
             }

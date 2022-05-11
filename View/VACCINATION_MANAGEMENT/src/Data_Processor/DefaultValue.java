@@ -368,13 +368,13 @@ public class DefaultValue
 
     public String getDoseTypeName(String DoseType)
     {
-        if (DoseType == "basic")
+        if (DoseType.equals("basic"))
             return "Cơ bản";
 
-        if (DoseType == "booster")
+        if (DoseType.equals("booster"))
             return "Tăng cường";
 
-        if (DoseType == "repeat")
+        if (DoseType.equals("repeat"))
             return "Nhắc lại";
 
         return "";
