@@ -19,7 +19,6 @@ public class SearchOrgView extends JPanel implements ActionListener
 {
     //Enities used to store the selected out data from database in this view
     private DefaultValue dv = new DefaultValue();
-    private Organization org[] = new Organization[100000];
     private Person personalUser = new Person();
 
     //Components used in this view
@@ -168,45 +167,45 @@ public class SearchOrgView extends JPanel implements ActionListener
                                 ADD IS TO A SCROLLPANE
                                 ADD THE SCROLLPANE TO THE LAYEREDPANE
 */
-    private void initOrgPanel(int i)
+    private void initOrgPanel(int i, Organization Org)
     {
         //Org info
-        JLabel OrgName = new JLabel("Đơn vị: " + org[i].getName());
+        JLabel OrgName = new JLabel("Đơn vị: " + Org.getName());
         OrgName.setFont(new Font(dv.fontName(), 3, 18));
         OrgName.setForeground(new Color(dv.FeatureButtonColor()));
         OrgName.setBounds(30,1,605,30);
         OrgName.setHorizontalAlignment(JLabel.LEFT);
         //OrgName.setBorder(dv.border());
 
-        JLabel OrgProvince = new JLabel("Tỉnh/TP: " + dv.getProvinceName(org[i].getProvince()));
+        JLabel OrgProvince = new JLabel("Tỉnh/TP: " + dv.getProvinceName(Org.getProvince()));
         OrgProvince.setFont(new Font(dv.fontName(), 0, 16));
         OrgProvince.setForeground(new Color(dv.BlackTextColor()));
         OrgProvince.setBounds(30,32,250,25);
         OrgProvince.setHorizontalAlignment(JLabel.LEFT);
         //OrgProvince.setBorder(dv.border());
 
-        JLabel OrgDistrict = new JLabel("Quận/Huyện: " + org[i].getDistrict());
+        JLabel OrgDistrict = new JLabel("Quận/Huyện: " + Org.getDistrict());
         OrgDistrict.setFont(new Font(dv.fontName(), 0, 16));
         OrgDistrict.setForeground(new Color(dv.BlackTextColor()));
         OrgDistrict.setBounds(30, 32+25+2,350,25);
         OrgDistrict.setHorizontalAlignment(JLabel.LEFT);
         //OrgDistrict.setBorder(dv.border());
 
-        JLabel OrgTown  = new JLabel("Xã/phường/thị trấn: " + org[i].getTown());
+        JLabel OrgTown  = new JLabel("Xã/phường/thị trấn: " + Org.getTown());
         OrgTown.setFont(new Font(dv.fontName(), 0, 16));
         OrgTown.setForeground(new Color(dv.BlackTextColor()));
         OrgTown.setBounds(30,(32+25+2)+25+2,350,25);
         OrgTown.setHorizontalAlignment(JLabel.LEFT);
         //OrgTown.setBorder(dv.border());
 
-        JLabel OrgStreet  = new JLabel("Đ/c: " + org[i].getStreet());
+        JLabel OrgStreet  = new JLabel("Đ/c: " + Org.getStreet());
         OrgStreet.setFont(new Font(dv.fontName(), 0, 16));
         OrgStreet.setForeground(new Color(dv.BlackTextColor()));
         OrgStreet.setBounds(285,32,350,25);
         OrgStreet.setHorizontalAlignment(JLabel.LEFT);
         //OrgStreet.setBorder(dv.border());
 
-        JLabel OrgAvaiScheds = new JLabel("Số lịch tiêm hiện có: " + org[i].getAvaiScheds());
+        JLabel OrgAvaiScheds = new JLabel("Số lịch tiêm hiện có: " + Org.getAvaiScheds());
         OrgAvaiScheds.setFont(new Font(dv.fontName(), 0, 16));
         OrgAvaiScheds.setForeground(new Color(dv.BlackTextColor()));
         OrgAvaiScheds.setBounds(385,(32+25)+2,250,25);
@@ -228,7 +227,6 @@ public class SearchOrgView extends JPanel implements ActionListener
         OrgPanel[i].add(OrgTown);
         OrgPanel[i].add(OrgStreet);
         OrgPanel[i].add(OrgAvaiScheds);
-        //OrgPanel[i].add(OrgDetailButton[i]);
 
         /*
             INITIALIZED THE SPECIFIED SCHEDULE LIST OF THE SELECTED ORGANIZATION
@@ -240,13 +238,13 @@ public class SearchOrgView extends JPanel implements ActionListener
             {
                 LayeredPaneArea.removeAll();
 
-                JLabel SchedListLabel = new JLabel("DANH SÁCH CÁC LỊCH TIÊM " + org[i].getName() + ":");
+                JLabel SchedListLabel = new JLabel("DANH SÁCH CÁC LỊCH TIÊM " + Org.getName() + ":");
                 SchedListLabel.setBounds(0,0,640,40);
                 SchedListLabel.setFont(new Font(dv.fontName(), 1, 20));
                 SchedListLabel.setForeground(new Color(dv.FeatureButtonColor()));
                 SchedListLabel.setHorizontalAlignment(JLabel.CENTER);
 
-                initScrollPaneSchedList(org[i]);
+                initScrollPaneSchedList(Org);
 
                 LayeredPaneArea.add(SchedListLabel, Integer.valueOf(3));
                 LayeredPaneArea.add(ScrollPaneSchedList, Integer.valueOf(3));
@@ -280,24 +278,70 @@ public class SearchOrgView extends JPanel implements ActionListener
         OrgPanel[i].addMouseListener(handleMouseAction);
     }
 
-    private void initOrgListPanel(int nORG)
+    private void initOrgListPanel()
     {
         OrgListPanel = new JPanel();
-        OrgListPanel.setPreferredSize(new Dimension(660, 120*nORG));
         OrgListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         OrgListPanel.setLayout((new FlowLayout()));
 
-        for (int i = 0; i < nORG; i++)
+        Organization Org;
+        int i = 0;
+        int nORG = 0;
+
+        //Select out the code of chosen province
+        String ProvinceCode = "";
+        ProvinceCode = dv.getProvinceCode(ProvinceChoice.getSelectedItem());
+
+        //Select out the specified ORGs
+        String query = "select ORG.ID, Name, Province, District, Town, Street, COUNT(SCHED.ID)"
+                + " from ORGANIZATION ORG left outer join SCHEDULE SCHED on ORG.ID = SCHED.OrgID";
+
+        if (ProvinceChoice.getSelectedIndex() != 1)
+            query = query + " where Province = '" + ProvinceCode + "'";
+        else
+            query = query + " where Province like '%'";
+
+        if (DistrictChoice.getSelectedIndex() > 0)
+            query = query + " and District = '" + DistrictChoice.getSelectedItem() + "'";
+
+        if (TownChoice.getSelectedIndex() > 0)
+            query = query + " and ORG.Town = '" + TownChoice.getSelectedItem() + "'";
+
+        query += " and (OnDate > '" + dv.oracleSysdate() + "' or OnDate is null)";
+        query += " group by ORG.ID, Name, Province, District, Town, Street";
+        query += " order by ID, Province, District, Town";
+
+        System.out.println(query);
+
+        try
         {
-            initOrgPanel(i);
-            OrgListPanel.add(OrgPanel[i]);
+            Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+            PreparedStatement st = connection.prepareStatement(query);
+            ResultSet rs = st.executeQuery(query);
+            ResultSetMetaData rsmd = rs.getMetaData();
+            while (rs.next())
+            {
+                Org = new Organization();
+                Org.setID(rs.getString("ID"));
+                Org.setName(rs.getString("Name"));
+                Org.setProvince(rs.getString("Province"));
+                Org.setDistrict(rs.getString("District"));
+                Org.setTown(rs.getString("Town"));
+                Org.setStreet(rs.getString("Street"));
+                Org.setAvaiScheds(rs.getInt("COUNT(SCHED.ID)"));
+                initOrgPanel(i, Org);
+                OrgListPanel.add(OrgPanel[i]);
+                i++;
+            }
+            nORG = i;
+            OrgListPanel.setPreferredSize(new Dimension(660, 120*nORG + nORG*5));
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
    }
 
-    private void initScrollPaneOrgList(int nORG)
+    private void initScrollPaneOrgList()
     {
-        initOrgListPanel(nORG);
-
         ScrollPaneOrgList = new JScrollPane(OrgListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneOrgList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneOrgList.setBounds(0, 40, 680, 590); //320-40
@@ -606,94 +650,33 @@ public class SearchOrgView extends JPanel implements ActionListener
         /*
             HANDLE ON SEARCH ORG BUTTON CLICKING
         */
-        if (e.getSource() == SearchOrgButton)
-        {
+        if (e.getSource() == SearchOrgButton) {
             /*
                 SELECT OUT THE INFO OF THE ORGANIZATION'S SPECIFIED SCHEDULES
             */
-            String query = "";
-            //Select out the code of chosen province
-            String ProvinceCode = "";
+            //clear the Layered Area
+            LayeredPaneArea.removeAll();
 
-            ProvinceCode = dv.getProvinceCode(ProvinceChoice.getSelectedItem());
+            //init OrgListLabel
+            JLabel OrgListLabel = new JLabel("DANH SÁCH CÁC ĐƠN VỊ TIÊM CHỦNG ("
+                    + ProvinceChoice.getSelectedItem() + "-" + DistrictChoice.getSelectedItem() + "-" + TownChoice.getSelectedItem() + "):");
+            OrgListLabel.setBounds(0, 0, 640, 40);
+            OrgListLabel.setFont(new Font(dv.fontName(), 1, 20));
+            OrgListLabel.setForeground(new Color(dv.FeatureButtonColor()));
+            OrgListLabel.setHorizontalAlignment(JLabel.CENTER);
 
-            //Select out the specified ORGs
-            query = "select ORG.ID, Name, Province, District, Town, Street, COUNT(SCHED.ID)"
-                    + " from ORGANIZATION ORG left outer join SCHEDULE SCHED on ORG.ID = SCHED.OrgID";
+            //init Scroll Pane of Orgs
+            initOrgListPanel();
+            initScrollPaneOrgList();
 
-            if (ProvinceChoice.getSelectedIndex() != 1)
-                query = query + " where ORG.Province = '" + ProvinceCode + "'";
-            else
-                query = query + " where ORG.Province like '%'";
+            //add Label
+            LayeredPaneArea.add(OrgListLabel, Integer.valueOf(0));
 
-            if (DistrictChoice.getSelectedIndex() > 0)
-                query = query + " and ORG.District = '" + DistrictChoice.getSelectedItem() + "'";
-            /*else
-                query = query + " and ORG.District like '%'";*/
-
-            if (TownChoice.getSelectedIndex() > 0)
-                query = query + " and ORG.Town = '" + TownChoice.getSelectedItem() + "'";
-            /*else
-                query = query + " and ORG.Town like '%'";*/
-
-            //query += " and OnDate >= '" + dv.sysdate() + "'";
-            query += " group by ORG.ID, Name, Province, District, Town, Street";
-            query += " order by Province, District, Town";
-
-            System.out.println(query);
-
-            try
-            {
-                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-
-                PreparedStatement st = connection.prepareStatement(query);
-
-                ResultSet rs = st.executeQuery(query);
-
-                int i = 0;
-                n = 0;
-
-                while (rs.next())
-                {
-                    org[i] = new Organization();
-                    org[i].setID(rs.getString(1));
-                    org[i].setName(rs.getString("Name"));
-                    org[i].setProvince(rs.getString("Province"));
-                    org[i].setDistrict(rs.getString("District"));
-                    org[i].setTown(rs.getString("Town"));
-                    org[i].setStreet(rs.getString("Street"));
-                    org[i].setAvaiScheds(rs.getInt("COUNT(SCHED.ID)"));
-                    i++;
-                }
-                n = i;
-
-                //clear the Layered Area
-                LayeredPaneArea.removeAll();
-
-                //init OrgListLabel
-                JLabel OrgListLabel = new JLabel("DANH SÁCH CÁC ĐƠN VỊ TIÊM CHỦNG ("
-                        + ProvinceChoice.getSelectedItem() + "-" + DistrictChoice.getSelectedItem() + "-" + TownChoice.getSelectedItem()+"):");
-                OrgListLabel.setBounds(0,0,640,40);
-                OrgListLabel.setFont(new Font(dv.fontName(), 1, 20));
-                OrgListLabel.setForeground(new Color(dv.FeatureButtonColor()));
-                OrgListLabel.setHorizontalAlignment(JLabel.CENTER);
-
-                //init Scroll Pane of Orgs
-                initScrollPaneOrgList(n);
-
-                //add Label
-                LayeredPaneArea.add(OrgListLabel, Integer.valueOf(0));
-
-                //add Scroll Pane of Orgs to TOP of Layered Area
-                LayeredPaneArea.add(ScrollPaneOrgList, Integer.valueOf(0));
-                //Delete scroll pane of sched
-                SchedListPanel = null;
-                ScrollPaneSchedList = null;
-            }
-            catch (SQLException exception)
-            {
-                exception.printStackTrace();
-            }
+            //add Scroll Pane of Orgs to TOP of Layered Area
+            LayeredPaneArea.add(ScrollPaneOrgList, Integer.valueOf(0));
+            //Delete scroll pane of sched
+            SchedListPanel = null;
+            ScrollPaneSchedList = null;
         }
 
 

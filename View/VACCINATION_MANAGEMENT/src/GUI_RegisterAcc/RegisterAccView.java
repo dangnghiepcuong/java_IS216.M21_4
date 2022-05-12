@@ -602,27 +602,26 @@ public class RegisterAccView extends JFrame implements ActionListener
             String InputStreet = StreetTextField.getText();
             String InputEmail = EmailTextField.getText();
 
-            if ( dv.checkStringInputValue(InputUsername, "Cảnh báo!", "Nhập tên tài khoản!") != -2 )
+            if (dv.checkStringInputValue(InputUsername, "Cảnh báo!", "Nhập tên tài khoản!") != -2)
                 return;
-            if ( dv.checkStringInputValue(InputPassword, "Cảnh báo!","Nhập mật khẩu!") != -2 )
+            if (dv.checkStringInputValue(InputPassword, "Cảnh báo!", "Nhập mật khẩu!") != -2)
                 return;
-            if ( dv.checkStringInputValue(InputRepeatPassword, "Cảnh báo!","Nhập lại mật khẩu!") != -2 )
+            if (dv.checkStringInputValue(InputRepeatPassword, "Cảnh báo!", "Nhập lại mật khẩu!") != -2)
                 return;
-            if ( dv.checkStringInputValue(InputID, "Cảnh báo!","Nhập mã định danh cá nhân!") != -2 )
+            if (dv.checkStringInputValue(InputID, "Cảnh báo!", "Nhập mã định danh cá nhân!") != -2)
                 return;
-            if ( dv.checkStringInputValue(InputFirstName, "Cảnh báo!","Nhập tên công dân!") != -2 )
+            if (dv.checkStringInputValue(InputFirstName, "Cảnh báo!", "Nhập tên công dân!") != -2)
                 return;
-            if ( dv.checkStringInputValue(InputBirthday, "Cảnh báo!","Nhập ngày sinh!") != -2 )
+            if (dv.checkStringInputValue(InputBirthday, "Cảnh báo!", "Nhập ngày sinh!") != -2)
                 return;
-            if ( dv.checkStringInputValue(InputProvince, "Cảnh báo!", "Nhập tỉnh cư trú!") != -2 )
+            if (dv.checkStringInputValue(InputProvince, "Cảnh báo!", "Nhập tỉnh cư trú!") != -2)
                 return;
             else
                 InputProvince = dv.getProvinceCode(InputProvince);
             if (InputGender == 0)
                 InputGender = 3;
 
-            if (InputPassword.equals(InputRepeatPassword) == false)
-            {
+            if (InputPassword.equals(InputRepeatPassword) == false) {
                 System.out.println("Mật khẩu không trùng khớp!");
                 return;
             }
@@ -665,8 +664,7 @@ public class RegisterAccView extends JFrame implements ActionListener
 
                 cst.execute();
 
-            }
-            catch (SQLException ex) {
+            } catch (SQLException ex) {
                 dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
 
                 throw new RuntimeException(ex);
