@@ -236,9 +236,10 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
                 acc.setUsername(rs.getString("Username"));
                 acc.setPassword(rs.getString("Password"));
                 acc.setRole(rs.getInt("Role"));
+                acc.setStatus(rs.getInt("Status"));
 
             } catch (SQLException ex) {
-                dv.popupOption(this, "Tài khoản không tồn tại!", String.valueOf(ex.getErrorCode()), 2);
+                dv.popupOption(this, "Tài khoản không tồn tại!", "Lỗi " + ex.getErrorCode(), 2);
                 throw new RuntimeException(ex);
             }
 
@@ -247,7 +248,35 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
                 dv.popupOption(this, "Mật khẩu không đúng!", "Cảnh báo!", 1);
                 return;
             }
+
+            if (acc.getStatus() == 0)
+            {
+                dv.popupOption(this, "Tài khoản đã bị khóa!", "Cảnh báo!", 1);
+                return;
+            }
+
+            if (acc.getStatus() == 2)
+            {
+                dv.popupOption(this, "Tài khoản đang được đăng nhập!", "Cảnh báo!", 1);
+                return;
+            }
+
             else
+            {
+                query = "update ACCOUNT ACC set Status = 2 where ACC.Username = '" + acc.getUsername() + "'";
+
+                try {
+                    Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                    PreparedStatement st = connection.prepareStatement(query);
+
+                    //st.executeQuery(query);
+                } catch (SQLException ex) {
+                    dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(),2);
+                    ex.printStackTrace();
+                }
+
+
                 switch (acc.getRole()) {
                     case 0:
                         this.dispose();
@@ -264,6 +293,8 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
                     default:
                         break;
                 }
+            }
+
         }
     }
 

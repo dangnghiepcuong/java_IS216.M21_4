@@ -5,6 +5,7 @@ import Data_Processor.DefaultValue;
 import Data_Processor.Organization;
 import GUI_Login.LoginView;
 import GUI_ManageSchedule.ManageScheduleView;
+import GUI_OrgInformation.OrgInformationView;
 import GUI_SearchOrg.SearchOrgView;
 
 import javax.swing.*;
@@ -37,11 +38,13 @@ public class ORGMainView extends JFrame implements ActionListener
     private Organization orgUser = new Organization();
 
     private LoginView loginView;
+    private OrgInformationView orgInformationView;
     private SearchOrgView searchOrgView;
     private ManageScheduleView manageScheduleView;
 
     private JButton LogoutButton;
     private JButton BackButton;
+    private JButton BackInfoButton;
 
     private void initBackButton()
     {
@@ -54,6 +57,19 @@ public class ORGMainView extends JFrame implements ActionListener
         BackButton.setContentAreaFilled(false);
 
         BackButton.addActionListener(this);
+    }
+
+    private void initBackInfoButton()
+    {
+        BackInfoButton = new JButton();
+        ImageIcon BackInfoButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Back Button_2.png"));
+        BackInfoButton.setIcon(BackInfoButtonIcon);
+
+        BackInfoButton.setBounds(10, 10, BackInfoButtonIcon.getIconWidth(), BackInfoButtonIcon.getIconHeight());
+        BackInfoButton.setBorder(null);
+        BackInfoButton.setContentAreaFilled(false);
+
+        BackInfoButton.addActionListener(this);
     }
 
     private void initInfoLayeredPane()
@@ -79,8 +95,8 @@ public class ORGMainView extends JFrame implements ActionListener
         Avatar.setBounds(90,100,190,190);
         Avatar.setHorizontalAlignment(JLabel.CENTER);
 
-        JLabel Name = new JLabel(orgUser.getName());
-        Name.setBounds(0, 300, 360, 35);
+        JLabel Name = new JLabel("<html>" + orgUser.getName());
+        Name.setBounds(50, 300, 280, 70);
         Name.setFont(new Font(dv.fontName(),Font.BOLD, 24));
         Name.setHorizontalAlignment(JLabel.CENTER);
 
@@ -287,7 +303,7 @@ public class ORGMainView extends JFrame implements ActionListener
         MainPanel = new JPanel();
         MainPanel.setBounds(0,0,dv.FrameWidth(),dv.FrameHeight());
         MainPanel.setLayout(null);
-        MainPanel.setOpaque(true);
+        MainPanel.setBackground(new Color(dv.ViewBackgroundColor()));
     }
 
     private void initMainLayeredPane()
@@ -295,7 +311,7 @@ public class ORGMainView extends JFrame implements ActionListener
         MainLayeredPane = new JLayeredPane();
         MainLayeredPane.setBounds(0, 0, dv.FrameWidth(), dv.FrameHeight());
         MainLayeredPane.setLayout(null);
-        MainLayeredPane.setOpaque(true);
+        MainLayeredPane.setBackground(new Color(dv.ViewBackgroundColor()));
     }
 
     public ORGMainView(String Username)
@@ -360,6 +376,25 @@ public class ORGMainView extends JFrame implements ActionListener
 
         this.add(MainLayeredPane);
 
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent)
+            {
+                String query = "update ACCOUNT ACC set Status = 1 where ACC.Username = '" + orgUser.getID() + "'";
+
+                try {
+                    Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                    PreparedStatement st = connection.prepareStatement(query);
+
+                    st.executeUpdate(query);
+                } catch (SQLException ex) {
+                    dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(),2);
+                    ex.printStackTrace();
+                }
+            }
+        });
+
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
 
     }
@@ -378,10 +413,46 @@ public class ORGMainView extends JFrame implements ActionListener
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
 
+        if(e.getSource() == BackInfoButton)
+        {
+            orgUser.setID(orgInformationView.getOrgUser().getID());
+            orgInformationView = null;
+            MainLayeredPane.removeAll();
+            ORGMainView orgMainView = new ORGMainView(orgUser.getID());
+            this.dispose();
+        }
+
         if (e.getSource() == LogoutButton)
         {
+            String query = "update ACCOUNT ACC set Status = 1 where ACC.Username = '" + orgUser.getID() + "'";
+
+            try {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                PreparedStatement st = connection.prepareStatement(query);
+
+                st.executeUpdate(query);
+            } catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(),"Lỗi " + ex.getErrorCode(),2);
+                ex.printStackTrace();
+            }
+
             loginView = new LoginView();
             this.dispose();
+        }
+
+        if (e.getSource() == InfoSettingButton)
+        {
+            orgInformationView = new OrgInformationView(orgUser);
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(orgInformationView, Integer.valueOf(0));
+
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+
+            //init BackButton
+            initBackInfoButton();
+            MainLayeredPane.add(BackInfoButton, Integer.valueOf(5));
+
         }
 
         /*if (e.getSource() == SearchButton)

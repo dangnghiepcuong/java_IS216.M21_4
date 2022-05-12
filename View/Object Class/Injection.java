@@ -9,29 +9,30 @@ package doancuoiky;
  * @author DELL
  */
 public class Injection {
-    private String PersonalID;
+    private Person person = new Person();
     private int InjNo;
-    private String SchedID;
+    private Schedule Sched = new Schedule();
+    private Organization Org = new Organization();
     private String DoseType;
     private String Note;
 
     public Injection() {
     }
 
-    public Injection(String PersonalID, int InjNo, String SchedID, String DoseType, String Note) {
-        this.PersonalID = PersonalID;
+    public Injection(Person person, int InjNo, String SchedID, String DoseType, String Note) {
+        this.person = person;
         this.InjNo = InjNo;
-        this.SchedID = SchedID;
+        this.Sched = Sched;
         this.DoseType = DoseType;
         this.Note = Note;
     }
 
-    public String getPersonalID() {
-        return PersonalID;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setPersonalID(String PersonalID) {
-        this.PersonalID = PersonalID;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     public int getInjNo() {
@@ -42,12 +43,12 @@ public class Injection {
         this.InjNo = InjNo;
     }
 
-    public String getSchedID() {
-        return SchedID;
+    public Schedule getSched() {
+        return Sched;
     }
 
-    public void setSchedID(String SchedID) {
-        this.SchedID = SchedID;
+    public void setSched(Schedule Sched) {
+        this.Sched = Sched;
     }
 
     public String getDoseType() {

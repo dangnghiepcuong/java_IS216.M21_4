@@ -1,6 +1,8 @@
 package GUI_SearchOrg;
 
 import Data_Processor.*;
+import oracle.sql.NUMBER;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,9 +17,12 @@ import java.sql.*;
  */
 public class SearchOrgView extends JPanel implements ActionListener
 {
+    //Enities used to store the selected out data from database in this view
     private DefaultValue dv = new DefaultValue();
     private Organization org[] = new Organization[100000];
+    private Person personalUser = new Person();
 
+    //Components used in this view
     private JPanel OrgFilterPanel;
     private JLabel ProvinceLabel;
     private JLabel DistrictLabel;
@@ -31,14 +36,11 @@ public class SearchOrgView extends JPanel implements ActionListener
     private JPanel OrgListPanel;
     private JPanel OrgPanel[] = new JPanel[100000];
 
-    private JFrame OrgDetailView;
     private JScrollPane ScrollPaneSchedList;
     private JPanel SchedListPanel;
     private JPanel SchedPanel[] = new JPanel[50];
 
     private JLayeredPane LayeredPaneArea;
-
-    private Person personalUser = new Person();
 
 
 /*
@@ -63,10 +65,11 @@ public class SearchOrgView extends JPanel implements ActionListener
         ProvinceChoice.setForeground(new Color(dv.BlackTextColor()));
         ProvinceChoice.setBackground(Color.WHITE);
 
+        ProvinceChoice.add(dv.getProvinceName(personalUser.getProvince()));
         ProvinceChoice.add("");
-        ProvinceChoice.add("Bình Dương");
-        ProvinceChoice.add("Hồ Chí Minh");
-        ProvinceChoice.add("Hà Nội");
+        for (int i = 1; i <= 64; i++)
+            if (i != 20 && dv.getProvinceList()[i] != dv.getProvinceName(personalUser.getProvince()))
+                ProvinceChoice.add(dv.getProvinceList()[i]);
     }
 
     private void initDistrictLabel()
@@ -168,7 +171,7 @@ public class SearchOrgView extends JPanel implements ActionListener
     private void initOrgPanel(int i)
     {
         //Org info
-        JLabel OrgName = new JLabel("Tên đơn vị: " + org[i].getName());
+        JLabel OrgName = new JLabel("Đơn vị: " + org[i].getName());
         OrgName.setFont(new Font(dv.fontName(), 3, 18));
         OrgName.setForeground(new Color(dv.FeatureButtonColor()));
         OrgName.setBounds(30,1,605,30);
@@ -227,6 +230,9 @@ public class SearchOrgView extends JPanel implements ActionListener
         OrgPanel[i].add(OrgAvaiScheds);
         //OrgPanel[i].add(OrgDetailButton[i]);
 
+        /*
+            INITIALIZED THE SPECIFIED SCHEDULE LIST OF THE SELECTED ORGANIZATION
+        */
         MouseListener handleMouseAction = new MouseListener()
         {
             @Override
@@ -271,16 +277,14 @@ public class SearchOrgView extends JPanel implements ActionListener
             }
         };
 
-        //OrgDetailButton[i].addMouseListener(this);
         OrgPanel[i].addMouseListener(handleMouseAction);
     }
 
     private void initOrgListPanel(int nORG)
     {
         OrgListPanel = new JPanel();
-
         OrgListPanel.setPreferredSize(new Dimension(660, 120*nORG));
-
+        OrgListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         OrgListPanel.setLayout((new FlowLayout()));
 
         for (int i = 0; i < nORG; i++)
@@ -294,10 +298,8 @@ public class SearchOrgView extends JPanel implements ActionListener
     {
         initOrgListPanel(nORG);
 
-        //create ScrollPaneOrgList Panel
         ScrollPaneOrgList = new JScrollPane(OrgListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        //set Bounds
+        ScrollPaneOrgList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneOrgList.setBounds(0, 40, 680, 590); //320-40
     }
 
@@ -351,7 +353,7 @@ public class SearchOrgView extends JPanel implements ActionListener
         NoonTime.setBounds(250,(32+25)+2,150,25);
         NoonTime.setHorizontalAlignment(JLabel.LEFT);
 
-        JLabel NightTime = new JLabel("Buổi trưa: " + sched.getNightRegistered() + "/" + sched.getLimitNight());
+        JLabel NightTime = new JLabel("Buổi tối: " + sched.getNightRegistered() + "/" + sched.getLimitNight());
         NightTime.setFont(new Font(dv.fontName(), 0, 16));
         NightTime.setForeground(new Color(dv.BlackTextColor()));
         NightTime.setBounds(250,(32+25+2)+25+2,150,25);
@@ -366,6 +368,10 @@ public class SearchOrgView extends JPanel implements ActionListener
         TimeChoice.add("Trưa");
         TimeChoice.add("Tối");
 
+        /*
+            HANDLE REGISTER A VACCINATION SCHEDULE ACTION
+        */
+
         ActionListener handleSchedRegister = new ActionListener()
         {
             @Override
@@ -375,27 +381,66 @@ public class SearchOrgView extends JPanel implements ActionListener
 
                 if (answer == JOptionPane.YES_OPTION)
                 {
-                    String plsql = "{call REG_INSERT_RECORD(?,?,?)}";
+                    String plsql = "{call REG_BEFORE_INSERT_RECORD(?,?,?)}";
 
+                    String plsql2 = "{call REG_INSERT_RECORD(?,?,?,?)}";
 
                     Connection connection = null;
                     try {
                         connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
+                        /*
+                            CALL PROC TO GET THE RIGHT DOSETYPE OR ASK THE USER IF THIS IS THE 3RD INJECTION
+                        */
+                        int BoosterAvai = 0;
+                        String par_DoseType = "";
+
+                        //CALL PROC
                         CallableStatement cst = connection.prepareCall(plsql);
                         cst.setString("par_PersonalID", personalUser.getID());
-                        cst.setString("par_SchedID", sched.getID());
-                        cst.setInt("par_Time", TimeChoice.getSelectedIndex());
-
-                        System.out.println(personalUser.getID() + " " + sched.getID());
+                        cst.registerOutParameter("par_BoosterAvai", Types.NUMERIC);
+                        cst.registerOutParameter("par_DoseType", Types.VARCHAR);
 
                         cst.execute();
+
+                        BoosterAvai = cst.getInt("par_BoosterAvai");
+                        par_DoseType = cst.getString("par_DoseType");
+
+                        //ASK USER IF THIS IS THE 3RD INJECTION
+                        if (BoosterAvai == 1)
+                        {
+                            answer = dv.popupConfirmOption(null, "Bạn đang đăng ký mũi tiêm thứ 3, " +
+                                            "đây là có phải là mũi bổ sung không? (Chọn 'Không' nếu đây là mũi nhắc lại)",
+                                    "Chọn loại mũi tiêm đăng ký");
+
+                            if (answer  == 0)
+                                par_DoseType = "booster";
+                            else if (answer == 1)
+                                par_DoseType = "repeat";
+                            else
+                                return;
+                        }
+
+                        /*
+                            REGISTER ACTION
+                        */
+                        CallableStatement cst2 = connection.prepareCall(plsql2);
+                        cst2.setString("par_PersonalID", personalUser.getID());
+                        cst2.setString("par_SchedID", sched.getID());
+                        cst2.setInt("par_Time", TimeChoice.getSelectedIndex());
+                        cst2.setString("par_DoseType", par_DoseType);
+
+                        cst2.execute();
                     } catch (SQLException ex) {
-                        dv.popupOption(null,  ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+                        dv.popupOption(null,  ex.getMessage(),"Lỗi " + ex.getErrorCode(), 2);
                         ex.printStackTrace();
+                        return;
                     }
                 }
+                else
+                    return;
 
+                dv.popupOption(null, "Đăng ký tiêm chủng thành công!", "Thông báo", 0);
             }
         };
 
@@ -429,7 +474,9 @@ public class SearchOrgView extends JPanel implements ActionListener
 
     private void initSchedListPanel(Organization SelectedOrg)
     {
-
+        /*
+                SELECT OUT THE INFO OF THE ORGANIZATION'S SPECIFIED SCHEDULES
+        */
         Schedule sched[] = new Schedule[50];
         String query = "";
 
@@ -438,8 +485,9 @@ public class SearchOrgView extends JPanel implements ActionListener
 
         query = "select *" +
                 " from SCHEDULE SCHED" +
-                " where SCHED.OrgID = '" + SelectedOrg.getID() + "'" +
-                " and SCHED.OnDate >= TO_DATE('" + dv.sysdate() + "')";
+                " where OrgID = '" + SelectedOrg.getID() + "'" +
+                " and OnDate >= TO_DATE('" + dv.oracleSysdate() + "')" +
+                " order by OnDate";
 
         System.out.println(query);
 
@@ -474,9 +522,8 @@ public class SearchOrgView extends JPanel implements ActionListener
         nSched = i;
 
         SchedListPanel = new JPanel();
-
         SchedListPanel.setPreferredSize(new Dimension( 660, 120*nSched + nSched*10));
-
+        SchedListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         SchedListPanel.setLayout(new FlowLayout());
 
         for (i = 0; i<nSched; i++)
@@ -491,22 +538,18 @@ public class SearchOrgView extends JPanel implements ActionListener
     {
         initSchedListPanel(SelectedOrg);
 
-        //create ScrollPaneOrgList Panel
         ScrollPaneSchedList = new JScrollPane(SchedListPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        ScrollPaneSchedList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneSchedList.setBounds(0, 40, 680, 590);
-        /*ScrollPaneSchedList.add(SchedListPanel);
-        ScrollPaneSchedList.repaint(0, 40, 680, 590);*/
     }
 
     private void initLayeredPaneArea()
     {
         LayeredPaneArea = new JLayeredPane();
-
         LayeredPaneArea.setLayout(null);
-
         LayeredPaneArea.setBounds(320, 40, 680, 630);
-
+        LayeredPaneArea.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         LayeredPaneArea.repaint(320, 40, 680, 630);
     }
 
@@ -560,11 +603,15 @@ public class SearchOrgView extends JPanel implements ActionListener
     {
         int n = 0;
 
-        //Pressed SearchOrgButton
+        /*
+            HANDLE ON SEARCH ORG BUTTON CLICKING
+        */
         if (e.getSource() == SearchOrgButton)
         {
+            /*
+                SELECT OUT THE INFO OF THE ORGANIZATION'S SPECIFIED SCHEDULES
+            */
             String query = "";
-
             //Select out the code of chosen province
             String ProvinceCode = "";
 
@@ -572,22 +619,22 @@ public class SearchOrgView extends JPanel implements ActionListener
 
             //Select out the specified ORGs
             query = "select ORG.ID, Name, Province, District, Town, Street, COUNT(SCHED.ID)"
-                    + " from ORGANIZATION ORG left join SCHEDULE SCHED on ORG.ID = SCHED.OrgID";
+                    + " from ORGANIZATION ORG left outer join SCHEDULE SCHED on ORG.ID = SCHED.OrgID";
 
-            if (ProvinceChoice.getSelectedIndex() > 0)
+            if (ProvinceChoice.getSelectedIndex() != 1)
                 query = query + " where ORG.Province = '" + ProvinceCode + "'";
             else
                 query = query + " where ORG.Province like '%'";
 
             if (DistrictChoice.getSelectedIndex() > 0)
                 query = query + " and ORG.District = '" + DistrictChoice.getSelectedItem() + "'";
-            else
-                query = query + " and ORG.District like '%'";
+            /*else
+                query = query + " and ORG.District like '%'";*/
 
             if (TownChoice.getSelectedIndex() > 0)
                 query = query + " and ORG.Town = '" + TownChoice.getSelectedItem() + "'";
-            else
-                query = query + " and ORG.Town like '%'";
+            /*else
+                query = query + " and ORG.Town like '%'";*/
 
             //query += " and OnDate >= '" + dv.sysdate() + "'";
             query += " group by ORG.ID, Name, Province, District, Town, Street";
@@ -598,7 +645,6 @@ public class SearchOrgView extends JPanel implements ActionListener
             try
             {
                 Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-                //Statement st = connection.createStatement();
 
                 PreparedStatement st = connection.prepareStatement(query);
 

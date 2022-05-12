@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.Dialog.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class DefaultValue
 {
@@ -107,7 +109,6 @@ public class DefaultValue
 
         String responses[] = {"Có", "Không"};
 
-
         ImageIcon icon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Question Icon.png"));
 
         return OptionFrame.showOptionDialog(frame, Message, title,
@@ -142,50 +143,10 @@ public class DefaultValue
         return OptionFrame;
     }
 
-   /* public JDialog popupDialog (JFrame frame, int ErrorCode, int w, int h, String ErrorMessage)
-    {
-        JDialog Dialog = new JDialog(frame, String.valueOf(ErrorCode));
-        Dialog.setAlwaysOnTop(true);
-        Dialog.setModal(true);
-        Dialog.setModalityType (ModalityType.APPLICATION_MODAL);
-        Dialog.setSize(w,h);
-        Dialog.setBounds((1600-w)/2,(900-h)/2,w,h);
-
-        Dialog.setResizable(false);
-        Dialog.setVisible(true);
-        Dialog.setBackground(new Color(this.ViewBackgroundColor()));
-        Dialog.setUndecorated(true);
-
-        JLabel DialogLabel = new JLabel(ErrorMessage);
-        DialogLabel.setFont(new Font(this.fontName(), 0, 14));
-        DialogLabel.setForeground(Color.BLACK);
-        DialogLabel.setBounds(0,0,w,h-50);
-        DialogLabel.setHorizontalAlignment(JLabel.CENTER);
-
-        JButton DialogButton = new JButton();
-        DialogButton.setBounds(
-                (Dialog.getWidth()-60)/2, Dialog.getHeight()-(50+10), 50, 35);
-        DialogButton.setBorder(null);
-        DialogButton.setContentAreaFilled(false);
-        DialogButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/OK Button.png")));
-
-        Box b = Box.createHorizontalBox();
-        b.add(Box.createHorizontalGlue());
-        b.add(DialogLabel, BorderLayout.CENTER);
-        b.add(Box.createHorizontalGlue());
-
-//        Dialog.setLayout(null);
-        Dialog.add(b);
-        Dialog.add(DialogButton);
-        Dialog.pack();
-        Dialog.setLocationRelativeTo(null);
-
-        return Dialog;
-    }*/
 
     public String fontName()
     {
-        return "SVN-Arial";
+        return "Open Sans";
     }
 
     public int LabelFontSize()
@@ -246,8 +207,10 @@ public class DefaultValue
 
     public int ViewBackgroundColor()
     {
-        return 0xF2F2F2;
+        return 0xFFFAFA;
     }
+
+    public int SpecifiedAreaBackgroundColor() {return 0xF3F6FB;}
 
     public int FeatureButtonColor()
     {
@@ -264,53 +227,108 @@ public class DefaultValue
         return 0x333333;
     }
 
-    private String province[] = new String[65];
+    public int GreenPastel() { return 0x77DD77; };
+
+    public int YellowPastel() { return 0xFDFD96; };
+
+    public int RedPastel() { return 0xFF6961; };
+
+
+
+    public String[] getProvinceList()
+    {
+        String provinceList[] = new String[65];
+
+        for (int i = 1; i <= 64; i++)
+            provinceList[i] = new String();
+
+        provinceList[1] = "Hà Nội";
+        provinceList[2] = "Hồ Chí Minh";
+        provinceList[3] = "Hải Phòng";
+        provinceList[4] = "Đà Nẵng";
+        provinceList[5] = "Hà Giang";
+        provinceList[6] = "Cao Bằng";
+        provinceList[7] = "Lai Châu";
+        provinceList[8] = "Lào Cai";
+        provinceList[9] = "Tuyên Quang";
+        provinceList[10] = "Lạng Sơn";
+        provinceList[11] = "Bắc Kạn";
+        provinceList[12] = "Thái Nguyên";
+        provinceList[13] = "Yên Bái";
+        provinceList[14] = "Sơn La";
+        provinceList[15] = "Phú Thọ";
+        provinceList[16] = "Vĩnh Phúc";
+        provinceList[17] = "Quảng Ninh";
+        provinceList[18] = "Bắc Giang";
+        provinceList[19] = "Bắc Ninh";
+        provinceList[20] = "";
+        provinceList[21] = "Hải Dương";
+        provinceList[22] = "Hưng Yên";
+        provinceList[23] = "Hòa Bình";
+        provinceList[24] = "Hà Nam";
+        provinceList[25] = "Nam Định";
+        provinceList[26] = "Thái Bình";
+        provinceList[27] = "Ninh Bình";
+        provinceList[28] = "Thanh Hóa";
+        provinceList[29] = "Nghệ An";
+        provinceList[30] = "Hà Tĩnh";
+        provinceList[31] = "Quảng Bình";
+        provinceList[32] = "Quảng Trị";
+        provinceList[33] = "Thừa Thiên - Huế";
+        provinceList[34] = "Quảng Nam";
+        provinceList[35] = "Quảng Ngãi";
+        provinceList[36] = "Kon Tum";
+        provinceList[37] = "Bình Định";
+        provinceList[38] = "Giai Lai";
+        provinceList[39] = "Phú Yên";
+        provinceList[40] = "Đắk Lắk";
+        provinceList[41] = "Khánh Hòa";
+        provinceList[42] = "Lâm Đồng";
+        provinceList[43] = "Bình Phước";
+        provinceList[44] = "Bình Dương";
+        provinceList[45] = "Ninh Thuận";
+        provinceList[46] = "Tây Ninh";
+        provinceList[47] = "Bình Thuận";
+        provinceList[48] = "Đồng Nai";
+        provinceList[49] = "Long An";
+        provinceList[50] = "Đồng Tháp";
+        provinceList[51] = "An Giang";
+        provinceList[52] = "Bà Rịa - Vũng Tàu";
+        provinceList[53] = "Tiền Giang";
+        provinceList[54] = "Kiên Giang";
+        provinceList[55] = "Cần Thơ";
+        provinceList[56] = "Bến Tre";
+        provinceList[57] = "Vĩnh Long";
+        provinceList[58] = "Trà Vinh";
+        provinceList[59] = "Sóc Trăng";
+        provinceList[60] = "Bạc Liêu";
+        provinceList[61] = "Cà Mau";
+        provinceList[62] = "Điện Biên";
+        provinceList[63] = "Đắk Nông";
+        provinceList[64] = "Hậu Giang";
+
+        return provinceList;
+    }
 
     public DefaultValue()
     {
-        for (int i=1; i<=64; i++)
-            province[i] = new String();
 
-        province[1] = "Hà Nội";
-        province[2] = "Hồ Chí Minh";
-        province[3] = "Hải Phòng";
-        province[4] = "Đà Nẵng";
-        province[5] = "Hà Giang";
-        province[25] = "Nam Định";
-        province[39] = "Phú Yên";
-        province[43] = "Bình Phước";
-        province[44] = "Bình Dương";
-        province[45] = "Ninh Thuận";
-        province[46] = "Tây Ninh";
-        province[47] = "Bình Thuận";
-        province[48] = "Đồng Nai";
-        province[49] = "Long An";
-        province[50] = "Đồng Tháp";
-        province[51] = "An Giang";
-        province[52] = "Bà Rịa - Vũng Tàu";
-        province[53] = "Tiền Giang";
-        province[54] = "Kiên Giang";
-        province[55] = "Cần Thơ";
-        province[56] = "Bến Tre";
-        province[57] = "Vĩnh Long";
-        province[58] = "Trà Vinh";
-        province[59] = "Sóc Trăng";
     }
 
     public String getProvinceName(String Code)
     {
         int index = Integer.parseInt(Code);
-        return province[index];
+        return this.getProvinceList()[index];
     }
 
     public String getProvinceCode(String Name)
     {
         for (int i = 1; i < 10; i++)
-            if (province[i].equals(Name))
+            if (this.getProvinceList()[i].equals(Name))
                 return "0"+i;
 
         for (int i = 10; i <= 64; i++)
-            if (province[i].equals(Name))
+            if (this.getProvinceList()[i].equals(Name))
                 return ""+i;
 
         return "";
@@ -348,20 +366,57 @@ public class DefaultValue
         return date.substring(8,10) + "-" + Month + "-" + date.substring(0,4);
     }
 
-    public String sysdate()
+    public String oracleSysdate()
     {
-        return toOracleDateFormat(java.time.LocalDateTime.now().toString().substring(0, 10));
+        return toOracleDateFormat(LocalDateTime.now().toString().substring(0, 10));
+    }
+
+    public String toApplicationDate(String date)
+    {
+        String Month = date.substring(5,8);
+
+        if (Month.equals("JAN"))
+            Month = "01";
+        if (Month.equals("FEB"))
+            Month = "02";
+        if (Month.equals("MAR"))
+            Month = "03";
+        if (Month.equals("APR"))
+            Month = "04";
+        if (Month.equals("MAY"))
+            Month = "05";
+        if (Month.equals("JUN"))
+            Month = "06";
+        if (Month.equals("JUL"))
+            Month = "07";
+        if (Month.equals("AUG"))
+            Month = "08";
+        if (Month.equals("SEP"))
+            Month = "09";
+        if (Month.equals("OCT"))
+            Month = "10";
+        if (Month.equals("NOV"))
+            Month = "11";
+        if (Month.equals("DEC"))
+            Month = "12";
+
+        return date.substring(6,10) + "-" + Month + "-" + date.substring(0,2) ;
+    }
+
+    public String todayString()
+    {
+        return LocalDateTime.now().toString().substring(0, 10);
     }
 
     public String getDoseTypeName(String DoseType)
     {
-        if (DoseType == "basic")
+        if (DoseType.equals("basic"))
             return "Cơ bản";
 
-        if (DoseType == "booster")
+        if (DoseType.equals("booster"))
             return "Tăng cường";
 
-        if (DoseType == "repeat")
+        if (DoseType.equals("repeat"))
             return "Nhắc lại";
 
         return "";
@@ -393,6 +448,13 @@ public class DefaultValue
             return "Đã hủy";
 
         return "";
+    }
+
+    public String[] getGenderList()
+    {
+        String genderList[] = {"Nữ", "Nam", "Khác"};
+
+        return genderList;
     }
 
     public String getGenderName(int Gender)

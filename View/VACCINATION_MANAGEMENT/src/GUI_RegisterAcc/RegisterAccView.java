@@ -352,27 +352,6 @@ public class RegisterAccView extends JFrame implements ActionListener
         BirthdayLabel.setForeground(new Color(0x666666));
     }
 
-    public class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
-
-        private String datePattern = "yyyy-MM-dd";
-        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
-
-        @Override
-        public Object stringToValue(String text) throws ParseException {
-            return dateFormatter.parseObject(text);
-        }
-
-        @Override
-        public String valueToString(Object value) throws ParseException {
-            if (value != null) {
-                Calendar cal = (Calendar) value;
-                return dateFormatter.format(cal.getTime());
-            }
-
-            return "";
-        }
-    }
-
     private void initBirthdayField()
     {
         UtilDateModel model=new UtilDateModel();
@@ -432,12 +411,9 @@ public class RegisterAccView extends JFrame implements ActionListener
         HomeTownChoice.setBackground(Color.WHITE);
 
         HomeTownChoice.add("");
-        HomeTownChoice.add("Bình Dương");
-        HomeTownChoice.add("Hồ Chí Minh");
-        HomeTownChoice.add("Hà Nội");
-        HomeTownChoice.add("Phú Yên");
-        HomeTownChoice.add("Đồng Nai");
-        HomeTownChoice.add("Bình Định");
+        for (int i = 1; i <= 64; i++)
+            if (i != 20)
+                HomeTownChoice.add(dv.getProvinceList()[i]);
     }
 
     private void initProvinceLabel()
@@ -458,12 +434,9 @@ public class RegisterAccView extends JFrame implements ActionListener
         ProvinceChoice.setBackground(Color.WHITE);
 
         ProvinceChoice.add("");
-        ProvinceChoice.add("Bình Dương");
-        ProvinceChoice.add("Hồ Chí Minh");
-        ProvinceChoice.add("Đồng Nai");
-        ProvinceChoice.add("Bình Định");
-        ProvinceChoice.add("Phú Yên");
-        ProvinceChoice.add("Hà Nội");
+        for (int i = 1; i <= 64; i++)
+            if (i != 20)
+                ProvinceChoice.add(dv.getProvinceList()[i]);
     }
 
     private void initDistrictLabel()
@@ -660,7 +633,6 @@ public class RegisterAccView extends JFrame implements ActionListener
 
             String plsql = "{call ACC_INSERT_RECORD(?,?,?,?,?)}";
 
-
             String plsql2 = "{call PERSON_INSERT_RECORD(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 
             try {
@@ -695,9 +667,7 @@ public class RegisterAccView extends JFrame implements ActionListener
 
             }
             catch (SQLException ex) {
-                System.out.println("Không thành công!");
-
-                dv.popupOption(null, "Không thành công", "Lỗi!", 2);
+                dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
 
                 throw new RuntimeException(ex);
             }
