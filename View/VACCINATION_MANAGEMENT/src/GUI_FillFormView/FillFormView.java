@@ -111,18 +111,17 @@ public class FillFormView extends JPanel implements ActionListener
     {
         JLabel Target = new JLabel("Đối tượng: " + personalUser.getFullName()
                 + " (ID: " + getPersonalUser().getID() + ")");
-        Target.setFont(new Font(dv.fontName(), 1, 20));
+        Target.setFont(new Font(dv.fontName(), 1, 16));
         Target.setForeground(new Color(dv.BlackTextColor()));
-        Target.setBounds(30,2,600,30);
+        Target.setBounds(30,1,600,25);
         Target.setHorizontalAlignment(JLabel.LEFT);
-
 
         String temp = dv.toApplicationDate(String.valueOf(Heal.getFilledDate()));
 
         JLabel FilledDate = new JLabel("Ngày thực hiện khai báo: " + Heal.getFilledDate());
-        FilledDate.setFont(new Font(dv.fontName(), 1, 18));
+        FilledDate.setFont(new Font(dv.fontName(), 1, 16));
         FilledDate.setForeground(new Color(dv.BlackTextColor()));
-        FilledDate.setBounds(30,30,600,25);
+        FilledDate.setBounds(30,25,600,25);
         FilledDate.setHorizontalAlignment(JLabel.LEFT);
 
         FormPanel[i] = new JPanel();
@@ -134,82 +133,82 @@ public class FillFormView extends JPanel implements ActionListener
         if (Heal.getHealths().equals("0000"))
         {
             JLabel NormalHealth = new JLabel("Sức khỏe bình thường - Đạt điều kiện sức khỏe tiêm chủng");
-            NormalHealth.setFont(new Font(dv.fontName(), 0, 20));
+            NormalHealth.setFont(new Font(dv.fontName(), 1, 13));
             NormalHealth.setForeground(new Color(dv.GreenPastel()));
-            NormalHealth.setBounds(30,55,600,30);
+            NormalHealth.setBounds(30,50,600,25);
             NormalHealth.setHorizontalAlignment(JLabel.LEFT);
 
-            FormPanel[i].setPreferredSize(new Dimension(640,100));
+            FormPanel[i].setPreferredSize(new Dimension(640,80));
             FormPanel[i].add(NormalHealth);
         }
         else
         {
             JLabel FirstAns = new JLabel();
-            FirstAns.setBounds(30,60,600,30);
+            FirstAns.setBounds(30,50,600,25);
             FirstAns.setHorizontalAlignment(JLabel.LEFT);
             if (Heal.getHealths().substring(0,1).equals("1"))
             {
-                FirstAns.setText("Có một trong các dấu hiệu sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi trong vòng 14 ngày qua");
-                FirstAns.setFont(new Font(dv.fontName(), 1, 16));
+                FirstAns.setText("<html>Có một trong các dấu hiệu sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi trong vòng 14 ngày qua");
+                FirstAns.setFont(new Font(dv.fontName(), 1, 13));
                 FirstAns.setForeground(new Color(dv.BlackTextColor()));
             }
             else
             {
-                FirstAns.setText("Không có dấu hiệu sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi trong vòng 14 ngày qua");
-                FirstAns.setFont(new Font(dv.fontName(), 0, 16));
-                FirstAns.setForeground(new Color(dv.BlackTextColor()));
+                FirstAns.setText("<html>Không có dấu hiệu sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi trong vòng 14 ngày qua");
+                FirstAns.setFont(new Font(dv.fontName(), 0, 13));
+                FirstAns.setForeground(new Color(dv.GreenPastel()));
             }
 
             JLabel SecondAns = new JLabel();
-            SecondAns.setBounds(30,90,600,30);
+            SecondAns.setBounds(30,75,600,25);
             SecondAns.setHorizontalAlignment(JLabel.LEFT);
             if (Heal.getHealths().substring(1,2).equals("1"))
             {
-                SecondAns.setText("Có tiếp xúc với Người bệnh hoặc nghi ngờ, mắc bệnh COVID-19 trong vòng 14 ngày qua");
-                SecondAns.setFont(new Font(dv.fontName(), 1, 16));
+                SecondAns.setText("<html>Có tiếp xúc với Người bệnh hoặc nghi ngờ, mắc bệnh COVID-19 trong vòng 14 ngày qua");
+                SecondAns.setFont(new Font(dv.fontName(), 1, 13));
                 SecondAns.setForeground(new Color(dv.BlackTextColor()));
             }
             else
             {
-                SecondAns.setText("Không tiếp xúc với Người bệnh hoặc nghi ngờ, mắc bệnh COVID-19 trong vòng 14 ngày qua");
-                SecondAns.setFont(new Font(dv.fontName(), 0, 16));
-                SecondAns.setForeground(new Color(dv.BlackTextColor()));
+                SecondAns.setText("<html>Không tiếp xúc với Người bệnh hoặc nghi ngờ, mắc bệnh COVID-19 trong vòng 14 ngày qua");
+                SecondAns.setFont(new Font(dv.fontName(), 0, 13));
+                SecondAns.setForeground(new Color(dv.GreenPastel()));
             }
 
 
             JLabel ThirdAns = new JLabel();
-            ThirdAns.setBounds(30,120,600,30);
+            ThirdAns.setBounds(30,100,600,25);
             ThirdAns.setHorizontalAlignment(JLabel.LEFT);
             if (Heal.getHealths().substring(2,3).equals("1"))
             {
-                ThirdAns.setText("Là đối tượng đang dương tính với Covid-19");
-                ThirdAns.setFont(new Font(dv.fontName(), 1, 16));
+                ThirdAns.setText("<html>Là đối tượng đang dương tính với Covid-19");
+                ThirdAns.setFont(new Font(dv.fontName(), 1, 13));
                 ThirdAns.setForeground(new Color(dv.RedPastel()));
             }
             else
             {
-                ThirdAns.setText("Không là đối tượng đang dương tính với Covid-19");
-                ThirdAns.setFont(new Font(dv.fontName(), 0, 16));
-                ThirdAns.setForeground(new Color(dv.BlackTextColor()));
+                ThirdAns.setText("<html>Không là đối tượng đang dương tính với Covid-19");
+                ThirdAns.setFont(new Font(dv.fontName(), 0, 13));
+                ThirdAns.setForeground(new Color(dv.GreenPastel()));
             }
 
             JLabel FourthAns = new JLabel();
-            FourthAns.setBounds(30,150,600,30);
+            FourthAns.setBounds(30,125,600,25);
             FourthAns.setHorizontalAlignment(JLabel.LEFT);
             if (Heal.getHealths().substring(3,4).equals("1"))
             {
-                FourthAns.setText("Là đối tượng trì hoãn tiêm chủng hoặc chống chỉ định với tiêm chủng vaccine Covid-19");
-                FourthAns.setFont(new Font(dv.fontName(), 1, 16));
+                FourthAns.setText("<html>Là đối tượng trì hoãn tiêm chủng hoặc chống chỉ định với tiêm chủng vaccine Covid-19");
+                FourthAns.setFont(new Font(dv.fontName(), 1, 13));
                 FourthAns.setForeground(new Color(dv.RedPastel()));
             }
             else
             {
-                FourthAns.setText("Không là đối tượng trì hoãn tiêm chủng hoặc chống chỉ định với tiêm chủng vaccine Covid-19");
-                FourthAns.setFont(new Font(dv.fontName(), 0, 16));
-                FourthAns.setForeground(new Color(dv.BlackTextColor()));
+                FourthAns.setText("<html>Không là đối tượng trì hoãn tiêm chủng hoặc chống chỉ định với tiêm chủng vaccine Covid-19");
+                FourthAns.setFont(new Font(dv.fontName(), 0, 13));
+                FourthAns.setForeground(new Color(dv.GreenPastel()));
             }
 
-            FormPanel[i].setPreferredSize(new Dimension(640,180));
+            FormPanel[i].setPreferredSize(new Dimension(640,150));
             FormPanel[i].add(FirstAns);
             FormPanel[i].add(SecondAns);
             FormPanel[i].add(ThirdAns);
@@ -219,8 +218,11 @@ public class FillFormView extends JPanel implements ActionListener
 
     private void initFormListPanel(int Within)
     {
-        Health heals[] = new Health[100000];
-        int nheals = 0;
+        FormListPanel = new JPanel();
+        FormListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+        FormListPanel.setLayout(new FlowLayout());
+        Health Heal;
+        int listHeight = 0;
         int i = 0;
 
         String nDaysAgo = dv.toOracleDateFormat(String.valueOf(LocalDate.parse(dv.todayString()).minusDays(Within)));
@@ -229,8 +231,6 @@ public class FillFormView extends JPanel implements ActionListener
                 " where HEAL.PersonalID = '" + personalUser.getID() + "'" +
                 " and FilledDate >= '" + nDaysAgo + "'" +
                 " order by FilledDate desc, ID desc";
-
-        System.out.println(query);
 
         Connection connection = null;
         try {
@@ -242,11 +242,17 @@ public class FillFormView extends JPanel implements ActionListener
 
             while(rs.next())
             {
-                heals[i] = new Health();
-                heals[i].setID(rs.getInt("ID"));
-                heals[i].getPerson().setID(rs.getString("PersonalID"));
-                heals[i].setFilledDate(LocalDate.parse(rs.getString("FilledDate").substring(0,10)));
-                heals[i].setHealths(rs.getString("Healths"));
+                Heal = new Health();
+                Heal.setID(rs.getInt("ID"));
+                Heal.getPerson().setID(rs.getString("PersonalID"));
+                Heal.setFilledDate(LocalDate.parse(rs.getString("FilledDate").substring(0,10)));
+                Heal.setHealths(rs.getString("Healths"));
+                initFormPanel(i, Heal);
+                FormListPanel.add(FormPanel[i]);
+                if (Heal.getHealths().equals("0000"))
+                    listHeight += 80;
+                else
+                    listHeight += 150;
                 i++;
             }
         } catch (SQLException ex) {
@@ -254,19 +260,7 @@ public class FillFormView extends JPanel implements ActionListener
             ex.printStackTrace();
             return;
         }
-
-        nheals = i;
-
-        FormListPanel = new JPanel();
-        FormListPanel.setPreferredSize(new Dimension(660, 180*nheals+nheals*10));
-        FormListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
-        FormListPanel.setLayout(new FlowLayout());
-
-        for (i = 0; i<nheals; i++)
-        {
-            initFormPanel(i, heals[i]);
-            FormListPanel.add(FormPanel[i]);
-        }
+        FormListPanel.setPreferredSize(new Dimension(660, listHeight + i*10));
     }
 
     private void initScrollPaneFormList(int Within)
@@ -318,7 +312,7 @@ public class FillFormView extends JPanel implements ActionListener
         FilledDateField.setVisible(true);
         FilledDateField.setEnabled(true);
 
-        JLabel FirstQuesLabel = new JLabel("<html>     Trong vòng 14 ngày qua, Anh/Chị có thấy xuất hiện ít nhất 1 trong các dấu hiệu: " +
+        JLabel FirstQuesLabel = new JLabel("<html>Trong vòng 14 ngày qua, Anh/Chị có thấy xuất hiện ít nhất 1 trong các dấu hiệu: " +
                 "sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi không?:");
         FirstQuesLabel.setPreferredSize(new Dimension(600, 50));
         FirstQuesLabel.setFont(new Font(dv.fontName(), 0 ,16));
@@ -331,7 +325,7 @@ public class FillFormView extends JPanel implements ActionListener
         FirstQuesChoice.add("Không");
         FirstQuesChoice.add("Có");
 
-        JLabel SecondQuesLabel = new JLabel("<html>     Trong vòng 14 ngày qua, Anh/Chị có tiếp xúc với Người bệnh hoặc nghi ngờ," +
+        JLabel SecondQuesLabel = new JLabel("<html>Trong vòng 14 ngày qua, Anh/Chị có tiếp xúc với Người bệnh hoặc nghi ngờ," +
                 " mắc bệnh COVID-19 không?");
         SecondQuesLabel.setPreferredSize(new Dimension(600, 50));
         SecondQuesLabel.setFont(new Font(dv.fontName(), 0 ,16));
@@ -344,7 +338,7 @@ public class FillFormView extends JPanel implements ActionListener
         SecondQuesChoice.add("Không");
         SecondQuesChoice.add("Có");
 
-        JLabel ThirdQuesLabel = new JLabel("<html>     Anh/Chị có đang dương tính với Covid-19 không?");
+        JLabel ThirdQuesLabel = new JLabel("<html>Anh/Chị có đang dương tính với Covid-19 không?");
         ThirdQuesLabel.setPreferredSize(new Dimension(600, 50));
         ThirdQuesLabel.setFont(new Font(dv.fontName(), 0 ,16));
         ThirdQuesLabel.setForeground(new Color(dv.BlackTextColor()));
@@ -356,7 +350,7 @@ public class FillFormView extends JPanel implements ActionListener
         ThirdQuesChoice.add("Không");
         ThirdQuesChoice.add("Có");
 
-        JLabel FourthQuesLabel = new JLabel("<html>    Anh/Chị có đang là đối tượng trì hoãn tiêm chủng vaccine Covid-19 hoặc " +
+        JLabel FourthQuesLabel = new JLabel("<html>Anh/Chị có đang là đối tượng trì hoãn tiêm chủng vaccine Covid-19 hoặc " +
                 "đang là đối tượng chống chỉ định với tiêm chủng Covid-19 không?");
         FourthQuesLabel.setPreferredSize(new Dimension(600, 50));
         FourthQuesLabel.setFont(new Font(dv.fontName(), 0 ,16));

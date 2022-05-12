@@ -20,7 +20,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
     /*Province Filter Panel*/
     private JPanel ProvinceFilterPanel;
     private JLabel ProvinceFilterLabel;
-    private Choice ProvinceFilterChoice;
+    private Choice ProvinceChoice;
     private JButton ProvinceFilterButton;
 
     /*Org List Panel*/
@@ -47,16 +47,17 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         ProvinceFilterLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
     }
 
-    private void initProvinceFilterChoice()
+    private void initProvinceChoice()
     {
-        ProvinceFilterChoice = new Choice();
-        ProvinceFilterChoice.setBounds(0, 40, dv.FieldWidth(), dv.FieldHeight());
-        ProvinceFilterChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
-        ProvinceFilterChoice.setForeground(new Color(dv.BlackTextColor()));
+        ProvinceChoice = new Choice();
+        ProvinceChoice.setBounds(0, 40, dv.FieldWidth(), dv.FieldHeight());
+        ProvinceChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
+        ProvinceChoice.setForeground(new Color(dv.BlackTextColor()));
 
-        ProvinceFilterChoice.add("");
+        ProvinceChoice.add("");
         for (int i = 1; i<=64; i++)
-            ProvinceFilterChoice.add(dv.getProvinceList()[i]);
+            if (i != 20)
+                ProvinceChoice.add(dv.getProvinceList()[i]);
     }
 
     private void initProvinceFilterButton()
@@ -75,7 +76,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
     private void initProvinceFilterPanel()
     {
         initProvinceFilterLabel();
-        initProvinceFilterChoice();
+        initProvinceChoice();
         initProvinceFilterButton();
 
         ProvinceFilterPanel = new JPanel();
@@ -84,7 +85,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         ProvinceFilterPanel.setBackground(new Color(dv.ViewBackgroundColor()));
 
         ProvinceFilterPanel.add(ProvinceFilterLabel);
-        ProvinceFilterPanel.add(ProvinceFilterChoice);
+        ProvinceFilterPanel.add(ProvinceChoice);
         ProvinceFilterPanel.add(ProvinceFilterButton);
     }
 
@@ -153,57 +154,58 @@ public class CreateOrgAccView extends JPanel implements ActionListener
 
     private void initOrgListPanel(String ProvinceCode)
     {
-        Organization Org[] = new Organization[10000];
-        String query = "";
+        OrgListPanel = new JPanel();
+        OrgListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+        OrgListPanel.setLayout((new FlowLayout()));
 
-        int nOrg = 0;
+        Organization Org;
         int i = 0;
+        int nORG = 0;
 
-        query = "select * from ORGANIZATION ORG" +
-                " where ORG.Province = '" + ProvinceCode + "'" +
-                " order by ID";
+        //Select out the specified ORGs
+        String query = "select ORG.ID, Name, Province, District, Town, Street, COUNT(SCHED.ID)"
+                + " from ORGANIZATION ORG left outer join SCHEDULE SCHED on ORG.ID = SCHED.OrgID";
 
-        Connection connection = null;
-        try {
-            connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+        if (ProvinceChoice.getSelectedIndex() != 0)
+            query = query + " where Province = '" + ProvinceCode + "'";
+        else
+            query = query + " where Province like '%'";
 
+        query += " and (OnDate > '" + dv.oracleSysdate() + "' or OnDate is null)";
+        query += " group by ORG.ID, Name, Province, District, Town, Street";
+        query += " order by ID, Province, District, Town";
+
+        System.out.println(query);
+
+        try
+        {
+            Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
             PreparedStatement st = connection.prepareStatement(query);
-
             ResultSet rs = st.executeQuery(query);
-
-            while(rs.next())
+            ResultSetMetaData rsmd = rs.getMetaData();
+            while (rs.next())
             {
-                Org[i] = new Organization();
-                Org[i].setID(rs.getString("ID"));
-                Org[i].setName(rs.getString("Name"));
-                Org[i].setProvince(rs.getString("Province"));
-                Org[i].setDistrict(rs.getString("District"));
-                Org[i].setTown(rs.getString("Town"));
-                Org[i].setNote(rs.getString("Note"));
+                Org = new Organization();
+                Org.setID(rs.getString("ID"));
+                Org.setName(rs.getString("Name"));
+                Org.setProvince(rs.getString("Province"));
+                Org.setDistrict(rs.getString("District"));
+                Org.setTown(rs.getString("Town"));
+                Org.setStreet(rs.getString("Street"));
+                Org.setAvaiScheds(rs.getInt("COUNT(SCHED.ID)"));
+                initOrgPanel(i, Org);
+                OrgListPanel.add(OrgPanel[i]);
                 i++;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        nOrg = i;
-
-        OrgListPanel = new JPanel();
-        OrgListPanel.setPreferredSize(new Dimension(660, 120*nOrg+nOrg*10));
-        OrgListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
-        OrgListPanel.setLayout(new FlowLayout());
-
-        for (i = 0; i<nOrg; i++)
-        {
-            initOrgPanel(i, Org[i]);
-            OrgListPanel.add(OrgPanel[i]);
+            nORG = i;
+            OrgListPanel.setPreferredSize(new Dimension(660, 120*nORG + nORG*5));
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
     }
 
-    private void initScrollPaneOrgList(String ProvinceCode)
+    private void initScrollPaneOrgList()
     {
-        initOrgListPanel(ProvinceCode);
-
         ScrollPaneOrgList = new JScrollPane(OrgListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneOrgList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneOrgList.setBounds(0, 40, 680, 590); //320 40
@@ -419,13 +421,14 @@ public class CreateOrgAccView extends JPanel implements ActionListener
             LayeredPaneArea.removeAll();
             LayeredPaneArea.repaint(320, 40, 680, 630);
 
-            JLabel OrgListLabel = new JLabel("DANH SÁCH ĐƠN VỊ (" + ProvinceFilterChoice.getSelectedItem() + ")");
+            JLabel OrgListLabel = new JLabel("DANH SÁCH ĐƠN VỊ (" + ProvinceChoice.getSelectedItem() + ")");
             OrgListLabel.setBounds(0,0,640,40);
             OrgListLabel.setFont(new Font(dv.fontName(), 1, 20));
             OrgListLabel.setForeground(new Color(dv.FeatureButtonColor()));
             OrgListLabel.setHorizontalAlignment(JLabel.CENTER);
 
-            initScrollPaneOrgList(dv.getProvinceCode(ProvinceFilterChoice.getSelectedItem()));
+            initOrgListPanel(dv.getProvinceCode(ProvinceChoice.getSelectedItem()));
+            initScrollPaneOrgList();
 
             LayeredPaneArea.add(OrgListLabel, Integer.valueOf(0));
             LayeredPaneArea.add(ScrollPaneOrgList, Integer.valueOf(0));

@@ -406,12 +406,11 @@ public class UserInformationView extends JPanel implements ActionListener
         JFormattedTextField textField = BirthdayField.getJFormattedTextField();
 
         //textField = dv.toOracleDateFormat(personalUser.getBirthday());
-        textField.setText((String) personalUser.getBirthday());
+        textField.setText(dv.toApplicationDate(personalUser.getBirthday().substring(0,10)));
 
         textField.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
 
         textField.setBounds(50, 100 + 3*dv.LabelHeight()+2*dv.FieldHeight(),170,40);
-
 
         BirthdayField.setTextEditable(true);
         BirthdayField.setName("BirthdayField");
