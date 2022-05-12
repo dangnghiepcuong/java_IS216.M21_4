@@ -180,6 +180,7 @@ public class CitizenMainView extends JFrame implements ActionListener
         ButtonLabel.setBounds(0, 160, 240, 30);
         ButtonLabel.setText("Thông tin");
         ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -187,6 +188,7 @@ public class CitizenMainView extends JFrame implements ActionListener
         ButtonLabel2.setBounds(0, 160 +25, 240, 30);
         ButtonLabel2.setText("cá nhân");
         ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -207,6 +209,7 @@ public class CitizenMainView extends JFrame implements ActionListener
         ButtonLabel.setBounds(240, 160, 240, 30);
         ButtonLabel.setText("Tìm kiếm đơn vị");
         ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -214,6 +217,7 @@ public class CitizenMainView extends JFrame implements ActionListener
         ButtonLabel2.setBounds(240, 160 +25, 240, 30);
         ButtonLabel2.setText("tiêm chủng");
         ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel2_1.setBorder(dv.border());
         FeatureLayeredPane.add(ButtonLabel);
@@ -233,6 +237,7 @@ public class CitizenMainView extends JFrame implements ActionListener
         ButtonLabel.setBounds(240*2 -15, 160, 240-20, 30);
         ButtonLabel.setText("Thông báo");
         ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -240,6 +245,7 @@ public class CitizenMainView extends JFrame implements ActionListener
         ButtonLabel2.setBounds(240*2 -15, 160 +25, 240-20, 30);
         ButtonLabel2.setText("- tin tức");
         ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -260,6 +266,7 @@ public class CitizenMainView extends JFrame implements ActionListener
         ButtonLabel.setBounds(0, 240+130, 240, 30);
         ButtonLabel.setText("Khai báo y tế");
         ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
         FeatureLayeredPane.add(ButtonLabel);
@@ -278,6 +285,7 @@ public class CitizenMainView extends JFrame implements ActionListener
         ButtonLabel.setBounds(240 -10, 240+130, 240, 30);
         ButtonLabel.setText("Đăng ký");
         ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -285,6 +293,7 @@ public class CitizenMainView extends JFrame implements ActionListener
         ButtonLabel2.setBounds(240 -10, 240+130 +25, 240, 30);
         ButtonLabel2.setText("tiêm chủng");
         ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -305,6 +314,7 @@ public class CitizenMainView extends JFrame implements ActionListener
         ButtonLabel.setBounds(240*2 -15, 240+130, 240 -20, 30);
         ButtonLabel.setText("Cập nhật");
         ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -312,6 +322,7 @@ public class CitizenMainView extends JFrame implements ActionListener
         ButtonLabel2.setBounds(240*2 -15, 240+130 +25, 240 -20, 30);
         ButtonLabel2.setText("mũi tiêm");
         ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -332,6 +343,7 @@ public class CitizenMainView extends JFrame implements ActionListener
         ButtonLabel.setBounds(10, 240*2-30 +130, 240, 30);
         ButtonLabel.setText("Chứng nhận");
         ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -339,6 +351,7 @@ public class CitizenMainView extends JFrame implements ActionListener
         ButtonLabel2.setBounds(10, 240*2-30 +130 +25, 240, 30);
         ButtonLabel2.setText("tiêm chủng");
         ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
