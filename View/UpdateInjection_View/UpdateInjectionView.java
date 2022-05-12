@@ -5,9 +5,7 @@
 package GUI_UpdateInjection;
 
 import Data_Processor.Account;
-import java.security.cert.Certificate;
 import Data_Processor.DefaultValue;
-import Data_Processor.ImageHelper;
 import static Data_Processor.ImageHelper.reSize;
 import Data_Processor.Organization;
 import Data_Processor.Person;
@@ -18,28 +16,16 @@ import GUI_SearchOrg.SearchOrgView;
 
 import java.awt.Image;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.beans.Statement;
-import java.sql.Blob;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -49,6 +35,12 @@ import javax.swing.JScrollPane;
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
+
+import java.io.FileInputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
  *
@@ -107,7 +99,10 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
     private byte[] ImageInjection;
     
     Connection connection;
-    private Image IMG;
+    private Image img;
+    private File file;
+    private FileInputStream input=null;
+    private byte[] imageData;
     
     
    public UpdateInjectionView(String Username) throws IOException
@@ -175,11 +170,11 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         
         initMainLayeredPane();
         initMainPanel();
-        initInfoLayerPanel();   
+          
         initInfoInjectionPanel(Username);
         initLayerPanel();
-        
         initScrollPaneRegList();
+        initInfoLayerPanel(); 
         
         this.add(MainLayeredPane);
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
@@ -217,20 +212,23 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         InfoLayeredPane.setLayout(null);
         InfoLayeredPane.setOpaque(true);
         
-        if(register.getImageInjection() != null)
-        {
-            try {
-                Image img=ImageHelper.createImageFromByteArray(register.getImageInjection(), "jpg");
-                JLabel image = new JLabel(new ImageIcon(img));         
-                image.setBounds(60,140,379,505);
-                image.setHorizontalAlignment(JLabel.LEFT);
-                InfoLayeredPane.add(image,Integer.valueOf(2));
-            } catch (IOException ex) {
-                Logger.getLogger(UpdateInjectionView.class.getName()).log(Level.SEVERE, null, ex);
+        //Load Image
+            if(imageData!=null)
+            {
+         
+                ImageIcon imgIcon=new ImageIcon(imageData);
+                
+                Image Img=reSize(imgIcon.getImage(),379,505);
+                
+                JLabel Image=new JLabel(new ImageIcon(Img));
+                
+                Image.setBounds(60,140,379,505);
+                Image.setHorizontalAlignment(JLabel.LEFT);
+                InfoLayeredPane.add(Image,Integer.valueOf(2));
             }
-        }
-        
-       
+            else 
+                System.out.println(imageData);
+    
                
    }
    
@@ -295,6 +293,14 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
             register.getOrg().setStreet(rs.getString("Street"));
             register.getSched().setOnDate(rs.getString("OnDate").substring(0,10));           
             register.setStatus(rs.getInt("Status"));
+            
+            System.out.println("asdf");
+            System.out.println(imageData);
+            imageData=rs.getBytes("Image");
+            System.out.println(imageData);
+            
+            //Xử lý xuất ảnh từ csdl
+            
  
         } catch (SQLException e) {
             e.printStackTrace();
@@ -415,11 +421,11 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
 
         //set Bounds
         ScrollPaneRegList.setBounds(450,140,600, dv.FrameHeight()-215);; //320 40
-        //ScrollPaneRegList.setBackground(Color.yellow);
+        
     }
    
    
-    private void ActionUpLoadImage( )
+    private void ActionUpLoadImage()
     {
         JFileChooser chooser=new JFileChooser();
         chooser.setFileFilter(new FileFilter() 
@@ -442,25 +448,22 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         );
         if(chooser.showOpenDialog(this) == JFileChooser.CANCEL_OPTION)
             return;
+       
         
-        File file=chooser.getSelectedFile();
+        file=chooser.getSelectedFile();
         try
         {
             ImageIcon imageicon=new ImageIcon(file.getPath());
-            Image img=reSize(imageicon.getImage(), 379, 505);
-            JLabel image = new JLabel(new ImageIcon(img));         
+            img=reSize(imageicon.getImage(), 379, 505);
+            JLabel image = new JLabel(new ImageIcon(img));  
             image.setBounds(60,140,379,505);
             image.setHorizontalAlignment(JLabel.LEFT);
             InfoLayeredPane.add(image,Integer.valueOf(2));
-            register.setImageInjection(ImageHelper.toByteArray(img, ".jpg"));
-          
-//            JLabel image2 = new JLabel(new ImageIcon(ImageHelper.createImageFromByteArray(ImageInjection, ".jpg") ));
-//            register.setImageInjection(ImageInjection);
-//      InfoLayeredPane.add(image2,Integer.valueOf(2));
         }
         catch(Exception e)
         {
             e.printStackTrace();
+            System.out.println("ERROR1");
             
         }
     }
@@ -473,55 +476,59 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         
+        if (e.getSource() == UpLoadImageButton)
+        {
+            //InfoLayeredPane=null;
+            InfoLayeredPane.removeAll();
+            ActionUpLoadImage();
+            System.out.println("16");
+        }
+        
+        
         if (e.getSource() == ConfirmButton)
         {
-//            byte[] imgData = null;
-//            Blob img = null;
-//            ResultSet rs = null;
-            //Statement st = null;
+            System.out.println("1");
             if ( dv.popupConfirmOption(null, "Xác nhận cập nhật giấy chứng nhận mũi tiêm?", "Xác nhận?") == 0)
             {
                 
-                System.out.println(register.getImageInjection());
-//                //Xử lý lưu thông tin hình ảnh vào cơ sở dữ liệu 
-//                
-//                
-//                String query = "select Image" +
-//                        "from Register \n" +
-//                        " where personalID= '" +  register.getOrg().getID() + " Schedid= " + register.getSched();
-//        try {
-//            
-//            
-//            connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-//
-//            PreparedStatement st = connection.prepareStatement(query);
-//            rs = st.executeQuery(query);
-//            
-//            while (rs.next()) {
-//            img = rs.getBlob("Image");
-//            imgData = img.getBytes(1, (int) img.length());
-//        }
-//        rs.close();
-//        
-//            
-//            
-// 
-//            } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        }
-        
+                //System.out.println(register.getImageInjection());
+                //Xử lý lưu thông tin hình ảnh vào cơ sở dữ liệu 
                 
+                
+                
+        try {
+            connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+            String query ="update register\n" +
+                               "set Image=?\n" +
+                               "where PersonalID='20521890' and Schedid = '44001280920221'";
+            PreparedStatement st = connection.prepareStatement(query);
+            //ResultSet rs = st.executeQuery(query);
+            
+ 
+            input = new FileInputStream(file);
+            
+            st.setBinaryStream(1,input);
+            
+            st.executeUpdate();
+            st.close();
+           
+          
+        }
+        catch (SQLException ex) {
+            ex.printStackTrace();           
+        }       
+        catch (IOException ex) {
+            Logger.getLogger(UpdateInjectionView.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error");
+        }
+
                 dv.popupOption(null, "Cập nhật thành công!", "Thông báo!", 0);
             }
             else
                 return;
         }
         
-        if (e.getSource() == UpLoadImageButton)
-        {
-            InfoLayeredPane.removeAll();
-            ActionUpLoadImage();
-        }
+        
         
         //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
