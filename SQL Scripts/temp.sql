@@ -147,4 +147,7 @@ update REGISTER
 set Status = 2
 where DoseType = 'booster'
 
+alter table PERSON
+add Avatar blob;
+
 commit;
