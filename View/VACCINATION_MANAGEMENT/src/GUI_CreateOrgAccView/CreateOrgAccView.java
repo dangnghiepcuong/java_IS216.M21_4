@@ -35,8 +35,12 @@ public class CreateOrgAccView extends JPanel implements ActionListener
     private JLayeredPane LayeredPaneArea;
 
     /*
-
-*/
+    *   INITIALIZE THE ORGANIZATION LIST FILTER PANEL
+    *   - PANEL:
+    *       + LABELS
+    *       + CHOICES
+    *       + BUTTON: SELECT
+    * */
     private void initProvinceFilterLabel()
     {
         ProvinceFilterLabel = new JLabel();
@@ -89,7 +93,15 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         ProvinceFilterPanel.add(ProvinceFilterButton);
     }
 
-    private void initOrgPanel(int i, Organization Org)
+
+    /*
+    *   INITIALIZE THE LIST OF ORGANIZATION IN A REGION
+    *   - SCROLLPANE:
+    *       + PANEL:
+    *           - PANELS:
+    *               + LABELS
+    * */
+    private JPanel initOrgPanel(Organization Org)
     {
 
         //Org info
@@ -135,21 +147,22 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         OrgAvaiScheds.setHorizontalAlignment(JLabel.LEFT);
         //OrgAvaiScheds.setBorder(dv.border());
 
-
         //create OrgPanel Panel
-        OrgPanel[i] = new JPanel();
+        JPanel OrgPanel = new JPanel();
         //set layout
-        OrgPanel[i].setLayout(null);
-        OrgPanel[i].setPreferredSize(new Dimension(640,120));
+        OrgPanel.setLayout(null);
+        OrgPanel.setPreferredSize(new Dimension(640,120));
         //set Background color
-        OrgPanel[i].setBackground(Color.WHITE);
+        OrgPanel.setBackground(Color.WHITE);
 
-        OrgPanel[i].add(OrgName);
-        OrgPanel[i].add(OrgProvince);
-        OrgPanel[i].add(OrgDistrict);
-        OrgPanel[i].add(OrgTown);
-        OrgPanel[i].add(OrgStreet);
-        OrgPanel[i].add(OrgAvaiScheds);
+        OrgPanel.add(OrgName);
+        OrgPanel.add(OrgProvince);
+        OrgPanel.add(OrgDistrict);
+        OrgPanel.add(OrgTown);
+        OrgPanel.add(OrgStreet);
+        OrgPanel.add(OrgAvaiScheds);
+
+        return OrgPanel;
     }
 
     private void initOrgListPanel(String ProvinceCode)
@@ -193,8 +206,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
                 Org.setTown(rs.getString("Town"));
                 Org.setStreet(rs.getString("Street"));
                 Org.setAvaiScheds(rs.getInt("COUNT(SCHED.ID)"));
-                initOrgPanel(i, Org);
-                OrgListPanel.add(OrgPanel[i]);
+                OrgListPanel.add(initOrgPanel(Org));
                 i++;
             }
             nORG = i;
@@ -214,7 +226,13 @@ public class CreateOrgAccView extends JPanel implements ActionListener
 
 
 
-
+    /*
+    *   INITIALIZE THE CREATE ORGANIZATION PANEL
+    *   - PANEL:
+    *       + LABELS
+    *       + CHOICES
+    *       + BUTTON: CONFIRM CREATION
+    * */
     private void initAddNewOrgAccButton()
     {
         ImageIcon AddNewOrgAccButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Create New Org Acc Button.png"));
@@ -349,40 +367,16 @@ public class CreateOrgAccView extends JPanel implements ActionListener
 //        LayeredPaneArea.repaint(320, 80, 680, 630);
     }
 
-    private void initFrameComponent()
+    private void initComponents()
     {
-        //set Frame icon
-        //this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
-
-        //set frame title
-        //this.setTitle("Tìm kiếm đơn vị tiêm chủng");
-
-        //set frame size
         this.setSize(dv.FrameWidth(), dv.FrameHeight());
-        //this.setSize(1080, 720); --Main View
-
-        //set do not allow frame resizing
-        //this.setResizable(false);
-
-        //set frame visible on screen
         this.setVisible(true);
-
-        //set frame close on X button
-        //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //set frame background color
-        //this.getContentPane().setBackground(new Color(dv.ViewBackgroundColor()));
         this.setBackground(new Color(dv.ViewBackgroundColor()));
-
         this.setLayout(null);
 
         //initProvinceFilterPanel
         initProvinceFilterPanel();
         this.add(ProvinceFilterPanel);
-
-        //initAddNewSchedLabel
-//        initAddNewSchedLabel();
-//        this.add(AddNewSchedLabel);
 
         //init AddNewOrgAccButton
         initAddNewOrgAccButton();
@@ -406,12 +400,13 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         this.repaint(0,0, dv.FrameWidth(), dv.FrameHeight());
     }
 
+    /*CONSTRUCTOR*/
     public CreateOrgAccView()
     {
-        initFrameComponent();
-        this.validate();
+        initComponents();
     }
 
+    /*ACTION PERFORMED*/
     @Override
     public void actionPerformed(ActionEvent e)
     {

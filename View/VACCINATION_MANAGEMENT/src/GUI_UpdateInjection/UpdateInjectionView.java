@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package GUI_UpdateInjection;
 
 
@@ -38,8 +34,6 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
     private JButton UpLoadImageButton;
     private JButton ConfirmButton;
     
-    private JLayeredPane SchedAttendance;
-
     /*Data Stored Class*/
     private DefaultValue dv = new DefaultValue();
     private Person personalUser = new Person();
@@ -53,8 +47,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
     private Image img;
     private File file;
     private FileInputStream input=null;
-    private byte[] imageData;
-    
+
     
    public UpdateInjectionView(Person person) throws IOException
    {
@@ -105,7 +98,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         }
         
         initMainLayeredPane();
-        initMainPanel();
+//        initMainPanel();
           
         initInfoInjectionPanel(personalUser);
         initLayerPanel();
@@ -114,15 +107,11 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         
         this.add(MainLayeredPane);
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
-        MainLayeredPane.add(MainPanel,Integer.valueOf(0));   
+        MainLayeredPane.add(MainPanel,Integer.valueOf(0));
         MainPanel.add(InfoLayeredPane);
-        //MainPanel.add(InfoInjectionPanel);
         MainPanel.add(LayerPanel);
         
         MainPanel.add(ScrollPaneRegList);
-        
-                
-        
    }
    
    private void initMainLayeredPane()
@@ -150,10 +139,10 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         
 
         //Load Image
-            if(imageData!=null)
+            if(Reg.getImage() != null)
             {
          
-                ImageIcon imgIcon=new ImageIcon(imageData);
+                ImageIcon imgIcon=new ImageIcon(Reg.getImage());
                 
                 Image Img= ImageHelper.reSize(imgIcon.getImage(),379,505);
                 
@@ -164,10 +153,6 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
                 InfoLayeredPane.add(Image,Integer.valueOf(2));
 
             }
-            else 
-                System.out.println(imageData);
-    
-               
    }
    
    
@@ -185,9 +170,8 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         InfoLabel.setHorizontalAlignment(JLabel.CENTER);
         InfoLabel.setForeground(new Color(dv.FeatureButtonColor()));
         //InfoLabel.setBackground(Color.blue);
-        
+
         LayerPanel.add(InfoLabel);
-        
    }
    
    
@@ -229,15 +213,8 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
             Reg.getOrg().setStreet(rs.getString("Street"));
             Reg.getSched().setOnDate(rs.getString("OnDate").substring(0,10));
             Reg.setStatus(rs.getInt("Status"));
-            
-            System.out.println("asdf");
-            System.out.println(imageData);
-            imageData=rs.getBytes("Image");
-            System.out.println(imageData);
-            
-            //Xử lý xuất ảnh từ csdl
-            
- 
+            Reg.setImage(rs.getBytes("Image"));
+
         } catch (SQLException e) {
             dv.popupOption(null,"Bạn không có mũi tiêm nào chưa được cập nhật!", "Thông báo", 0);
             e.printStackTrace();

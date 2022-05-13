@@ -403,32 +403,13 @@ public class CitizenMainView extends JFrame implements ActionListener
 
     public CitizenMainView(String Username)
     {
-        //Frame
-        //set frame title
         this.setTitle("Quản lý tiêm chủng vaccine Covid-19: Công dân");
-
-        //set frame size
         this.setBounds(260, 90, dv.FrameWidth(), dv.FrameHeight());
-
-        //set do not allow frame resizing
         this.setResizable(false);
-
-        //set frame visible on screen
         this.setVisible(true);
-
-        //set frame close on X button
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //set frame background color
-        //this.setBackground(new Color(dv.ViewBackgroundColor()));
-        //this.setBackground(Color.WHITE);
-
-        //set Frame icon
         this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
-
-        //set layout
         this.setLayout(null);
-
 
         String query = "select * from PERSON where PERSON.Phone = '" +  Username + "'";
 
@@ -474,29 +455,9 @@ public class CitizenMainView extends JFrame implements ActionListener
         this.add(MainLayeredPane);
 
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
-
-        this.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent windowEvent)
-            {
-                String query = "update ACCOUNT ACC set Status = 1 where ACC.Username = '" + personalUser.getPhone() + "'";
-
-                try {
-                    Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-
-                    PreparedStatement st = connection.prepareStatement(query);
-
-                    st.executeUpdate(query);
-                } catch (SQLException ex) {
-                    dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(),2);
-                    ex.printStackTrace();
-                }
-            }
-        });
-
     }
 
-
+    /*ACTION PERFORMED*/
     @Override
     public void actionPerformed(ActionEvent e)
     {
