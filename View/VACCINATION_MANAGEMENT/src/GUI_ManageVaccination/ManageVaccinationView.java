@@ -1,17 +1,11 @@
 package GUI_ManageVaccination;
 
-import Data_Processor.DefaultValue;
-import Data_Processor.Person;
-import Data_Processor.RegisteredScheds;
-import Data_Processor.Schedule;
-import GUI_SearchOrg.SearchOrgView;
+import Data_Processor.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.sql.*;
 
 /**
@@ -54,7 +48,7 @@ public class ManageVaccinationView extends JPanel implements ActionListener
         RegFilterLabel.setBounds(0, 0, dv.LabelWidth()+50, dv.LabelHeight());
         RegFilterLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         RegFilterLabel.setForeground(new Color(0x666666));
-        RegFilterLabel.setText("Bộ lọc:");
+        RegFilterLabel.setText("Bộ lọc trạng thái đăng ký");
         RegFilterLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
     }
 
@@ -76,10 +70,10 @@ public class ManageVaccinationView extends JPanel implements ActionListener
     private void initFilterButton()
     {
         FilterButton = new JButton();
-        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Magnifying Glass Button_1.png"));
+        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search Filter Button.png"));
         FilterButton.setIcon(SearchIcon);
 
-        FilterButton.setBounds(0, 110, dv.FieldWidth(), SearchIcon.getIconHeight());
+        FilterButton.setBounds(0, 80, dv.FieldWidth(), SearchIcon.getIconHeight());
         FilterButton.setBorder(null);
         FilterButton.setContentAreaFilled(false);
 

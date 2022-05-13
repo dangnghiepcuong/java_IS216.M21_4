@@ -189,6 +189,8 @@ public class DefaultValue
         return 80;
     }
 
+    public int AlignTop_InfoView() { return 40; }
+
     public int AlignLeft()
     {
         return 60;
@@ -465,6 +467,20 @@ public class DefaultValue
             return "Nam";
         if (Gender == 2)
             return "Khác";
+
+        return "";
+    }
+
+    public String getVaccineID(int index)
+    {
+        switch (index)
+        {
+            case 0: return "Astra";
+            case 1: return "Vero";
+            case 2: return "Sputnik";
+            case 3: return "Pfizer";
+            case 4: return "Moderna";
+        }
 
         return "";
     }
