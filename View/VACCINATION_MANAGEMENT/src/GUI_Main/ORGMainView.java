@@ -1,8 +1,6 @@
 package GUI_Main;
 
-import Data_Processor.Account;
-import Data_Processor.DefaultValue;
-import Data_Processor.Organization;
+import Data_Processor.*;
 import GUI_Login.LoginView;
 import GUI_ManageSchedule.ManageScheduleView;
 import GUI_OrgInformation.OrgInformationView;
@@ -92,7 +90,8 @@ public class ORGMainView extends JFrame implements ActionListener
 
         ImageIcon AvatarImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/Avatar.png"));
         JLabel Avatar = new JLabel(AvatarImage);
-        Avatar.setBounds(90,100,190,190);
+        Avatar.setBounds((dv.FrameWidth()-dv.FrameHeight()-AvatarImage.getIconWidth())/2,100,
+                AvatarImage.getIconWidth(),AvatarImage.getIconHeight());
         Avatar.setHorizontalAlignment(JLabel.CENTER);
 
         JLabel Name = new JLabel("<html>" + orgUser.getName());

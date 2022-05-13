@@ -1,22 +1,19 @@
 package GUI_Main;
 
-import Data_Processor.Account;
-import Data_Processor.DefaultValue;
-import Data_Processor.Person;
-import GUI_CertificateView.CertificateView;
-import GUI_FillFormView.FillFormView;
-import GUI_Login.LoginView;
-import GUI_ManageVaccination.ManageVaccinationView;
-import GUI_SearchOrg.SearchOrgView;
-import GUI_UpdateInjection.UpdateInjectionView;
+import Data_Processor.*;
+import GUI_CertificateView.*;
+import GUI_FillFormView.*;
+import GUI_Login.*;
+import GUI_ManageVaccination.*;
+import GUI_SearchOrg.*;
+import GUI_UpdateInjection.*;
 import GUI_UserInformation.*;
-import com.sun.tools.javac.Main;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.sql.*;
 
 public class CitizenMainView extends JFrame implements ActionListener
@@ -39,7 +36,6 @@ public class CitizenMainView extends JFrame implements ActionListener
 
     /*Data Stored Class*/
     private DefaultValue dv = new DefaultValue();
-    //private Account userAccount = new Account();
     private Person personalUser = new Person();
 
     /*Other Views*/
@@ -133,7 +129,8 @@ public class CitizenMainView extends JFrame implements ActionListener
 
         ImageIcon AvatarImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/Avatar.png"));
         JLabel Avatar = new JLabel(AvatarImage);
-        Avatar.setBounds(90,100,190,190);
+        Avatar.setBounds((dv.FrameWidth()-dv.FrameHeight()-AvatarImage.getIconWidth())/2,100,
+                AvatarImage.getIconWidth(),AvatarImage.getIconHeight());
         Avatar.setHorizontalAlignment(JLabel.CENTER);
 
         JLabel Name = new JLabel(personalUser.getFullName());
@@ -589,7 +586,11 @@ public class CitizenMainView extends JFrame implements ActionListener
 
         if (e.getSource() == UpdateInjectionButton)
         {
-            updateInjectionView = new UpdateInjectionView(personalUser);
+            try {
+                updateInjectionView = new UpdateInjectionView(personalUser);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
             MainLayeredPane.removeAll();
             MainLayeredPane.add(updateInjectionView, Integer.valueOf(0));
             MainLayeredPane.add(BackButton, Integer.valueOf(5));

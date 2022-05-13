@@ -147,4 +147,19 @@ update REGISTER
 set Status = 2
 where DoseType = 'booster'
 
+alter table PERSON
+add Avatar blob;
+
+
+select * 
+from REGISTER REG
+where REG.PersonalID = '281332982' 
+
+select * 
+from REGISTER REG, SCHEDULE SCHED, ORGANIZATION ORG 
+where REG.PersonalID = '281322982' 
+and      REG.SchedID = SCHED.ID 
+and       SCHED.OrgID = ORG.ID 
+and       Status = 1
+
 commit;

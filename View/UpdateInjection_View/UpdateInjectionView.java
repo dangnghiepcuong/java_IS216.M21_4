@@ -2,7 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package GUI_UpdateInjection;
+package Data_Processor;
+
 
 import Data_Processor.Account;
 import Data_Processor.DefaultValue;
@@ -17,10 +18,12 @@ import GUI_SearchOrg.SearchOrgView;
 import java.awt.Image;
 import java.awt.Color;
 import java.awt.Font;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,9 +35,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 
-import javax.swing.BorderFactory;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
+
+import static GUI_UpdateInjection.ImageHelper.reSize;
 
 import java.io.FileInputStream;
 import java.sql.Connection;
@@ -87,7 +89,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
     private Account userAccount = new Account();
     private Person personalUser = new Person();
     private Organization organization = new Organization();
-    private RegisteredScheds register=new RegisteredScheds();
+    private RegisteredScheds Reg=new RegisteredScheds();
     private Schedule schedule = new Schedule();
 
     /*Other Views*/
@@ -158,7 +160,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
             personalUser.setEmail(rs.getString("Email"));
             personalUser.setGuardian(rs.getString("Guardian"));
 
-            register.setDoseType(rs.getString("Dosetype"));
+            Reg.setDoseType(rs.getString("Dosetype"));
             
             rs1.next();
             Total_Injection=rs1.getInt("Total");
@@ -212,6 +214,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         InfoLayeredPane.setLayout(null);
         InfoLayeredPane.setOpaque(true);
         
+
         //Load Image
             if(imageData!=null)
             {
@@ -225,6 +228,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
                 Image.setBounds(60,140,379,505);
                 Image.setHorizontalAlignment(JLabel.LEFT);
                 InfoLayeredPane.add(Image,Integer.valueOf(2));
+
             }
             else 
                 System.out.println(imageData);
@@ -283,10 +287,11 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
             
             rs.next();
             organization.setName(rs.getString("Name"));
-            register.getSched().setID(rs.getString("SchedID"));
+            Reg.getSched().setID(rs.getString("SchedID"));
             schedule.setVaccineID(rs.getString("VaccineID"));
             schedule.setSerial(rs.getString("Serial"));
             
+
             register.getOrg().setProvince(rs.getString("Province"));
             register.getOrg().setDistrict(rs.getString("District"));
             register.getOrg().setTown(rs.getString("Town"));
@@ -328,7 +333,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         NameOrg.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
         NameOrg.setHorizontalAlignment(JLabel.LEFT);
         
-        JLabel IDOrg=new JLabel("Mã lịch tiêm: " + register.getSched().getID());
+        JLabel IDOrg=new JLabel("Mã lịch tiêm: " + Reg.getSched().getID());
         IDOrg.setBounds(50, 170, 712, 35);
         IDOrg.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
         IDOrg.setHorizontalAlignment(JLabel.LEFT);
@@ -338,24 +343,24 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         Vaccine.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
         Vaccine.setHorizontalAlignment(JLabel.LEFT);
         
-        JLabel doseType=new JLabel("Loại: "+dv.getDoseTypeName(register.getDoseType()));
+        JLabel doseType=new JLabel("Loại: "+dv.getDoseTypeName(Reg.getDoseType()));
         doseType.setBounds(406, 205, 356, 35);
         doseType.setFont(new Font("SVN-Arial",Font.PLAIN,20));
         doseType.setHorizontalAlignment(JLabel.LEFT);
         
-        JLabel Address = new JLabel("Đ/c: " + dv.getProvinceName(register.getOrg().getProvince())  + ", "
-                + register.getOrg().getDistrict() + ", " + register.getOrg().getTown() + ", " + register.getOrg().getStreet());  
+        JLabel Address = new JLabel("Đ/c: " + dv.getProvinceName(Reg.getOrg().getProvince())  + ", "
+                + Reg.getOrg().getDistrict() + ", " + Reg.getOrg().getTown() + ", " + Reg.getOrg().getStreet());
         Address.setBounds(50,240,712,35);
         Address.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
         Address.setHorizontalAlignment(JLabel.LEFT);
         
-        JLabel OnDateTime = new JLabel("Lịch tiêm ngày: " + register.getSched().getOnDate()
-                + "          Buổi: " + dv.getTimeName(register.getTime())  + "          STT: " + register.getNO());
+        JLabel OnDateTime = new JLabel("Lịch tiêm ngày: " + Reg.getSched().getOnDate()
+                + "          Buổi: " + dv.getTimeName(Reg.getTime())  + "          STT: " + Reg.getNO());
         OnDateTime.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
         OnDateTime.setBounds(50,275,712,35);
         OnDateTime.setHorizontalAlignment(JLabel.LEFT);
         
-        JLabel Status = new JLabel("Tình trạng: "+ dv.getStatusName(register.getStatus()));
+        JLabel Status = new JLabel("Tình trạng: "+ dv.getStatusName(Reg.getStatus()));
         Status.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
         Status.setBounds(50,310,712,35);
         Status.setHorizontalAlignment(JLabel.LEFT);
@@ -491,10 +496,9 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
             if ( dv.popupConfirmOption(null, "Xác nhận cập nhật giấy chứng nhận mũi tiêm?", "Xác nhận?") == 0)
             {
                 
+
                 //System.out.println(register.getImageInjection());
-                //Xử lý lưu thông tin hình ảnh vào cơ sở dữ liệu 
-                
-                
+                //Xử lý lưu thông tin hình ảnh vào cơ sở dữ liệu   
                 
         try {
             connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());

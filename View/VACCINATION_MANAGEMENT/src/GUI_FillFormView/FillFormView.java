@@ -1,7 +1,6 @@
 package GUI_FillFormView;
 
 import Data_Processor.*;
-import GUI_ManageSchedule.ManageScheduleView;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -11,11 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
-import java.text.Normalizer;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.Properties;
 
 /**
@@ -216,6 +211,117 @@ public class FillFormView extends JPanel implements ActionListener
         }
     }
 
+    private JPanel FormPanel(Health Heal)
+    {
+        JLabel Target = new JLabel("Đối tượng: " + personalUser.getFullName()
+                + " (ID: " + getPersonalUser().getID() + ")");
+        Target.setFont(new Font(dv.fontName(), 1, 16));
+        Target.setForeground(new Color(dv.BlackTextColor()));
+        Target.setBounds(30,1,600,25);
+        Target.setHorizontalAlignment(JLabel.LEFT);
+
+        String temp = dv.toApplicationDate(String.valueOf(Heal.getFilledDate()));
+
+        JLabel FilledDate = new JLabel("Ngày thực hiện khai báo: " + Heal.getFilledDate());
+        FilledDate.setFont(new Font(dv.fontName(), 1, 16));
+        FilledDate.setForeground(new Color(dv.BlackTextColor()));
+        FilledDate.setBounds(30,25,600,25);
+        FilledDate.setHorizontalAlignment(JLabel.LEFT);
+
+        JPanel initFormPanel = new JPanel();
+        initFormPanel.setLayout(null);
+        initFormPanel.setBackground(Color.WHITE);
+        initFormPanel.add(Target);
+        initFormPanel.add(FilledDate);
+
+        if (Heal.getHealths().equals("0000"))
+        {
+            JLabel NormalHealth = new JLabel("Sức khỏe bình thường - Đạt điều kiện sức khỏe tiêm chủng");
+            NormalHealth.setFont(new Font(dv.fontName(), 1, 13));
+            NormalHealth.setForeground(new Color(dv.GreenPastel()));
+            NormalHealth.setBounds(30,50,600,25);
+            NormalHealth.setHorizontalAlignment(JLabel.LEFT);
+
+            initFormPanel.setPreferredSize(new Dimension(640,80));
+            initFormPanel.add(NormalHealth);
+        }
+        else
+        {
+            JLabel FirstAns = new JLabel();
+            FirstAns.setBounds(30,50,600,25);
+            FirstAns.setHorizontalAlignment(JLabel.LEFT);
+            if (Heal.getHealths().substring(0,1).equals("1"))
+            {
+                FirstAns.setText("<html>Có một trong các dấu hiệu sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi trong vòng 14 ngày qua");
+                FirstAns.setFont(new Font(dv.fontName(), 1, 13));
+                FirstAns.setForeground(new Color(dv.BlackTextColor()));
+            }
+            else
+            {
+                FirstAns.setText("<html>Không có dấu hiệu sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi trong vòng 14 ngày qua");
+                FirstAns.setFont(new Font(dv.fontName(), 0, 13));
+                FirstAns.setForeground(new Color(dv.GreenPastel()));
+            }
+
+            JLabel SecondAns = new JLabel();
+            SecondAns.setBounds(30,75,600,25);
+            SecondAns.setHorizontalAlignment(JLabel.LEFT);
+            if (Heal.getHealths().substring(1,2).equals("1"))
+            {
+                SecondAns.setText("<html>Có tiếp xúc với Người bệnh hoặc nghi ngờ, mắc bệnh COVID-19 trong vòng 14 ngày qua");
+                SecondAns.setFont(new Font(dv.fontName(), 1, 13));
+                SecondAns.setForeground(new Color(dv.BlackTextColor()));
+            }
+            else
+            {
+                SecondAns.setText("<html>Không tiếp xúc với Người bệnh hoặc nghi ngờ, mắc bệnh COVID-19 trong vòng 14 ngày qua");
+                SecondAns.setFont(new Font(dv.fontName(), 0, 13));
+                SecondAns.setForeground(new Color(dv.GreenPastel()));
+            }
+
+
+            JLabel ThirdAns = new JLabel();
+            ThirdAns.setBounds(30,100,600,25);
+            ThirdAns.setHorizontalAlignment(JLabel.LEFT);
+            if (Heal.getHealths().substring(2,3).equals("1"))
+            {
+                ThirdAns.setText("<html>Là đối tượng đang dương tính với Covid-19");
+                ThirdAns.setFont(new Font(dv.fontName(), 1, 13));
+                ThirdAns.setForeground(new Color(dv.RedPastel()));
+            }
+            else
+            {
+                ThirdAns.setText("<html>Không là đối tượng đang dương tính với Covid-19");
+                ThirdAns.setFont(new Font(dv.fontName(), 0, 13));
+                ThirdAns.setForeground(new Color(dv.GreenPastel()));
+            }
+
+            JLabel FourthAns = new JLabel();
+            FourthAns.setBounds(30,125,600,25);
+            FourthAns.setHorizontalAlignment(JLabel.LEFT);
+            if (Heal.getHealths().substring(3,4).equals("1"))
+            {
+                FourthAns.setText("<html>Là đối tượng trì hoãn tiêm chủng hoặc chống chỉ định với tiêm chủng vaccine Covid-19");
+                FourthAns.setFont(new Font(dv.fontName(), 1, 13));
+                FourthAns.setForeground(new Color(dv.RedPastel()));
+            }
+            else
+            {
+                FourthAns.setText("<html>Không là đối tượng trì hoãn tiêm chủng hoặc chống chỉ định với tiêm chủng vaccine Covid-19");
+                FourthAns.setFont(new Font(dv.fontName(), 0, 13));
+                FourthAns.setForeground(new Color(dv.GreenPastel()));
+            }
+
+            initFormPanel.setPreferredSize(new Dimension(640,150));
+            initFormPanel.add(FirstAns);
+            initFormPanel.add(SecondAns);
+            initFormPanel.add(ThirdAns);
+            initFormPanel.add(FourthAns);
+        }
+
+        return initFormPanel;
+    }
+
     private void initFormListPanel(int Within)
     {
         FormListPanel = new JPanel();
@@ -248,7 +354,7 @@ public class FillFormView extends JPanel implements ActionListener
                 Heal.setFilledDate(LocalDate.parse(rs.getString("FilledDate").substring(0,10)));
                 Heal.setHealths(rs.getString("Healths"));
                 initFormPanel(i, Heal);
-                FormListPanel.add(FormPanel[i]);
+                FormListPanel.add(FormPanel(Heal));
                 if (Heal.getHealths().equals("0000"))
                     listHeight += 80;
                 else

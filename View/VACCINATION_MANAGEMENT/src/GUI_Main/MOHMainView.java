@@ -4,7 +4,6 @@ import Data_Processor.*;
 import GUI_CreateOrgAccView.CreateOrgAccView;
 import GUI_Login.LoginView;
 import GUI_SearchOrg.SearchOrgView;
-import com.sun.tools.javac.Main;
 
 import javax.swing.*;
 import java.awt.*;
@@ -68,7 +67,8 @@ public class MOHMainView extends JFrame implements ActionListener
 
         ImageIcon AvatarImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/Avatar.png"));
         JLabel Avatar = new JLabel(AvatarImage);
-        Avatar.setBounds(90,100,190,190);
+        Avatar.setBounds((dv.FrameWidth()-dv.FrameHeight()-AvatarImage.getIconWidth())/2,100,
+                AvatarImage.getIconWidth(),AvatarImage.getIconHeight());
         Avatar.setHorizontalAlignment(JLabel.CENTER);
 
         JLabel Name = new JLabel(orgUser.getName());
