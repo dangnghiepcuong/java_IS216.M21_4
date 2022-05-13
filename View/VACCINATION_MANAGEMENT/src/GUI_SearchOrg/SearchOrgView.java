@@ -20,7 +20,7 @@ public class SearchOrgView extends JPanel implements ActionListener
     private DefaultValue dv = new DefaultValue();
     private Person personalUser = new Person();
 
-    //Components used in this view
+    //Org Filter Components
     private JPanel OrgFilterPanel;
     private JLabel ProvinceLabel;
     private JLabel DistrictLabel;
@@ -28,15 +28,21 @@ public class SearchOrgView extends JPanel implements ActionListener
     private Choice DistrictChoice;
     private Choice TownChoice;
     private Choice ProvinceChoice;
-    private JButton SearchOrgButton;
+    private JButton OrgFilterButton;
+
+    //Schedule Filter Components
+    private JPanel SchedFilterPanel;
+    private JLabel SchedFilterLabel;
+    private Choice SchedFilterChoice;
+    private JButton SchedFilterButton;
+
+    private Organization SelectedOrg;
 
     private JScrollPane ScrollPaneOrgList;
     private JPanel OrgListPanel;
-    private JPanel OrgPanel[] = new JPanel[100000];
 
     private JScrollPane ScrollPaneSchedList;
     private JPanel SchedListPanel;
-    private JPanel SchedPanel[] = new JPanel[50];
 
     private JLayeredPane LayeredPaneArea;
 
@@ -54,14 +60,14 @@ public class SearchOrgView extends JPanel implements ActionListener
         ProvinceLabel.setBounds(0, 0, dv.LabelWidth(), dv.LabelHeight());
         ProvinceLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         ProvinceLabel.setForeground(new Color(0x666666));
-        ProvinceLabel.setText("Tỉnh/thành phố:");
+        ProvinceLabel.setText("Tỉnh/thành phố");
         ProvinceLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
     }
 
     private void initProvinceChoice()
     {
         ProvinceChoice = new Choice();
-        ProvinceChoice.setBounds(0, 40, dv.FieldWidth(), dv.FieldHeight());
+        ProvinceChoice.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
         ProvinceChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         ProvinceChoice.setForeground(new Color(dv.BlackTextColor()));
         ProvinceChoice.setBackground(Color.WHITE);
@@ -76,17 +82,17 @@ public class SearchOrgView extends JPanel implements ActionListener
     private void initDistrictLabel()
     {
         DistrictLabel = new JLabel();
-        DistrictLabel.setBounds(0, 80, dv.LabelWidth(), dv.LabelHeight());
+        DistrictLabel.setBounds(0, 70, dv.LabelWidth(), dv.LabelHeight());
         DistrictLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         DistrictLabel.setForeground(new Color(0x666666));
-        DistrictLabel.setText("Quận/Huyện:");
+        DistrictLabel.setText("Quận/Huyện");
         DistrictLabel.setSize(dv.LabelWidth(), dv.LabelHeight());
     }
 
     private void initDistrictChoice()
     {
         DistrictChoice = new Choice();
-        DistrictChoice.setBounds(0, 110, dv.FieldWidth(), dv.FieldHeight());
+        DistrictChoice.setBounds(0, 100, dv.FieldWidth(), dv.FieldHeight());
         DistrictChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         DistrictChoice.setForeground(new Color(0x333333));
         DistrictChoice.setBackground(Color.WHITE);
@@ -103,17 +109,17 @@ public class SearchOrgView extends JPanel implements ActionListener
     private void initTownLabel()
     {
         TownLabel = new JLabel();
-        TownLabel.setBounds(0, 150, dv.LabelWidth(), dv.LabelHeight());
+        TownLabel.setBounds(0, 140, dv.LabelWidth(), dv.LabelHeight());
         TownLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         TownLabel.setForeground(new Color(0x666666));
         TownLabel.setSize(dv.LabelWidth(), dv.LabelHeight());
-        TownLabel.setText("Xã/phường/thị trấn:");
+        TownLabel.setText("Xã/phường/thị trấn");
     }
 
     private void initTownChoice()
     {
         TownChoice = new Choice();
-        TownChoice.setBounds(0, 180, dv.FieldWidth(), dv.FieldHeight());
+        TownChoice.setBounds(0, 170, dv.FieldWidth(), dv.FieldHeight());
         TownChoice.setForeground(new Color(0x333333));
         TownChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         TownChoice.setBackground(Color.WHITE);
@@ -126,17 +132,17 @@ public class SearchOrgView extends JPanel implements ActionListener
         TownChoice.add("Trúc Bạch");
     }
 
-    private void initSearchOrgButton() 
+    private void initOrgFilterButton() 
     {
-        SearchOrgButton = new JButton();
-        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Magnifying Glass Button_1.png"));
-        SearchOrgButton.setIcon(SearchIcon);
+        OrgFilterButton = new JButton();
+        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search Filter Button.png"));
+        OrgFilterButton.setIcon(SearchIcon);
 
-        SearchOrgButton.setBounds(0, 250, dv.FieldWidth(), SearchIcon.getIconHeight());
-        SearchOrgButton.setBorder(null);
-        SearchOrgButton.setContentAreaFilled(false);
+        OrgFilterButton.setBounds(0, 210, dv.FieldWidth(), SearchIcon.getIconHeight());
+        OrgFilterButton.setBorder(null);
+        OrgFilterButton.setContentAreaFilled(false);
 
-        SearchOrgButton.addActionListener(this);
+        OrgFilterButton.addActionListener(this);
     }
 
     private void initOrgFilterPanel()
@@ -147,10 +153,10 @@ public class SearchOrgView extends JPanel implements ActionListener
         initDistrictChoice();
         initTownLabel();
         initTownChoice();
-        initSearchOrgButton();
+        initOrgFilterButton();
 
         OrgFilterPanel = new JPanel();
-        OrgFilterPanel.setBounds(dv.AlignLeft(), dv.AlignTop(), dv.LabelWidth()+50, 350);
+        OrgFilterPanel.setBounds(dv.AlignLeft(), dv.AlignTop(), dv.LabelWidth()+50, 270);
         OrgFilterPanel.setLayout(null);
         OrgFilterPanel.setBackground(new Color(dv.ViewBackgroundColor()));
 
@@ -160,7 +166,7 @@ public class SearchOrgView extends JPanel implements ActionListener
         OrgFilterPanel.add(DistrictChoice);
         OrgFilterPanel.add(TownLabel);
         OrgFilterPanel.add(TownChoice);
-        OrgFilterPanel.add(SearchOrgButton);
+        OrgFilterPanel.add(OrgFilterButton);
     }
 
 
@@ -248,11 +254,15 @@ public class SearchOrgView extends JPanel implements ActionListener
                 SchedListLabel.setForeground(new Color(dv.FeatureButtonColor()));
                 SchedListLabel.setHorizontalAlignment(JLabel.CENTER);
 
-                initScrollPaneSchedList(Org);
+                SelectedOrg = Org;
+                initSchedListPanel(Org, -1);
+                initScrollPaneSchedList();
 
                 LayeredPaneArea.add(SchedListLabel, Integer.valueOf(3));
                 LayeredPaneArea.add(ScrollPaneSchedList, Integer.valueOf(3));
                 LayeredPaneArea.repaint(320, 40, 680, 630);
+
+                SchedFilterButton.setEnabled(true);
 
                 ScrollPaneOrgList = null;
                 OrgListPanel = null;
@@ -342,6 +352,68 @@ public class SearchOrgView extends JPanel implements ActionListener
     }
 
 
+
+    /*
+     *   INITIALIZE REGISTER FILTER PANEL
+     *   - PANEL:
+     *       + LABEL
+     *       + CHOICE
+     *       + BUTTON: SELECT
+     */
+
+    private void initSchedFilterLabel()
+    {
+        SchedFilterLabel = new JLabel();
+        SchedFilterLabel.setBounds(0, 0, dv.LabelWidth()+50, dv.LabelHeight());
+        SchedFilterLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        SchedFilterLabel.setForeground(new Color(0x666666));
+        SchedFilterLabel.setText("Bộ lọc vaccine Covid-19");
+        SchedFilterLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
+    }
+
+    private void initSchedFilterChoice()
+    {
+        SchedFilterChoice = new Choice();
+        SchedFilterChoice.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
+        SchedFilterChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
+        SchedFilterChoice.setForeground(new Color(dv.BlackTextColor()));
+
+        SchedFilterChoice.add("Tất cả");
+        SchedFilterChoice.add("Astra Zeneca");
+        SchedFilterChoice.add("Vero Cell (Sinopharm)");
+        SchedFilterChoice.add("Sputnik V");
+        SchedFilterChoice.add("Corminaty (Pfizer)");
+        SchedFilterChoice.add("Moderna");
+    }
+
+    private void initSchedFilterButton()
+    {
+        SchedFilterButton = new JButton();
+        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search Filter Button.png"));
+        SchedFilterButton.setIcon(SearchIcon);
+
+        SchedFilterButton.setBounds(0, 70, dv.FieldWidth(), SearchIcon.getIconHeight());
+        SchedFilterButton.setBorder(null);
+        SchedFilterButton.setContentAreaFilled(false);
+
+        SchedFilterButton.addActionListener(this);
+    }
+
+    private void initSchedFilterPanel()
+    {
+        initSchedFilterLabel();
+        initSchedFilterChoice();
+        initSchedFilterButton();
+
+        SchedFilterPanel = new JPanel();
+        SchedFilterPanel.setBounds(dv.AlignLeft(), 380, dv.LabelWidth()+50, 125);
+        SchedFilterPanel.setLayout(null);
+        SchedFilterPanel.setBackground(new Color(dv.ViewBackgroundColor()));
+
+        SchedFilterPanel.add(SchedFilterLabel);
+        SchedFilterPanel.add(SchedFilterChoice);
+        SchedFilterPanel.add(SchedFilterButton);
+    }
 
     /*
     *   INITIALIZE A SCHEDULE LIST PANEL
@@ -513,11 +585,15 @@ public class SearchOrgView extends JPanel implements ActionListener
         return SchedPanel;
     }
 
-    private void initSchedListPanel(Organization SelectedOrg)
+    private void initSchedListPanel(Organization Org, int SelectedVaccine)
     {
         /*
                 SELECT OUT THE INFO OF THE ORGANIZATION'S SPECIFIED SCHEDULES
         */
+        SchedListPanel = new JPanel();
+        SchedListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+        SchedListPanel.setLayout(new FlowLayout());
+
         String query = "";
 
         int nSched = 0;
@@ -525,9 +601,11 @@ public class SearchOrgView extends JPanel implements ActionListener
 
         query = "select *" +
                 " from SCHEDULE SCHED" +
-                " where OrgID = '" + SelectedOrg.getID() + "'" +
-                " and OnDate >= TO_DATE('" + dv.oracleSysdate() + "')" +
-                " order by OnDate";
+                " where OrgID = '" + Org.getID() + "'" +
+                " and OnDate >= TO_DATE('" + dv.oracleSysdate() + "')";
+        if (SelectedVaccine != -1)
+            query += " and VaccineID = '" + dv.getVaccineID(SchedFilterChoice.getSelectedIndex()-1) + "'";
+        query += " order by OnDate";
 
         System.out.println(query);
 
@@ -562,19 +640,11 @@ public class SearchOrgView extends JPanel implements ActionListener
 
         nSched = i;
 
-        SchedListPanel = new JPanel();
         SchedListPanel.setPreferredSize(new Dimension( 660, 120*nSched + nSched*10));
-        SchedListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
-        SchedListPanel.setLayout(new FlowLayout());
-
-
-
     }
 
-    private void initScrollPaneSchedList(Organization SelectedOrg)
+    private void initScrollPaneSchedList()
     {
-        initSchedListPanel(SelectedOrg);
-
         ScrollPaneSchedList = new JScrollPane(SchedListPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneSchedList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
@@ -601,6 +671,11 @@ public class SearchOrgView extends JPanel implements ActionListener
         initOrgFilterPanel();
         this.add(OrgFilterPanel);
 
+        //init SchedFilterPanel
+        initSchedFilterPanel();
+        this.add(SchedFilterPanel);
+        SchedFilterButton.setEnabled(false);
+
         //init LayeredPane
         initLayeredPaneArea();
         this.add(LayeredPaneArea);
@@ -625,7 +700,7 @@ public class SearchOrgView extends JPanel implements ActionListener
         /*
             HANDLE ON SEARCH ORG BUTTON CLICKING
         */
-        if (e.getSource() == SearchOrgButton) {
+        if (e.getSource() == OrgFilterButton) {
             /*
                 SELECT OUT THE INFO OF THE ORGANIZATION'S SPECIFIED SCHEDULES
             */
@@ -644,9 +719,27 @@ public class SearchOrgView extends JPanel implements ActionListener
             LayeredPaneArea.add(OrgListLabel, Integer.valueOf(0));
 
             LayeredPaneArea.add(ScrollPaneOrgList, Integer.valueOf(0));
-            SchedListPanel = null;
 
+            SchedListPanel = null;
             ScrollPaneSchedList = null;
+            SchedFilterButton.setEnabled(false);
+        }
+
+        if (e.getSource() == SchedFilterButton)
+        {
+            JLabel SchedListLabel = new JLabel("DANH SÁCH CÁC LỊCH TIÊM " + SelectedOrg.getName() + ":");
+            SchedListLabel.setBounds(0,0,640,40);
+            SchedListLabel.setFont(new Font(dv.fontName(), 1, 20));
+            SchedListLabel.setForeground(new Color(dv.FeatureButtonColor()));
+            SchedListLabel.setHorizontalAlignment(JLabel.CENTER);
+
+            initSchedListPanel(SelectedOrg, SchedFilterChoice.getSelectedIndex()-1);
+            initScrollPaneSchedList();
+
+            LayeredPaneArea.removeAll();
+
+            LayeredPaneArea.add(SchedListLabel);
+            LayeredPaneArea.add(ScrollPaneSchedList);
         }
     }
 

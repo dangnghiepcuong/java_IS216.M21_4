@@ -47,7 +47,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         ProvinceFilterLabel.setBounds(0, 0, dv.LabelWidth()+50, dv.LabelHeight());
         ProvinceFilterLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         ProvinceFilterLabel.setForeground(new Color(0x666666));
-        ProvinceFilterLabel.setText("Bộ lọc tỉnh/TP:");
+        ProvinceFilterLabel.setText("Bộ lọc tỉnh/TP");
         ProvinceFilterLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
     }
 
@@ -67,7 +67,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
     private void initProvinceFilterButton()
     {
         ProvinceFilterButton = new JButton();
-        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Magnifying Glass Button_1.png"));
+        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search Filter Button.png"));
         ProvinceFilterButton.setIcon(SearchIcon);
 
         ProvinceFilterButton.setBounds(0, 110, dv.FieldWidth(), SearchIcon.getIconHeight());
@@ -252,7 +252,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         CreateSchedLabel.setForeground(new Color(dv.FeatureButtonColor()));
         CreateSchedLabel.setHorizontalAlignment(JLabel.CENTER);
 
-        JLabel ProvinceLabel = new JLabel("Tỉnh/thành phố:");
+        JLabel ProvinceLabel = new JLabel("Tỉnh/thành phố");
         ProvinceLabel.setPreferredSize(new Dimension(200, 30));
         ProvinceLabel.setFont(new Font(dv.fontName(), 0 ,16));
         ProvinceLabel.setForeground(new Color(dv.BlackTextColor()));
@@ -266,7 +266,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         for (int i = 1; i<=64; i++)
             ProvinceChoice.add(dv.getProvinceList()[i]);
 
-        JLabel QuantityLabel = new JLabel("Số lượng tài khoản cần tạo: ");
+        JLabel QuantityLabel = new JLabel("Số lượng tài khoản cần tạo");
         QuantityLabel.setPreferredSize(new Dimension(220, 30));
         QuantityLabel.setFont(new Font(dv.fontName(), 0 ,16));
         QuantityLabel.setForeground(new Color(dv.BlackTextColor()));

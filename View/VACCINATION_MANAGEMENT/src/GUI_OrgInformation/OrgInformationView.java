@@ -168,7 +168,7 @@ public class OrgInformationView extends JPanel implements ActionListener
 
         ImageIcon RegisterButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Update Button.png"));
         UpdateAccButton = new JButton();
-        UpdateAccButton.setBounds(105, 450+40, RegisterButtonIcon.getIconWidth(), RegisterButtonIcon.getIconHeight());
+        UpdateAccButton.setBounds(105, 600, RegisterButtonIcon.getIconWidth(), RegisterButtonIcon.getIconHeight());
         UpdateAccButton.setBorder(null);
         UpdateAccButton.setContentAreaFilled(false);
         UpdateAccButton.setIcon(RegisterButtonIcon);
