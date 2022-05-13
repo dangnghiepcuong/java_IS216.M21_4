@@ -2,53 +2,23 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package GUI_UpdateInjection;
+package Data_Processor;
 
-import Data_Processor.Account;
-import java.security.cert.Certificate;
-import Data_Processor.DefaultValue;
-import Data_Processor.ImageHelper;
-import static Data_Processor.ImageHelper.reSize;
-import Data_Processor.Organization;
-import Data_Processor.Person;
-import Data_Processor.Schedule;
-import Data_Processor.RegisteredScheds;
 import GUI_ManageVaccination.ManageVaccinationView;
 import GUI_SearchOrg.SearchOrgView;
 
-import java.awt.Image;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.beans.Statement;
-import java.sql.Blob;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
-
-import javax.swing.BorderFactory;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
+import static GUI_UpdateInjection.ImageHelper.reSize;
 
 /**
  *
@@ -95,7 +65,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
     private Account userAccount = new Account();
     private Person personalUser = new Person();
     private Organization organization = new Organization();
-    private RegisteredScheds register=new RegisteredScheds();
+    private RegisteredScheds Reg=new RegisteredScheds();
     private Schedule schedule = new Schedule();
 
     /*Other Views*/
@@ -163,7 +133,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
             personalUser.setEmail(rs.getString("Email"));
             personalUser.setGuardian(rs.getString("Guardian"));
 
-            register.setDoseType(rs.getString("Dosetype"));
+            Reg.setDoseType(rs.getString("Dosetype"));
             
             rs1.next();
             Total_Injection=rs1.getInt("Total");
@@ -217,10 +187,10 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         InfoLayeredPane.setLayout(null);
         InfoLayeredPane.setOpaque(true);
         
-        if(register.getImageInjection() != null)
+        if(Reg.getImageInjection() != null)
         {
             try {
-                Image img=ImageHelper.createImageFromByteArray(register.getImageInjection(), "jpg");
+                Image img=ImageHelper.createImageFromByteArray(Reg.getImageInjection(), "jpg");
                 JLabel image = new JLabel(new ImageIcon(img));         
                 image.setBounds(60,140,379,505);
                 image.setHorizontalAlignment(JLabel.LEFT);
@@ -285,16 +255,16 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
             
             rs.next();
             organization.setName(rs.getString("Name"));
-            register.getSched().setID(rs.getString("SchedID"));
+            Reg.getSched().setID(rs.getString("SchedID"));
             schedule.setVaccineID(rs.getString("VaccineID"));
             schedule.setSerial(rs.getString("Serial"));
             
-            register.getOrg().setProvince(rs.getString("Province"));
-            register.getOrg().setDistrict(rs.getString("District"));
-            register.getOrg().setTown(rs.getString("Town"));
-            register.getOrg().setStreet(rs.getString("Street"));
-            register.getSched().setOnDate(rs.getString("OnDate").substring(0,10));           
-            register.setStatus(rs.getInt("Status"));
+            Reg.getOrg().setProvince(rs.getString("Province"));
+            Reg.getOrg().setDistrict(rs.getString("District"));
+            Reg.getOrg().setTown(rs.getString("Town"));
+            Reg.getOrg().setStreet(rs.getString("Street"));
+            Reg.getSched().setOnDate(rs.getString("OnDate").substring(0,10));
+            Reg.setStatus(rs.getInt("Status"));
  
         } catch (SQLException e) {
             e.printStackTrace();
@@ -322,7 +292,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         NameOrg.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
         NameOrg.setHorizontalAlignment(JLabel.LEFT);
         
-        JLabel IDOrg=new JLabel("Mã lịch tiêm: " + register.getSched().getID());
+        JLabel IDOrg=new JLabel("Mã lịch tiêm: " + Reg.getSched().getID());
         IDOrg.setBounds(50, 170, 712, 35);
         IDOrg.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
         IDOrg.setHorizontalAlignment(JLabel.LEFT);
@@ -332,24 +302,24 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         Vaccine.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
         Vaccine.setHorizontalAlignment(JLabel.LEFT);
         
-        JLabel doseType=new JLabel("Loại: "+dv.getDoseTypeName(register.getDoseType()));
+        JLabel doseType=new JLabel("Loại: "+dv.getDoseTypeName(Reg.getDoseType()));
         doseType.setBounds(406, 205, 356, 35);
         doseType.setFont(new Font("SVN-Arial",Font.PLAIN,20));
         doseType.setHorizontalAlignment(JLabel.LEFT);
         
-        JLabel Address = new JLabel("Đ/c: " + dv.getProvinceName(register.getOrg().getProvince())  + ", "
-                + register.getOrg().getDistrict() + ", " + register.getOrg().getTown() + ", " + register.getOrg().getStreet());  
+        JLabel Address = new JLabel("Đ/c: " + dv.getProvinceName(Reg.getOrg().getProvince())  + ", "
+                + Reg.getOrg().getDistrict() + ", " + Reg.getOrg().getTown() + ", " + Reg.getOrg().getStreet());
         Address.setBounds(50,240,712,35);
         Address.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
         Address.setHorizontalAlignment(JLabel.LEFT);
         
-        JLabel OnDateTime = new JLabel("Lịch tiêm ngày: " + register.getSched().getOnDate()
-                + "          Buổi: " + dv.getTimeName(register.getTime())  + "          STT: " + register.getNO());
+        JLabel OnDateTime = new JLabel("Lịch tiêm ngày: " + Reg.getSched().getOnDate()
+                + "          Buổi: " + dv.getTimeName(Reg.getTime())  + "          STT: " + Reg.getNO());
         OnDateTime.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
         OnDateTime.setBounds(50,275,712,35);
         OnDateTime.setHorizontalAlignment(JLabel.LEFT);
         
-        JLabel Status = new JLabel("Tình trạng: "+ dv.getStatusName(register.getStatus()));
+        JLabel Status = new JLabel("Tình trạng: "+ dv.getStatusName(Reg.getStatus()));
         Status.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
         Status.setBounds(50,310,712,35);
         Status.setHorizontalAlignment(JLabel.LEFT);
@@ -452,10 +422,10 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
             image.setBounds(60,140,379,505);
             image.setHorizontalAlignment(JLabel.LEFT);
             InfoLayeredPane.add(image,Integer.valueOf(2));
-            register.setImageInjection(ImageHelper.toByteArray(img, ".jpg"));
+            Reg.setImageInjection(ImageHelper.toByteArray(img, ".jpg"));
           
 //            JLabel image2 = new JLabel(new ImageIcon(ImageHelper.createImageFromByteArray(ImageInjection, ".jpg") ));
-//            register.setImageInjection(ImageInjection);
+//            Reg.setImageInjection(ImageInjection);
 //      InfoLayeredPane.add(image2,Integer.valueOf(2));
         }
         catch(Exception e)
@@ -482,13 +452,13 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
             if ( dv.popupConfirmOption(null, "Xác nhận cập nhật giấy chứng nhận mũi tiêm?", "Xác nhận?") == 0)
             {
                 
-                System.out.println(register.getImageInjection());
+                System.out.println(Reg.getImageInjection());
 //                //Xử lý lưu thông tin hình ảnh vào cơ sở dữ liệu 
 //                
 //                
 //                String query = "select Image" +
 //                        "from Register \n" +
-//                        " where personalID= '" +  register.getOrg().getID() + " Schedid= " + register.getSched();
+//                        " where personalID= '" +  Reg.getOrg().getID() + " Schedid= " + Reg.getSched();
 //        try {
 //            
 //            
