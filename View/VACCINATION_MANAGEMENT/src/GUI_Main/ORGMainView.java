@@ -166,6 +166,7 @@ public class ORGMainView extends JFrame implements ActionListener
         ButtonLabel.setBounds(0, 160, 240, 30);
         ButtonLabel.setText("Thông tin");
         ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -173,6 +174,7 @@ public class ORGMainView extends JFrame implements ActionListener
         ButtonLabel2.setBounds(0, 160 +25, 240, 30);
         ButtonLabel2.setText("đơn vị");
         ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -193,6 +195,7 @@ public class ORGMainView extends JFrame implements ActionListener
         ButtonLabel.setBounds(240, 160, 240, 30);
         ButtonLabel.setText("Quản lý");
         ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -200,6 +203,7 @@ public class ORGMainView extends JFrame implements ActionListener
         ButtonLabel2.setBounds(240, 160 +25, 240, 30);
         ButtonLabel2.setText("lịch tiêm chủng");
         ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel2_1.setBorder(dv.border());
         FeatureLayeredPane.add(ButtonLabel);
@@ -219,6 +223,7 @@ public class ORGMainView extends JFrame implements ActionListener
         ButtonLabel.setBounds(240*2 -15, 160, 240-20, 30);
         ButtonLabel.setText("Gửi thông báo");
         ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -226,6 +231,7 @@ public class ORGMainView extends JFrame implements ActionListener
         ButtonLabel2.setBounds(240*2 -15, 160 +25, 240-20, 30);
         ButtonLabel2.setText("địa phương");
         ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -246,6 +252,7 @@ public class ORGMainView extends JFrame implements ActionListener
         ButtonLabel.setBounds(0, 240+130, 240, 30);
         ButtonLabel.setText("Tìm kiếm");
         ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -253,6 +260,7 @@ public class ORGMainView extends JFrame implements ActionListener
         ButtonLabel2.setBounds(0, 240+130 +25, 240, 30);
         ButtonLabel2.setText("thông tin");
         ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -273,6 +281,7 @@ public class ORGMainView extends JFrame implements ActionListener
         ButtonLabel.setBounds(240 -10, 240+130, 240, 30);
         ButtonLabel.setText("Thống kê");
         ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
@@ -280,6 +289,7 @@ public class ORGMainView extends JFrame implements ActionListener
         ButtonLabel2.setBounds(240 -10, 240+130 +25, 240, 30);
         ButtonLabel2.setText("số liệu");
         ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
