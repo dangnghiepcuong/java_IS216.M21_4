@@ -41,10 +41,13 @@ public class SearchOrgView extends JPanel implements ActionListener
     private JLayeredPane LayeredPaneArea;
 
 
-/*
-                                INIT A FILTER OF ORGANIZATION
-                                ADD IS TO THE SEARCHORGVIEW PANEL
-*/
+    /*
+    *   INITIALIZE A FILTER OF ORGANIZATION
+    *   - PANEL:
+    *       + LABELS
+    *       + CHOICES
+    *       + BUTTON: SELECT
+    */
     private void initProvinceLabel()
     {
         ProvinceLabel = new JLabel();
@@ -161,12 +164,14 @@ public class SearchOrgView extends JPanel implements ActionListener
     }
 
 
-/*
-                                INIT A ORGANIZATION LIST PANEL
-                                ADD IS TO A SCROLLPANE
-                                ADD THE SCROLLPANE TO THE LAYEREDPANE
-*/
-    private void initOrgPanel(int i, Organization Org)
+    /*
+    *   INITIALIZE A ORGANIZATION LIST PANEL
+    *   - SCROLLPANE:
+    *       + PANEL: LIST OF ORGANIZATION
+    *           - PANELS: ORGANIZATIONS
+    *               + LABELS
+    * */
+    private JPanel initOrgPanel(Organization Org)
     {
         //Org info
         JLabel OrgName = new JLabel("Đơn vị: " + Org.getName());
@@ -213,19 +218,19 @@ public class SearchOrgView extends JPanel implements ActionListener
 
 
         //create OrgPanel Panel
-        OrgPanel[i] = new JPanel();
+        JPanel OrgPanel = new JPanel();
         //set layout
-        OrgPanel[i].setLayout(null);
-        OrgPanel[i].setPreferredSize(new Dimension(640,120));
+        OrgPanel.setLayout(null);
+        OrgPanel.setPreferredSize(new Dimension(640,120));
         //set Background color
-        OrgPanel[i].setBackground(Color.WHITE);
+        OrgPanel.setBackground(Color.WHITE);
 
-        OrgPanel[i].add(OrgName);
-        OrgPanel[i].add(OrgProvince);
-        OrgPanel[i].add(OrgDistrict);
-        OrgPanel[i].add(OrgTown);
-        OrgPanel[i].add(OrgStreet);
-        OrgPanel[i].add(OrgAvaiScheds);
+        OrgPanel.add(OrgName);
+        OrgPanel.add(OrgProvince);
+        OrgPanel.add(OrgDistrict);
+        OrgPanel.add(OrgTown);
+        OrgPanel.add(OrgStreet);
+        OrgPanel.add(OrgAvaiScheds);
 
         /*
             INITIALIZED THE SPECIFIED SCHEDULE LIST OF THE SELECTED ORGANIZATION
@@ -254,27 +259,18 @@ public class SearchOrgView extends JPanel implements ActionListener
             }
 
             @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
+            public void mousePressed(MouseEvent e) {}
             @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
+            public void mouseReleased(MouseEvent e) {}
             @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
+            public void mouseEntered(MouseEvent e) {}
             @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
+            public void mouseExited(MouseEvent e) {}
         };
 
-        OrgPanel[i].addMouseListener(handleMouseAction);
+        OrgPanel.addMouseListener(handleMouseAction);
+
+        return OrgPanel;
     }
 
     private void initOrgListPanel()
@@ -285,7 +281,6 @@ public class SearchOrgView extends JPanel implements ActionListener
 
         Organization Org;
         int i = 0;
-        int nORG = 0;
 
         //Select out the code of chosen province
         String ProvinceCode = "";
@@ -328,11 +323,10 @@ public class SearchOrgView extends JPanel implements ActionListener
                 Org.setTown(rs.getString("Town"));
                 Org.setStreet(rs.getString("Street"));
                 Org.setAvaiScheds(rs.getInt("COUNT(SCHED.ID)"));
-                initOrgPanel(i, Org);
-                OrgListPanel.add(OrgPanel[i]);
+                OrgListPanel.add(initOrgPanel(Org));
                 i++;
             }
-            nORG = i;
+            int nORG = i;
             OrgListPanel.setPreferredSize(new Dimension(660, 120*nORG + nORG*5));
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -341,62 +335,65 @@ public class SearchOrgView extends JPanel implements ActionListener
 
     private void initScrollPaneOrgList()
     {
-        ScrollPaneOrgList = new JScrollPane(OrgListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        ScrollPaneOrgList = new JScrollPane(OrgListPanel,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneOrgList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneOrgList.setBounds(0, 40, 680, 590); //320-40
     }
 
 
 
-/*
-                                INIT A SCHEDULE LIST PANEL
-                                ADD IS TO A SCROLLPANE
-                                ADD THE SCROLLPANE TO THE LAYEREDPANE
-*/
-    private void initSchedPanel(int i, Schedule sched, Organization SelectedOrg)
+    /*
+    *   INITIALIZE A SCHEDULE LIST PANEL
+    *   - SCROLLPANE:
+    *       + PANEL:
+    *           - PANELS:
+    *               + LABELS
+    * */
+    private JPanel initSchedPanel(Schedule Sched)
     {
         //Org info
-        JLabel OrgName = new JLabel("Tên đơn vị: " + SelectedOrg.getName());
+        JLabel OrgName = new JLabel("Tên đơn vị: " + Sched.getOrg().getName());
         OrgName.setFont(new Font(dv.fontName(), 3, 18));
         OrgName.setForeground(new Color(dv.FeatureButtonColor()));
         OrgName.setBounds(30,1,605,30);
         OrgName.setHorizontalAlignment(JLabel.LEFT);
         //OrgName.setBorder(dv.border());
 
-        JLabel OnDate = new JLabel("Lịch tiêm ngày: " + sched.getOnDate().toString().substring(0,10));
+        JLabel OnDate = new JLabel("Lịch tiêm ngày: " + Sched.getOnDate().toString().substring(0,10));
         OnDate.setFont(new Font(dv.fontName(), 0, 16));
         OnDate.setForeground(new Color(dv.BlackTextColor()));
         OnDate.setBounds(30,32,200,25);
         OnDate.setHorizontalAlignment(JLabel.LEFT);
         //OnDate.setBorder(dv.border());
 
-        JLabel VaccineID = new JLabel("Vaccine: " + sched.getVaccineID());
+        JLabel VaccineID = new JLabel("Vaccine: " + Sched.getVaccineID());
         VaccineID.setFont(new Font(dv.fontName(), 0, 16));
         VaccineID.setForeground(new Color(dv.BlackTextColor()));
         VaccineID.setBounds(30, 32+25+2,200,25);
         VaccineID.setHorizontalAlignment(JLabel.LEFT);
         //VaccineID.setBorder(dv.border());
 
-        JLabel Serial  = new JLabel("Serial: " + sched.getSerial());
+        JLabel Serial  = new JLabel("Serial: " + Sched.getSerial());
         Serial.setFont(new Font(dv.fontName(), 0, 16));
         Serial.setForeground(new Color(dv.BlackTextColor()));
         Serial.setBounds(30,(32+25+2)+25+2,200,25);
         Serial.setHorizontalAlignment(JLabel.LEFT);
         //Serial.setBorder(dv.border());
 
-        JLabel DayTime  = new JLabel("Buổi sáng: " + sched.getDayRegistered() + "/" + sched.getLimitDay());
+        JLabel DayTime  = new JLabel("Buổi sáng: " + Sched.getDayRegistered() + "/" + Sched.getLimitDay());
         DayTime.setFont(new Font(dv.fontName(), 0, 16));
         DayTime.setForeground(new Color(dv.BlackTextColor()));
         DayTime.setBounds(250,32,150,25);
         DayTime.setHorizontalAlignment(JLabel.LEFT);
 
-        JLabel NoonTime = new JLabel("Buổi trưa: " + sched.getNoonRegistered() + "/" + sched.getLimitNoon());
+        JLabel NoonTime = new JLabel("Buổi trưa: " + Sched.getNoonRegistered() + "/" + Sched.getLimitNoon());
         NoonTime.setFont(new Font(dv.fontName(), 0, 16));
         NoonTime.setForeground(new Color(dv.BlackTextColor()));
         NoonTime.setBounds(250,(32+25)+2,150,25);
         NoonTime.setHorizontalAlignment(JLabel.LEFT);
 
-        JLabel NightTime = new JLabel("Buổi tối: " + sched.getNightRegistered() + "/" + sched.getLimitNight());
+        JLabel NightTime = new JLabel("Buổi tối: " + Sched.getNightRegistered() + "/" + Sched.getLimitNight());
         NightTime.setFont(new Font(dv.fontName(), 0, 16));
         NightTime.setForeground(new Color(dv.BlackTextColor()));
         NightTime.setBounds(250,(32+25+2)+25+2,150,25);
@@ -414,7 +411,6 @@ public class SearchOrgView extends JPanel implements ActionListener
         /*
             HANDLE REGISTER A VACCINATION SCHEDULE ACTION
         */
-
         ActionListener handleSchedRegister = new ActionListener()
         {
             @Override
@@ -469,7 +465,7 @@ public class SearchOrgView extends JPanel implements ActionListener
                         */
                         CallableStatement cst2 = connection.prepareCall(plsql2);
                         cst2.setString("par_PersonalID", personalUser.getID());
-                        cst2.setString("par_SchedID", sched.getID());
+                        cst2.setString("par_SchedID", Sched.getID());
                         cst2.setInt("par_Time", TimeChoice.getSelectedIndex());
                         cst2.setString("par_DoseType", par_DoseType);
 
@@ -498,21 +494,23 @@ public class SearchOrgView extends JPanel implements ActionListener
         SchedRegisterButton.setIcon(SchedRegisterButtonIcon);
         SchedRegisterButton.addActionListener(handleSchedRegister);
 
-        SchedPanel[i] = new JPanel();
+        JPanel SchedPanel = new JPanel();
 
-        SchedPanel[i].setLayout(null);
-        SchedPanel[i].setPreferredSize(new Dimension(640,120));
-        SchedPanel[i].setBackground(Color.WHITE);
+        SchedPanel.setLayout(null);
+        SchedPanel.setPreferredSize(new Dimension(640,120));
+        SchedPanel.setBackground(Color.WHITE);
 
-        SchedPanel[i].add(OrgName);
-        SchedPanel[i].add(OnDate);
-        SchedPanel[i].add(VaccineID);
-        SchedPanel[i].add(Serial);
-        SchedPanel[i].add(DayTime);
-        SchedPanel[i].add(NoonTime);
-        SchedPanel[i].add(NightTime);
-        SchedPanel[i].add(TimeChoice);
-        SchedPanel[i].add(SchedRegisterButton);
+        SchedPanel.add(OrgName);
+        SchedPanel.add(OnDate);
+        SchedPanel.add(VaccineID);
+        SchedPanel.add(Serial);
+        SchedPanel.add(DayTime);
+        SchedPanel.add(NoonTime);
+        SchedPanel.add(NightTime);
+        SchedPanel.add(TimeChoice);
+        SchedPanel.add(SchedRegisterButton);
+
+        return SchedPanel;
     }
 
     private void initSchedListPanel(Organization SelectedOrg)
@@ -520,7 +518,6 @@ public class SearchOrgView extends JPanel implements ActionListener
         /*
                 SELECT OUT THE INFO OF THE ORGANIZATION'S SPECIFIED SCHEDULES
         */
-        Schedule sched[] = new Schedule[50];
         String query = "";
 
         int nSched = 0;
@@ -544,18 +541,19 @@ public class SearchOrgView extends JPanel implements ActionListener
 
             while(rs.next())
             {
-                sched[i] = new Schedule();
-                sched[i].setID(rs.getString("ID"));
-                sched[i].getOrg().setID(rs.getString("OrgID"));
-                sched[i].setOnDate(rs.getString("OnDate"));
-                sched[i].setVaccineID(rs.getString("VaccineID"));
-                sched[i].setSerial(rs.getString("Serial"));
-                sched[i].setLimitDay(rs.getInt("LimitDay"));
-                sched[i].setLimitNoon(rs.getInt("LimitNoon"));
-                sched[i].setLimitNight(rs.getInt("LimitNight"));
-                sched[i].setDayRegistered(rs.getInt("DayRegistered"));
-                sched[i].setNoonRegistered(rs.getInt("Noonregistered"));
-                sched[i].setNightRegistered(rs.getInt("NightRegistered"));
+                Schedule Sched = new Schedule();
+                Sched.setID(rs.getString("ID"));
+                Sched.getOrg().setID(rs.getString("OrgID"));
+                Sched.setOnDate(rs.getString("OnDate"));
+                Sched.setVaccineID(rs.getString("VaccineID"));
+                Sched.setSerial(rs.getString("Serial"));
+                Sched.setLimitDay(rs.getInt("LimitDay"));
+                Sched.setLimitNoon(rs.getInt("LimitNoon"));
+                Sched.setLimitNight(rs.getInt("LimitNight"));
+                Sched.setDayRegistered(rs.getInt("DayRegistered"));
+                Sched.setNoonRegistered(rs.getInt("Noonregistered"));
+                Sched.setNightRegistered(rs.getInt("NightRegistered"));
+                SchedListPanel.add(initSchedPanel(Sched));
                 i++;
             }
         } catch (SQLException e) {
@@ -569,11 +567,7 @@ public class SearchOrgView extends JPanel implements ActionListener
         SchedListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         SchedListPanel.setLayout(new FlowLayout());
 
-        for (i = 0; i<nSched; i++)
-        {
-            initSchedPanel(i, sched[i], SelectedOrg);
-            SchedListPanel.add(SchedPanel[i]);
-        }
+
 
     }
 
@@ -596,31 +590,11 @@ public class SearchOrgView extends JPanel implements ActionListener
         LayeredPaneArea.repaint(320, 40, 680, 630);
     }
 
-    private void initFrameComponent()
+    private void initComponents()
     {
-        //set Frame icon
-        //this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
-
-        //set frame title
-        //this.setTitle("Tìm kiếm đơn vị tiêm chủng");
-        
-        //set frame size
         this.setSize(dv.FrameWidth(), dv.FrameHeight());
-        //this.setSize(1080, 720); --Main View
-        
-        //set do not allow frame resizing
-        //this.setResizable(false);
-        
-        //set frame visible on screen
         this.setVisible(true);
-        
-        //set frame close on X button
-        //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        //set frame background color
-        //this.getContentPane().setBackground(new Color(dv.ViewBackgroundColor()));
         this.setBackground(new Color(dv.ViewBackgroundColor()));
-
         this.setLayout(null);
         
         //init OrgFilterPanel
@@ -634,13 +608,15 @@ public class SearchOrgView extends JPanel implements ActionListener
         this.repaint(0,0, dv.FrameWidth(), dv.FrameHeight());
     }
 
+    /*CONSTRUCTOR*/
     public SearchOrgView(Person person)
     {
         personalUser = person;
-        initFrameComponent();
+        initComponents();
         this.validate();
     }
 
+    /*ACTION PERFORMED*/
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -653,10 +629,8 @@ public class SearchOrgView extends JPanel implements ActionListener
             /*
                 SELECT OUT THE INFO OF THE ORGANIZATION'S SPECIFIED SCHEDULES
             */
-            //clear the Layered Area
             LayeredPaneArea.removeAll();
 
-            //init OrgListLabel
             JLabel OrgListLabel = new JLabel("DANH SÁCH CÁC ĐƠN VỊ TIÊM CHỦNG ("
                     + ProvinceChoice.getSelectedItem() + "-" + DistrictChoice.getSelectedItem() + "-" + TownChoice.getSelectedItem() + "):");
             OrgListLabel.setBounds(0, 0, 640, 40);
@@ -664,21 +638,16 @@ public class SearchOrgView extends JPanel implements ActionListener
             OrgListLabel.setForeground(new Color(dv.FeatureButtonColor()));
             OrgListLabel.setHorizontalAlignment(JLabel.CENTER);
 
-            //init Scroll Pane of Orgs
             initOrgListPanel();
             initScrollPaneOrgList();
 
-            //add Label
             LayeredPaneArea.add(OrgListLabel, Integer.valueOf(0));
 
-            //add Scroll Pane of Orgs to TOP of Layered Area
             LayeredPaneArea.add(ScrollPaneOrgList, Integer.valueOf(0));
-            //Delete scroll pane of sched
             SchedListPanel = null;
+
             ScrollPaneSchedList = null;
         }
-
-
     }
 
 }

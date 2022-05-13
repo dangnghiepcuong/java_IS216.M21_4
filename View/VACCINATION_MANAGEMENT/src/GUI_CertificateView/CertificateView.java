@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package GUI_CertificateView;
 
 import Data_Processor.*;
@@ -34,23 +30,22 @@ public class CertificateView extends JPanel implements ActionListener{
     private JScrollPane ScrollPaneInjList;
 
     private JPanel InjectionListPanel;
-    private JPanel InjectionPanel[] = new JPanel[10];
     private JLayeredPane LayeredPaneArea;
-    private JButton UpLoadImageButton;
-    private JButton PhotoImageButton;
-    private JButton ContinuteButton;
-    private JButton ConfirmButton;
-    private JButton CancelButton;
-
-    private JLayeredPane SchedAttendance;
 
     /*Object Class*/
     private DefaultValue dv = new DefaultValue();
     private Person personalUser = new Person();
     private Certificate cert = new Certificate();
 
-
-   private void initInjectionPanel(int i, Injection Inj)
+    /*
+    *   INITIALIZE THE LIST OF INJECTIONS OF THE CITIZEN
+    *   -LAYEREDPANE:
+    *      + SCROLLPANE:
+    *           - PANEL: LIST OF INJECTIONS
+    *               + PANELS: INJECTIONS
+    *                  - LABELS
+    * */
+   private JPanel initInjectionPanel(Injection Inj)
    {
        JLabel NameOrg = new JLabel("Mũi: " + Inj.getInjNo()
                + " ("+dv.getDoseTypeName(Inj.getDoseType()) +")");
@@ -73,21 +68,26 @@ public class CertificateView extends JPanel implements ActionListener{
        OnDateTime.setBounds(20,30*3,500,25);
        OnDateTime.setForeground(new Color(dv.BlackTextColor()));
 
-       InjectionPanel[i] = new JPanel();
-       InjectionPanel[i].setPreferredSize(new Dimension(560, 120));
-       InjectionPanel[i].setLayout(null);
-       InjectionPanel[i].setBackground(null);
-       InjectionPanel[i].setBorder(dv.border());
+       JPanel InjectionPanel = new JPanel();
+       InjectionPanel.setPreferredSize(new Dimension(560, 120));
+       InjectionPanel.setLayout(null);
+       InjectionPanel.setBackground(null);
+       InjectionPanel.setBorder(dv.border());
 
-       InjectionPanel[i].add(NameOrg);
-       InjectionPanel[i].add(Vaccine);
-       InjectionPanel[i].add(InjNOType);
-       InjectionPanel[i].add(OnDateTime);
+       InjectionPanel.add(NameOrg);
+       InjectionPanel.add(Vaccine);
+       InjectionPanel.add(InjNOType);
+       InjectionPanel.add(OnDateTime);
+
+       return InjectionPanel;
    }
 
 
    private void initInjectionListPanel()
    {
+       InjectionListPanel = new JPanel();
+
+
        int i =0;
        int nInj = 0;
 
@@ -115,16 +115,13 @@ public class CertificateView extends JPanel implements ActionListener{
                 cert.getInjectionList()[i].getSched().setOnDate(rs.getString("OnDate").substring(0,10));
                 cert.getInjectionList()[i].getSched().setVaccineID(rs.getString("VaccineID"));
                 cert.getInjectionList()[i].setDoseType(rs.getString("DoseType"));
+                InjectionListPanel.add(initInjectionPanel(cert.getInjectionList()[i]));
                 i++;
             }
-
-
         } catch (SQLException ex) {
             dv.popupOption(null,ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
             ex.printStackTrace();
         }
-
-
 
        query = "select * from CERTIFICATE CERT where PersonalID = '" + personalUser.getID() + "'";
        try {
@@ -142,9 +139,6 @@ public class CertificateView extends JPanel implements ActionListener{
             return;
        }
 
-       nInj = i;
-
-       InjectionListPanel = new JPanel();
        InjectionListPanel.setLayout(new FlowLayout());
        if (cert.getCertType() == 0)
            InjectionListPanel.setBackground(new Color(dv.RedPastel()));
@@ -153,21 +147,16 @@ public class CertificateView extends JPanel implements ActionListener{
        if (cert.getCertType() == 2)
            InjectionListPanel.setBackground(new Color(dv.GreenPastel()));
 
+       nInj = i;
+
        InjectionListPanel.setPreferredSize(new Dimension(580, 120*nInj + nInj*10));
-
-        for (i = 0; i<nInj; i++)
-        {
-            initInjectionPanel(i, cert.getInjectionList()[i]);
-            InjectionListPanel.add(InjectionPanel[i]);
-        }
-
    }
 
 
-   private void initScrollPaneInjList()//1
+   private void initScrollPaneInjList()
     {
         ScrollPaneInjList = new JScrollPane(InjectionListPanel,
-                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         ScrollPaneInjList.setBounds(0,80,600, 510);; //320 40
     }
@@ -195,17 +184,11 @@ public class CertificateView extends JPanel implements ActionListener{
         LayeredPaneArea.add(InfoLabel2);
     }
 
-    public CertificateView(Person person)
+    private void initComponents()
     {
-        personalUser = person;
-        //set frame size
         this.setSize(dv.FrameWidth(), dv.FrameHeight());
-        //this.setSize(1080, 720); --Main View
-        //set frame visible on screen
         this.setVisible(true);
-        //set frame background color
         this.setBackground(new Color(dv.ViewBackgroundColor()));
-        //set layout
         this.setLayout(null);
 
         initInjectionListPanel();
@@ -218,7 +201,15 @@ public class CertificateView extends JPanel implements ActionListener{
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
     }
 
+    /*CONSTRUCTOR*/
 
+    public CertificateView(Person person)
+    {
+        personalUser = person;
+        initComponents();
+    }
+
+    /*ACTION PERFORMED*/
    
     private void ActionUpLoadImage( )
     {
@@ -268,21 +259,19 @@ public class CertificateView extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         
-        if (e.getSource() == ConfirmButton)
+        /*if (e.getSource() == ConfirmButton)
         {
             if ( dv.popupConfirmOption(null, "Xác nhận cập nhật giấy chứng nhận mũi tiêm?", "Xác nhận?") == 0)
                 dv.popupOption(null, "Cập nhật thành công!", "Thông báo!", 0);
             else
                 return;
         }
-        
+
         if (e.getSource() == UpLoadImageButton)
         {
             ActionUpLoadImage();
-        }
-        
-        
-        
+        }*/
+
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

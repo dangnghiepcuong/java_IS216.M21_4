@@ -1,7 +1,6 @@
 package GUI_ManageSchedule;
 
 import Data_Processor.*;
-import GUI_RegisterAcc.RegisterAccView;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -10,14 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Properties;
 
 /**
@@ -37,7 +30,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
     private JScrollPane ScrollPaneSchedList;
     private JPanel SchedListPanel;
-    private JPanel SchedPanel[] = new JPanel[50];
 
     /*Registion List*/
     private JPanel RegFilterPanel;
@@ -50,8 +42,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
     private JPanel RegPanel[] = new JPanel[3000];
 
     /*Create Schedule*/
-    private JLabel AddNewSchedLabel;
-    private JButton AddNewSchedButton;
+    private JButton CreateNewSchedButton;
     private JPanel CreateSchedPanel;
 
 
@@ -64,9 +55,14 @@ public class ManageScheduleView extends JPanel implements ActionListener
     public void setOrgUser(Organization orgUser) {
         this.orgUser = orgUser;
     }
-    /*
 
-*/
+
+    /*
+    *   INITIALIZE THE SCHEDULE FILTER PANEL:
+    *   + LABEL
+    *   + CHOICE
+    *   + BUTTON: SELECT
+    */
     private void initSchedFilterLabel()
     {
         SchedFilterLabel = new JLabel();
@@ -118,7 +114,17 @@ public class ManageScheduleView extends JPanel implements ActionListener
         SchedFilterPanel.add(SchedFilterButton);
     }
 
-    private void initSchedPanel(int i, Schedule Sched)
+
+
+    /*
+    *   INITIALIZE SCHEDULE LIST OF THE ORGANIZATION:
+    *   - A SCROLLPANE:
+    *       + A PANEL: LIST OF SCHEDULES
+    *           - PANELS: SCHEDULES
+    *               + LABELS
+    *               + BUTTONS: WATCH LIST OF REGISTION
+    */
+    private JPanel initSchedPanel(Schedule Sched)
     {
         ActionListener handleRegistion = new ActionListener()
         {
@@ -146,13 +152,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
             }
         };
 
-
-        /*JLabel OrgName = new JLabel("Tên đơn vị: " + orgUser.getName());
-        OrgName.setFont(new Font(dv.fontName(), 3, 18));
-        OrgName.setForeground(new Color(dv.FeatureButtonColor()));
-        OrgName.setBounds(30,1,605,30);
-        OrgName.setHorizontalAlignment(JLabel.LEFT);*/
-
         JLabel OnDateVaccine = new JLabel("Lịch tiêm ngày: " + Sched.getOnDate().substring(0, 10)
                 + "          Vaccine: " + Sched.getVaccineID() + " - " + Sched.getSerial());
         OnDateVaccine.setFont(new Font(dv.fontName(), 1, 20));
@@ -175,18 +174,16 @@ public class ManageScheduleView extends JPanel implements ActionListener
         SchedRegistionButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Sched Registion Button.png")));
         SchedRegistionButton.addActionListener(handleRegistion);
 
-        SchedPanel[i] = new JPanel();
-        SchedPanel[i].setLayout(null);
-        SchedPanel[i].setPreferredSize(new Dimension(640,120));
-        SchedPanel[i].setBackground(Color.WHITE);
+        JPanel SchedPanel = new JPanel();
+        SchedPanel.setLayout(null);
+        SchedPanel.setPreferredSize(new Dimension(640,120));
+        SchedPanel.setBackground(Color.WHITE);
 
-//        SchedPanel[i].add(OrgName);
-        SchedPanel[i].add(OnDateVaccine);
-        SchedPanel[i].add(Time);
-        SchedPanel[i].add(SchedRegistionButton);
+        SchedPanel.add(OnDateVaccine);
+        SchedPanel.add(Time);
+        SchedPanel.add(SchedRegistionButton);
 
         LocalDate SchedOnDate = LocalDate.parse(Sched.getOnDate().substring(0, 10));
-//                LocalDate.of(dv.getYear(Sched.getOnDate()), dv.getMonth(Sched.getOnDate()), dv.getDay(Sched.getOnDate()));
 
         LocalDate sysdate = LocalDate.parse(dv.todayString());
 
@@ -222,14 +219,19 @@ public class ManageScheduleView extends JPanel implements ActionListener
             CancelSchedButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Cancel Sched Button.png")));
             CancelSchedButton.addActionListener(handleCancel);
 
-            SchedPanel[i].add(UpdateSchedButton);
-            SchedPanel[i].add(CancelSchedButton);
+            SchedPanel.add(UpdateSchedButton);
+            SchedPanel.add(CancelSchedButton);
         }
+
+        return SchedPanel;
     }
 
     private void initSchedListPanel(int OnDateFilter)
     {
-        Schedule Scheds[] = new Schedule[1000];
+        SchedListPanel = new JPanel();
+        SchedListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+        SchedListPanel.setLayout(new FlowLayout());
+
         String query = "";
 
         int nScheds = 0;
@@ -258,17 +260,18 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
             while(rs.next())
             {
-                Scheds[i] = new Schedule();
-                Scheds[i].setID(rs.getString("ID"));
-                Scheds[i].setOnDate(rs.getString("OnDate"));
-                Scheds[i].setVaccineID(rs.getString("VaccineID"));
-                Scheds[i].setSerial(rs.getString("Serial"));
-                Scheds[i].setLimitDay(rs.getInt("LimitDay"));
-                Scheds[i].setLimitNoon(rs.getInt("LimitNoon"));
-                Scheds[i].setLimitNight(rs.getInt("LimitNight"));
-                Scheds[i].setDayRegistered(rs.getInt("DayRegistered"));
-                Scheds[i].setNoonRegistered(rs.getInt("NoonRegistered"));
-                Scheds[i].setNightRegistered(rs.getInt("NightRegistered"));
+                Schedule Sched = new Schedule();
+                Sched.setID(rs.getString("ID"));
+                Sched.setOnDate(rs.getString("OnDate"));
+                Sched.setVaccineID(rs.getString("VaccineID"));
+                Sched.setSerial(rs.getString("Serial"));
+                Sched.setLimitDay(rs.getInt("LimitDay"));
+                Sched.setLimitNoon(rs.getInt("LimitNoon"));
+                Sched.setLimitNight(rs.getInt("LimitNight"));
+                Sched.setDayRegistered(rs.getInt("DayRegistered"));
+                Sched.setNoonRegistered(rs.getInt("NoonRegistered"));
+                Sched.setNightRegistered(rs.getInt("NightRegistered"));
+                SchedListPanel.add(initSchedPanel(Sched));
                 i++;
             }
         } catch (SQLException e) {
@@ -277,16 +280,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
         nScheds = i;
 
-        SchedListPanel = new JPanel();
         SchedListPanel.setPreferredSize(new Dimension(660, 120*nScheds+nScheds*10));
-        SchedListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
-        SchedListPanel.setLayout(new FlowLayout());
-
-        for (i = 0; i<nScheds; i++)
-        {
-            initSchedPanel(i, Scheds[i]);
-            SchedListPanel.add(SchedPanel[i]);
-        }
     }
 
     private void initScrollPaneSchedList(int OnDateFilter)
@@ -300,7 +294,13 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
 
 
-
+    /*
+    *   INITIALIZE REGISTER FILTER PANEL
+    *   - PANEL:
+    *       + LABEL
+    *       + CHOICE
+    *       + BUTTON: SELECT
+    */
 
     private void initRegFilterLabel()
     {
@@ -353,7 +353,16 @@ public class ManageScheduleView extends JPanel implements ActionListener
         RegFilterPanel.add(RegFilterButton);
     }
 
-    private void initRegPanel(int i, RegisteredScheds Reg)
+    /*
+    *       INITIALIZE THE LIST OF REGISTIONS OF THE SELECTED SCHEDULE
+    *       - SCROLLPANE:
+    *           + PANEL: LIST OF REGISTIONS
+    *               - PANELS: REGISTIONS
+    *                   + CHOICE: STATUS OF REGISTION
+    *                   + BUTTON: UPDATE STATUS
+    * */
+
+    private JPanel initRegPanel(RegisteredScheds Reg)
     {
         //PersonalID, LastName, FirstName, Birthday, Gender, Phone, Time, NO, DoseType, Status, Image
         JLabel CitizenName = new JLabel("Đối tượng: " + Reg.getCitizen().getFullName() + " - "
@@ -384,15 +393,15 @@ public class ManageScheduleView extends JPanel implements ActionListener
         TimeNOStatus.setBounds(30, 32+25*2+2,380,25);
         TimeNOStatus.setHorizontalAlignment(JLabel.LEFT);
 
-        RegPanel[i] = new JPanel();
-        RegPanel[i].setLayout(null);
-        RegPanel[i].setPreferredSize(new Dimension(640,120));
-        RegPanel[i].setBackground(Color.WHITE);
+        JPanel RegPanel = new JPanel();
+        RegPanel.setLayout(null);
+        RegPanel.setPreferredSize(new Dimension(640,120));
+        RegPanel.setBackground(Color.WHITE);
 
-        RegPanel[i].add(CitizenName);
-        RegPanel[i].add(Phone);
-        RegPanel[i].add(OnDateVaccine);
-        RegPanel[i].add(TimeNOStatus);
+        RegPanel.add(CitizenName);
+        RegPanel.add(Phone);
+        RegPanel.add(OnDateVaccine);
+        RegPanel.add(TimeNOStatus);
 
         if (Reg.getStatus() < 2)
         {
@@ -458,14 +467,20 @@ public class ManageScheduleView extends JPanel implements ActionListener
             UpdateStatusButton.setIcon(UpdateStatusButtonIcon);
             UpdateStatusButton.addActionListener(handleUpdate);
 
-            RegPanel[i].add(StatusChoice);
-            RegPanel[i].add(UpdateStatusButton);
+            RegPanel.add(StatusChoice);
+            RegPanel.add(UpdateStatusButton);
         }
+
+        return RegPanel;
     }
 
     private void initRegListPanel(Schedule Sched)
     {
-        RegisteredScheds Reg[] = new RegisteredScheds[1000];
+        RegListPanel = new JPanel();
+        RegListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+        RegListPanel.setLayout(new FlowLayout());
+
+
         String query = "";
 
         int nReg = 0;
@@ -489,19 +504,20 @@ public class ManageScheduleView extends JPanel implements ActionListener
             while(rs.next())
             {
                 //PersonalID, LastName, FirstName, Birthday, Gender, Phone, Time, NO, DoseType, Status, Image
-                Reg[i] = new RegisteredScheds();
-                Reg[i].setSched(Sched);
-                Reg[i].getCitizen().setID(rs.getString("PersonalID"));
-                Reg[i].getCitizen().setLastName(rs.getString("LastName"));
-                Reg[i].getCitizen().setFirstName(rs.getString("FirstName"));
-                Reg[i].getCitizen().setBirthday(rs.getString("Birthday"));
-                Reg[i].getCitizen().setGender(rs.getInt("Gender"));
-                Reg[i].getCitizen().setPhone(rs.getString("Phone"));
-                Reg[i].setTime(rs.getInt("Time"));
-                Reg[i].setNO(rs.getInt("NO"));
-                Reg[i].setDoseType(rs.getString("DoseType"));
-                Reg[i].setStatus(rs.getInt("Status"));
-                Reg[i].setImage(rs.getByte("Image"));
+                RegisteredScheds Reg = new RegisteredScheds();
+                Reg.setSched(Sched);
+                Reg.getCitizen().setID(rs.getString("PersonalID"));
+                Reg.getCitizen().setLastName(rs.getString("LastName"));
+                Reg.getCitizen().setFirstName(rs.getString("FirstName"));
+                Reg.getCitizen().setBirthday(rs.getString("Birthday"));
+                Reg.getCitizen().setGender(rs.getInt("Gender"));
+                Reg.getCitizen().setPhone(rs.getString("Phone"));
+                Reg.setTime(rs.getInt("Time"));
+                Reg.setNO(rs.getInt("NO"));
+                Reg.setDoseType(rs.getString("DoseType"));
+                Reg.setStatus(rs.getInt("Status"));
+                Reg.setImage(rs.getBytes("Image"));
+                RegListPanel.add(initRegPanel(Reg));
                 i++;
             }
         } catch (SQLException e) {
@@ -510,16 +526,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
         nReg = i;
 
-        RegListPanel = new JPanel();
         RegListPanel.setPreferredSize(new Dimension(660, 150*nReg+nReg*10));
-        RegListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
-        RegListPanel.setLayout(new FlowLayout());
-
-        for (i = 0; i<nReg; i++)
-        {
-            initRegPanel(i, Reg[i]);
-            RegListPanel.add(RegPanel[i]);
-        }
     }
 
     private void initScrollPaneRegList(Schedule Sched)
@@ -533,30 +540,24 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
 
 
+    /*
+    *   INITIALIZE THE CREATE SCHEDULE PANEL
+    *   - BUTTON: CREATE A NEW SCHEDULE
+    *   - PANEL:
+    *       + LABELS
+    *       + CHOICES
+    *       + BUTTON: CONFIRM CREATION
+    * */
 
-
-    private void initOnDateLabel()
+    private void initCreateNewSchedButton()
     {
-
-    }
-    
-    private void initAddNewSchedLabel()
-    {
-        AddNewSchedLabel = new JLabel("Thêm lịch tiêm mới");
-        AddNewSchedLabel.setBounds(70, 260, 200, 30);
-        AddNewSchedLabel.setFont(new Font(dv.fontName(), 1, 18));
-        AddNewSchedLabel.setForeground(new Color(dv.BlackTextColor()));
-    }
-
-    private void initAddNewSchedButton()
-    {
-        ImageIcon AddNewSchedButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Add New Sched Button.png"));
-        AddNewSchedButton = new JButton();
-        AddNewSchedButton.setBounds((320-AddNewSchedButtonIcon.getIconWidth())/2, 300, AddNewSchedButtonIcon.getIconWidth(), AddNewSchedButtonIcon.getIconHeight());
-        AddNewSchedButton.setBorder(null);
-        AddNewSchedButton.setContentAreaFilled(false);
-        AddNewSchedButton.setIcon(AddNewSchedButtonIcon);
-        AddNewSchedButton.addActionListener(this);
+        ImageIcon CreateNewSchedButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Add New Sched Button.png"));
+        CreateNewSchedButton = new JButton();
+        CreateNewSchedButton.setBounds((320-CreateNewSchedButtonIcon.getIconWidth())/2, 300, CreateNewSchedButtonIcon.getIconWidth(), CreateNewSchedButtonIcon.getIconHeight());
+        CreateNewSchedButton.setBorder(null);
+        CreateNewSchedButton.setContentAreaFilled(false);
+        CreateNewSchedButton.setIcon(CreateNewSchedButtonIcon);
+        CreateNewSchedButton.addActionListener(this);
     }
 
     private void initCreateSchedPanel()
@@ -833,44 +834,20 @@ public class ManageScheduleView extends JPanel implements ActionListener
 //        LayeredPaneArea.repaint(320, 80, 680, 630);
     }
 
-    private void initFrameComponent()
+    private void initComponents()
     {
-        //set Frame icon
-        //this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
-
-        //set frame title
-        //this.setTitle("Tìm kiếm đơn vị tiêm chủng");
-
-        //set frame size
         this.setSize(dv.FrameWidth(), dv.FrameHeight());
-        //this.setSize(1080, 720); --Main View
-
-        //set do not allow frame resizing
-        //this.setResizable(false);
-
-        //set frame visible on screen
         this.setVisible(true);
-
-        //set frame close on X button
-        //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //set frame background color
-        //this.getContentPane().setBackground(new Color(dv.ViewBackgroundColor()));
         this.setBackground(new Color(dv.ViewBackgroundColor()));
-
         this.setLayout(null);
 
         //initSchedFilterPanel
         initSchedFilterPanel();
         this.add(SchedFilterPanel);
 
-        //initAddNewSchedLabel
-//        initAddNewSchedLabel();
-//        this.add(AddNewSchedLabel);
-
-        //init AddNewSchedButton
-        initAddNewSchedButton();
-        this.add(AddNewSchedButton);
+        //init CreateNewSchedButton
+        initCreateNewSchedButton();
+        this.add(CreateNewSchedButton);
 
         //init SchedListPanel
         initSchedListPanel(0);
@@ -893,13 +870,14 @@ public class ManageScheduleView extends JPanel implements ActionListener
         this.repaint(0,0, dv.FrameWidth(), dv.FrameHeight());
     }
 
+    /*CONSTRUCTOR*/
     public ManageScheduleView(Organization org)
     {
         orgUser = org;
-        initFrameComponent();
-        this.validate();
+        initComponents();
     }
 
+    /*ACTION PERFORMED*/
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -925,7 +903,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
             ScrollPaneRegList = null;
         }
 
-        if (e.getSource() == AddNewSchedButton)
+        if (e.getSource() == CreateNewSchedButton)
         {
             SchedListPanel = null;
             ScrollPaneSchedList = null;

@@ -14,13 +14,13 @@ public class RegisteredScheds {
     private int Time;
     private int NO;
     private int Status;
-    private byte Image;
+    private byte[] Image;
     private String Note;
 
     public RegisteredScheds() {
     }
 
-    public RegisteredScheds(Person Citizen, Schedule Sched, Organization Org, String DoseType, int Time, int NO, int Status, byte Image, String Note) {
+    public RegisteredScheds(Person Citizen, Schedule Sched, Organization Org, String DoseType, int Time, int NO, int Status, byte[] Image, String Note) {
         this.Citizen = Citizen;
         this.Sched = Sched;
         this.Org = Org;
@@ -88,11 +88,11 @@ public class RegisteredScheds {
         this.Status = Status;
     }
 
-    public byte getImage() {
+    public byte[] getImage() {
         return Image;
     }
 
-    public void setImage(byte Image) {
+    public void setImage(byte[] Image) {
         this.Image = Image;
     }
 
