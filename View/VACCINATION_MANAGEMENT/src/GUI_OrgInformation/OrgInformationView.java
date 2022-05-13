@@ -167,7 +167,7 @@ public class OrgInformationView extends JPanel implements ActionListener
     {
         PasswordLabel = new JLabel();
         PasswordLabel.setBounds(70, 90 + dv.FieldHeight() + dv.LabelHeight()+40+20+10, 270, 30);
-        PasswordLabel.setText("Nhập mật khẩu");
+        PasswordLabel.setText("Xác nhận mật khẩu");
         PasswordLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         PasswordLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
@@ -226,6 +226,7 @@ public class OrgInformationView extends JPanel implements ActionListener
         ProvinceChoice.setBounds(50, 90 + 2*dv.LabelHeight()+dv.FieldHeight()+40+20+10, 170, 30);
         ProvinceChoice.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         ProvinceChoice.setForeground(new Color(dv.FieldLabelColor()));
+        ProvinceChoice.setEnabled(false);
 
         ProvinceChoice.add(dv.getProvinceName(orgUser.getProvince()));
 
@@ -362,7 +363,7 @@ public class OrgInformationView extends JPanel implements ActionListener
             String InputID = IDTextField.getText();
             String InputPassword = String.valueOf(PasswordField.getPassword());
             String InputName = NameTextField.getText();
-            String InputProvince = ProvinceChoice.getSelectedItem();
+//            String InputProvince = ProvinceChoice.getSelectedItem();
             String InputDistrict = DistrictChoice.getSelectedItem();
             String InputTown = TownChoice.getSelectedItem();
             String InputStreet = StreetTextField.getText();
@@ -398,11 +399,11 @@ public class OrgInformationView extends JPanel implements ActionListener
                 throw new RuntimeException(ex);
             }
 
-            if ( dv.checkStringInputValue(InputProvince, "Cảnh báo!", "Nhập tỉnh cư trú!") != -2 )
+            /*if ( dv.checkStringInputValue(InputProvince, "Cảnh báo!", "Nhập tỉnh cư trú!") != -2 )
                 return;
             else
                 InputProvince = dv.getProvinceCode(InputProvince);
-
+*/
 
             String plsql = "{call ORG_UPDATE_RECORD(?, ?, ?, ?, ?, ?)}";
 
@@ -413,17 +414,17 @@ public class OrgInformationView extends JPanel implements ActionListener
 
                 cst = connection.prepareCall(plsql);
                 cst.setString("par_ID", InputID);
-                cst.setString("par_Province", InputProvince);
+                cst.setString("par_Name", InputName);
                 cst.setString("par_District", InputDistrict);
                 cst.setString("par_Town", InputTown);
                 cst.setString("par_Street", InputStreet);
-                cst.setString("par_Name", InputName);
+                cst.setString("par_Note", "");
 
                 cst.execute();
             }
             catch (SQLException ex) {
 
-                dv.popupOption(null, "Không thành công", "Lỗi!", 2);
+                dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
 
                 throw new RuntimeException(ex);
             }

@@ -1,8 +1,6 @@
 package GUI_Main;
 
-import Data_Processor.Account;
-import Data_Processor.DefaultValue;
-import Data_Processor.Organization;
+import Data_Processor.*;
 import GUI_Login.LoginView;
 import GUI_ManageSchedule.ManageScheduleView;
 import GUI_OrgInformation.OrgInformationView;
