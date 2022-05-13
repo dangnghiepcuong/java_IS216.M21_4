@@ -325,30 +325,13 @@ public class ORGMainView extends JFrame implements ActionListener
 
     public ORGMainView(String Username)
     {
-        //Frame
-        //set frame title
         this.setTitle("Quản lý tiêm chủng vaccine Covid-19: Đơn vị tiêm chủng");
-
-        //set frame size
         this.setBounds(260, 90, dv.FrameWidth(), dv.FrameHeight());
-        //this.setSize(1080, 720); --Main View
-
-        //set do not allow frame resizing
         this.setResizable(false);
-
-        //set frame visible on screen
         this.setVisible(true);
-
-        //set frame close on X button
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //set frame background color
         this.setBackground(new Color(dv.ViewBackgroundColor()));
-
-        //set Frame icon
         this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
-
-        //set layout
         this.setLayout(null);
 
         String query = "select * from ORGANIZATION ORG where ORG.ID = '" +  Username + "'";
@@ -385,30 +368,10 @@ public class ORGMainView extends JFrame implements ActionListener
 
         this.add(MainLayeredPane);
 
-        this.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent windowEvent)
-            {
-                String query = "update ACCOUNT ACC set Status = 1 where ACC.Username = '" + orgUser.getID() + "'";
-
-                try {
-                    Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-
-                    PreparedStatement st = connection.prepareStatement(query);
-
-                    st.executeUpdate(query);
-                } catch (SQLException ex) {
-                    dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(),2);
-                    ex.printStackTrace();
-                }
-            }
-        });
-
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
-
     }
 
-
+    /*ACTION PERFORMED*/
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -489,8 +452,6 @@ public class ORGMainView extends JFrame implements ActionListener
             initBackButton();
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }
-
-
     }
 
 }

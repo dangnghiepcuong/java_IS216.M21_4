@@ -3,6 +3,7 @@ package GUI_Main;
 import Data_Processor.*;
 import GUI_CreateOrgAccView.CreateOrgAccView;
 import GUI_Login.LoginView;
+import GUI_OrgInformation.OrgInformationView;
 import GUI_SearchOrg.SearchOrgView;
 
 import javax.swing.*;
@@ -29,12 +30,14 @@ public class MOHMainView extends JFrame implements ActionListener
     private JButton StatisticButton;
 
     private JButton BackButton;
+    private JButton BackInfoButton;
     private JButton LogoutButton;
 
     private Organization orgUser = new Organization();
 
     private LoginView loginView;
     private SearchOrgView searchOrgView;
+    private OrgInformationView orgInformationView;
     private CreateOrgAccView createOrgAccView;
 
     private void initBackButton()
@@ -48,6 +51,19 @@ public class MOHMainView extends JFrame implements ActionListener
         BackButton.setContentAreaFilled(false);
 
         BackButton.addActionListener(this);
+    }
+
+    private void initBackInfoButton()
+    {
+        BackInfoButton = new JButton();
+        ImageIcon BackInfoButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Back Button_2.png"));
+        BackInfoButton.setIcon(BackInfoButtonIcon);
+
+        BackInfoButton.setBounds(10, 10, BackInfoButtonIcon.getIconWidth(), BackInfoButtonIcon.getIconHeight());
+        BackInfoButton.setBorder(null);
+        BackInfoButton.setContentAreaFilled(false);
+
+        BackInfoButton.addActionListener(this);
     }
 
     private void initInfoLayeredPane()
@@ -136,6 +152,7 @@ public class MOHMainView extends JFrame implements ActionListener
         InfoSettingButton.setBorder(null);
         InfoSettingButton.setContentAreaFilled(false);
         InfoSettingButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Org Info Feature Button.png")));
+        InfoSettingButton.addActionListener(this);
 
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(0, 160, 240, 30);
@@ -297,34 +314,17 @@ public class MOHMainView extends JFrame implements ActionListener
         MainLayeredPane.setBackground(new Color(dv.ViewBackgroundColor()));
     }
 
+    /*CONSTRUCTOR*/
     public MOHMainView(String Username)
     {
-        //Frame
-        //set frame title
         this.setTitle("Quản lý tiêm chủng vaccine Covid-19: Bộ Y tế");
-
-        //set frame size
         this.setBounds(260, 90, dv.FrameWidth(), dv.FrameHeight());
-        //this.setSize(1080, 720); --Main View
-
-        //set do not allow frame resizing
         this.setResizable(false);
-
-        //set frame visible on screen
         this.setVisible(true);
-
-        //set frame close on X button
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //set frame background color
         this.setBackground(new Color(dv.ViewBackgroundColor()));
-
-        //set Frame icon
         this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
-
-        //set layout
         this.setLayout(null);
-
 
         String query = "select * from ORGANIZATION ORG where ORG.ID = '" +  Username + "'";
 
@@ -362,30 +362,10 @@ public class MOHMainView extends JFrame implements ActionListener
 
         this.add(MainLayeredPane);
 
-        this.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent windowEvent)
-            {
-                String query = "update ACCOUNT ACC set Status = 1 where ACC.Username = '" + orgUser.getID() + "'";
-
-                try {
-                    Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-
-                    PreparedStatement st = connection.prepareStatement(query);
-
-                    st.executeUpdate(query);
-                } catch (SQLException ex) {
-                    dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(),2);
-                    ex.printStackTrace();
-                }
-            }
-        });
-
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
-
     }
 
-
+    /*ACTION PERFORMED*/
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -413,6 +393,29 @@ public class MOHMainView extends JFrame implements ActionListener
             }
 
             loginView = new LoginView();
+            this.dispose();
+        }
+
+        if (e.getSource() == InfoSettingButton)
+        {
+            orgInformationView = new OrgInformationView(orgUser);
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(orgInformationView, Integer.valueOf(0));
+
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+
+            //init BackButton
+            initBackInfoButton();
+            MainLayeredPane.add(BackInfoButton, Integer.valueOf(5));
+
+        }
+
+        if(e.getSource() == BackInfoButton)
+        {
+            orgUser.setID(orgInformationView.getOrgUser().getID());
+            orgInformationView = null;
+            MainLayeredPane.removeAll();
+            ORGMainView orgMainView = new ORGMainView(orgUser.getID());
             this.dispose();
         }
 

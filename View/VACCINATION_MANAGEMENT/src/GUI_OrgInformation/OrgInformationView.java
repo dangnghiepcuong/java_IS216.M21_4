@@ -1,25 +1,13 @@
 package GUI_OrgInformation;
 
-/*
-COLOR HEX CODE
-màu xám dành cho nền: F2F2F2
-màu Peach dành cho button chức năng: FF9292
-màu xám hơi đậm dành cho label: 666666
-màu đen dành cho text nhập vào: 333333
-*/
 
 import Data_Processor.*;
-import org.jdatepicker.impl.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Properties;
 
 /**
  *
@@ -70,23 +58,18 @@ public class OrgInformationView extends JPanel implements ActionListener
 
         AccInfoPanel.add(AccInfoLabel);
 
-        //init IDLabel
         initIDLabel();
         AccInfoPanel.add(IDLabel);
 
-        //init PasswordLabel
         initPasswordLabel();
         AccInfoPanel.add(PasswordLabel);
 
-        //init IDTextField
         initIDTextField();
         AccInfoPanel.add(IDTextField);
 
-        //init PasswordField;
         initPasswordField();
         AccInfoPanel.add(PasswordField);
 
-        //init UpdateAccButton
         initUpdateAccButton();
         AccInfoPanel.add(UpdateAccButton);
 
@@ -189,7 +172,6 @@ public class OrgInformationView extends JPanel implements ActionListener
         UpdateAccButton.setBorder(null);
         UpdateAccButton.setContentAreaFilled(false);
         UpdateAccButton.setIcon(RegisterButtonIcon);
-
         UpdateAccButton.addActionListener(this);
     }
 
@@ -305,32 +287,12 @@ public class OrgInformationView extends JPanel implements ActionListener
         StreetTextField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         StreetTextField.setForeground(new Color(dv.BlackTextColor()));
     }
-    private void initFrameComponent()
+
+    private void initComponents()
     {
-        //Frame
-        //set frame title
-//        this.setTitle("Đăng ký tài khoản cá nhân");
-
-        //set frame size
         this.setBounds(0, 0, dv.FrameWidth(), dv.FrameHeight());
-        //this.setSize(1080, 720); --Main View
-
-        //set do not allow frame resizing
-//        this.setResizable(false);
-
-        //set frame visible on screen
         this.setVisible(true);
-
-        //set frame close on X button
-//        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //set frame background color
         this.setBackground(new Color(dv.ViewBackgroundColor()));
-
-        //set Frame icon
-//        this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
-
-        //set layout
         this.setLayout(null);
 
         //set account information Panel
@@ -347,14 +309,12 @@ public class OrgInformationView extends JPanel implements ActionListener
 
     public OrgInformationView(Organization org)
     {
-
         orgUser = org;
-
-        initFrameComponent();
-        this.validate();
+        initComponents();
 
     }
 
+    /*ACTION PERFORMED*/
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -363,7 +323,6 @@ public class OrgInformationView extends JPanel implements ActionListener
             String InputID = IDTextField.getText();
             String InputPassword = String.valueOf(PasswordField.getPassword());
             String InputName = NameTextField.getText();
-//            String InputProvince = ProvinceChoice.getSelectedItem();
             String InputDistrict = DistrictChoice.getSelectedItem();
             String InputTown = TownChoice.getSelectedItem();
             String InputStreet = StreetTextField.getText();
@@ -398,13 +357,7 @@ public class OrgInformationView extends JPanel implements ActionListener
                 dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
                 throw new RuntimeException(ex);
             }
-
-            /*if ( dv.checkStringInputValue(InputProvince, "Cảnh báo!", "Nhập tỉnh cư trú!") != -2 )
-                return;
-            else
-                InputProvince = dv.getProvinceCode(InputProvince);
-*/
-
+            
             String plsql = "{call ORG_UPDATE_RECORD(?, ?, ?, ?, ?, ?)}";
 
             try {

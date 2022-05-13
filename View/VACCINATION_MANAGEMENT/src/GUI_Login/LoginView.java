@@ -3,17 +3,7 @@ package GUI_Login;
 import Data_Processor.*;
 import GUI_Main.*;
 import GUI_RegisterAcc.RegisterAccView;
-/*
-COLOR HEX CODE
-màu xám dành cho nền: F2F2F2
-màu Peach dành cho button chức năng: FF9292
-màu xám hơi đậm dành cho label: 666666
-màu đen dành cho text nhập vào: 333333
-*/
-
 import javax.swing.*;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
@@ -134,32 +124,15 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
         LoginButton.addActionListener(this);
     }
 
-    private void initFrameComponent()
+    private void initFrameComponents()
     {
-        //Frame
-        //set frame title
         this.setTitle("Đăng nhập");
-
-        //set frame size
         this.setBounds((1600-380)/2, (900-520)/2, 380, 520);
-        //this.setSize(1080, 720); --Main View
-
-        //set do not allow frame resizing
         this.setResizable(false);
-
-        //set frame visible on screen
         this.setVisible(true);
-
-        //set frame close on X button
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //set frame background color
         this.getContentPane().setBackground(new Color(dv.ViewBackgroundColor()));
-
-        //set Frame icon
         this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
-
-        //set layout
         this.setLayout(null);
 
         //init ViewSymbol
@@ -203,7 +176,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
 
     public LoginView()
     {
-        initFrameComponent();
+        initFrameComponents();
     }
 
     @Override
@@ -219,11 +192,9 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
                 return;
             }
 
-
             String query = "select *" +
                     " from ACCOUNT" +
                     " where Username = '" + InputUsername + "'";
-
 
             try {
                 Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
@@ -263,20 +234,6 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
 
             else
             {
-                query = "update ACCOUNT ACC set Status = 2 where ACC.Username = '" + acc.getUsername() + "'";
-
-                try {
-                    Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-
-                    PreparedStatement st = connection.prepareStatement(query);
-
-                    //st.executeQuery(query);
-                } catch (SQLException ex) {
-                    dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(),2);
-                    ex.printStackTrace();
-                }
-
-
                 switch (acc.getRole()) {
                     case 0:
                         this.dispose();
@@ -298,12 +255,13 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
         }
     }
 
-
+    /*CONSTRUCTOR*/
     public static void main(String args[])
     {
         LoginView loginView = new LoginView();
     }
 
+    /*ACTION PERFORMED*/
     @Override
     public void mouseClicked(MouseEvent e)
     {
@@ -320,22 +278,11 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
+    public void mousePressed(MouseEvent e) {}
     @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
+    public void mouseReleased(MouseEvent e) {}
     @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
+    public void mouseEntered(MouseEvent e) {}
     @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
+    public void mouseExited(MouseEvent e) {}
 }

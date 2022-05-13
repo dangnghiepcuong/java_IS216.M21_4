@@ -1,28 +1,14 @@
 package GUI_RegisterAcc;
 
-/*
-COLOR HEX CODE
-màu xám dành cho nền: F2F2F2
-màu Peach dành cho button chức năng: FF9292
-màu xám hơi đậm dành cho label: 666666
-màu đen dành cho text nhập vào: 333333
-*/
-
 import Data_Processor.*;
 import GUI_Login.LoginView;
 import org.jdatepicker.impl.*;
-import org.jdatepicker.util.*;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.event.AncestorEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Properties;
 
 /**
@@ -97,35 +83,27 @@ public class RegisterAccView extends JFrame implements ActionListener
 
         AccInfoPanel.add(AccInfoLabel);
 
-        //init BackButton
         initBackButton();
         AccInfoPanel.add(BackButton);
 
-        //init UsernameLabel
         initUsernameLabel();
         AccInfoPanel.add(UsernameLabel);
 
-        //init PasswordLabel
         initPasswordLabel();
         AccInfoPanel.add(PasswordLabel);
 
-        //init RepeatPasswordLabel
         initRepeatPasswordLabel();
         AccInfoPanel.add(RepeatPasswordLabel);
 
-        //init UsernameTextField
         initUsernameTextField();
         AccInfoPanel.add(UsernameTextField);
 
-        //init PasswordField;
         initPasswordField();
         AccInfoPanel.add(PasswordField);
 
-        //init RepeatPasswordLabel
         initRepeatPasswordField();
         AccInfoPanel.add(RepeatPasswordField);
 
-        //init RegisterAccButton
         initRegisterAccButton();
         AccInfoPanel.add(RegisterAccButton);
 
@@ -277,7 +255,6 @@ public class RegisterAccView extends JFrame implements ActionListener
 
     private void initRegisterAccButton()
     {
-
         ImageIcon RegisterAccIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/RegisterAcc.png"));
         RegisterAccButton = new JButton();
         RegisterAccButton.setBounds(105, 350, RegisterAccIcon.getIconWidth(), RegisterAccIcon.getIconHeight());
@@ -331,7 +308,6 @@ public class RegisterAccView extends JFrame implements ActionListener
         IDLabel.setText("Mã định danh");
         IDLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         IDLabel.setForeground(new Color(0x666666));
-
     }
     private void initIDTextField()
     {
@@ -527,32 +503,16 @@ public class RegisterAccView extends JFrame implements ActionListener
         EmailTextField.setForeground(new Color(0x333333));
         EmailTextField.setBackground(Color.WHITE);
     }
-    private void initFrameComponent()
+
+    private void initComponents()
     {
-        //Frame
-        //set frame title
         this.setTitle("Đăng ký tài khoản cá nhân");
-
-        //set frame size
         this.setBounds((1600-dv.FrameWidth())/2, (900-dv.FrameHeight())/2, dv.FrameWidth(), dv.FrameHeight());
-        //this.setSize(1080, 720); --Main View
-
-        //set do not allow frame resizing
         this.setResizable(false);
-
-        //set frame visible on screen
         this.setVisible(true);
-
-        //set frame close on X button
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //set frame background color
         this.setBackground(new Color(dv.ViewBackgroundColor()));
-
-        //set Frame icon
         this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
-
-        //set layout
         this.setLayout(null);
 
         //set account information Panel
@@ -564,15 +524,15 @@ public class RegisterAccView extends JFrame implements ActionListener
         //set personal information Panel
         initPersonalInfoPanel();
         this.add(PersonalInfoPanel);
-
     }
 
+    /*CONSTRUCTOR*/
     public RegisterAccView()
     {
-        initFrameComponent();
-
+        initComponents();
     }
 
+    /*ACTION PERFORMED*/
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -585,8 +545,7 @@ public class RegisterAccView extends JFrame implements ActionListener
         if (e.getSource() == RegisterAccButton) {
 
             JFormattedTextField textField = BirthdayField.getJFormattedTextField();
-
-
+            
             String InputUsername = UsernameTextField.getText();
             String InputPassword = String.valueOf(PasswordField.getPassword());
             String InputRepeatPassword = String.valueOf(RepeatPasswordField.getPassword());
@@ -673,7 +632,5 @@ public class RegisterAccView extends JFrame implements ActionListener
             dv.popupOption(null, "Đăng ký thành công!", "Thông báo!", 0);
         }
     }
-
-
-
+    
 }

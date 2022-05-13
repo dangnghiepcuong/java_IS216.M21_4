@@ -1,22 +1,10 @@
 package GUI_UserInformation;
 
-/*
-COLOR HEX CODE
-màu xám dành cho nền: F2F2F2
-màu Peach dành cho button chức năng: FF9292
-màu xám hơi đậm dành cho label: 666666
-màu đen dành cho text nhập vào: 333333
-*/
 
 import Data_Processor.*;
-import GUI_Login.LoginView;
-import GUI_RegisterAcc.RegisterAccView;
 import org.jdatepicker.impl.*;
-import org.jdatepicker.util.*;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.event.AncestorEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -92,39 +80,30 @@ public class UserInformationView extends JPanel implements ActionListener
 
         AccInfoPanel.add(AccInfoLabel);
 
-        //init UsernameLabel
         initUsernameLabel();
         AccInfoPanel.add(UsernameLabel);
 
-        //init OldPasswordLabel
         initOldPasswordLabel();
         AccInfoPanel.add(OldPasswordLabel);
 
-        //init NewPasswordLabel
         initNewPasswordLabel();
         AccInfoPanel.add(NewPasswordLabel);
 
-        //init UsernameTextField
         initUsernameTextField();
         AccInfoPanel.add(UsernameTextField);
 
-        //init OldPasswordField;
         initOldPasswordField();
         AccInfoPanel.add(OldPasswordField);
 
-        //init NewPasswordField
         initNewPasswordField();
         AccInfoPanel.add(NewPasswordField);
 
-        //init RepeatNewPasswordLabel;
         initRepeatNewPasswordLabel();
         this.add(RepeatNewPasswordLabel);
 
-        //initRepeatNewPasswordField
         initRepeatNewPasswordField();
         this.add(RepeatNewPasswordField);
 
-        //init UpdateAccButton
         initUpdateAccButton();
         AccInfoPanel.add(UpdateAccButton);
 
@@ -389,7 +368,6 @@ public class UserInformationView extends JPanel implements ActionListener
                 Calendar cal = (Calendar) value;
                 return dateFormatter.format(cal.getTime());
             }
-
             return "";
         }
     }
@@ -405,7 +383,6 @@ public class UserInformationView extends JPanel implements ActionListener
 
         JFormattedTextField textField = BirthdayField.getJFormattedTextField();
 
-        //textField = dv.toOracleDateFormat(personalUser.getBirthday());
         textField.setText(dv.toApplicationDate(personalUser.getBirthday().substring(0,10)));
 
         textField.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
@@ -427,6 +404,7 @@ public class UserInformationView extends JPanel implements ActionListener
         GenderLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         GenderLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
+    
     private void initGenderChoice()
     {
         GenderChoice = new Choice();
@@ -585,32 +563,11 @@ public class UserInformationView extends JPanel implements ActionListener
         EmailTextField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         EmailTextField.setForeground(new Color(dv.BlackTextColor()));
     }
-    private void initFrameComponent()
+    private void initComponents()
     {
-        //Frame
-        //set frame title
-//        this.setTitle("Đăng ký tài khoản cá nhân");
-
-        //set frame size
         this.setBounds(0, 0, dv.FrameWidth(), dv.FrameHeight());
-        //this.setSize(1080, 720); --Main View
-
-        //set do not allow frame resizing
-//        this.setResizable(false);
-
-        //set frame visible on screen
         this.setVisible(true);
-
-        //set frame close on X button
-//        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //set frame background color
         this.setBackground(new Color(dv.ViewBackgroundColor()));
-
-        //set Frame icon
-//        this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
-
-        //set layout
         this.setLayout(null);
 
         //set account information Panel
@@ -622,25 +579,22 @@ public class UserInformationView extends JPanel implements ActionListener
         //set personal information Panel
         initPersonalInfoPanel();
         this.add(PersonalInfoPanel);
-
     }
 
+    /*CONSTRUCTOR*/
     public UserInformationView(Person perUser)
     {
-
         personalUser = perUser;
-
-        initFrameComponent();
-
+        initComponents();
     }
 
+    /*ACTION PERFORMED*/
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        if (e.getSource() == UpdateAccButton) {
-
+        if (e.getSource() == UpdateAccButton)
+        {
             JFormattedTextField textField = BirthdayField.getJFormattedTextField();
-
 
             String InputUsername = UsernameTextField.getText();
             String InputPassword = String.valueOf(OldPasswordField.getPassword());
@@ -686,12 +640,7 @@ public class UserInformationView extends JPanel implements ActionListener
                 dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
                 throw new RuntimeException(ex);
             }
-            /*if ( InputNewPassword != "" )
-                if ( dv.checkStringInputValue(InputRepeatNewPassword, "Cảnh báo!","Nhập lại mật khẩu mới!") != -2 )
-                    return;
-            if ( InputRepeatNewPassword != "")
-                if ( dv.checkStringInputValue(InputNewPassword, "Cảnh báo!","Nhập mật khẩu mới!") != -2 )
-                    return;*/
+
             if ( dv.checkStringInputValue(InputID, "Cảnh báo!","Nhập mã định danh cá nhân!") != -2 )
                 return;
             if ( dv.checkStringInputValue(InputBirthday, "Cảnh báo!","Nhập ngày sinh!") != -2 )
@@ -702,8 +651,6 @@ public class UserInformationView extends JPanel implements ActionListener
                 InputProvince = dv.getProvinceCode(InputProvince);
             if (InputGender == 0)
                 InputGender = 3;
-
-
 
             if (InputRepeatNewPassword.equals(InputNewPassword) == false)
             {
@@ -716,7 +663,6 @@ public class UserInformationView extends JPanel implements ActionListener
                 OptionFrame.showOptionDialog(null, "Mật khẩu mới không trùng khớp!", "Cảnh báo",
                         JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE, icon, responses, 0);
                 return;
-
             }
 
             InputBirthday = dv.toOracleDateFormat(InputBirthday);
