@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Tuesday-April-26-2022   
+--  File created - Thursday-May-12-2022   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Table ACCOUNT
@@ -40,7 +40,7 @@
 --  DDL for Table PERSON
 --------------------------------------------------------
 
-  CREATE TABLE "PERSON" ("ID" VARCHAR2(256), "LASTNAME" VARCHAR2(100), "FIRSTNAME" VARCHAR2(50), "BIRTHDAY" DATE, "GENDER" NUMBER(1,0), "HOMETOWN" VARCHAR2(50), "PROVINCE" VARCHAR2(2), "DISTRICT" VARCHAR2(50), "TOWN" VARCHAR2(50), "STREET" VARCHAR2(100), "PHONE" VARCHAR2(30), "EMAIL" VARCHAR2(254), "GUARDIAN" VARCHAR2(12), "NOTE" VARCHAR2(2000));
+  CREATE TABLE "PERSON" ("ID" VARCHAR2(256), "LASTNAME" VARCHAR2(100), "FIRSTNAME" VARCHAR2(50), "BIRTHDAY" DATE, "GENDER" NUMBER(1,0), "HOMETOWN" VARCHAR2(50), "PROVINCE" VARCHAR2(2), "DISTRICT" VARCHAR2(50), "TOWN" VARCHAR2(50), "STREET" VARCHAR2(100), "PHONE" VARCHAR2(30), "EMAIL" VARCHAR2(254), "GUARDIAN" VARCHAR2(12), "NOTE" VARCHAR2(2000), "AVATAR" BLOB);
 --------------------------------------------------------
 --  DDL for Table REGION
 --------------------------------------------------------

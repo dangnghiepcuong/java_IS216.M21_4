@@ -26,26 +26,6 @@ BEGIN
 END "PERSON_VALUE";
 
 --------------------------------------------------------
---  DDL for Trigger SCHED_REGISTION_LIMIT
---------------------------------------------------------
-  CREATE OR REPLACE EDITIONABLE TRIGGER "SCHED_REGISTION_LIMIT" 
-BEFORE UPDATE OR INSERT ON SCHEDULE
-FOR EACH ROW
-BEGIN
-    if (:new.DayRegistered < 0 or :new.NoonRegistered < 0 or :new.NightRegistered < 0)
-    then
-        raise_application_error(-20010,'Number of registion can not be negative!');
-    end if;
-    
-    if (:new.DayRegistered > :new.LimitDay
-        or :new.NoonRegistered > :new.LimitNoon
-        or :new.NightRegistered > :new.LimitNight)
-    then
-        raise_application_error(-20011,'Number of registion is limited!');
-    end if;
-END "SCHED_REGISTION_LIMIT";
-
---------------------------------------------------------
 --  DDL for Trigger REG_VACCINATION_AGE_STATUS
 --------------------------------------------------------
 
