@@ -4,7 +4,6 @@ import Data_Processor.*;
 import GUI_CreateOrgAccView.CreateOrgAccView;
 import GUI_Login.LoginView;
 import GUI_SearchOrg.SearchOrgView;
-import com.sun.tools.javac.Main;
 
 import javax.swing.*;
 import java.awt.*;

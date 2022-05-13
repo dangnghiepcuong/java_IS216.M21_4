@@ -1,92 +1,64 @@
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
-
-
+ */
 package GUI_UpdateInjection;
 
+
 import Data_Processor.*;
-import GUI_ManageVaccination.ManageVaccinationView;
-import GUI_SearchOrg.SearchOrgView;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.filechooser.FileFilter;
 
-import static GUI_UpdateInjection.ImageHelper.reSize;
-
-*
+/**
  *
  * @author ASUS
-
-
+ */
 public class UpdateInjectionView extends JPanel implements ActionListener{
     
-Main GUI
-
+    /*Main GUI*/
     private JLayeredPane MainLayeredPane;
     private JPanel MainPanel;
 
     private JLayeredPane InfoLayeredPane;
-    private JLabel InfoBackground;
-    private JLabel NameLabel;
-    private JLabel LocationLabel;
-    private JLabel image;
     
     private JScrollPane ScrollPaneRegList;
     
     private JLayeredPane InfoInjectionPanel; 
     private JLayeredPane LayerPanel; 
     private JButton UpLoadImageButton;
-    private JButton PhotoImageButton;
-    private JButton ContinuteButton;
     private JButton ConfirmButton;
-    private JButton CancelButton;
     
     private JLayeredPane SchedAttendance;
 
-    private JLayeredPane FeatureLayeredPane;
-    private JButton InfoSettingButton;
-    private JButton SearchButton;
-    private JButton NotificationButton;
-    private JButton FillFormButton;
-    private JButton ManageVaccinationButton;
-    private JButton UpdateInjectionButton;
-    private JButton CertificateButton;
-
-    private JButton BackButton;
-    private JButton LogoutButton;
-
-Data Stored Class
-
+    /*Data Stored Class*/
     private DefaultValue dv = new DefaultValue();
-    private Account userAccount = new Account();
     private Person personalUser = new Person();
-    private Organization organization = new Organization();
     private RegisteredScheds Reg=new RegisteredScheds();
-    private Schedule schedule = new Schedule();
 
-Other Views
-
-    private SearchOrgView searchOrgView;
-    private ManageVaccinationView manageVaccinationView;
-    
     //Stored Sum_Injection
     private int Total_Injection;
     private byte[] ImageInjection;
     
     Connection connection;
-    private Image IMG;
+    private Image img;
+    private File file;
+    private FileInputStream input=null;
+    private byte[] imageData;
     
     
-   public UpdateInjectionView(String Username) throws IOException
+   public UpdateInjectionView(Person person) throws IOException
    {
+       personalUser = person;
 
         //set frame size
         this.setSize(dv.FrameWidth(), dv.FrameHeight());
@@ -97,18 +69,15 @@ Other Views
         this.setBackground(new Color(dv.ViewBackgroundColor()));
         //set layout
         this.setLayout(null);
-        
-        
-        
-       
+
         String query = "select * "
                         + "from PERSON join Register on Person.ID=Register.PersonalID "
-                        + "where PERSON.Phone = '" +  Username + "'"
+                        + "where PERSON.Phone = '" +  personalUser.getPhone() + "'"
                         + "Order by SchedID DESC";
         
         String query1 = "select count(*) as Total "
                         + "from PERSON join Register on Person.ID=Register.PersonalID "
-                        + "where PERSON.Phone = '" +  Username + "' and Status = 2";
+                        + "where PERSON.Phone = '" +  personalUser.getPhone() + "' and Status = 1";
                       
               
         try {
@@ -124,19 +93,6 @@ Other Views
             
 
             rs.next();
-            personalUser.setID(rs.getString("ID"));
-            personalUser.setFirstName(rs.getString("FirstName"));
-            personalUser.setLastName(rs.getString("LastName"));
-            personalUser.setBirthday(rs.getString("Birthday"));
-            personalUser.setGender(rs.getInt("Gender"));
-            personalUser.setHomeTown(rs.getString("HomeTown"));
-            personalUser.setProvince(rs.getString("Province"));
-            personalUser.setDistrict(rs.getString("District"));
-            personalUser.setTown(rs.getString("Town"));
-            personalUser.setStreet(rs.getString("Street"));
-            personalUser.setPhone(rs.getString("Phone"));
-            personalUser.setEmail(rs.getString("Email"));
-            personalUser.setGuardian(rs.getString("Guardian"));
 
             Reg.setDoseType(rs.getString("Dosetype"));
             
@@ -150,11 +106,11 @@ Other Views
         
         initMainLayeredPane();
         initMainPanel();
-        initInfoLayerPanel();   
-        initInfoInjectionPanel(Username);
+          
+        initInfoInjectionPanel(personalUser);
         initLayerPanel();
-        
         initScrollPaneRegList();
+        initInfoLayerPanel(); 
         
         this.add(MainLayeredPane);
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
@@ -192,20 +148,25 @@ Other Views
         InfoLayeredPane.setLayout(null);
         InfoLayeredPane.setOpaque(true);
         
-        if(Reg.getImageInjection() != null)
-        {
-            try {
-                Image img=ImageHelper.createImageFromByteArray(Reg.getImageInjection(), "jpg");
-                JLabel image = new JLabel(new ImageIcon(img));         
-                image.setBounds(60,140,379,505);
-                image.setHorizontalAlignment(JLabel.LEFT);
-                InfoLayeredPane.add(image,Integer.valueOf(2));
-            } catch (IOException ex) {
-                Logger.getLogger(UpdateInjectionView.class.getName()).log(Level.SEVERE, null, ex);
+
+        //Load Image
+            if(imageData!=null)
+            {
+         
+                ImageIcon imgIcon=new ImageIcon(imageData);
+                
+                Image Img= ImageHelper.reSize(imgIcon.getImage(),379,505);
+                
+                JLabel Image=new JLabel(new ImageIcon(Img));
+                
+                Image.setBounds(60,140,379,505);
+                Image.setHorizontalAlignment(JLabel.LEFT);
+                InfoLayeredPane.add(Image,Integer.valueOf(2));
+
             }
-        }
-        
-       
+            else 
+                System.out.println(imageData);
+    
                
    }
    
@@ -220,7 +181,7 @@ Other Views
         
         JLabel InfoLabel=new JLabel("CẬP NHẬT THÔNG TIN TIÊM CHỦNG");
         InfoLabel.setBounds(0, 20, 630, 100);
-        InfoLabel.setFont(new Font("SVN-Arial",Font.BOLD, 24));
+        InfoLabel.setFont(new Font(dv.fontName(),Font.BOLD, 24));
         InfoLabel.setHorizontalAlignment(JLabel.CENTER);
         InfoLabel.setForeground(new Color(dv.FeatureButtonColor()));
         //InfoLabel.setBackground(Color.blue);
@@ -230,7 +191,7 @@ Other Views
    }
    
    
-   private void initInfoInjectionPanel(String Username) throws IOException
+   private void initInfoInjectionPanel(Person personalUser) throws IOException
    {
         InfoInjectionPanel = new JLayeredPane();
         InfoInjectionPanel.setBounds(400,100,600, dv.FrameHeight()-200);
@@ -243,15 +204,13 @@ Other Views
         
         //InfoInjectionPanel.setBorder(border);
         
-        String query = "select *" +
-                        "from Register, Schedule, Organization, PERSON\n" +
-                        "where Person.ID = Register.PersonalID and\n" +
-                        "      register.schedid=Schedule.id and\n" +
-                        "      Schedule.OrgID=Organization.ID and\n" +
-                        "      PERSON.Phone = '" +  Username + "' and Status = 0";
+        String query = "select * " +
+                        "from REGISTER REG, SCHEDULE SCHED, ORGANIZATION ORG " +
+                        "where REG.PersonalID = '" + personalUser.getID() + "' and" +
+                        "      REG.SchedID = SCHED.ID and " +
+                        "      SCHED.OrgID = ORG.ID and " +
+                        "      Status = 1";
         try {
-            
-            
             connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
             PreparedStatement st = connection.prepareStatement(query);
@@ -259,79 +218,87 @@ Other Views
             
             
             rs.next();
-            organization.setName(rs.getString("Name"));
-            Reg.getSched().setID(rs.getString("SchedID"));
-            schedule.setVaccineID(rs.getString("VaccineID"));
-            schedule.setSerial(rs.getString("Serial"));
-            
+            Reg.getSched().setID(rs.getString("ID"));
+            Reg.getSched().setVaccineID(rs.getString("VaccineID"));
+
+            Reg.getSched().setSerial("Serial");
+            Reg.getOrg().setName("Name");
             Reg.getOrg().setProvince(rs.getString("Province"));
             Reg.getOrg().setDistrict(rs.getString("District"));
             Reg.getOrg().setTown(rs.getString("Town"));
             Reg.getOrg().setStreet(rs.getString("Street"));
             Reg.getSched().setOnDate(rs.getString("OnDate").substring(0,10));
             Reg.setStatus(rs.getInt("Status"));
+            
+            System.out.println("asdf");
+            System.out.println(imageData);
+            imageData=rs.getBytes("Image");
+            System.out.println(imageData);
+            
+            //Xử lý xuất ảnh từ csdl
+            
  
         } catch (SQLException e) {
+            dv.popupOption(null,"Bạn không có mũi tiêm nào chưa được cập nhật!", "Thông báo", 0);
             e.printStackTrace();
+            return;
         }
-        
-
 
         JLabel Name=new JLabel("Họ tên: "+personalUser.getFullName());
         Name.setBounds(50,30,360,35);
-        Name.setFont(new Font("SVN-Arial",Font.PLAIN,20));
+        Name.setFont(new Font(dv.fontName(),Font.PLAIN,20));
         Name.setHorizontalAlignment(JLabel.LEFT);
         
         JLabel sID=new JLabel("CMND/CCCD: "+personalUser.getID());
         sID.setBounds(50,65,360,35);
-        sID.setFont(new Font("SVN-Arial",Font.PLAIN,20));
+        sID.setFont(new Font(dv.fontName(),Font.PLAIN,20));
         sID.setHorizontalAlignment(JLabel.LEFT);
         
         JLabel SDT=new JLabel("SĐT: "+personalUser.getPhone());
         SDT.setBounds(50,100,360,35);
-        SDT.setFont(new Font("SVN-Arial",Font.PLAIN,20));
+        SDT.setFont(new Font(dv.fontName(),Font.PLAIN,20));
         SDT.setHorizontalAlignment(JLabel.LEFT);
 
-        JLabel NameOrg=new JLabel("Tên đơn vị: " + organization.getName());
+        JLabel NameOrg=new JLabel("Tên đơn vị: " + Reg.getOrg().getName());
         NameOrg.setBounds(50, 135, 712, 35);
-        NameOrg.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
+        NameOrg.setFont(new Font(dv.fontName(),Font.PLAIN, 20));
         NameOrg.setHorizontalAlignment(JLabel.LEFT);
         
         JLabel IDOrg=new JLabel("Mã lịch tiêm: " + Reg.getSched().getID());
         IDOrg.setBounds(50, 170, 712, 35);
-        IDOrg.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
+        IDOrg.setFont(new Font(dv.fontName(),Font.PLAIN, 20));
         IDOrg.setHorizontalAlignment(JLabel.LEFT);
         
-        JLabel Vaccine=new JLabel("Vaccine: " + schedule.getVaccineID()+" - "+schedule.getSerial());
+        JLabel Vaccine=new JLabel("Vaccine: " + Reg.getSched().getVaccineID()+" - "+ Reg.getSched().getSerial());
         Vaccine.setBounds(50, 205, 356, 35);
-        Vaccine.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
+        Vaccine.setFont(new Font(dv.fontName(),Font.PLAIN, 20));
         Vaccine.setHorizontalAlignment(JLabel.LEFT);
         
         JLabel doseType=new JLabel("Loại: "+dv.getDoseTypeName(Reg.getDoseType()));
         doseType.setBounds(406, 205, 356, 35);
-        doseType.setFont(new Font("SVN-Arial",Font.PLAIN,20));
+        doseType.setFont(new Font(dv.fontName(),Font.PLAIN,20));
         doseType.setHorizontalAlignment(JLabel.LEFT);
         
         JLabel Address = new JLabel("Đ/c: " + dv.getProvinceName(Reg.getOrg().getProvince())  + ", "
                 + Reg.getOrg().getDistrict() + ", " + Reg.getOrg().getTown() + ", " + Reg.getOrg().getStreet());
         Address.setBounds(50,240,712,35);
-        Address.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
+        Address.setFont(new Font(dv.fontName(),Font.PLAIN, 20));
         Address.setHorizontalAlignment(JLabel.LEFT);
         
         JLabel OnDateTime = new JLabel("Lịch tiêm ngày: " + Reg.getSched().getOnDate()
                 + "          Buổi: " + dv.getTimeName(Reg.getTime())  + "          STT: " + Reg.getNO());
-        OnDateTime.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
+        OnDateTime.setFont(new Font(dv.fontName(),Font.PLAIN, 20));
         OnDateTime.setBounds(50,275,712,35);
         OnDateTime.setHorizontalAlignment(JLabel.LEFT);
         
         JLabel Status = new JLabel("Tình trạng: "+ dv.getStatusName(Reg.getStatus()));
-        Status.setFont(new Font("SVN-Arial",Font.PLAIN, 20));
+        Status.setFont(new Font(dv.fontName(),Font.PLAIN, 20));
         Status.setBounds(50,310,712,35);
         Status.setHorizontalAlignment(JLabel.LEFT);
         
         JLabel Type=new JLabel("Giấy chứng nhận tiêm chủng vaccine: ");
         Type.setBounds(50,345,360,35);
-        Type.setFont(new Font("SVN-Arial",Font.PLAIN,20));
+        Type.setFont(new Font(dv.fontName(),Font.PLAIN,20));
         Type.setHorizontalAlignment(JLabel.LEFT);
         
         
@@ -354,7 +321,7 @@ Other Views
         JLabel Warning=new JLabel("<html>Khai báo thông tin sai là vi phạm pháp luật Việt Nam và có thể xử lý hình sự.");
         //Warning.setText("");
         Warning.setBounds(50,380,440,60);
-        Warning.setFont(new Font("SVN-Arial",Font.ITALIC,18));
+        Warning.setFont(new Font(dv.fontName(),Font.ITALIC,18));
         Warning.setHorizontalAlignment(JLabel.CENTER);
         Warning.setForeground(Color.red);
         
@@ -377,10 +344,6 @@ Other Views
         //Button
         InfoInjectionPanel.add(UpLoadImageButton,Integer.valueOf(1));    
         InfoInjectionPanel.add(ConfirmButton,Integer.valueOf(2));
-       
-        
-        
-       
    }
    
    
@@ -390,14 +353,14 @@ Other Views
 
         //set Bounds
         ScrollPaneRegList.setBounds(450,140,600, dv.FrameHeight()-215);; //320 40
-        //ScrollPaneRegList.setBackground(Color.yellow);
+        
     }
    
    
-    private void ActionUpLoadImage( )
+    private void ActionUpLoadImage()
     {
         JFileChooser chooser=new JFileChooser();
-        chooser.setFileFilter(new FileFilter() 
+        chooser.setFileFilter(new FileFilter()
         {
                     @Override
                     public boolean accept(File f)
@@ -407,7 +370,7 @@ Other Views
                         else
                             return f.getName().toLowerCase().endsWith(".jpg");
                     }   
-                 
+
                     @Override
                     public String getDescription()
                     {
@@ -417,25 +380,22 @@ Other Views
         );
         if(chooser.showOpenDialog(this) == JFileChooser.CANCEL_OPTION)
             return;
+       
         
-        File file=chooser.getSelectedFile();
+        file=chooser.getSelectedFile();
         try
         {
             ImageIcon imageicon=new ImageIcon(file.getPath());
-            Image img=reSize(imageicon.getImage(), 379, 505);
-            JLabel image = new JLabel(new ImageIcon(img));         
+            img= ImageHelper.reSize(imageicon.getImage(), 379, 505);
+            JLabel image = new JLabel(new ImageIcon(img));  
             image.setBounds(60,140,379,505);
             image.setHorizontalAlignment(JLabel.LEFT);
             InfoLayeredPane.add(image,Integer.valueOf(2));
-            Reg.setImageInjection(ImageHelper.toByteArray(img, ".jpg"));
-          
-//            JLabel image2 = new JLabel(new ImageIcon(ImageHelper.createImageFromByteArray(ImageInjection, ".jpg") ));
-//            Reg.setImageInjection(ImageInjection);
-//      InfoLayeredPane.add(image2,Integer.valueOf(2));
         }
         catch(Exception e)
         {
             e.printStackTrace();
+            System.out.println("ERROR1");
             
         }
     }
@@ -448,55 +408,49 @@ Other Views
     @Override
     public void actionPerformed(ActionEvent e) {
         
-        if (e.getSource() == ConfirmButton)
+        if (e.getSource() == UpLoadImageButton)
         {
-//            byte[] imgData = null;
-//            Blob img = null;
-//            ResultSet rs = null;
-            //Statement st = null;
-            if ( dv.popupConfirmOption(null, "Xác nhận cập nhật giấy chứng nhận mũi tiêm?", "Xác nhận?") == 0)
-            {
-                
-               // System.out.println(Reg.getImageInjection());
-//                //Xử lý lưu thông tin hình ảnh vào cơ sở dữ liệu 
-//                
-//                
-                String query = "select Image" +
-                        "from Register \n" +
-                        " where personalID= '" +  Reg.getOrg().getID() + " Schedid= " + Reg.getSched();
-        try {
-
-
-            connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-
-            PreparedStatement st = connection.prepareStatement(query);
-            rs = st.executeQuery(query);
-
-            while (rs.next()) {
-            img = rs.getBlob("Image");
-            imgData = img.getBytes(1, (int) img.length());
-        }
-        rs.close();
-
-
-
-
-            } catch (SQLException ex) {
-            ex.printStackTrace();
+            //InfoLayeredPane=null;
+            InfoLayeredPane.removeAll();
+            ActionUpLoadImage();
+            System.out.println("16");
         }
         
-                
+        
+        if (e.getSource() == ConfirmButton)
+        {
+            System.out.println("1");
+            if ( dv.popupConfirmOption(null, "Xác nhận cập nhật giấy chứng nhận mũi tiêm?", "Xác nhận?") == 0)
+            {
+                try {
+                    connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+                    String query ="update REGISTER REG " +
+                                       "set Image=? " +
+                                       "where PersonalID= '" + personalUser.getID() + "'" +
+                                        " and SchedID = '"+ Reg.getSched().getID() +"'";
+                    PreparedStatement st = connection.prepareStatement(query);
+
+                    input = new FileInputStream(file);
+
+                    st.setBinaryStream(1,input);
+
+                    st.executeUpdate();
+                    st.close();
+                }
+                catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+                catch (IOException ex) {
+                    Logger.getLogger(UpdateInjectionView.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("Error");
+                }
                 dv.popupOption(null, "Cập nhật thành công!", "Thông báo!", 0);
             }
             else
                 return;
         }
         
-        if (e.getSource() == UpLoadImageButton)
-        {
-            InfoLayeredPane.removeAll();
-            ActionUpLoadImage();
-        }
+        
         
         //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
