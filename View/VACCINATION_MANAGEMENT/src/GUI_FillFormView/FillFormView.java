@@ -59,29 +59,29 @@ public class FillFormView extends JPanel implements ActionListener
         FormFilterLabel.setBounds(0, 0, dv.LabelWidth()+50, dv.LabelHeight());
         FormFilterLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         FormFilterLabel.setForeground(new Color(0x666666));
-        FormFilterLabel.setText("Tờ khai trong vòng:");
+        FormFilterLabel.setText("Tờ khai trong vòng");
         FormFilterLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
     }
 
     private void initFormFilterChoice()
     {
         FormFilterChoice = new Choice();
-        FormFilterChoice.setBounds(0, 40, dv.FieldWidth(), dv.FieldHeight());
+        FormFilterChoice.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
         FormFilterChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         FormFilterChoice.setForeground(new Color(dv.BlackTextColor()));
 
         FormFilterChoice.add("7 ngày");
         FormFilterChoice.add("14 ngày");
-        FormFilterChoice.add("30 ngày");
+        FormFilterChoice.add("28 ngày");
     }
 
     private void initFormFilterButton()
     {
         FormFilterButton = new JButton();
-        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Magnifying Glass Button_1.png"));
+        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search Filter Button.png"));
         FormFilterButton.setIcon(SearchIcon);
 
-        FormFilterButton.setBounds(0, 110, dv.FieldWidth(), SearchIcon.getIconHeight());
+        FormFilterButton.setBounds(0, 70, dv.FieldWidth(), SearchIcon.getIconHeight());
         FormFilterButton.setBorder(null);
         FormFilterButton.setContentAreaFilled(false);
 
@@ -95,7 +95,7 @@ public class FillFormView extends JPanel implements ActionListener
         initFormFilterButton();
 
         FormFilterPanel = new JPanel();
-        FormFilterPanel.setBounds(dv.AlignLeft(), 80, dv.LabelWidth()+50, 110 + 56);
+        FormFilterPanel.setBounds(dv.AlignLeft(), 80, dv.LabelWidth()+50, 125);
         FormFilterPanel.setLayout(null);
         FormFilterPanel.setBackground(new Color(dv.ViewBackgroundColor()));
 
@@ -272,7 +272,7 @@ public class FillFormView extends JPanel implements ActionListener
     {
         ImageIcon FillFormButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Fill Form Button.png"));
         FillFormButton = new JButton();
-        FillFormButton.setBounds((320-FillFormButtonIcon.getIconWidth())/2, 300, FillFormButtonIcon.getIconWidth(), FillFormButtonIcon.getIconHeight());
+        FillFormButton.setBounds((320-FillFormButtonIcon.getIconWidth())/2, 600, FillFormButtonIcon.getIconWidth(), FillFormButtonIcon.getIconHeight());
         FillFormButton.setBorder(null);
         FillFormButton.setContentAreaFilled(false);
         FillFormButton.setIcon(FillFormButtonIcon);

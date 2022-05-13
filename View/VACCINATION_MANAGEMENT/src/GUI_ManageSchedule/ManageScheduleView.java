@@ -36,10 +36,10 @@ public class ManageScheduleView extends JPanel implements ActionListener
     private JLabel RegFilterLabel;
     private Choice RegFilterChoice;
     private JButton RegFilterButton;
+    private Schedule SelectedSched;
 
     private JScrollPane ScrollPaneRegList;
     private JPanel RegListPanel;
-    private JPanel RegPanel[] = new JPanel[3000];
 
     /*Create Schedule*/
     private JButton CreateNewSchedButton;
@@ -69,14 +69,14 @@ public class ManageScheduleView extends JPanel implements ActionListener
         SchedFilterLabel.setBounds(0, 0, dv.LabelWidth()+50, dv.LabelHeight());
         SchedFilterLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         SchedFilterLabel.setForeground(new Color(0x666666));
-        SchedFilterLabel.setText("Bộ lọc lịch tiêm:");
+        SchedFilterLabel.setText("Bộ lọc lịch tiêm");
         SchedFilterLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
     }
 
     private void initSchedFilterChoice()
     {
         SchedFilterChoice = new Choice();
-        SchedFilterChoice.setBounds(0, 40, dv.FieldWidth(), dv.FieldHeight());
+        SchedFilterChoice.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
         SchedFilterChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         SchedFilterChoice.setForeground(new Color(dv.BlackTextColor()));
 
@@ -88,10 +88,10 @@ public class ManageScheduleView extends JPanel implements ActionListener
     private void initSchedFilterButton()
     {
         SchedFilterButton = new JButton();
-        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Magnifying Glass Button_1.png"));
+        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search Filter Button.png"));
         SchedFilterButton.setIcon(SearchIcon);
 
-        SchedFilterButton.setBounds(0, 110, dv.FieldWidth(), SearchIcon.getIconHeight());
+        SchedFilterButton.setBounds(0, 70, dv.FieldWidth(), SearchIcon.getIconHeight());
         SchedFilterButton.setBorder(null);
         SchedFilterButton.setContentAreaFilled(false);
 
@@ -105,7 +105,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         initSchedFilterButton();
 
         SchedFilterPanel = new JPanel();
-        SchedFilterPanel.setBounds(dv.AlignLeft(), 80, dv.LabelWidth()+50, 110 + 56);
+        SchedFilterPanel.setBounds(dv.AlignLeft(), 80, dv.LabelWidth()+50, 125);
         SchedFilterPanel.setLayout(null);
         SchedFilterPanel.setBackground(new Color(dv.ViewBackgroundColor()));
 
@@ -141,14 +141,15 @@ public class ManageScheduleView extends JPanel implements ActionListener
                 RegListLabel.setForeground(new Color(dv.FeatureButtonColor()));
                 RegListLabel.setHorizontalAlignment(JLabel.CENTER);
 
-                initScrollPaneRegList(Sched);
+                SelectedSched = Sched;
+                initRegListPanel(Sched, -1);
+                initScrollPaneRegList();
 
                 LayeredPaneArea.add(RegListLabel, Integer.valueOf(0));
                 LayeredPaneArea.add(ScrollPaneRegList, Integer.valueOf(0));
                 LayeredPaneArea.repaint(320, 40, 680, 630);
 
-                initRegFilterPanel();
-                getParent().add(RegFilterPanel);
+                RegFilterButton.setEnabled(true);
             }
         };
 
@@ -308,29 +309,31 @@ public class ManageScheduleView extends JPanel implements ActionListener
         RegFilterLabel.setBounds(0, 0, dv.LabelWidth()+50, dv.LabelHeight());
         RegFilterLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         RegFilterLabel.setForeground(new Color(0x666666));
-        RegFilterLabel.setText("Bộ lọc lịch tiêm:");
+        RegFilterLabel.setText("Bộ lọc lượt đăng ký");
         RegFilterLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
     }
 
     private void initRegFilterChoice()
     {
         RegFilterChoice = new Choice();
-        RegFilterChoice.setBounds(0, 40, dv.FieldWidth(), dv.FieldHeight());
+        RegFilterChoice.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
         RegFilterChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         RegFilterChoice.setForeground(new Color(dv.BlackTextColor()));
 
         RegFilterChoice.add("Tất cả");
-        RegFilterChoice.add("Đã lên lịch");
-        RegFilterChoice.add("Đã thực hiện");
+        RegFilterChoice.add("Đã đăng ký");
+        RegFilterChoice.add("Đã điểm danh");
+        RegFilterChoice.add("Đã tiêm");
+        RegFilterChoice.add("Đã hủy");
     }
 
     private void initRegFilterButton()
     {
         RegFilterButton = new JButton();
-        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Magnifying Glass Button_1.png"));
+        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search Filter Button.png"));
         RegFilterButton.setIcon(SearchIcon);
 
-        RegFilterButton.setBounds(0, 110, dv.FieldWidth(), SearchIcon.getIconHeight());
+        RegFilterButton.setBounds(0, 70, dv.FieldWidth(), SearchIcon.getIconHeight());
         RegFilterButton.setBorder(null);
         RegFilterButton.setContentAreaFilled(false);
 
@@ -344,7 +347,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         initRegFilterButton();
 
         RegFilterPanel = new JPanel();
-        RegFilterPanel.setBounds(dv.AlignLeft(), 300, dv.LabelWidth()+50, 110 + 56);
+        RegFilterPanel.setBounds(dv.AlignLeft(), 240, dv.LabelWidth()+50, 125);
         RegFilterPanel.setLayout(null);
         RegFilterPanel.setBackground(new Color(dv.ViewBackgroundColor()));
 
@@ -442,7 +445,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         cst.setInt("par_Status", StatusChoice.getSelectedIndex()+1);
 
                         cst.execute();
-
                     }
                     catch (SQLException ex)
                     {
@@ -474,12 +476,11 @@ public class ManageScheduleView extends JPanel implements ActionListener
         return RegPanel;
     }
 
-    private void initRegListPanel(Schedule Sched)
+    private void initRegListPanel(Schedule Sched, int Status)
     {
         RegListPanel = new JPanel();
         RegListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         RegListPanel.setLayout(new FlowLayout());
-
 
         String query = "";
 
@@ -489,8 +490,10 @@ public class ManageScheduleView extends JPanel implements ActionListener
         query = "select PersonalID, LastName, FirstName, Birthday, Gender, Phone, Time, NO, DoseType, Status, Image" +
                 " from REGISTER REG, PERSON" +
                 " where REG.PersonalID = PERSON.ID" +
-                " and REG.SchedID = '" +  Sched.getID() + "'" +
-                " order by Time, NO";
+                " and REG.SchedID = '" +  Sched.getID() + "'";
+        if (Status != -1)
+            query += " and Status = " + Status;
+        query += " order by Time, NO";
 
         System.out.println(query);
 
@@ -529,10 +532,8 @@ public class ManageScheduleView extends JPanel implements ActionListener
         RegListPanel.setPreferredSize(new Dimension(660, 150*nReg+nReg*10));
     }
 
-    private void initScrollPaneRegList(Schedule Sched)
+    private void initScrollPaneRegList()
     {
-        initRegListPanel(Sched);
-
         ScrollPaneRegList = new JScrollPane(RegListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneRegList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneRegList.setBounds(0, 40, 680, 590); //320 40
@@ -553,7 +554,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
     {
         ImageIcon CreateNewSchedButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Add New Sched Button.png"));
         CreateNewSchedButton = new JButton();
-        CreateNewSchedButton.setBounds((320-CreateNewSchedButtonIcon.getIconWidth())/2, 300, CreateNewSchedButtonIcon.getIconWidth(), CreateNewSchedButtonIcon.getIconHeight());
+        CreateNewSchedButton.setBounds((320-CreateNewSchedButtonIcon.getIconWidth())/2, 600, CreateNewSchedButtonIcon.getIconWidth(), CreateNewSchedButtonIcon.getIconHeight());
         CreateNewSchedButton.setBorder(null);
         CreateNewSchedButton.setContentAreaFilled(false);
         CreateNewSchedButton.setIcon(CreateNewSchedButtonIcon);
@@ -845,6 +846,11 @@ public class ManageScheduleView extends JPanel implements ActionListener
         initSchedFilterPanel();
         this.add(SchedFilterPanel);
 
+        //initRegFilterPanel
+        initRegFilterPanel();
+        RegFilterButton.setEnabled(false);
+        this.add(RegFilterPanel);
+
         //init CreateNewSchedButton
         initCreateNewSchedButton();
         this.add(CreateNewSchedButton);
@@ -883,7 +889,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
     {
         if (e.getSource() == SchedFilterButton)
         {
-            CreateSchedPanel = null;
+//            CreateSchedPanel = null;
             LayeredPaneArea.removeAll();
             LayeredPaneArea.repaint(320, 40, 680, 630);
 
@@ -901,6 +907,24 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
             RegListPanel = null;
             ScrollPaneRegList = null;
+            RegFilterButton.setEnabled(false);
+        }
+
+        if (e.getSource() == RegFilterButton)
+        {
+            LayeredPaneArea.removeAll();
+
+            JLabel RegListLabel = new JLabel("DANH SÁCH CÁC LƯỢT ĐĂNG KÝ:");
+            RegListLabel.setBounds(0,0,640,40);
+            RegListLabel.setFont(new Font(dv.fontName(), 1, 20));
+            RegListLabel.setForeground(new Color(dv.FeatureButtonColor()));
+            RegListLabel.setHorizontalAlignment(JLabel.CENTER);
+
+            initRegListPanel(SelectedSched, RegFilterChoice.getSelectedIndex()-1);
+            initScrollPaneRegList();
+
+            LayeredPaneArea.add(RegListLabel);
+            LayeredPaneArea.add(ScrollPaneRegList);
         }
 
         if (e.getSource() == CreateNewSchedButton)

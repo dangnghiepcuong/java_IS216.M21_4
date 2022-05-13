@@ -415,7 +415,7 @@ public class MOHMainView extends JFrame implements ActionListener
             orgUser.setID(orgInformationView.getOrgUser().getID());
             orgInformationView = null;
             MainLayeredPane.removeAll();
-            ORGMainView orgMainView = new ORGMainView(orgUser.getID());
+            MOHMainView mohMainView = new MOHMainView(orgUser.getID());
             this.dispose();
         }
 
