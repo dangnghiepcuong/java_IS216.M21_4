@@ -41,6 +41,9 @@ public class ManageScheduleView extends JPanel implements ActionListener
     private JScrollPane ScrollPaneRegList;
     private JPanel RegListPanel;
 
+    /*Update Sched*/
+    private JPanel UpdateSchedPanel;
+
     /*Create Schedule*/
     private JButton CreateNewSchedButton;
     private JPanel CreateSchedPanel;
@@ -146,7 +149,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         Time.setBounds(30, 40+2,600,25);
         Time.setHorizontalAlignment(JLabel.LEFT);
 
-        ActionListener handleRegistion = new ActionListener()
+        ActionListener handleRegistionsButton = new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
@@ -178,7 +181,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         SchedRegistionButton.setBorder(null);
         SchedRegistionButton.setContentAreaFilled(false);
         SchedRegistionButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Sched Registion Button.png")));
-        SchedRegistionButton.addActionListener(handleRegistion);
+        SchedRegistionButton.addActionListener(handleRegistionsButton);
 
         SchedPanel.add(OnDateVaccine);
         SchedPanel.add(Time);
@@ -188,37 +191,210 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
         LocalDate sysdate = LocalDate.parse(dv.todayString());
 
+        JButton UpdateSchedButton = new JButton();
+        JButton CancelSchedButton = new JButton();
+
         if (SchedOnDate.isAfter(sysdate))
         {
-            ActionListener handleUpdate = new ActionListener()
+            ActionListener handleUpdateCancelSched = new ActionListener()
             {
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
+                    if (e.getSource() == UpdateSchedButton)
+                    {
+                        LayeredPaneArea.removeAll();
+                        SchedListPanel = null;
+                        ScrollPaneSchedList = null;
 
+                        UpdateSchedPanel = new JPanel();
+                        UpdateSchedPanel.setBounds(0,0,680,630);
+                        UpdateSchedPanel.setLayout(new GridBagLayout());
+                        UpdateSchedPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+                        UpdateSchedPanel.setBorder(dv.border());
+
+                        JLabel UpdateSchedLabel = new JLabel("CẬP NHẬT LỊCH TIÊM");
+                        UpdateSchedLabel.setPreferredSize(new Dimension(640,40));
+                        UpdateSchedLabel.setFont(new Font(dv.fontName(), 1, 20));
+                        UpdateSchedLabel.setForeground(new Color(dv.FeatureButtonColor()));
+                        UpdateSchedLabel.setHorizontalAlignment(JLabel.CENTER);
+
+                        JLabel LimitDayLabel = new JLabel("Giới hạn số lượt đăng ký buổi sáng:");
+                        LimitDayLabel.setPreferredSize(new Dimension(270, 30));
+                        LimitDayLabel.setFont(new Font(dv.fontName(), 0 ,16));
+                        LimitDayLabel.setForeground(new Color(dv.BlackTextColor()));
+
+                        JTextField LimitDayTextField = new JTextField();
+                        LimitDayTextField.setPreferredSize(new Dimension(200, 30));
+                        LimitDayTextField.setFont(new Font(dv.fontName(), 0 ,16));
+                        LimitDayTextField.setForeground(new Color(dv.BlackTextColor()));
+
+                        JLabel LimitNoonLabel = new JLabel("Giới hạn số lượt đăng ký buổi trưa:");
+                        LimitNoonLabel.setPreferredSize(new Dimension(270, 30));
+                        LimitNoonLabel.setFont(new Font(dv.fontName(), 0 ,16));
+                        LimitNoonLabel.setForeground(new Color(dv.BlackTextColor()));
+
+                        JTextField LimitNoonTextField = new JTextField();
+                        LimitNoonTextField.setPreferredSize(new Dimension(200, 30));
+                        LimitNoonTextField.setFont(new Font(dv.fontName(), 0 ,16));
+                        LimitNoonTextField.setForeground(new Color(dv.BlackTextColor()));
+
+                        JLabel LimitNightLabel = new JLabel("Giới hạn số lượt đăng ký buổi tối:");
+                        LimitNightLabel.setPreferredSize(new Dimension(270, 30));
+                        LimitNightLabel.setFont(new Font(dv.fontName(), 0 ,16));
+                        LimitNightLabel.setForeground(new Color(dv.BlackTextColor()));
+
+                        JTextField LimitNightTextField = new JTextField();
+                        LimitNightTextField.setPreferredSize(new Dimension(200, 30));
+                        LimitNightTextField.setFont(new Font(dv.fontName(), 0 ,16));
+                        LimitNightTextField.setForeground(new Color(dv.BlackTextColor()));
+
+                        ActionListener handleConfirmButton = new ActionListener()
+                        {
+                            @Override
+                            public void actionPerformed(ActionEvent e)
+                            {
+                                String InputLimitDay = LimitDayTextField.getText();
+                                String InputLimitNoon = LimitNoonTextField.getText();
+                                String InputLimitNight = LimitNightTextField.getText();
+
+                                if (InputLimitDay.equals("") == false)
+                                {
+                                    if(dv.checkisNumberInputValue(InputLimitDay,
+                                            "Lỗi!", "Giới hạn phải là số!") != -2)
+                                        return;
+                                }
+                                else
+                                    InputLimitDay = String.valueOf(Sched.getLimitDay());
+
+
+                                if (InputLimitNoon.equals("") == false)
+                                {
+                                    if(dv.checkisNumberInputValue(InputLimitNoon,
+                                            "Lỗi!", "Giới hạn phải là số!") != -2)
+                                        return;
+                                }
+                                else
+                                    InputLimitNoon = String.valueOf(Sched.getLimitNoon());
+
+
+                                if (InputLimitNight.equals("") == false)
+                                {
+                                    if(dv.checkisNumberInputValue(InputLimitNight,
+                                            "Lỗi!", "Giới hạn phải là số!") != -2)
+                                        return;
+                                }
+                                else
+                                    InputLimitNight = String.valueOf(Sched.getLimitNight());
+
+                                if (dv.popupConfirmOption(null,"Xác nhận cập nhật lịch tiêm?", "Xác nhận?") != 0)
+                                    return;
+
+                                String plsql = "{call SCHED_UPDATE_RECORD(?, ?, ?, ?)}";
+
+                                try {
+                                    Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+                                    CallableStatement cst = connection.prepareCall(plsql);
+
+                                    cst.setString("par_ID", Sched.getID());
+                                    cst.setInt("par_LimitDay", Integer.parseInt(InputLimitDay));
+                                    cst.setInt("par_LimitNoon", Integer.parseInt(InputLimitNoon));
+                                    cst.setInt("par_LimitNight", Integer.parseInt(InputLimitNight));
+
+                                    cst.execute();
+                                }
+                                catch (SQLException ex)
+                                {
+                                    dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+                                    ex.printStackTrace();
+                                    return;
+                                }
+                                dv.popupOption(null, "Cập nhật thành công!", "Thông báo!", 0);
+
+                                Sched.setLimitDay(Integer.parseInt(InputLimitDay));
+                                Sched.setLimitNoon(Integer.parseInt(InputLimitNoon));
+                                Sched.setLimitNight(Integer.parseInt(InputLimitNight));
+                                Time.setText("Buổi sáng: " + Sched.getDayRegistered() + "/" + Sched.getLimitDay()
+                                        + "          Buổi trưa: " + Sched.getNoonRegistered() + "/" + Sched.getLimitNoon()
+                                        + "          Buổi tối: " + Sched.getNightRegistered() + "/" + Sched.getLimitNight());
+
+                                UpdateSchedPanel.repaint(0,0,680,630);
+
+//                                LayeredPaneArea.removeAll();
+//                                LayeredPaneArea.add(UpdateSchedPanel, Integer.valueOf(0));
+//                                LayeredPaneArea.repaint(320, 40, 680, 630);
+                            }
+                        };
+
+                        JButton UpdateSchedButton = new JButton();
+                        ImageIcon UpdateSchedButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Confirm Button.png"));
+                        UpdateSchedButton.setForeground(new Color(dv.BlackTextColor()));
+                        UpdateSchedButton.setPreferredSize(new Dimension(UpdateSchedButtonIcon.getIconWidth(),UpdateSchedButtonIcon.getIconHeight()));
+                        UpdateSchedButton.setContentAreaFilled(false);
+                        UpdateSchedButton.setBorder(null);
+                        UpdateSchedButton.setIcon(UpdateSchedButtonIcon);
+                        UpdateSchedButton.addActionListener(handleConfirmButton);
+
+                        GridBagConstraints c = new GridBagConstraints();
+                        c.gridx = 0;
+
+                        c.insets = new Insets(0,0,10,0);
+                        c.gridy = 0;
+                        UpdateSchedPanel.add(UpdateSchedLabel,c);
+
+                        c.insets = new Insets(0,0,5,0);
+                        c.gridy = 1;
+                        UpdateSchedPanel.add(OnDateVaccine,c);
+
+                        c.insets = new Insets(0,0,30,0);
+                        c.gridy = 2;
+                        UpdateSchedPanel.add(Time,c);
+
+                        c.insets = new Insets(0,0,0,0);
+                        c.gridy = 3;
+                        UpdateSchedPanel.add(LimitDayLabel,c);
+
+                        c.insets = new Insets(0,0,20,0);
+                        c.gridy = 4;
+                        UpdateSchedPanel.add(LimitDayTextField,c);
+
+                        c.insets = new Insets(0,0,0,0);
+                        c.gridy = 5;
+                        UpdateSchedPanel.add(LimitNoonLabel,c);
+
+                        c.insets = new Insets(0,0,20,0);
+                        c.gridy = 6;
+                        UpdateSchedPanel.add(LimitNoonTextField,c);
+
+                        c.insets = new Insets(0,0,0,0);
+                        c.gridy = 7;
+                        UpdateSchedPanel.add(LimitNightLabel,c);
+
+                        c.insets = new Insets(0,0,30,0);
+                        c.gridy = 8;
+                        UpdateSchedPanel.add(LimitNightTextField,c);
+
+                        c.gridy = 9;
+                        UpdateSchedPanel.add(UpdateSchedButton, c);
+
+                        LayeredPaneArea.add(UpdateSchedPanel, Integer.valueOf(0));
+
+                        LayeredPaneArea.repaint(320, 40, 680, 630);
+                    }
                 }
             };
-            JButton UpdateSchedButton = new JButton();
+
             UpdateSchedButton.setBounds(30 + 160 + 30, 80, 150+7, 30+6);
             UpdateSchedButton.setBorder(null);
             UpdateSchedButton.setContentAreaFilled(false);
             UpdateSchedButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Update Sched Button.png")));
-            UpdateSchedButton.addActionListener(handleUpdate);
+            UpdateSchedButton.addActionListener(handleUpdateCancelSched);
 
-            ActionListener handleCancel = new ActionListener()
-            {
-                @Override
-                public void actionPerformed(ActionEvent e)
-                {
-
-                }
-            };
-            JButton CancelSchedButton = new JButton();
             CancelSchedButton.setBounds( 160 + 30 + 200, 80, 150+7, 30+6);
             CancelSchedButton.setBorder(null);
             CancelSchedButton.setContentAreaFilled(false);
             CancelSchedButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Cancel Sched Button.png")));
-            CancelSchedButton.addActionListener(handleCancel);
+            CancelSchedButton.addActionListener(handleUpdateCancelSched);
 
             SchedPanel.add(UpdateSchedButton);
             SchedPanel.add(CancelSchedButton);
@@ -427,7 +603,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                 StatusChoice.add("Hủy");
             }
 
-            ActionListener handleUpdate = new ActionListener()
+            ActionListener handleUpdateRegistions = new ActionListener()
             {
                 @Override
                 public void actionPerformed(ActionEvent e)
@@ -471,7 +647,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
             UpdateStatusButton.setContentAreaFilled(false);
             UpdateStatusButton.setBorder(null);
             UpdateStatusButton.setIcon(UpdateStatusButtonIcon);
-            UpdateStatusButton.addActionListener(handleUpdate);
+            UpdateStatusButton.addActionListener(handleUpdateRegistions);
 
             RegPanel.add(StatusChoice);
             RegPanel.add(UpdateStatusButton);
