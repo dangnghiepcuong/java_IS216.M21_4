@@ -1,6 +1,6 @@
-package GUI_FillFormView;
+package View;
 
-import Data_Processor.*;
+import Process.*;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -78,7 +78,7 @@ public class FillFormView extends JPanel implements ActionListener
     private void initFormFilterButton()
     {
         FormFilterButton = new JButton();
-        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search Filter Button.png"));
+        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Resources/icon/Search Filter Button.png"));
         FormFilterButton.setIcon(SearchIcon);
 
         FormFilterButton.setBounds(0, 70, dv.FieldWidth(), SearchIcon.getIconHeight());
@@ -270,7 +270,7 @@ public class FillFormView extends JPanel implements ActionListener
 
     private void initFillFormButton()
     {
-        ImageIcon FillFormButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Fill Form Button.png"));
+        ImageIcon FillFormButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Fill Form Button.png"));
         FillFormButton = new JButton();
         FillFormButton.setBounds((320-FillFormButtonIcon.getIconWidth())/2, 600, FillFormButtonIcon.getIconWidth(), FillFormButtonIcon.getIconHeight());
         FillFormButton.setBorder(null);
@@ -398,7 +398,7 @@ public class FillFormView extends JPanel implements ActionListener
             }
         };
 
-        ImageIcon CreateHealButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Confirm Button.png"));
+        ImageIcon CreateHealButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Confirm Button.png"));
         JButton CreateHealButton = new JButton();
         CreateHealButton.setPreferredSize(new Dimension(CreateHealButtonIcon.getIconWidth(), CreateHealButtonIcon.getIconHeight()));
         CreateHealButton.setContentAreaFilled(false);

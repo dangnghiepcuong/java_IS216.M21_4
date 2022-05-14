@@ -1,7 +1,7 @@
-package GUI_OrgInformation;
+package View;
 
 
-import Data_Processor.*;
+import Process.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -166,7 +166,7 @@ public class OrgInformationView extends JPanel implements ActionListener
     private void initUpdateAccButton()
     {
 
-        ImageIcon RegisterButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Update Button.png"));
+        ImageIcon RegisterButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Update Button.png"));
         UpdateAccButton = new JButton();
         UpdateAccButton.setBounds(105, 600, RegisterButtonIcon.getIconWidth(), RegisterButtonIcon.getIconHeight());
         UpdateAccButton.setBorder(null);

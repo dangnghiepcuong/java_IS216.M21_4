@@ -1,13 +1,12 @@
-package GUI_CreateOrgAccView;
+package View;
 
-import Data_Processor.*;
+import Process.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
-import java.time.LocalDate;
 
 /**
  *
@@ -67,7 +66,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
     private void initProvinceFilterButton()
     {
         ProvinceFilterButton = new JButton();
-        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search Filter Button.png"));
+        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Resources/icon/Search Filter Button.png"));
         ProvinceFilterButton.setIcon(SearchIcon);
 
         ProvinceFilterButton.setBounds(0, 110, dv.FieldWidth(), SearchIcon.getIconHeight());
@@ -235,7 +234,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
     * */
     private void initAddNewOrgAccButton()
     {
-        ImageIcon AddNewOrgAccButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Create New Org Acc Button.png"));
+        ImageIcon AddNewOrgAccButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Create New Org Acc Button.png"));
         AddNewOrgAccButton = new JButton();
         AddNewOrgAccButton.setBounds((320-AddNewOrgAccButtonIcon.getIconWidth())/2, 300, AddNewOrgAccButtonIcon.getIconWidth(), AddNewOrgAccButtonIcon.getIconHeight());
         AddNewOrgAccButton.setBorder(null);
@@ -316,7 +315,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
             }
         };
 
-        ImageIcon CreateOrgAccButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Confirm Button.png"));
+        ImageIcon CreateOrgAccButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Confirm Button.png"));
         JButton CreateOrgAccButton = new JButton();
         CreateOrgAccButton.setPreferredSize(new Dimension(CreateOrgAccButtonIcon.getIconWidth(), CreateOrgAccButtonIcon.getIconHeight()));
         CreateOrgAccButton.setContentAreaFilled(false);

@@ -1,6 +1,6 @@
-package GUI_SearchOrg;
+package View;
 
-import Data_Processor.*;
+import Process.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -135,7 +135,7 @@ public class SearchOrgView extends JPanel implements ActionListener
     private void initOrgFilterButton() 
     {
         OrgFilterButton = new JButton();
-        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search Filter Button.png"));
+        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Resources/icon/Search Filter Button.png"));
         OrgFilterButton.setIcon(SearchIcon);
 
         OrgFilterButton.setBounds(0, 210, dv.FieldWidth(), SearchIcon.getIconHeight());
@@ -389,7 +389,7 @@ public class SearchOrgView extends JPanel implements ActionListener
     private void initSchedFilterButton()
     {
         SchedFilterButton = new JButton();
-        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search Filter Button.png"));
+        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Resources/icon/Search Filter Button.png"));
         SchedFilterButton.setIcon(SearchIcon);
 
         SchedFilterButton.setBounds(0, 70, dv.FieldWidth(), SearchIcon.getIconHeight());
@@ -557,7 +557,7 @@ public class SearchOrgView extends JPanel implements ActionListener
 
         JButton SchedRegisterButton = new JButton();
         ImageIcon SchedRegisterButtonIcon = new ImageIcon(getClass().getResource(
-                "/Data_Processor/icon/Sched Register Button.png"));
+                "/Resources/icon/Sched Register Button.png"));
         SchedRegisterButton.setForeground(new Color(dv.BlackTextColor()));
         SchedRegisterButton.setBounds(470,32*2,
                 SchedRegisterButtonIcon.getIconWidth(),SchedRegisterButtonIcon.getIconHeight());

@@ -1,6 +1,6 @@
-package GUI_ManageSchedule;
+package View;
 
-import Data_Processor.*;
+import Process.*;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -88,7 +88,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
     private void initSchedFilterButton()
     {
         SchedFilterButton = new JButton();
-        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search Filter Button.png"));
+        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Resources/icon/Search Filter Button.png"));
         SchedFilterButton.setIcon(SearchIcon);
 
         SchedFilterButton.setBounds(0, 70, dv.FieldWidth(), SearchIcon.getIconHeight());
@@ -172,7 +172,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         SchedRegistionButton.setBounds(30, 80, 150+7, 30+6);
         SchedRegistionButton.setBorder(null);
         SchedRegistionButton.setContentAreaFilled(false);
-        SchedRegistionButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Sched Registion Button.png")));
+        SchedRegistionButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Sched Registion Button.png")));
         SchedRegistionButton.addActionListener(handleRegistion);
 
         JPanel SchedPanel = new JPanel();
@@ -202,7 +202,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
             UpdateSchedButton.setBounds(30 + 160 + 30, 80, 150+7, 30+6);
             UpdateSchedButton.setBorder(null);
             UpdateSchedButton.setContentAreaFilled(false);
-            UpdateSchedButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Update Sched Button.png")));
+            UpdateSchedButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Update Sched Button.png")));
             UpdateSchedButton.addActionListener(handleUpdate);
 
             ActionListener handleCancel = new ActionListener()
@@ -217,7 +217,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
             CancelSchedButton.setBounds( 160 + 30 + 200, 80, 150+7, 30+6);
             CancelSchedButton.setBorder(null);
             CancelSchedButton.setContentAreaFilled(false);
-            CancelSchedButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Cancel Sched Button.png")));
+            CancelSchedButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Cancel Sched Button.png")));
             CancelSchedButton.addActionListener(handleCancel);
 
             SchedPanel.add(UpdateSchedButton);
@@ -330,7 +330,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
     private void initRegFilterButton()
     {
         RegFilterButton = new JButton();
-        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search Filter Button.png"));
+        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Resources/icon/Search Filter Button.png"));
         RegFilterButton.setIcon(SearchIcon);
 
         RegFilterButton.setBounds(0, 70, dv.FieldWidth(), SearchIcon.getIconHeight());
@@ -367,6 +367,11 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
     private JPanel initRegPanel(RegisteredScheds Reg)
     {
+        JPanel RegPanel = new JPanel();
+        RegPanel.setLayout(null);
+        RegPanel.setPreferredSize(new Dimension(640,120));
+        RegPanel.setBackground(Color.WHITE);
+
         //PersonalID, LastName, FirstName, Birthday, Gender, Phone, Time, NO, DoseType, Status, Image
         JLabel CitizenName = new JLabel("Đối tượng: " + Reg.getCitizen().getFullName() + " - "
                 + dv.getGenderName(Reg.getCitizen().getGender())  + " - " + dv.getYear(Reg.getCitizen().getBirthday())
@@ -395,11 +400,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
         TimeNOStatus.setForeground(new Color(dv.BlackTextColor()));
         TimeNOStatus.setBounds(30, 32+25*2+2,380,25);
         TimeNOStatus.setHorizontalAlignment(JLabel.LEFT);
-
-        JPanel RegPanel = new JPanel();
-        RegPanel.setLayout(null);
-        RegPanel.setPreferredSize(new Dimension(640,120));
-        RegPanel.setBackground(Color.WHITE);
 
         RegPanel.add(CitizenName);
         RegPanel.add(Phone);
@@ -452,16 +452,17 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         return;
                     }
 
+                    //repaint Status on Registion Panel
                     Reg.setStatus(StatusChoice.getSelectedIndex()+1);
                     TimeNOStatus.setText("Buổi: " + dv.getTimeName(Reg.getTime())
                             + "          STT: " + Reg.getNO() + "          Tình trạng: " + dv.getStatusName(Reg.getStatus()));
 
-                    LayeredPaneArea.repaint(320, 40, 680, 630);
+                    RegPanel.repaint();
                 }
             };
 
             JButton UpdateStatusButton = new JButton();
-            ImageIcon UpdateStatusButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Update Status Button.png"));
+            ImageIcon UpdateStatusButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Update Status Button.png"));
             UpdateStatusButton.setForeground(new Color(dv.BlackTextColor()));
             UpdateStatusButton.setBounds(500,32*2+5,UpdateStatusButtonIcon.getIconWidth(),UpdateStatusButtonIcon.getIconHeight());
             UpdateStatusButton.setContentAreaFilled(false);
@@ -552,7 +553,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
     private void initCreateNewSchedButton()
     {
-        ImageIcon CreateNewSchedButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Add New Sched Button.png"));
+        ImageIcon CreateNewSchedButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Add New Sched Button.png"));
         CreateNewSchedButton = new JButton();
         CreateNewSchedButton.setBounds((320-CreateNewSchedButtonIcon.getIconWidth())/2, 600, CreateNewSchedButtonIcon.getIconWidth(), CreateNewSchedButtonIcon.getIconHeight());
         CreateNewSchedButton.setBorder(null);
@@ -752,7 +753,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
             }
         };
 
-        ImageIcon CreateSchedButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Confirm Button.png"));
+        ImageIcon CreateSchedButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Confirm Button.png"));
         JButton CreateSchedButton = new JButton();
         CreateSchedButton.setPreferredSize(new Dimension(CreateSchedButtonIcon.getIconWidth(), CreateSchedButtonIcon.getIconHeight()));
         CreateSchedButton.setContentAreaFilled(false);

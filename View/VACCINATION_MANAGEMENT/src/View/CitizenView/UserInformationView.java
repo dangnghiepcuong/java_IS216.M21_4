@@ -1,7 +1,7 @@
-package GUI_UserInformation;
+package View;
 
 
-import Data_Processor.*;
+import Process.*;
 import org.jdatepicker.impl.*;
 
 import javax.swing.*;
@@ -39,6 +39,7 @@ public class UserInformationView extends JPanel implements ActionListener
     private JLabel EmailLabel;
     private JTextField UsernameTextField;
     private JPasswordField OldPasswordField;
+    private JLabel ChangePasswordLabel;
     private JPasswordField NewPasswordField;
     private JPasswordField RepeatNewPasswordField;
     private JTextField LastNameTextField;
@@ -82,6 +83,9 @@ public class UserInformationView extends JPanel implements ActionListener
 
         initUsernameLabel();
         AccInfoPanel.add(UsernameLabel);
+
+        initChangePasswordLabel();
+        AccInfoPanel.add(ChangePasswordLabel);
 
         initOldPasswordLabel();
         AccInfoPanel.add(OldPasswordLabel);
@@ -201,9 +205,8 @@ public class UserInformationView extends JPanel implements ActionListener
 
     private void initUsernameLabel()
     {
-        UsernameLabel = new JLabel();
+        UsernameLabel = new JLabel("Số điện thoại");
         UsernameLabel.setBounds(70, 40 +dv.AlignTop_InfoView(), 240, 30);
-        UsernameLabel.setText("Số điện thoại");
         UsernameLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         UsernameLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
@@ -220,9 +223,8 @@ public class UserInformationView extends JPanel implements ActionListener
 
     private void initOldPasswordLabel()
     {
-        OldPasswordLabel = new JLabel();
+        OldPasswordLabel = new JLabel("Xác nhận mật khẩu cũ");
         OldPasswordLabel.setBounds(70, 50 + dv.FieldHeight() + dv.LabelHeight() +dv.AlignTop_InfoView(), 270, 30);
-        OldPasswordLabel.setText("Nhập mật khẩu cũ");
         OldPasswordLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         OldPasswordLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
@@ -236,11 +238,18 @@ public class UserInformationView extends JPanel implements ActionListener
         OldPasswordField.setForeground(new Color(dv.BlackTextColor()));
     }
 
+    private void initChangePasswordLabel()
+    {
+        ChangePasswordLabel = new JLabel("Đổi mật khẩu:");
+        ChangePasswordLabel.setBounds(70, 70 + 2*dv.FieldHeight() + 3 * dv.LabelHeight() +dv.AlignTop_InfoView(), 240, 30);
+        ChangePasswordLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        ChangePasswordLabel.setForeground(new Color(dv.FieldLabelColor()));
+    }
+
     private void initNewPasswordLabel()
     {
-        NewPasswordLabel = new JLabel();
-        NewPasswordLabel.setBounds(70, 60 + 3*dv.FieldHeight() + dv.LabelHeight() +dv.AlignTop_InfoView(), 240, 30);
-        NewPasswordLabel.setText("Nhập mật khẩu mới");
+        NewPasswordLabel = new JLabel("Nhập mật khẩu mới");
+        NewPasswordLabel.setBounds(70, 70 + 3*dv.LabelHeight()+3*dv.FieldHeight() + dv.AlignTop_InfoView(), 240, 30);
         NewPasswordLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         NewPasswordLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
@@ -248,7 +257,7 @@ public class UserInformationView extends JPanel implements ActionListener
     private void initNewPasswordField()
     {
         NewPasswordField = new JPasswordField();
-        NewPasswordField.setBounds(70, 60 + 3*dv.FieldHeight() + 2 * dv.LabelHeight() +dv.AlignTop_InfoView(), 220, 30);
+        NewPasswordField.setBounds(70, 70 + 4*dv.LabelHeight()+3*dv.FieldHeight() + dv.AlignTop_InfoView(), 220, 30);
         NewPasswordField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         NewPasswordField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         NewPasswordField.setForeground(new Color(dv.BlackTextColor()));
@@ -256,9 +265,8 @@ public class UserInformationView extends JPanel implements ActionListener
     
     private void initRepeatNewPasswordLabel()
     {
-        RepeatNewPasswordLabel = new JLabel();
-        RepeatNewPasswordLabel.setBounds(70, 70 + 3*dv.LabelHeight()+3*dv.FieldHeight() + dv.AlignTop_InfoView(), 240, 30);
-        RepeatNewPasswordLabel.setText("Nhập lại mật khẩu mới");
+        RepeatNewPasswordLabel = new JLabel("Nhập lại mật khẩu mới");
+        RepeatNewPasswordLabel.setBounds(70, 90 + 4*dv.LabelHeight()+4*dv.FieldHeight() + dv.AlignTop_InfoView(), 240, 30);
         RepeatNewPasswordLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         RepeatNewPasswordLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
@@ -266,7 +274,7 @@ public class UserInformationView extends JPanel implements ActionListener
     private void initRepeatNewPasswordField()
     {
         RepeatNewPasswordField = new JPasswordField();
-        RepeatNewPasswordField.setBounds(70, 70 + 4*dv.LabelHeight()+3*dv.FieldHeight() + dv.AlignTop_InfoView(), 220, 30);
+        RepeatNewPasswordField.setBounds(70, 90 + 5*dv.LabelHeight()+4*dv.FieldHeight() + dv.AlignTop_InfoView(), 220, 30);
         RepeatNewPasswordField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         RepeatNewPasswordField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         RepeatNewPasswordField.setForeground(new Color(dv.BlackTextColor()));
@@ -275,7 +283,7 @@ public class UserInformationView extends JPanel implements ActionListener
     private void initUpdateAccButton()
     {
 
-        ImageIcon RegisterButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Update Button.png"));
+        ImageIcon RegisterButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Update Button.png"));
         UpdateAccButton = new JButton();
         UpdateAccButton.setBounds(105, 600, RegisterButtonIcon.getIconWidth(), RegisterButtonIcon.getIconHeight());
         UpdateAccButton.setBorder(null);
@@ -287,9 +295,8 @@ public class UserInformationView extends JPanel implements ActionListener
 
     private void initLastNameLabel()
     {
-        LastNameLabel = new JLabel();
+        LastNameLabel = new JLabel("Họ và tên đệm");
         LastNameLabel.setBounds(50, 40  + dv.AlignTop_InfoView(), 240, 30);
-        LastNameLabel.setText("Họ và tên đệm");
         LastNameLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         LastNameLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
@@ -306,9 +313,8 @@ public class UserInformationView extends JPanel implements ActionListener
 
     private void initFirstNameLabel()
     {
-        FirstNameLabel = new JLabel();
+        FirstNameLabel = new JLabel("Tên");
         FirstNameLabel.setBounds(50+220+25, 40 + dv.AlignTop_InfoView(), 240, 30);
-        FirstNameLabel.setText("Tên");
         FirstNameLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         FirstNameLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
@@ -325,9 +331,8 @@ public class UserInformationView extends JPanel implements ActionListener
 
     private void initIDLabel()
     {
-        IDLabel = new JLabel();
+        IDLabel = new JLabel("Mã định danh");
         IDLabel.setBounds(50, 50 + dv.LabelHeight()+dv.FieldHeight()  + dv.AlignTop_InfoView(), 240, 30);
-        IDLabel.setText("Mã định danh");
         IDLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         IDLabel.setForeground(new Color(dv.FieldLabelColor()));
 
@@ -345,9 +350,8 @@ public class UserInformationView extends JPanel implements ActionListener
 
     private void initBirthdayLabel()
     {
-        BirthdayLabel = new JLabel();
+        BirthdayLabel = new JLabel("Ngày tháng năm sinh");
         BirthdayLabel.setBounds(50, 60 + 2*dv.LabelHeight()+2*dv.FieldHeight()  + dv.AlignTop_InfoView(),220,30);
-        BirthdayLabel.setText("Ngày tháng năm sinh");
         BirthdayLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         BirthdayLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
@@ -390,7 +394,6 @@ public class UserInformationView extends JPanel implements ActionListener
         textField.setBounds(50, 100 + 3*dv.LabelHeight()+2*dv.FieldHeight(),170,30);
 
         BirthdayField.setTextEditable(true);
-        BirthdayField.setName("BirthdayField");
         BirthdayField.setForeground(new Color(dv.BlackTextColor()));
         BirthdayField.setVisible(true);
         BirthdayField.setEnabled(true);
@@ -398,9 +401,8 @@ public class UserInformationView extends JPanel implements ActionListener
 
     private void initGenderLabel()
     {
-        GenderLabel = new JLabel();
+        GenderLabel = new JLabel("Giới tính");
         GenderLabel.setBounds(50 + 25 + 220, 60 + 2*dv.LabelHeight()+2*dv.FieldHeight() + dv.AlignTop_InfoView(), 240, 30);
-        GenderLabel.setText("Giới tính");
         GenderLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         GenderLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
@@ -421,9 +423,8 @@ public class UserInformationView extends JPanel implements ActionListener
 
     private void initHomeTownLabel()
     {
-        HomeTownLabel = new JLabel();
+        HomeTownLabel = new JLabel("Quê quán");
         HomeTownLabel.setBounds(50, 70 + 3*dv.LabelHeight()+3*dv.FieldHeight() + dv.AlignTop_InfoView(), 240, 28);
-        HomeTownLabel.setText("Quê quán");
         HomeTownLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         HomeTownLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
@@ -444,9 +445,8 @@ public class UserInformationView extends JPanel implements ActionListener
 
     private void initAddressLabel()
     {
-        AddressLabel = new JLabel();
+        AddressLabel = new JLabel("Địa chỉ thường trú:");
         AddressLabel.setBounds(50, 90 + 4*dv.LabelHeight()+4*dv.FieldHeight() + dv.AlignTop_InfoView(), 240, 28);
-        AddressLabel.setText("Địa chỉ thường trú:");
         AddressLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         AddressLabel.setForeground(new Color(dv.FieldLabelColor()));
         //AddressLabel.setForeground(new Color(dv.FeatureButtonColor()));
@@ -454,9 +454,8 @@ public class UserInformationView extends JPanel implements ActionListener
 
     private void initProvinceLabel()
     {
-        ProvinceLabel = new JLabel();
+        ProvinceLabel = new JLabel("Tỉnh/thành phố");
         ProvinceLabel.setBounds(50, 90 + 5*dv.LabelHeight()+4*dv.FieldHeight() + dv.AlignTop_InfoView(), 240, 30);
-        ProvinceLabel.setText("Tỉnh/thành phố");
         ProvinceLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         ProvinceLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
@@ -477,9 +476,8 @@ public class UserInformationView extends JPanel implements ActionListener
 
     private void initDistrictLabel()
     {
-        DistrictLabel = new JLabel();
+        DistrictLabel = new JLabel("Quận/huyện");
         DistrictLabel.setBounds(50 + 25 +170, 90 + 5*dv.LabelHeight()+4*dv.FieldHeight() + dv.AlignTop_InfoView(), 240, 30);
-        DistrictLabel.setText("Quận/huyện");
         DistrictLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         DistrictLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
@@ -504,9 +502,8 @@ public class UserInformationView extends JPanel implements ActionListener
 
     private void initTownLabel()
     {
-        TownLabel = new JLabel();
+        TownLabel = new JLabel("Xã/phường/thị trấn");
         TownLabel.setBounds(50 + 50 +2*170, 90 + 5*dv.LabelHeight()+4*dv.FieldHeight() + dv.AlignTop_InfoView(), 350, 30);
-        TownLabel.setText("Xã/phường/thị trấn");
         TownLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         TownLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
@@ -530,9 +527,8 @@ public class UserInformationView extends JPanel implements ActionListener
 
     private void initStreetLabel()
     {
-        StreetLabel = new JLabel();
+        StreetLabel = new JLabel("Số nhà, tên đường, khu phố/ấp");
         StreetLabel.setBounds(50, 110 + 6*dv.LabelHeight()+5*dv.FieldHeight() + dv.AlignTop_InfoView(), 300, 30);
-        StreetLabel.setText("Số nhà, tên đường, khu phố/ấp");
         StreetLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         StreetLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
@@ -548,9 +544,8 @@ public class UserInformationView extends JPanel implements ActionListener
 
     private void initEmailLabel()
     {
-        EmailLabel = new JLabel();
+        EmailLabel = new JLabel("Email");
         EmailLabel.setBounds(50, 120 + 7*dv.LabelHeight()+6*dv.FieldHeight() + dv.AlignTop_InfoView(), 240, 30);
-        EmailLabel.setText("Email");
         EmailLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         EmailLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
@@ -602,7 +597,7 @@ public class UserInformationView extends JPanel implements ActionListener
             String InputRepeatNewPassword = String.valueOf(RepeatNewPasswordField.getPassword());
             String InputID = IDTextField.getText();
             String InputBirthday = textField.getText();
-            int InputGender = GenderChoice.getSelectedIndex();
+            int InputGender = dv.getGenderIndex(GenderChoice.getSelectedItem());
             String InputHomeTown =HomeTownChoice.getSelectedItem();
             String InputProvince = ProvinceChoice.getSelectedItem();
             String InputDistrict = DistrictChoice.getSelectedItem();
@@ -649,8 +644,6 @@ public class UserInformationView extends JPanel implements ActionListener
                 return;
             else
                 InputProvince = dv.getProvinceCode(InputProvince);
-            if (InputGender == 0)
-                InputGender = 3;
 
             if (InputRepeatNewPassword.equals(InputNewPassword) == false)
             {
@@ -658,7 +651,7 @@ public class UserInformationView extends JPanel implements ActionListener
 
                 String responses[] = {"OK!"};
 
-                ImageIcon icon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Warning Icon.png"));
+                ImageIcon icon = new ImageIcon(getClass().getResource("/Resources/icon/Warning Icon.png"));
 
                 OptionFrame.showOptionDialog(null, "Mật khẩu mới không trùng khớp!", "Cảnh báo",
                         JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE, icon, responses, 0);
@@ -666,7 +659,7 @@ public class UserInformationView extends JPanel implements ActionListener
             }
 
             InputBirthday = dv.toOracleDateFormat(InputBirthday);
-            InputGender -= 1;
+
 
             String plsql = "{call PERSON_UPDATE_RECORD(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 
@@ -690,21 +683,21 @@ public class UserInformationView extends JPanel implements ActionListener
 
                 cst = connection.prepareCall(plsql);
                 cst.setString("par_ID", InputID);
-                cst.setString("par_Birthday", InputBirthday);
-                cst.setInt("par_Gender", InputGender);
                 cst.setString("par_HomeTown", InputHomeTown);
                 cst.setString("par_Province", InputProvince);
                 cst.setString("par_District", InputDistrict);
                 cst.setString("par_Town", InputTown);
                 cst.setString("par_Street", InputStreet);
+                cst.setString("par_Birthday", InputBirthday);
                 cst.setString("par_Phone", InputUsername);
                 cst.setString("par_Email", InputEmail);
+                cst.setInt("par_Gender", InputGender);
 
                 cst.execute();
             }
             catch (SQLException ex) {
 
-                    dv.popupOption(null, "Không thành công", "Lỗi!", 2);
+                    dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
 
                     throw new RuntimeException(ex);
             }

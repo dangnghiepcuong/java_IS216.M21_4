@@ -1,6 +1,6 @@
-package GUI_ManageVaccination;
+package View;
 
-import Data_Processor.*;
+import Process.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -70,7 +70,7 @@ public class ManageVaccinationView extends JPanel implements ActionListener
     private void initFilterButton()
     {
         FilterButton = new JButton();
-        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Search Filter Button.png"));
+        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Resources/icon/Search Filter Button.png"));
         FilterButton.setIcon(SearchIcon);
 
         FilterButton.setBounds(0, 80, dv.FieldWidth(), SearchIcon.getIconHeight());
@@ -105,7 +105,12 @@ public class ManageVaccinationView extends JPanel implements ActionListener
      * */
     private JPanel initRegPanel(RegisteredScheds Reg)
     {
-        //Org info
+        JPanel RegPanel = new JPanel();
+
+        RegPanel.setLayout(null);
+        RegPanel.setPreferredSize(new Dimension(640,120));
+        RegPanel.setBackground(Color.WHITE);
+
         JLabel OrgName = new JLabel("Đơn vị: " + Reg.getOrg().getName());
         OrgName.setFont(new Font(dv.fontName(), 3, 18));
         OrgName.setForeground(new Color(dv.FeatureButtonColor()));
@@ -143,18 +148,68 @@ public class ManageVaccinationView extends JPanel implements ActionListener
         Status.setHorizontalAlignment(JLabel.LEFT);
         //VaccineID.setBorder(dv.border());
 
-        JPanel RegPanel = new JPanel();
-
-        RegPanel.setLayout(null);
-        RegPanel.setPreferredSize(new Dimension(640,120));
-        //set Background color
-        RegPanel.setBackground(Color.WHITE);
-
         RegPanel.add(OrgName);
         RegPanel.add(Address);
         RegPanel.add(OnDateTime);
         RegPanel.add(Vaccine);
         RegPanel.add(Status);
+
+        if (Reg.getStatus() < 2)
+        {
+            Choice StatusChoice = new Choice();
+            StatusChoice.setBounds(500, 32+2, 120, 30);
+            StatusChoice.setFont(new Font(dv.fontName(), 0, 16));
+            StatusChoice.setForeground(new Color(dv.BlackTextColor()));
+            
+            StatusChoice.add("Hủy");
+
+            ActionListener handleUpdate = new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    if ( dv.popupConfirmOption(null,"Xác nhận cập nhật trạng thái lượt đăng ký?", "Xác nhận?") != 0)
+                        return;
+
+                    String plsql = "{call REG_UPDATE_STATUS(?, ?, ?)}";
+
+                    try {
+                        Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                        CallableStatement cst = connection.prepareCall(plsql);
+
+                        cst.setString("par_PersonalID", Reg.getCitizen().getID());
+                        cst.setString("par_SchedID", Reg.getSched().getID());
+                        cst.setInt("par_Status", StatusChoice.getSelectedIndex()+1);
+
+                        cst.execute();
+                    }
+                    catch (SQLException ex)
+                    {
+                        dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(),2);
+                        return;
+                    }
+
+                    Reg.setStatus(StatusChoice.getSelectedIndex()+1);
+                    Status.setText("Buổi: " + dv.getTimeName(Reg.getTime())
+                            + "          STT: " + Reg.getNO() + "          Tình trạng: " + dv.getStatusName(Reg.getStatus()));
+
+                    RegPanel.repaint();
+                }
+            };
+
+            JButton UpdateStatusButton = new JButton();
+            ImageIcon UpdateStatusButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Update Status Button.png"));
+            UpdateStatusButton.setForeground(new Color(dv.BlackTextColor()));
+            UpdateStatusButton.setBounds(500,32*2+5,UpdateStatusButtonIcon.getIconWidth(),UpdateStatusButtonIcon.getIconHeight());
+            UpdateStatusButton.setContentAreaFilled(false);
+            UpdateStatusButton.setBorder(null);
+            UpdateStatusButton.setIcon(UpdateStatusButtonIcon);
+            UpdateStatusButton.addActionListener(handleUpdate);
+
+            RegPanel.add(StatusChoice);
+            RegPanel.add(UpdateStatusButton);
+        }
 
         return RegPanel;
     }

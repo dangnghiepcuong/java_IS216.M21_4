@@ -1,10 +1,6 @@
-package GUI_Main;
+package View;
 
-import Data_Processor.*;
-import GUI_CreateOrgAccView.CreateOrgAccView;
-import GUI_Login.LoginView;
-import GUI_OrgInformation.OrgInformationView;
-import GUI_SearchOrg.SearchOrgView;
+import Process.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 
-public class MOHMainView extends JFrame implements ActionListener
+public class ORGMainView extends JFrame implements ActionListener
 {
     private JLayeredPane MainLayeredPane;
 
@@ -21,29 +17,33 @@ public class MOHMainView extends JFrame implements ActionListener
     private DefaultValue dv = new DefaultValue();
     private JLayeredPane InfoLayeredPane;
     private JLabel InfoBackground;
+    private JLabel NameLabel;
+    private JLabel LocationLabel;
 
     private JLayeredPane FeatureLayeredPane;
     private JButton InfoSettingButton;
-    private JButton CreateOrgAccButton;
+    private JButton ManageSchedButton;
     private JButton PublishPostButton;
     private JButton SearchButton;
     private JButton StatisticButton;
 
-    private JButton BackButton;
-    private JButton BackInfoButton;
-    private JButton LogoutButton;
+
 
     private Organization orgUser = new Organization();
 
     private LoginView loginView;
-    private SearchOrgView searchOrgView;
     private OrgInformationView orgInformationView;
-    private CreateOrgAccView createOrgAccView;
+    private SearchOrgView searchOrgView;
+    private ManageScheduleView manageScheduleView;
+
+    private JButton LogoutButton;
+    private JButton BackButton;
+    private JButton BackInfoButton;
 
     private void initBackButton()
     {
         BackButton = new JButton();
-        ImageIcon BackButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Back Button_2.png"));
+        ImageIcon BackButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Back Button_2.png"));
         BackButton.setIcon(BackButtonIcon);
 
         BackButton.setBounds(10, 10, BackButtonIcon.getIconWidth(), BackButtonIcon.getIconHeight());
@@ -56,7 +56,7 @@ public class MOHMainView extends JFrame implements ActionListener
     private void initBackInfoButton()
     {
         BackInfoButton = new JButton();
-        ImageIcon BackInfoButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Back Button_2.png"));
+        ImageIcon BackInfoButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Back Button_2.png"));
         BackInfoButton.setIcon(BackInfoButtonIcon);
 
         BackInfoButton.setBounds(10, 10, BackInfoButtonIcon.getIconWidth(), BackInfoButtonIcon.getIconHeight());
@@ -69,9 +69,12 @@ public class MOHMainView extends JFrame implements ActionListener
     private void initInfoLayeredPane()
     {
         InfoLayeredPane = new JLayeredPane();
+
         InfoLayeredPane.setBounds(0,0,dv.FrameWidth()-dv.FrameHeight() + 8, dv.FrameHeight());
+
         InfoLayeredPane.setLayout(null);
 
+        InfoLayeredPane.setOpaque(true);
 
         initInfoBackground();
         InfoLayeredPane.add(InfoBackground, Integer.valueOf(0));
@@ -81,18 +84,18 @@ public class MOHMainView extends JFrame implements ActionListener
         InfoLabel.setFont(new Font(dv.fontName(),Font.BOLD, 24));
         InfoLabel.setHorizontalAlignment(JLabel.CENTER);
 
-        ImageIcon AvatarImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/Avatar.png"));
+        ImageIcon AvatarImage = new ImageIcon(getClass().getResource("/Resources/icon/Avatar.png"));
         JLabel Avatar = new JLabel(AvatarImage);
         Avatar.setBounds((dv.FrameWidth()-dv.FrameHeight()-AvatarImage.getIconWidth())/2,100,
                 AvatarImage.getIconWidth(),AvatarImage.getIconHeight());
         Avatar.setHorizontalAlignment(JLabel.CENTER);
 
-        JLabel Name = new JLabel(orgUser.getName());
-        Name.setBounds(0, 300, 360, 35);
+        JLabel Name = new JLabel("<html>" + orgUser.getName());
+        Name.setBounds(50, 300, 280, 70);
         Name.setFont(new Font(dv.fontName(),Font.BOLD, 24));
         Name.setHorizontalAlignment(JLabel.CENTER);
 
-        ImageIcon LocationImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/Location.png"));
+        ImageIcon LocationImage = new ImageIcon(getClass().getResource("/Resources/icon/Location.png"));
         JLabel Location = new JLabel(dv.getProvinceName(orgUser.getProvince()));
         Location.setFont(new Font(dv.fontName(),Font.BOLD, 20));
         Location.setIcon(LocationImage);
@@ -121,8 +124,8 @@ public class MOHMainView extends JFrame implements ActionListener
         initInfoSettingButton();
         FeatureLayeredPane.add(InfoSettingButton);
 
-        initCreateOrgAccButton();
-        FeatureLayeredPane.add(CreateOrgAccButton);
+        initManageSchedButton();
+        FeatureLayeredPane.add(ManageSchedButton);
 
         initPublishPostButton();
         FeatureLayeredPane.add(PublishPostButton);
@@ -136,7 +139,7 @@ public class MOHMainView extends JFrame implements ActionListener
 
     private void initInfoBackground()
     {
-        ImageIcon InfoLayeredPaneBackground = new ImageIcon(getClass().getResource("/Data_Processor/icon/Org Info Panel.png"));
+        ImageIcon InfoLayeredPaneBackground = new ImageIcon(getClass().getResource("/Resources/icon/Org Info Panel.png"));
 
         InfoBackground = new JLabel(InfoLayeredPaneBackground);
 
@@ -151,7 +154,7 @@ public class MOHMainView extends JFrame implements ActionListener
         InfoSettingButton.setBounds(60, 30, 133, 133);
         InfoSettingButton.setBorder(null);
         InfoSettingButton.setContentAreaFilled(false);
-        InfoSettingButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Org Info Feature Button.png")));
+        InfoSettingButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Org Info Feature Button.png")));
         InfoSettingButton.addActionListener(this);
 
         JLabel ButtonLabel = new JLabel();
@@ -174,18 +177,18 @@ public class MOHMainView extends JFrame implements ActionListener
         FeatureLayeredPane.add(ButtonLabel2);
     }
 
-    private void initCreateOrgAccButton()
+    private void initManageSchedButton()
     {
-        CreateOrgAccButton = new JButton();
-        CreateOrgAccButton.setBounds(240 + 30+15, 30, 133, 133);
-        CreateOrgAccButton.setBorder(null);
-        CreateOrgAccButton.setContentAreaFilled(false);
-        CreateOrgAccButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Create Org Acc Feature Button.png")));
-        CreateOrgAccButton.addActionListener(this);
+        ManageSchedButton = new JButton();
+        ManageSchedButton.setBounds(240 + 30+15, 30, 133, 133);
+        ManageSchedButton.setBorder(null);
+        ManageSchedButton.setContentAreaFilled(false);
+        ManageSchedButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Manage Schedule Feature Button.png")));
+        ManageSchedButton.addActionListener(this);
 
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(240, 160, 240, 30);
-        ButtonLabel.setText("Tạo tài khoản");
+        ButtonLabel.setText("Quản lý");
         ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -193,7 +196,7 @@ public class MOHMainView extends JFrame implements ActionListener
 
         JLabel ButtonLabel2 = new JLabel();
         ButtonLabel2.setBounds(240, 160 +25, 240, 30);
-        ButtonLabel2.setText("đơn vị");
+        ButtonLabel2.setText("lịch tiêm chủng");
         ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
@@ -208,11 +211,12 @@ public class MOHMainView extends JFrame implements ActionListener
         PublishPostButton.setBounds(240*2+30, 30, 133,133);
         PublishPostButton.setBorder(null);
         PublishPostButton.setContentAreaFilled(false);
-        PublishPostButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Send Notification Feature Button.png")));
+        PublishPostButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Send Notification Feature Button.png")));
+        PublishPostButton.addActionListener(this);
 
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(240*2 -15, 160, 240-20, 30);
-        ButtonLabel.setText("Gửi thông tin");
+        ButtonLabel.setText("Gửi thông báo");
         ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -220,7 +224,7 @@ public class MOHMainView extends JFrame implements ActionListener
 
         JLabel ButtonLabel2 = new JLabel();
         ButtonLabel2.setBounds(240*2 -15, 160 +25, 240-20, 30);
-        ButtonLabel2.setText("- thông báo");
+        ButtonLabel2.setText("địa phương");
         ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
@@ -236,7 +240,7 @@ public class MOHMainView extends JFrame implements ActionListener
         SearchButton.setBounds(60, 240, 133, 133);
         SearchButton.setBorder(null);
         SearchButton.setContentAreaFilled(false);
-        SearchButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Search Feature Button.png")));
+        SearchButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Search Feature Button.png")));
         SearchButton.addActionListener(this);
 
         JLabel ButtonLabel = new JLabel();
@@ -265,7 +269,8 @@ public class MOHMainView extends JFrame implements ActionListener
         StatisticButton.setBounds(240 + 30+15, 240 , 133, 133);
         StatisticButton.setBorder(null);
         StatisticButton.setContentAreaFilled(false);
-        StatisticButton.setIcon(new ImageIcon(getClass().getResource("/Data_Processor/icon/Statistic Feature Button.png")));
+        StatisticButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Statistic Feature Button.png")));
+        StatisticButton.addActionListener(this);
 
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(240 -10, 240+130, 240, 30);
@@ -293,7 +298,7 @@ public class MOHMainView extends JFrame implements ActionListener
         LogoutButton.setBounds(105, 580, 160, 56);
         LogoutButton.setBorder(null);
         LogoutButton.setContentAreaFilled(false);
-        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Logout Button.png"));
+        ImageIcon LoginIcon = new ImageIcon(getClass().getResource("/Resources/icon/Logout Button.png"));
         LogoutButton.setIcon(LoginIcon);
         LogoutButton.addActionListener(this);
     }
@@ -314,16 +319,15 @@ public class MOHMainView extends JFrame implements ActionListener
         MainLayeredPane.setBackground(new Color(dv.ViewBackgroundColor()));
     }
 
-    /*CONSTRUCTOR*/
-    public MOHMainView(String Username)
+    public ORGMainView(String Username)
     {
-        this.setTitle("Quản lý tiêm chủng vaccine Covid-19: Bộ Y tế");
+        this.setTitle("Quản lý tiêm chủng vaccine Covid-19: Đơn vị tiêm chủng");
         this.setBounds(260, 90, dv.FrameWidth(), dv.FrameHeight());
         this.setResizable(false);
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setBackground(new Color(dv.ViewBackgroundColor()));
-        this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
+        this.setIconImage(new ImageIcon(getClass().getResource("/Resources/icon/Virus.png")).getImage());
         this.setLayout(null);
 
         String query = "select * from ORGANIZATION ORG where ORG.ID = '" +  Username + "'";
@@ -346,8 +350,6 @@ public class MOHMainView extends JFrame implements ActionListener
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        initBackButton();
 
         initMainLayeredPane();
         initMainPanel();
@@ -372,8 +374,10 @@ public class MOHMainView extends JFrame implements ActionListener
         if(e.getSource() == BackButton)
         {
             searchOrgView = null;
+            manageScheduleView = null;
+
             MainLayeredPane.removeAll();
-            MainLayeredPane.add(MainPanel, Integer.valueOf(0));
+            MainLayeredPane.add(MainPanel, Integer.valueOf(1));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
 
@@ -407,33 +411,46 @@ public class MOHMainView extends JFrame implements ActionListener
             //init BackButton
             initBackInfoButton();
             MainLayeredPane.add(BackInfoButton, Integer.valueOf(5));
-
         }
 
         if(e.getSource() == BackInfoButton)
         {
-            orgUser.setID(orgInformationView.getOrgUser().getID());
+            String query = "select * from ORGANIZATION ORG where ORG.ID = '" +  orgUser.getID() + "'";
+
+            try {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                PreparedStatement st = connection.prepareStatement(query);
+
+                ResultSet rs = st.executeQuery(query);
+
+                rs.next();
+                orgUser.setID(rs.getString("ID"));
+                orgUser.setName(rs.getString("Name"));
+                orgUser.setProvince(rs.getString("Province"));
+                orgUser.setDistrict(rs.getString("District"));
+                orgUser.setTown(rs.getString("Town"));
+                orgUser.setStreet(rs.getString("Street"));
+
+            } catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+                ex.printStackTrace();
+            }
+
             orgInformationView = null;
             MainLayeredPane.removeAll();
-            MOHMainView mohMainView = new MOHMainView(orgUser.getID());
-            this.dispose();
-        }
-
-        if (e.getSource() == CreateOrgAccButton)
-        {
-            createOrgAccView = new CreateOrgAccView();
-
-            MainLayeredPane.removeAll();
-
-            MainLayeredPane.add(createOrgAccView, Integer.valueOf(0));
-            MainLayeredPane.add(BackButton, Integer.valueOf(1));
-
-            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+            initInfoLayeredPane();
+            MainPanel.removeAll();
+            MainPanel.add(InfoLayeredPane);
+            MainPanel.add(FeatureLayeredPane);
+            MainLayeredPane.add(MainPanel);
         }
 
         /*if (e.getSource() == SearchButton)
         {
+            this.setTitle("Tìm kiếm");
             searchOrgView = new SearchOrgView();
+            MainLayeredPane.removeAll();
             MainLayeredPane.add(searchOrgView, Integer.valueOf(1));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
 
@@ -441,6 +458,19 @@ public class MOHMainView extends JFrame implements ActionListener
             initBackButton();
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }*/
+
+        if (e.getSource() == ManageSchedButton)
+        {
+            manageScheduleView = new ManageScheduleView(orgUser);
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(manageScheduleView, Integer.valueOf(0));
+
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+
+            //init BackButton
+            initBackButton();
+            MainLayeredPane.add(BackButton, Integer.valueOf(5));
+        }
     }
 
 }

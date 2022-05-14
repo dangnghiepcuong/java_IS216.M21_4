@@ -1,7 +1,6 @@
-package GUI_RegisterAcc;
+package View;
 
-import Data_Processor.*;
-import GUI_Login.LoginView;
+import Process.*;
 import org.jdatepicker.impl.*;
 
 import javax.swing.*;
@@ -57,7 +56,7 @@ public class RegisterAccView extends JFrame implements ActionListener
     private void initBackButton()
     {
         BackButton = new JButton();
-        ImageIcon BackButtonIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Back Button_2.png"));
+        ImageIcon BackButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Back Button_2.png"));
         BackButton.setIcon(BackButtonIcon);
 
         BackButton.setBounds(10, 10, BackButtonIcon.getIconWidth(), BackButtonIcon.getIconHeight());
@@ -259,7 +258,7 @@ public class RegisterAccView extends JFrame implements ActionListener
 
     private void initRegisterAccButton()
     {
-        ImageIcon RegisterAccIcon = new ImageIcon(getClass().getResource("/Data_Processor/icon/Register Button.png"));
+        ImageIcon RegisterAccIcon = new ImageIcon(getClass().getResource("/Resources/icon/Register Button.png"));
         RegisterAccButton = new JButton();
         RegisterAccButton.setBounds(105, 600, RegisterAccIcon.getIconWidth(), RegisterAccIcon.getIconHeight());
         RegisterAccButton.setBorder(null);
@@ -525,7 +524,7 @@ public class RegisterAccView extends JFrame implements ActionListener
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setBackground(new Color(dv.ViewBackgroundColor()));
-        this.setIconImage(new ImageIcon(getClass().getResource("/Data_Processor/icon/Virus.png")).getImage());
+        this.setIconImage(new ImageIcon(getClass().getResource("/Resources/icon/Virus.png")).getImage());
         this.setLayout(null);
 
         //set account information Panel

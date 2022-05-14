@@ -1,13 +1,11 @@
-package GUI_CertificateView;
+package View;
 
-import Data_Processor.*;
-import GUI_UpdateInjection.ImageHelper;
+import Process.*;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.sql.*;
 
@@ -15,7 +13,7 @@ import java.sql.*;
  *
  * @author ASUS
  */
-public class CertificateView extends JPanel implements ActionListener{
+public class CertificateView extends JPanel{
 
     /*Main GUI*/
     private JLayeredPane MainLayeredPane;
@@ -255,26 +253,4 @@ public class CertificateView extends JPanel implements ActionListener{
     }
 
 
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        
-        /*if (e.getSource() == ConfirmButton)
-        {
-            if ( dv.popupConfirmOption(null, "Xác nhận cập nhật giấy chứng nhận mũi tiêm?", "Xác nhận?") == 0)
-                dv.popupOption(null, "Cập nhật thành công!", "Thông báo!", 0);
-            else
-                return;
-        }
-
-        if (e.getSource() == UpLoadImageButton)
-        {
-            ActionUpLoadImage();
-        }*/
-
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-
-   
 }

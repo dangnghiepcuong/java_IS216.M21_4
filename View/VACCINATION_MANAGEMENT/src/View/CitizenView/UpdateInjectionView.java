@@ -1,7 +1,7 @@
-package GUI_UpdateInjection;
+package View;
 
 
-import Data_Processor.*;
+import Process.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -280,7 +280,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         
         
         UpLoadImageButton = new JButton();
-        ImageIcon UploadImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/image-gallery.png"));
+        ImageIcon UploadImage = new ImageIcon(getClass().getResource("/Resources/icon/image-gallery.png"));
         UpLoadImageButton.setIcon(UploadImage);
         UpLoadImageButton.setBounds(dv.AlignLeft()+350, 330, 50, 50);
         UpLoadImageButton.setBorder(null);
@@ -288,7 +288,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         UpLoadImageButton.addActionListener(this);
         
         ConfirmButton = new JButton();
-        ImageIcon ConfirmImage = new ImageIcon(getClass().getResource("/Data_Processor/icon/Confirm Button.png"));
+        ImageIcon ConfirmImage = new ImageIcon(getClass().getResource("/Resources/icon/Confirm Button.png"));
         ConfirmButton.setIcon(ConfirmImage);
         ConfirmButton.setBounds(dv.AlignLeft()+145, 450, dv.FieldWidth(), ConfirmImage.getIconHeight());
         ConfirmButton.setBorder(null);
