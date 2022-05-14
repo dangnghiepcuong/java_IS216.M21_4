@@ -369,8 +369,12 @@ begin
         where ID = par_OldID;
     else --if ID not changed, update other attribute
         update PERSON
-        set LastName = par_LastName, FirstName = par_FirstName, Birthday = par_Birthday, Gender = par_Gender, HomeTown = par_HomeTown, Province = par_Province, District = par_District,
-        Town = par_town, Street = par_Street, Email = par_Email, Note = par_Note
+        set Phone = par_Phone,
+        LastName = par_LastName, FirstName = par_FirstName, 
+        Birthday = par_Birthday, Gender = par_Gender, 
+        HomeTown = par_HomeTown, Province = par_Province, 
+        District = par_District, Town = par_town, Street = par_Street, 
+        Email = par_Email, Note = par_Note
         where ID = par_OldID;
     end if;
 
