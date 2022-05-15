@@ -1,3 +1,5 @@
+commit;
+
 select * from account
 where role = 2;
 
