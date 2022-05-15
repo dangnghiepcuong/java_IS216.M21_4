@@ -439,9 +439,9 @@ public class DefaultValue
     public String getStatusName(int Status)
     {
         if (Status == 0)
-            return "Đã đăng ký";
+            return "Đăng ký";
         if (Status == 1)
-            return "Đã điểm danh";
+            return "Điểm danh";
         if (Status == 2)
             return "Đã tiêm";
         if (Status == 3)
@@ -452,9 +452,9 @@ public class DefaultValue
 
     public int getStatusIndex(String Status)
     {
-        if (Status == "Đã đăng ký")
+        if (Status == "Đăng ký")
             return 0;
-        if (Status == "Đã điểm danh")
+        if (Status == "Điểm danh")
             return 1;
         if (Status == "Đã tiêm")
             return 2;
