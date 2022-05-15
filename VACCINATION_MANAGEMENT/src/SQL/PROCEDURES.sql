@@ -569,6 +569,35 @@ EXCEPTION
 end REG_UPDATE_STATUS;
 
 --------------------------------------------------------
+--  DDL for Procedure SCHED_CANCEL_SCHED
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "SCHED_CANCEL_SCHED" 
+(
+    par_ID SCHEDULE.ID%type
+)
+AS
+    var_SCHED SCHEDULE%rowtype;
+BEGIN
+    select * into var_SCHED
+    from SCHEDULE
+    where ID = par_ID for update;
+    
+    update REGISTER
+    set Status = 3
+    where SchedID = par_ID;
+    
+    update SCHEDULE
+    set LimitDay = DayRegistered, 
+    LimitNoon = NoonRegistered, 
+    LimitNight = NightRegistered
+    where ID = par_ID;
+    
+    commit;
+END SCHED_CANCEL_SCHED;
+
+--------------------------------------------------------
 --  DDL for Procedure SCHED_DEC_REG
 --------------------------------------------------------
 
