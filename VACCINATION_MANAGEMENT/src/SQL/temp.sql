@@ -27,6 +27,9 @@ where personalID = '281332982';
 
 commit;
 
+alter table REGISTER
+add ID number 
+
 rollback;
 
 select * from organization;
