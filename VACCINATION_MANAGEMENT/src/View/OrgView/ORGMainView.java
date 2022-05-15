@@ -1,7 +1,7 @@
 package View.OrgView;
 
 import Process.*;
-import View.CitizenView.SearchOrgView;
+import View.CitizenView.RegisterVaccinationView;
 import View.LoginView;
 
 import javax.swing.*;
@@ -35,7 +35,7 @@ public class ORGMainView extends JFrame implements ActionListener
 
     private LoginView loginView;
     private OrgInformationView orgInformationView;
-    private SearchOrgView searchOrgView;
+    private RegisterVaccinationView registerVaccinationView;
     private ManageScheduleView manageScheduleView;
 
     private JButton LogoutButton;
@@ -377,7 +377,7 @@ public class ORGMainView extends JFrame implements ActionListener
     {
         if(e.getSource() == BackButton)
         {
-            searchOrgView = null;
+            registerVaccinationView = null;
             manageScheduleView = null;
 
             MainLayeredPane.removeAll();

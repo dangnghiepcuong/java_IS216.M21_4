@@ -85,7 +85,8 @@ public class CertificateView extends JPanel{
                         "from INJECTION INJ, SCHEDULE SCHED, ORGANIZATION ORG " +
                         "where INJ.PersonalID = " + personalUser.getID() + " and" +
                         "      INJ.Schedid = SCHED.ID and" +
-                        "      SCHED.OrgID = ORG.ID";
+                        "      SCHED.OrgID = ORG.ID " +
+                        "order by InjNO";
         try {
             Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 

@@ -412,9 +412,13 @@ public class ManageScheduleView extends JPanel implements ActionListener
                             return;
                         }
                         dv.popupOption(null,"Hủy lịch tiêm thành công!", "Thông báo!", 0);
-                        Sched.setLimitDay(Sched.getDayRegistered());
-                        Sched.setLimitNoon(Sched.getNoonRegistered());
-                        Sched.setLimitNight(Sched.getNightRegistered());
+                        Sched.setLimitDay(0);
+                        Sched.setLimitNoon(0);
+                        Sched.setLimitNight(0);
+                        Sched.setDayRegistered(0);
+                        Sched.setNoonRegistered(0);
+                        Sched.setNightRegistered(0);
+
                         Time.setText("Buổi sáng: " + Sched.getDayRegistered() + "/" + Sched.getLimitDay()
                                 + "          Buổi trưa: " + Sched.getNoonRegistered() + "/" + Sched.getLimitNoon()
                                 + "          Buổi tối: " + Sched.getNightRegistered() + "/" + Sched.getLimitNight());
@@ -642,6 +646,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                 StatusChoice.add("Đã hủy");
             }
 
+            JButton UpdateStatusButton = new JButton();
             ActionListener handleUpdateRegistions = new ActionListener()
             {
                 @Override
@@ -685,11 +690,20 @@ public class ManageScheduleView extends JPanel implements ActionListener
                     TimeNOStatus.setText("Buổi: " + dv.getTimeName(Reg.getTime())
                             + "          STT: " + Reg.getNO() + "          Tình trạng: " + dv.getStatusName(Reg.getStatus()));
 
+                    if (StatusChoice.getSelectedItem() == "Điểm danh")
+                    {
+                        StatusChoice.removeAll();
+                        StatusChoice.add("Đã tiêm");
+                        StatusChoice.add("Đã hủy");
+                    }
+                    else
+                    {
+                        StatusChoice.removeAll();
+                        UpdateStatusButton.setEnabled(false);
+                    }
                     RegPanel.repaint();
                 }
             };
-
-            JButton UpdateStatusButton = new JButton();
             ImageIcon UpdateStatusButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Update Status Button.png"));
             UpdateStatusButton.setForeground(new Color(dv.BlackTextColor()));
             UpdateStatusButton.setBounds(500,32*2+5,UpdateStatusButtonIcon.getIconWidth(),UpdateStatusButtonIcon.getIconHeight());

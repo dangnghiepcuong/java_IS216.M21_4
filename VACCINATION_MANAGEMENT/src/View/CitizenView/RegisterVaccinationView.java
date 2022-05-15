@@ -14,7 +14,7 @@ import java.sql.*;
  *
  * @author NghiepCuong
  */
-public class SearchOrgView extends JPanel implements ActionListener
+public class RegisterVaccinationView extends JPanel implements ActionListener
 {
     //Enities used to store the selected out data from database in this view
     private DefaultValue dv = new DefaultValue();
@@ -679,7 +679,7 @@ public class SearchOrgView extends JPanel implements ActionListener
     }
 
     /*CONSTRUCTOR*/
-    public SearchOrgView(Person person)
+    public RegisterVaccinationView(Person person)
     {
         personalUser = person;
         initComponents();
