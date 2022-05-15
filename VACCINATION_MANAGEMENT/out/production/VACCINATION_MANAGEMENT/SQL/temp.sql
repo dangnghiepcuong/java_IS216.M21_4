@@ -19,7 +19,7 @@ delete ACCOUNT where Username = '0339770526';
 
 select *
 from REGISTER
-where SchedID = '44001171120221';
+where personalID = '281332982';
 
     update REGISTER
     set Status = 1

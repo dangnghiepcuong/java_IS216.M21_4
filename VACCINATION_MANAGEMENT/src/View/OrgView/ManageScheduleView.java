@@ -208,6 +208,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
+                    /*UPDATE A SCHEDULE: ADD NEW PROCESS PANEL(LABELS, CHOICES, CONFIRM BUTTON)*/
                     if (e.getSource() == UpdateSchedButton)
                     {
                         LayeredPaneArea.removeAll();
@@ -326,10 +327,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                         + "          Buổi tối: " + Sched.getNightRegistered() + "/" + Sched.getLimitNight());
 
                                 UpdateSchedPanel.repaint(0,0,680,630);
-
-//                                LayeredPaneArea.removeAll();
-//                                LayeredPaneArea.add(UpdateSchedPanel, Integer.valueOf(0));
-//                                LayeredPaneArea.repaint(320, 40, 680, 630);
                             }
                         };
 
@@ -391,6 +388,37 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         LayeredPaneArea.add(UpdateSchedPanel, Integer.valueOf(0));
 
                         LayeredPaneArea.repaint(320, 40, 680, 630);
+                    }
+
+                    if (e.getSource() == CancelSchedButton)
+                    {
+                        if (dv.popupConfirmOption(null, "Xác nhận hủy lịch tiêm?", "Xác nhận?") != 0)
+                            return;
+
+                        String plsql = "{call SCHED_CANCEL_SCHED(?)}";
+
+                        try {
+                            Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+                            CallableStatement cst = connection.prepareCall(plsql);
+
+                            cst.setString("par_ID", Sched.getID());
+
+                            cst.execute();
+                        }
+                        catch (SQLException ex)
+                        {
+                            dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+                            ex.printStackTrace();
+                            return;
+                        }
+                        dv.popupOption(null,"Hủy lịch tiêm thành công!", "Thông báo!", 0);
+                        Sched.setLimitDay(Sched.getDayRegistered());
+                        Sched.setLimitNoon(Sched.getNoonRegistered());
+                        Sched.setLimitNight(Sched.getNightRegistered());
+                        Time.setText("Buổi sáng: " + Sched.getDayRegistered() + "/" + Sched.getLimitDay()
+                                + "          Buổi trưa: " + Sched.getNoonRegistered() + "/" + Sched.getLimitNoon()
+                                + "          Buổi tối: " + Sched.getNightRegistered() + "/" + Sched.getLimitNight());
+                        SchedPanel.repaint(0,0,640,120);
                     }
                 }
             };
