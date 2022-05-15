@@ -12,7 +12,7 @@ import java.sql.*;
  *
  * @author NghiepCuong
  */
-public class ManageVaccinationView extends JPanel implements ActionListener
+public class ManageRegistionView extends JPanel implements ActionListener
 {
     private DefaultValue dv = new DefaultValue();
     private Person personalUser;
@@ -317,7 +317,7 @@ public class ManageVaccinationView extends JPanel implements ActionListener
     }
 
     /*CONSTRUCTOR*/
-    public ManageVaccinationView(Person person)
+    public ManageRegistionView(Person person)
     {
         personalUser = person;
         initComponents();
