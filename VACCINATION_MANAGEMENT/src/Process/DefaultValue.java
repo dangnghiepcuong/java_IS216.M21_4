@@ -450,6 +450,20 @@ public class DefaultValue
         return "";
     }
 
+    public int getStatusIndex(String Status)
+    {
+        if (Status == "Đã đăng ký")
+            return 0;
+        if (Status == "Đã điểm danh")
+            return 1;
+        if (Status == "Đã tiêm")
+            return 2;
+        if (Status == "Đã hủy")
+            return 3;
+
+        return-1;
+    }
+
     public String[] getGenderList()
     {
         String genderList[] = {"Nữ", "Nam", "Khác"};

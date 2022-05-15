@@ -378,6 +378,15 @@ public class FillFormView extends JPanel implements ActionListener
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                LocalDate FilledDate = LocalDate.parse(textField.getText());
+                LocalDate sysdate = LocalDate.parse(dv.todayString());
+
+                if (FilledDate.isAfter(sysdate))
+                {
+                    dv.popupOption(null,"Không thể khai báo y tế cho tương lai", "Lỗi!", 2);
+                    return;
+                }
+
                 String InputFirstQues = String.valueOf(FirstQuesChoice.getSelectedIndex());
                 String InputSecondQues = String.valueOf(SecondQuesChoice.getSelectedIndex());
                 String InputThirdQues = String.valueOf(ThirdQuesChoice.getSelectedIndex());

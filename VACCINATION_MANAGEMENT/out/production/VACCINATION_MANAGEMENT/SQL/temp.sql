@@ -17,7 +17,17 @@ delete CERTIFICATE where PersonalID = '2813325656';
 delete PERSON where Phone = '0339770526';
 delete ACCOUNT where Username = '0339770526';
 
+select *
+from REGISTER
+where SchedID = '44001171120221';
+
+    update REGISTER
+    set Status = 1
+    where SchedID = '44001171120221';
+
 commit;
+
+rollback;
 
 select * from organization;
 

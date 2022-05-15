@@ -130,7 +130,7 @@ public class ManageVaccinationView extends JPanel implements ActionListener
                 + "          Buổi: " + dv.getTimeName(Reg.getTime())  + "          STT: " + Reg.getNO());
         OnDateTime.setFont(new Font(dv.fontName(), 1, 16));
         OnDateTime.setForeground(new Color(dv.BlackTextColor()));
-        OnDateTime.setBounds(30,32+25+2,600,25);
+        OnDateTime.setBounds(30,32+25+2,500,25);
         OnDateTime.setHorizontalAlignment(JLabel.LEFT);
         //OnDate.setBorder(dv.border());
 
@@ -156,13 +156,6 @@ public class ManageVaccinationView extends JPanel implements ActionListener
 
         if (Reg.getStatus() < 2)
         {
-            Choice StatusChoice = new Choice();
-            StatusChoice.setBounds(500, 32+2, 120, 30);
-            StatusChoice.setFont(new Font(dv.fontName(), 0, 16));
-            StatusChoice.setForeground(new Color(dv.BlackTextColor()));
-
-            StatusChoice.add("Hủy");
-
             ActionListener handleUpdate = new ActionListener()
             {
                 @Override
@@ -180,7 +173,7 @@ public class ManageVaccinationView extends JPanel implements ActionListener
 
                         cst.setString("par_PersonalID", Reg.getCitizen().getID());
                         cst.setString("par_SchedID", Reg.getSched().getID());
-                        cst.setInt("par_Status", StatusChoice.getSelectedIndex()+1);
+                        cst.setInt("par_Status", 3);
 
                         cst.execute();
                     }
@@ -191,16 +184,15 @@ public class ManageVaccinationView extends JPanel implements ActionListener
                         return;
                     }
 
-                    Reg.setStatus(StatusChoice.getSelectedIndex()+1);
-                    Status.setText("Buổi: " + dv.getTimeName(Reg.getTime())
-                            + "          STT: " + Reg.getNO() + "          Tình trạng: " + dv.getStatusName(Reg.getStatus()));
+                    Reg.setStatus(3);
+                    Status.setText("Tình trạng: " + dv.getStatusName(Reg.getStatus()));
 
                     RegPanel.repaint();
                 }
             };
 
             JButton UpdateStatusButton = new JButton();
-            ImageIcon UpdateStatusButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Update Status Button.png"));
+            ImageIcon UpdateStatusButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Cancel Reg Button.png"));
             UpdateStatusButton.setForeground(new Color(dv.BlackTextColor()));
             UpdateStatusButton.setBounds(500,32*2+5,UpdateStatusButtonIcon.getIconWidth(),UpdateStatusButtonIcon.getIconHeight());
             UpdateStatusButton.setContentAreaFilled(false);
@@ -208,7 +200,6 @@ public class ManageVaccinationView extends JPanel implements ActionListener
             UpdateStatusButton.setIcon(UpdateStatusButtonIcon);
             UpdateStatusButton.addActionListener(handleUpdate);
 
-            RegPanel.add(StatusChoice);
             RegPanel.add(UpdateStatusButton);
         }
 

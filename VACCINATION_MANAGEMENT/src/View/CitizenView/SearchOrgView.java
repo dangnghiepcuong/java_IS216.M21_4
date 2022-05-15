@@ -419,8 +419,6 @@ public class SearchOrgView extends JPanel implements ActionListener
     * */
     private JPanel initSchedPanel(Schedule Sched)
     {
-
-
         JPanel SchedPanel = new JPanel();
         SchedPanel.setLayout(null);
         SchedPanel.setPreferredSize(new Dimension(640,120));
@@ -615,7 +613,7 @@ public class SearchOrgView extends JPanel implements ActionListener
             {
                 Schedule Sched = new Schedule();
                 Sched.setID(rs.getString("ID"));
-                Sched.getOrg().setID(rs.getString("OrgID"));
+//                Sched.getOrg().setID(rs.getString("OrgID"));
                 Sched.setOnDate(rs.getString("OnDate"));
                 Sched.setVaccineID(rs.getString("VaccineID"));
                 Sched.setSerial(rs.getString("Serial"));
@@ -625,6 +623,7 @@ public class SearchOrgView extends JPanel implements ActionListener
                 Sched.setDayRegistered(rs.getInt("DayRegistered"));
                 Sched.setNoonRegistered(rs.getInt("Noonregistered"));
                 Sched.setNightRegistered(rs.getInt("NightRegistered"));
+                Sched.setOrg(Org);
                 SchedListPanel.add(initSchedPanel(Sched));
                 i++;
             }
