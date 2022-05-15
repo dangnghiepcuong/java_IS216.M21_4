@@ -135,18 +135,24 @@ public class ManageScheduleView extends JPanel implements ActionListener
         SchedPanel.setBackground(Color.WHITE);
 
         JLabel OnDateVaccine = new JLabel("Lịch tiêm ngày: " + Sched.getOnDate().substring(0, 10)
-                + "          Vaccine: " + Sched.getVaccineID() + " - " + Sched.getSerial());
+                + " _ Vaccine: " + Sched.getVaccineID() + " - " + Sched.getSerial());
         OnDateVaccine.setFont(new Font(dv.fontName(), 1, 20));
         OnDateVaccine.setForeground(new Color(dv.BlackTextColor()));
         OnDateVaccine.setBounds(30,3,600,30);
         OnDateVaccine.setHorizontalAlignment(JLabel.LEFT);
+
+        JLabel SchedID = new JLabel("Mã lịch tiêm: " + Sched.getID());
+        SchedID.setFont(new Font(dv.fontName(), 0, 16));
+        SchedID.setForeground(new Color(dv.BlackTextColor()));
+        SchedID.setBounds(30, 30+2,600,25);
+        SchedID.setHorizontalAlignment(JLabel.LEFT);
 
         JLabel Time = new JLabel("Buổi sáng: " + Sched.getDayRegistered() + "/" + Sched.getLimitDay()
                 + "          Buổi trưa: " + Sched.getNoonRegistered() + "/" + Sched.getLimitNoon()
                 + "          Buổi tối: " + Sched.getNightRegistered() + "/" + Sched.getLimitNight());
         Time.setFont(new Font(dv.fontName(), 0, 16));
         Time.setForeground(new Color(dv.BlackTextColor()));
-        Time.setBounds(30, 40+2,600,25);
+        Time.setBounds(30, 55+2,600,25);
         Time.setHorizontalAlignment(JLabel.LEFT);
 
         ActionListener handleRegistionsButton = new ActionListener()
@@ -184,6 +190,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         SchedRegistionButton.addActionListener(handleRegistionsButton);
 
         SchedPanel.add(OnDateVaccine);
+        SchedPanel.add(SchedID);
         SchedPanel.add(Time);
         SchedPanel.add(SchedRegistionButton);
 
@@ -343,38 +350,42 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         UpdateSchedPanel.add(UpdateSchedLabel,c);
 
                         c.insets = new Insets(0,0,5,0);
-                        c.gridy = 1;
+                        c.gridy++;
                         UpdateSchedPanel.add(OnDateVaccine,c);
 
+                        c.insets = new Insets(0,0,5,0);
+                        c.gridy++;
+                        UpdateSchedPanel.add(SchedID, c);
+
                         c.insets = new Insets(0,0,30,0);
-                        c.gridy = 2;
+                        c.gridy++;
                         UpdateSchedPanel.add(Time,c);
 
                         c.insets = new Insets(0,0,0,0);
-                        c.gridy = 3;
+                        c.gridy++;
                         UpdateSchedPanel.add(LimitDayLabel,c);
 
                         c.insets = new Insets(0,0,20,0);
-                        c.gridy = 4;
+                        c.gridy++;
                         UpdateSchedPanel.add(LimitDayTextField,c);
 
                         c.insets = new Insets(0,0,0,0);
-                        c.gridy = 5;
+                        c.gridy++;
                         UpdateSchedPanel.add(LimitNoonLabel,c);
 
                         c.insets = new Insets(0,0,20,0);
-                        c.gridy = 6;
+                        c.gridy++;
                         UpdateSchedPanel.add(LimitNoonTextField,c);
 
                         c.insets = new Insets(0,0,0,0);
-                        c.gridy = 7;
+                        c.gridy++;
                         UpdateSchedPanel.add(LimitNightLabel,c);
 
                         c.insets = new Insets(0,0,30,0);
-                        c.gridy = 8;
+                        c.gridy++;
                         UpdateSchedPanel.add(LimitNightTextField,c);
 
-                        c.gridy = 9;
+                        c.gridy++;
                         UpdateSchedPanel.add(UpdateSchedButton, c);
 
                         LayeredPaneArea.add(UpdateSchedPanel, Integer.valueOf(0));
@@ -608,6 +619,16 @@ public class ManageScheduleView extends JPanel implements ActionListener
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
+                    LocalDate SchedOnDate = LocalDate.parse(Reg.getSched().getOnDate().substring(0, 10));
+
+                    LocalDate sysdate = LocalDate.parse(dv.todayString());
+
+                    if (sysdate.isBefore(SchedOnDate))
+                    {
+                        dv.popupOption(null, "Chưa thể cập nhật trạng thái cho lượt đăng ký này!", "Lỗi!", 2);
+                        return;
+                    }
+
                     if ( dv.popupConfirmOption(null,"Xác nhận cập nhật trạng thái lượt đăng ký?", "Xác nhận?") != 0)
                         return;
 
@@ -620,7 +641,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
                         cst.setString("par_PersonalID", Reg.getCitizen().getID());
                         cst.setString("par_SchedID", Reg.getSched().getID());
-                        cst.setInt("par_Status", StatusChoice.getSelectedIndex()+1);
+                        cst.setInt("par_Status", dv.getStatusIndex(StatusChoice.getSelectedItem()));
 
                         cst.execute();
                     }
@@ -959,55 +980,55 @@ public class ManageScheduleView extends JPanel implements ActionListener
         CreateSchedPanel.add(CreateSchedLabel, c);
 
         c.insets = new Insets(0, 0, 0, 0);
-        c.gridy = 1;
+        c.gridy++;
         CreateSchedPanel.add(OnDateLabel,c);
 
         c.insets = new Insets(0,0,10,0);
-        c.gridy = 2;
+        c.gridy++;
         CreateSchedPanel.add(OnDateField,c);
 
         c.insets = new Insets(0, 0, 0, 0);
-        c.gridy = 3;
+        c.gridy++;
         CreateSchedPanel.add(VaccineLabel,c);
 
         c.insets = new Insets(0,0,10,0);
-        c.gridy = 4;
+        c.gridy++;
         CreateSchedPanel.add(VaccineChoice,c);
 
         c.insets = new Insets(0, 0, 0, 0);
-        c.gridy = 5;
+        c.gridy++;
         CreateSchedPanel.add(SerialLabel,c);
 
         c.insets = new Insets(0,0,10,0);
-        c.gridy = 6;
+        c.gridy++;
         CreateSchedPanel.add(SerialTextField,c);
 
         c.insets = new Insets(0, 0, 0, 0);
-        c.gridy = 7;
+        c.gridy++;
         CreateSchedPanel.add(LimitDayLabel,c);
 
         c.insets = new Insets(0,0,10,0);
-        c.gridy = 8;
+        c.gridy++;
         CreateSchedPanel.add(LimitDayTextField,c);
 
         c.insets = new Insets(0, 0, 0, 0);
-        c.gridy = 9;
+        c.gridy++;
         CreateSchedPanel.add(LimitNoonLabel,c);
 
         c.insets = new Insets(0,0,10,0);
-        c.gridy = 10;
+        c.gridy++;
         CreateSchedPanel.add(LimitNoonTextField,c);
 
         c.insets = new Insets(0, 0, 0, 0);
-        c.gridy = 11;
+        c.gridy++;
         CreateSchedPanel.add(LimitNightLabel,c);
 
         c.insets = new Insets(0,0,10,0);
-        c.gridy = 12;
+        c.gridy++;
         CreateSchedPanel.add(LimitNightTextField,c);
 
         c.insets = new Insets(0, 0, 0, 0);
-        c.gridy = 13;
+        c.gridy++;
         CreateSchedPanel.add(CreateSchedButton, c);
     }
 

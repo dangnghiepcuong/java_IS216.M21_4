@@ -665,6 +665,47 @@ begin
     par_LimitDay, par_LimitNoon, par_LimitNight, 0, 0, 0, par_Note);
     commit;
 end SCHED_INSERT_RECORD;
+
+--------------------------------------------------------
+--  DDL for Procedure SCHED_UPDATE_RECORD
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "SCHED_UPDATE_RECORD" 
+(
+    par_ID SCHEDULE.ID%type,
+    par_LimitDay SCHEDULE.LimitDay%type,
+    par_LimitNoon SCHEDULE.LimitDay%type,
+    par_LimitNight SCHEDULE.LimitDay%type
+)
+AS
+    var_DayRegistered SCHEDULE.DayRegistered%type;
+    var_NoonRegistered SCHEDULE.DayRegistered%type;
+    var_NightRegistered SCHEDULE.DayRegistered%type;
+    var_LimitDay SCHEDULE.LimitDay%type;
+    var_LimitNoon SCHEDULE.LimitDay%type;
+    var_LimitNight SCHEDULE.LimitDay%type;
+BEGIN
+    select DayRegistered, NoonRegistered, NightRegistered 
+    into var_dayregistered, var_noonregistered, var_nightregistered
+    from SCHEDULE
+    where ID = par_ID
+    for update;
+    
+    if (var_DayRegistered > par_LimitDay or var_NoonRegistered > par_LimitNoon
+    or var_NightRegistered > par_LimitNight)
+    then
+        raise_application_error(-20020,
+        'Can not update, registion is over the new limit!');
+    end if;
+    
+    update SCHEDULE
+    set LimitDay = par_LimitDay, LimitNoon = par_LimitNoon, LimitNight = par_LimitNight
+    where ID = par_ID;
+    
+    commit;
+END SCHED_UPDATE_RECORD;
+
 --------------------------------------------------------
 --  DDL for Procedure VAC_INSERT_RECORD
 --------------------------------------------------------

@@ -50,7 +50,7 @@ public class CertificateView extends JPanel{
        NameOrg.setFont(new Font(dv.fontName(),1, 20));
        NameOrg.setForeground(new Color(dv.BlackTextColor()));
 
-       JLabel Vaccine = new JLabel("Vaccine: " + Inj.getSched().getVaccineID()+" - "+ Inj.getSched().getSerial());
+       JLabel Vaccine = new JLabel("Vaccine: " + Inj.getSched().getVaccineID());
        Vaccine.setBounds(20, 30, 350, 25);
        Vaccine.setFont(new Font(dv.fontName(),2,20));
        Vaccine.setForeground(new Color(dv.BlackTextColor()));
