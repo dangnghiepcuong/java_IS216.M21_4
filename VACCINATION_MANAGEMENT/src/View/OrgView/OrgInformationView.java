@@ -4,6 +4,7 @@ package View.OrgView;
 import Process.*;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +19,9 @@ public class OrgInformationView extends JPanel implements ActionListener
     DefaultValue dv = new DefaultValue();
     private JLabel IDLabel;
     private JLabel PasswordLabel;
+    private JLabel ChangePasswordLabel;
+    private JLabel NewPasswordLabel;
+    private JLabel RepeatNewPasswordLabel;
     private JLabel NameLabel;
     private JLabel ProvinceLabel;
     private JLabel DistrictLabel;
@@ -26,6 +30,8 @@ public class OrgInformationView extends JPanel implements ActionListener
     private JTextField IDTextField;
     private JTextField NameTextField;
     private JPasswordField PasswordField;
+    private JPasswordField NewPasswordField;
+    private JPasswordField RepeatNewPasswordField;
     private JTextField StreetTextField;
     private JButton UpdateAccButton;
     private Choice ProvinceChoice;
@@ -69,6 +75,21 @@ public class OrgInformationView extends JPanel implements ActionListener
 
         initPasswordField();
         AccInfoPanel.add(PasswordField);
+
+        initChangePasswordLabel();
+        AccInfoPanel.add(ChangePasswordLabel);
+
+        initNewPasswordLabel();
+        AccInfoPanel.add(NewPasswordLabel);
+
+        initNewPasswordField();
+        AccInfoPanel.add(NewPasswordField);
+
+        initRepeatNewPasswordLabel();
+        AccInfoPanel.add(RepeatNewPasswordLabel);
+
+        initRepeatNewPasswordField();
+        AccInfoPanel.add(RepeatNewPasswordField);
 
         initUpdateAccButton();
         AccInfoPanel.add(UpdateAccButton);
@@ -163,6 +184,49 @@ public class OrgInformationView extends JPanel implements ActionListener
         PasswordField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         PasswordField.setForeground(new Color(dv.BlackTextColor()));
     }
+
+    private void initChangePasswordLabel()
+    {
+        ChangePasswordLabel = new JLabel("Đổi mật khẩu:");
+        ChangePasswordLabel.setBounds(70, 120 + 2*dv.FieldHeight() + 3 * dv.LabelHeight() +dv.AlignTop_InfoView(), 240, 30);
+        ChangePasswordLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        ChangePasswordLabel.setForeground(new Color(dv.FieldLabelColor()));
+    }
+
+    private void initNewPasswordLabel()
+    {
+        NewPasswordLabel = new JLabel("Nhập mật khẩu mới");
+        NewPasswordLabel.setBounds(70, 120 + 3*dv.LabelHeight()+3*dv.FieldHeight() + dv.AlignTop_InfoView(), 240, 30);
+        NewPasswordLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        NewPasswordLabel.setForeground(new Color(dv.FieldLabelColor()));
+    }
+
+    private void initNewPasswordField()
+    {
+        NewPasswordField = new JPasswordField();
+        NewPasswordField.setBounds(70, 120 + 4*dv.LabelHeight()+3*dv.FieldHeight() + dv.AlignTop_InfoView(), 220, 30);
+        NewPasswordField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+        NewPasswordField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
+        NewPasswordField.setForeground(new Color(dv.BlackTextColor()));
+    }
+
+    private void initRepeatNewPasswordLabel()
+    {
+        RepeatNewPasswordLabel = new JLabel("Nhập lại mật khẩu mới");
+        RepeatNewPasswordLabel.setBounds(70, 130 + 4*dv.LabelHeight()+4*dv.FieldHeight() + dv.AlignTop_InfoView(), 240, 30);
+        RepeatNewPasswordLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        RepeatNewPasswordLabel.setForeground(new Color(dv.FieldLabelColor()));
+    }
+
+    private void initRepeatNewPasswordField()
+    {
+        RepeatNewPasswordField = new JPasswordField();
+        RepeatNewPasswordField.setBounds(70, 130 + 5*dv.LabelHeight()+4*dv.FieldHeight() + dv.AlignTop_InfoView(), 220, 30);
+        RepeatNewPasswordField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+        RepeatNewPasswordField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
+        RepeatNewPasswordField.setForeground(new Color(dv.BlackTextColor()));
+    }
+
     private void initUpdateAccButton()
     {
 
@@ -318,18 +382,21 @@ public class OrgInformationView extends JPanel implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        if (e.getSource() == UpdateAccButton) {
-
+        if (e.getSource() == UpdateAccButton)
+        {
             String InputID = IDTextField.getText();
             String InputPassword = String.valueOf(PasswordField.getPassword());
             String InputName = NameTextField.getText();
             String InputDistrict = DistrictChoice.getSelectedItem();
             String InputTown = TownChoice.getSelectedItem();
             String InputStreet = StreetTextField.getText();
+            String InputNewPassword = String.valueOf(NewPasswordField.getPassword());
+            String InputRepeatNewPassword = String.valueOf(RepeatNewPasswordField.getPassword());
 
-            if ( dv.checkStringInputValue(InputID, "Cảnh báo!", "Nhập tên tài khoản!") != -2 )
+            if ( dv.checkStringInputValue(InputName, "Cảnh báo!", "Nhập tên đơn vị!") != -2 )
                 return;
-            if ( dv.checkStringInputValue(InputPassword, "Cảnh báo!","Nhập mật khẩu!") != -2 )
+
+            if ( dv.checkStringInputValue(InputPassword, "Cảnh báo!","Xác nhận mật khẩu để cập nhật thông tin!") != -2 )
                 return;
 
             String query = "select *" +
@@ -349,7 +416,7 @@ public class OrgInformationView extends JPanel implements ActionListener
                 acc.setStatus(rs.getInt("Status"));
                 if (acc.getPassword().equals(InputPassword) == false)
                 {
-                    dv.popupOption(null, "Mật khẩu không đúng!", "Cảnh báo!", 1);
+                    dv.popupOption(null, "Mật khẩu không đúng!", "Lỗi!", 2);
                     return;
                 }
 
@@ -358,23 +425,43 @@ public class OrgInformationView extends JPanel implements ActionListener
                 ex.printStackTrace();
                 return;
             }
-            
+
+            if (InputRepeatNewPassword.equals(InputNewPassword) == false)
+            {
+                dv.popupOption(null,"Mật khẩu mới không trùng khớp với ô nhập lại mật khẩu mới!", "Lỗi!", 2);
+                JOptionPane OptionFrame = new JOptionPane();
+                return;
+            }
+
             String plsql = "{call ORG_UPDATE_RECORD(?, ?, ?, ?, ?, ?)}";
+
+            String plsql2 = "{call ACC_UPDATE_PASSWORD(?,?,?)}";
 
             try {
                 Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
                 CallableStatement cst;
 
-                cst = connection.prepareCall(plsql);
-                cst.setString("par_ID", InputID);
-                cst.setString("par_Name", InputName);
-                cst.setString("par_District", InputDistrict);
-                cst.setString("par_Town", InputTown);
-                cst.setString("par_Street", InputStreet);
-                cst.setString("par_Note", "");
+                if (InputNewPassword.equals("") == false) {
+                    cst = connection.prepareCall(plsql2);
+                    cst.setString(1, orgUser.getID());
+                    cst.setString(2, InputPassword);
+                    cst.setString(3, InputNewPassword);
 
-                cst.execute();
+                    cst.execute();
+                }
+
+                CallableStatement cst2;
+
+                cst2 = connection.prepareCall(plsql);
+                cst2.setString("par_ID", InputID);
+                cst2.setString("par_Name", InputName);
+                cst2.setString("par_District", InputDistrict);
+                cst2.setString("par_Town", InputTown);
+                cst2.setString("par_Street", InputStreet);
+                cst2.setString("par_Note", "");
+
+                cst2.execute();
             }
             catch (SQLException ex) {
                 dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
