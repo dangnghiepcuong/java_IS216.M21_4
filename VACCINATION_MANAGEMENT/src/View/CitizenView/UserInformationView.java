@@ -23,6 +23,7 @@ public class UserInformationView extends JPanel implements ActionListener
     DefaultValue dv = new DefaultValue();
     private JLabel UsernameLabel;
     private JLabel OldPasswordLabel;
+    private JLabel ChangePasswordLabel;
     private JLabel NewPasswordLabel;
     private JLabel RepeatNewPasswordLabel;
     private JLabel LastNameLabel;
@@ -39,7 +40,6 @@ public class UserInformationView extends JPanel implements ActionListener
     private JLabel EmailLabel;
     private JTextField UsernameTextField;
     private JPasswordField OldPasswordField;
-    private JLabel ChangePasswordLabel;
     private JPasswordField NewPasswordField;
     private JPasswordField RepeatNewPasswordField;
     private JTextField LastNameTextField;
@@ -606,11 +606,20 @@ public class UserInformationView extends JPanel implements ActionListener
             String InputStreet = StreetTextField.getText();
             String InputEmail = EmailTextField.getText();
 
-
             if ( dv.checkStringInputValue(InputPassword, "Cảnh báo!","Xác nhận mật khẩu để cập nhật thông tin!") != -2 )
                 return;
             if ( dv.checkStringInputValue(InputFirstName, "Cảnh báo!", "Nhập tên!") != -2)
                 return;
+            if ( dv.checkStringInputValue(InputUsername, "Cảnh báo!", "Nhập số điện thoại!") != -2 )
+                return;
+            if ( dv.checkStringInputValue(InputID, "Cảnh báo!","Nhập mã định danh cá nhân!") != -2 )
+                return;
+            if ( dv.checkStringInputValue(InputBirthday, "Cảnh báo!","Nhập ngày sinh!") != -2 )
+                return;
+            if ( dv.checkStringInputValue(InputProvince, "Cảnh báo!", "Nhập tỉnh cư trú!") != -2 )
+                return;
+            else
+                InputProvince = dv.getProvinceCode(InputProvince);
 
             String query = "select *" +
                     " from ACCOUNT" +
@@ -629,7 +638,7 @@ public class UserInformationView extends JPanel implements ActionListener
                 acc.setStatus(rs.getInt("Status"));
                 if (acc.getPassword().equals(InputPassword) == false)
                 {
-                    dv.popupOption(null, "Mật khẩu không đúng!", "Cảnh báo!", 1);
+                    dv.popupOption(null, "Mật khẩu không đúng!", "Lỗi!", 2);
                     return;
                 }
 
@@ -639,27 +648,9 @@ public class UserInformationView extends JPanel implements ActionListener
                 return;
             }
 
-            if ( dv.checkStringInputValue(InputUsername, "Cảnh báo!", "Nhập số điện thoại!") != -2 )
-                return;
-            if ( dv.checkStringInputValue(InputID, "Cảnh báo!","Nhập mã định danh cá nhân!") != -2 )
-                return;
-            if ( dv.checkStringInputValue(InputBirthday, "Cảnh báo!","Nhập ngày sinh!") != -2 )
-                return;
-            if ( dv.checkStringInputValue(InputProvince, "Cảnh báo!", "Nhập tỉnh cư trú!") != -2 )
-                return;
-            else
-                InputProvince = dv.getProvinceCode(InputProvince);
-
             if (InputRepeatNewPassword.equals(InputNewPassword) == false)
             {
-                JOptionPane OptionFrame = new JOptionPane();
-
-                String responses[] = {"OK!"};
-
-                ImageIcon icon = new ImageIcon(getClass().getResource("/Resources/icon/Warning Icon.png"));
-
-                OptionFrame.showOptionDialog(null, "Mật khẩu mới không trùng khớp!", "Cảnh báo",
-                        JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE, icon, responses, 0);
+                dv.popupOption(null,"Mật khẩu mới không trùng khớp với ô nhập lại mật khẩu mới!", "Lỗi!", 2);
                 return;
             }
 

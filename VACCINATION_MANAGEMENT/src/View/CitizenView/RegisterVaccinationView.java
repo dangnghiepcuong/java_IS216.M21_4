@@ -641,7 +641,7 @@ public class RegisterVaccinationView extends JPanel implements ActionListener
     private void initScrollPaneSchedList()
     {
         ScrollPaneSchedList = new JScrollPane(SchedListPanel,
-                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneSchedList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneSchedList.setBounds(0, 40, 680, 590);
     }

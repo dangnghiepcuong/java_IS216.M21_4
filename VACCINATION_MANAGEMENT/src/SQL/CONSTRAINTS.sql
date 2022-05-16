@@ -88,7 +88,7 @@
 --------------------------------------------------------
 
   ALTER TABLE "STATISTIC" ADD CONSTRAINT "PK_STAT" PRIMARY KEY ("TITLE") USING INDEX  ENABLE;
-  ALTER TABLE "STATISTIC" ADD CONSTRAINT "CK_STAT_DATA" CHECK (Data>0) ENABLE;
+  ALTER TABLE "STATISTIC" ADD CONSTRAINT "CK_STAT_DATA" CHECK (Data>=0) ENABLE;
 --------------------------------------------------------
 --  Constraints for Table VACCINE
 --------------------------------------------------------

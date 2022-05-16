@@ -220,7 +220,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
 
             if (acc.getPassword().equals(InputPassword) == false)
             {
-                dv.popupOption(this, "Mật khẩu không đúng!", "Cảnh báo!", 1);
+                dv.popupOption(this, "Mật khẩu không đúng!", "Lỗi!", 2);
                 return;
             }
 

@@ -188,4 +188,12 @@ where HEAL.PersonalID = '281325656'
 and FilledDate >= '07-MAY-2022' 
 order by FilledDate desc, ID desc
 
+select COUNT(ID)
+        from HEALTH
+        where PersonalID = '2813325656'
+        and substr(Healths, 3, 1) = '1';
+        
+select * from HEALTH
+where PersonalID = '2813325656';
+
 commit;
