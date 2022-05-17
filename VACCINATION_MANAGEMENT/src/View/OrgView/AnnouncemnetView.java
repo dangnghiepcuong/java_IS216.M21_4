@@ -8,12 +8,14 @@ import Data_Processor.DefaultValue;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.Border;
 
 /**
  *
@@ -28,7 +30,7 @@ public class AnnouncemnetView extends JFrame implements ActionListener {
     private JLayeredPane MainLayeredPane;
     private JScrollPane AnnouncementNew;
     private JLayeredPane SearchAnnouncement;
-    private JLayeredPane Announcement;
+    private JScrollPane Announcement;
     private JPanel MainPane;
     
     private JButton BackButton;
@@ -57,6 +59,7 @@ public class AnnouncemnetView extends JFrame implements ActionListener {
         initAnnouncement();
         initButtonBack();
         initButtonNext();
+        initButtonRefresh();
         
         this.add(MainLayeredPane);
         MainLayeredPane.add(MainPane,Integer.valueOf(0));
@@ -65,6 +68,7 @@ public class AnnouncemnetView extends JFrame implements ActionListener {
         MainPane.add(Announcement);
         MainPane.add(BackButton);
         MainPane.add(NextButton);
+        MainPane.add(RefreshButton);
     }
     
     private void initMainLayeredPane() 
@@ -90,7 +94,7 @@ public class AnnouncemnetView extends JFrame implements ActionListener {
         AnnouncementNew.setBounds(20,150,250 ,520);
         AnnouncementNew.setLayout(null);
         AnnouncementNew.setOpaque(true);
-        AnnouncementNew.setBackground(Color.red);
+        //AnnouncementNew.setBackground(Color.red);
     }
     
     private void initSearchAnnouncement()//View Search Announcement
@@ -99,16 +103,17 @@ public class AnnouncemnetView extends JFrame implements ActionListener {
         SearchAnnouncement.setBounds(20,90,250 ,50);
         SearchAnnouncement.setLayout(null);
         SearchAnnouncement.setOpaque(true);
-        SearchAnnouncement.setBackground(Color.blue);
+        //SearchAnnouncement.setBackground(Color.blue);
+        SearchAnnouncement.setBorder(BorderFactory.createLineBorder(Color.black));
     }
     
     private void initAnnouncement()// view detailed announcement
     {
-        Announcement = new JLayeredPane();
+        Announcement = new JScrollPane();
         Announcement.setBounds(280,20,770 ,650);
         Announcement.setLayout(null);
         Announcement.setOpaque(true);
-        Announcement.setBackground(Color.yellow);
+        
     }
     
     private void initButtonBack()
@@ -125,31 +130,27 @@ public class AnnouncemnetView extends JFrame implements ActionListener {
     private void initButtonNext()
     {
         NextButton = new JButton();
-        ImageIcon BackButtonIcon= new ImageIcon(getClass().getResource("/Data_Processor/icon/Back Button_2.png"));
-        NextButton.setIcon(BackButtonIcon);
+        ImageIcon NextButtonIcon= new ImageIcon(getClass().getResource("/Data_Processor/icon/NextButton.png"));
+        NextButton.setIcon(NextButtonIcon);
         
-        NextButton.setBounds(70, 20,BackButtonIcon.getIconWidth(),BackButtonIcon.getIconHeight());
+        NextButton.setBounds(70, 20,NextButtonIcon.getIconWidth(),NextButtonIcon.getIconHeight());
         NextButton.setContentAreaFilled(false);
         NextButton.setBorder(null);
     }
     
-    private void initButtonHome()
-    {}
-    
     private void initButtonRefresh()
     {
-    
+        RefreshButton = new JButton();
+        ImageIcon RefreshButtonIcon= new ImageIcon(getClass().getResource("/Data_Processor/icon/Refresh.png"));
+        RefreshButton.setIcon(RefreshButtonIcon);
+        
+        RefreshButton.setBounds(120, 20,RefreshButtonIcon.getIconWidth(),RefreshButtonIcon.getIconHeight());
+        RefreshButton.setContentAreaFilled(false);
+        RefreshButton.setBorder(null);
     }
-
     
-    
-    
-    
-    
-    
-    
-    
-    
+    private void initButtonHome()
+    {}
 
     @Override
     public void actionPerformed(ActionEvent e) {
