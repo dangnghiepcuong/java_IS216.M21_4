@@ -1,5 +1,17 @@
+select Status
+    from REGISTER REG, SCHEDULE SCHED
+    where REG.PersonalID = '281332982'
+    and REG.SchedID = '44001010920223'
+    and rownum = 1
+    order by OnDate desc, Status;
+
+delete REGISTER
+where SchedID = '44001010920223'
+
 select * from account
 where role = 2;
+
+commit;
 
 update REGISTER
 set PersonalID = '281325656'
