@@ -205,3 +205,23 @@ begin
             raise_application_error
             (-20007,'You have not fill out any medical form within 7 days yet!');
 end REG_VACCINATION_TARGET;
+--------------------------------------------------------
+--  DDL for Trigger SCHED_VALUE
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "SCHED_VALUE" 
+BEFORE INSERT OR UPDATE ON SCHEDULE
+FOR EACH ROW
+BEGIN
+    if (:new.LimitDay < 0 or :new.LimitNoon < 0 or :new.LimitNight < 0)
+    then
+        raise_application_error(-20010,'Number of registion can not be negative!');
+    end if;
+
+    if (:new.DayRegistered > :new.LimitDay or :new.NoonRegistered > :new.LimitNoon
+    or :new.NightRegistered > :new.LimitNight)
+    then
+        raise_application_error(-20011,'Number of registion is limited!');
+    end if;
+END;
+ALTER TRIGGER "SCHED_VALUE" ENABLE
