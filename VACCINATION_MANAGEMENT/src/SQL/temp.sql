@@ -13,17 +13,9 @@ where role = 2;
 
 commit;
 
-update REGISTER
-set PersonalID = '281325656'
-where PersonalID = '2813325656';
-
-update INJECTION
-set PersonalID = '281325656'
-where PersonalID = '2813325656';
-
-update HEALTH
-set PersonalID = '281325656'
-where PersonalID = '2813325656';
+update SCHEDULE
+set DayRegistered = 1, LimitDay = 1
+where ID = '44001010920223';
 
 delete CERTIFICATE where PersonalID = '2813325656';
 delete PERSON where Phone = '0339770526';

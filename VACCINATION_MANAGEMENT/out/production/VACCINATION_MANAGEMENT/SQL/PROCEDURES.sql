@@ -1,10 +1,10 @@
 --------------------------------------------------------
---  File created - Thursday-May-12-2022   
+--  File created - Wednesday-May-18-2022   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Procedure ACC_CREATE_ORG
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "ACC_CREATE_ORG" 
 (par_Quantity number, par_Province varchar2)
@@ -53,7 +53,7 @@ end ACC_CREATE_ORG;
 --------------------------------------------------------
 --  DDL for Procedure ACC_DELETE_RECORD
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "ACC_DELETE_RECORD" (par_Username varchar2)
 is
@@ -66,7 +66,7 @@ end ACC_DELETE_RECORD;
 --------------------------------------------------------
 --  DDL for Procedure ACC_INSERT_RECORD
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "ACC_INSERT_RECORD" 
 (par_Username varchar2, par_Password varchar2, par_Role number, par_Status number, par_Note varchar2 DEFAULT NULL)
@@ -83,7 +83,7 @@ end ACC_INSERT_RECORD;
 --------------------------------------------------------
 --  DDL for Procedure ACC_RESET_PASSWORD
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "ACC_RESET_PASSWORD" 
 (par_Username varchar2, par_NewPassword varchar2)
@@ -96,7 +96,7 @@ end ACC_RESET_PASSWORD;
 --------------------------------------------------------
 --  DDL for Procedure ACC_UPDATE_PASSWORD
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "ACC_UPDATE_PASSWORD" 
 (par_Username varchar2, par_OldPass varchar2, par_NewPass varchar2)
@@ -122,7 +122,7 @@ end ACC_UPDATE_PASSWORD;
 --------------------------------------------------------
 --  DDL for Procedure CERT_INSERT_RECORD
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "CERT_INSERT_RECORD" 
 (
@@ -139,7 +139,7 @@ END CERT_INSERT_RECORD;
 --------------------------------------------------------
 --  DDL for Procedure CERT_UPDATE_RECORD
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "CERT_UPDATE_RECORD" 
 (
@@ -178,7 +178,7 @@ END CERT_UPDATE_RECORD;
 --------------------------------------------------------
 --  DDL for Procedure HEAL_INSERT_RECORD
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "HEAL_INSERT_RECORD" 
 (
@@ -199,7 +199,7 @@ end HEAL_INSERT_RECORD;
 --------------------------------------------------------
 --  DDL for Procedure INJ_INSERT_RECORD
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "INJ_INSERT_RECORD" 
 (par_PersonalID PERSON.ID%type, 
@@ -219,7 +219,7 @@ end INJ_INSERT_RECORD;
 --------------------------------------------------------
 --  DDL for Procedure ORG_INSERT_RECORD
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "ORG_INSERT_RECORD" (par_ID ORGANIZATION.ID%type,                                            
                                              par_Province ORGANIZATION.Province%type,                                            
@@ -233,7 +233,7 @@ end ORG_INSERT_RECORD;
 --------------------------------------------------------
 --  DDL for Procedure ORG_UPDATE_RECORD
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "ORG_UPDATE_RECORD" (par_ID ORGANIZATION.ID%type,
                                                 par_Name ORGANIZATION.Name%type,
@@ -257,7 +257,7 @@ end ORG_UPDATE_RECORD;
 --------------------------------------------------------
 --  DDL for Procedure PAR_INSERT_RECORD
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "PAR_INSERT_RECORD" 
 (
@@ -276,7 +276,7 @@ END PAR_INSERT_RECORD;
 --------------------------------------------------------
 --  DDL for Procedure PERSON_INSERT_RECORD
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "PERSON_INSERT_RECORD" 
 (   par_ID PERSON.ID%type, 
@@ -387,11 +387,10 @@ begin
     commit;
 
 end PERSON_UPDATE_RECORD;
-
 --------------------------------------------------------
 --  DDL for Procedure REG_BEFORE_INSERT_RECORD
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "REG_BEFORE_INSERT_RECORD" 
 (par_PersonalID PERSON.ID%type, par_BoosterAvai out number, par_DoseType out REGISTER.DoseType%type)
@@ -452,7 +451,7 @@ END REG_BEFORE_INSERT_RECORD;
 --------------------------------------------------------
 --  DDL for Procedure REG_INSERT_RECORD
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "REG_INSERT_RECORD" 
 (par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type, 
@@ -461,6 +460,7 @@ as
 	set_NO REGISTER.NO%type;
     PreInj INJECTION%rowtype;
 	PreVac VACCINE.ID%type;
+    var_RegID REGISTER.ID%type;
 begin
 	--Use S_FUNC to calculate the NO of registion
 	set_NO := REG_SIGNED_NO(par_PersonalID, par_SchedID, par_Time);
@@ -485,8 +485,9 @@ begin
     where SCHED.ID = PreInj.SchedID;
 
 	--insert new registion
-	insert into REGISTER(PersonalID, SchedID, DoseType, Time, NO, Status, Image, Note) 
-    values (par_PersonalID, par_SchedID, par_DoseType, par_Time, set_NO, 0, NULL, NULL);
+    var_RegID := REG_REG_ID(par_PersonalID, par_SchedID);
+	insert into REGISTER(PersonalID, SchedID, ID, DoseType, Time, NO, Status, Image, Note) 
+    values (par_PersonalID, par_SchedID, var_RegID, par_DoseType, par_Time, set_NO, 0, NULL, NULL);
     --increase the registered number in schedule
     SCHED_INC_REG(par_SchedID, par_Time);
     commit;
@@ -495,17 +496,18 @@ begin
 	EXCEPTION
 		when no_data_found
         then
-        insert into REGISTER(PersonalID, SchedID, DoseType, Time, NO, Status, Image, Note) 
-    values (par_PersonalID, par_SchedID, 'basic', par_Time, set_NO, 0, NULL, NULL);
+        var_RegID := REG_REG_ID(par_PersonalID, par_SchedID);
+        insert into REGISTER(PersonalID, SchedID, ID, DoseType, Time, NO, Status, Image, Note) 
+        values (par_PersonalID, par_SchedID, var_RegID, 'basic', par_Time, set_NO, 0, NULL, NULL);
  		--increase the registered number in schedule
-    SCHED_INC_REG(par_SchedID, par_Time);
+        SCHED_INC_REG(par_SchedID, par_Time);
         commit;
 
 end REG_INSERT_RECORD;
 --------------------------------------------------------
 --  DDL for Procedure REG_UPDATE_STATUS
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "REG_UPDATE_STATUS" 
 (par_PersonalID PERSON.ID%type, par_SchedID SCHEDULE.ID%type, par_Status REGISTER.Status%type)
@@ -542,7 +544,7 @@ begin
         set Status = par_Status
         where PersonalID = par_PersonalID
         and SchedID = par_SchedID
-        and Status != 2; --The injected status can not be updated!
+        and Status < 2; --The injected status can not be updated!
     end if;
     
     --If the citizen is ready for vaccination
@@ -561,13 +563,14 @@ begin
         SCHED_DEC_REG(par_SchedID, var_Time);
     end if;
     
+    commit;
+    
 EXCEPTION
     when no_data_found
     then
         NULL;
     --There was no injection before, this the first injection
 end REG_UPDATE_STATUS;
-
 --------------------------------------------------------
 --  DDL for Procedure SCHED_CANCEL_SCHED
 --------------------------------------------------------
@@ -589,18 +592,20 @@ BEGIN
     where SchedID = par_ID;
     
     update SCHEDULE
-    set LimitDay = DayRegistered, 
-    LimitNoon = NoonRegistered, 
-    LimitNight = NightRegistered
+    set LimitDay = 0, 
+    LimitNoon = 0, 
+    LimitNight = 0,
+    DayRegistered = 0,
+    NoonRegistered = 0,
+    NightRegistered = 0
     where ID = par_ID;
     
     commit;
 END SCHED_CANCEL_SCHED;
-
 --------------------------------------------------------
 --  DDL for Procedure SCHED_DEC_REG
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "SCHED_DEC_REG" 
 (par_SchedID SCHEDULE.ID%type, par_Time REGISTER.Time%type)
@@ -627,7 +632,7 @@ end SCHED_DEC_REG;
 --------------------------------------------------------
 --  DDL for Procedure SCHED_DELETE_RECORD
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "SCHED_DELETE_RECORD" 
 (PAR_SCHEDID VARCHAR2) AS
@@ -646,7 +651,7 @@ END SCHED_DELETE_RECORD;
 --------------------------------------------------------
 --  DDL for Procedure SCHED_INC_REG
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "SCHED_INC_REG" 
 (par_SchedID SCHEDULE.ID%type, par_Time REGISTER.Time%type)
@@ -668,12 +673,12 @@ begin
 		set NightRegistered = NightRegistered + 1
 		where SCHEDULE.ID = par_SchedID;
 	end if;
-    commit;
+    --commit;
 end SCHED_INC_REG;
 --------------------------------------------------------
 --  DDL for Procedure SCHED_INSERT_RECORD
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "SCHED_INSERT_RECORD" 
 (par_OrgID ORGANIZATION.ID%type, 
@@ -694,7 +699,6 @@ begin
     par_LimitDay, par_LimitNoon, par_LimitNight, 0, 0, 0, par_Note);
     commit;
 end SCHED_INSERT_RECORD;
-
 --------------------------------------------------------
 --  DDL for Procedure SCHED_UPDATE_RECORD
 --------------------------------------------------------
@@ -718,8 +722,8 @@ BEGIN
     select DayRegistered, NoonRegistered, NightRegistered 
     into var_dayregistered, var_noonregistered, var_nightregistered
     from SCHEDULE
-    where ID = par_ID
-    for update;
+    where ID = par_ID;
+--    for update;
     
     if (var_DayRegistered > par_LimitDay or var_NoonRegistered > par_LimitNoon
     or var_NightRegistered > par_LimitNight)
@@ -734,11 +738,329 @@ BEGIN
     
     commit;
 END SCHED_UPDATE_RECORD;
+--------------------------------------------------------
+--  DDL for Procedure STAT_AFFECTED_ADULT
+--------------------------------------------------------
+set define off;
 
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "STAT_AFFECTED_ADULT" (par_Days int)
+AS 
+    var_Result number;
+    var_Check number;
+    cursor c_Person is 
+        select * from PERSON
+        where extract(year from SYSDATE) - extract(year from Birthday) > 22
+        and extract(year from SYSDATE) - extract(year from Birthday) < 50;
+    c_Person_row c_Person%rowtype;
+BEGIN
+    var_Result := 0;
+    
+    open c_Person;
+    loop
+        fetch c_Person into c_Person_row;
+        exit when c_Person%notfound;        
+        
+        select COUNT(ID) into var_Check
+        from HEALTH
+        where PersonalID = c_Person_row.ID
+        and ID = (select MAX(ID)
+                    from HEALTH
+                    where PersonalID = c_Person_row.ID)
+        and substr(Healths, 3, 1) = '1'
+        and SYSDATE - FilledDate >= par_Days;
+        
+        var_Result := var_Result + var_Check;
+        
+        var_Check := 0;
+    end loop;
+    
+    update STATISTIC
+    set Data = var_Result, LastUpdate = SYSDATE
+    where Title = 'STAT_AFFECTED_ADULT';
+    
+    commit;
+END STAT_AFFECTED_ADULT;
+--------------------------------------------------------
+--  DDL for Procedure STAT_AFFECTED_CHILDREN
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "STAT_AFFECTED_CHILDREN" (par_Days int)
+AS 
+    var_Result number;
+    var_Check number;
+    cursor c_Person is 
+        select * from PERSON
+        where extract(year from SYSDATE) - extract(year from Birthday) <= 12;
+    c_Person_row c_Person%rowtype;
+BEGIN
+    var_Result := 0;
+    
+    open c_Person;
+    loop
+        fetch c_Person into c_Person_row;
+        exit when c_Person%notfound;        
+        
+        select COUNT(ID) into var_Check
+        from HEALTH
+        where PersonalID = c_Person_row.ID
+        and ID = (select MAX(ID)
+                    from HEALTH
+                    where PersonalID = c_Person_row.ID)
+        and substr(Healths, 3, 1) = '1'
+        and SYSDATE - FilledDate >= par_Days;
+        
+        var_Result := var_Result + var_Check;
+        
+        var_Check := 0;
+    end loop;
+    
+    update STATISTIC
+    set Data = var_Result, LastUpdate = SYSDATE
+    where Title = 'STAT_AFFECTED_CHILDREN';
+    
+    commit;
+END STAT_AFFECTED_CHILDREN;
+--------------------------------------------------------
+--  DDL for Procedure STAT_AFFECTED_OLDPEOPLE
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "STAT_AFFECTED_OLDPEOPLE" (par_Days int)
+AS 
+    var_Result number;
+    var_Check number;
+    cursor c_Person is 
+        select * from PERSON
+        where extract(year from SYSDATE) - extract(year from Birthday) >= 50;
+    c_Person_row c_Person%rowtype;
+BEGIN
+    var_Result := 0;
+    
+    open c_Person;
+    loop
+        fetch c_Person into c_Person_row;
+        exit when c_Person%notfound;        
+        
+        select COUNT(ID) into var_Check
+        from HEALTH
+        where PersonalID = c_Person_row.ID
+        and ID = (select MAX(ID)
+                    from HEALTH
+                    where PersonalID = c_Person_row.ID)
+        and substr(Healths, 3, 1) = '1'
+        and SYSDATE - FilledDate >= par_Days;
+        
+        var_Result := var_Result + var_Check;
+        
+        var_Check := 0;
+    end loop;
+    
+    update STATISTIC
+    set Data = var_Result, LastUpdate = SYSDATE
+    where Title = 'STAT_AFFECTED_CHILDREN';
+    
+    commit;
+END STAT_AFFECTED_OLDPEOPLE;
+--------------------------------------------------------
+--  DDL for Procedure STAT_AFFECTED_TEENAGER
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "STAT_AFFECTED_TEENAGER" (par_Days int)
+AS 
+    var_Result number;
+    var_Check number;
+    cursor c_Person is 
+        select * from PERSON
+        where extract(year from SYSDATE) - extract(year from Birthday) > 12
+        and extract(year from SYSDATE) - extract(year from Birthday) <= 22;
+    c_Person_row c_Person%rowtype;
+BEGIN
+    var_Result := 0;
+    
+    open c_Person;
+    loop
+        fetch c_Person into c_Person_row;
+        exit when c_Person%notfound;        
+        
+        select COUNT(ID) into var_Check
+        from HEALTH
+        where PersonalID = c_Person_row.ID
+        and ID = (select MAX(ID)
+                    from HEALTH
+                    where PersonalID = c_Person_row.ID)
+        and substr(Healths, 3, 1) = '1'
+        and SYSDATE - FilledDate >= par_Days;
+        
+        var_Result := var_Result + var_Check;
+        
+        var_Check := 0;
+    end loop;
+    
+    update STATISTIC
+    set Data = var_Result, LastUpdate = SYSDATE
+    where Title = 'STAT_AFFECTED_TEENAGER';
+    
+    commit;
+END STAT_AFFECTED_TEENAGER;
+--------------------------------------------------------
+--  DDL for Procedure STAT_BASICDOSE
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "STAT_BASICDOSE" AS 
+    var_Result number;
+BEGIN
+    var_Result := 0;
+    
+    select COUNT(CertType) into var_Result
+    from CERTIFICATE
+    where CertType = 2;
+    
+    update STATISTIC
+    set Data = var_Result, LastUpdate = SYSDATE
+    where Title = 'STAT_BASICDOSE';
+    
+    commit;
+END STAT_BASICDOSE;
+--------------------------------------------------------
+--  DDL for Procedure STAT_BASICDOSE_ADULT
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "STAT_BASICDOSE_ADULT" AS 
+    var_Result number;
+BEGIN
+    var_Result := 0;
+    
+    select COUNT(CertType) into var_Result
+    from CERTIFICATE, PERSON
+    where CertType = 2
+    and PersonalID = ID
+    and  extract(year from SYSDATE) - extract(year from Birthday) > 22
+    and extract(year from SYSDATE) - extract(year from Birthday) < 50;
+
+    update STATISTIC
+    set Data = var_Result, LastUpdate = SYSDATE
+    where Title = 'STAT_BASICDOSE_ADULT'; 
+    
+    commit;
+END STAT_BASICDOSE_ADULT;
+--------------------------------------------------------
+--  DDL for Procedure STAT_BASICDOSE_CHILDREN
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "STAT_BASICDOSE_CHILDREN" AS 
+    var_Result number;
+BEGIN
+    var_Result := 0;
+    
+    select COUNT(CertType) into var_Result
+    from CERTIFICATE, PERSON
+    where CertType = 2
+    and PersonalID = ID
+    and  extract(year from SYSDATE) - extract(year from Birthday) <= 12;
+
+    update STATISTIC
+    set Data = var_Result, LastUpdate = SYSDATE
+    where Title = 'STAT_CHILDREN';
+    
+    commit;
+END STAT_BASICDOSE_CHILDREN;
+--------------------------------------------------------
+--  DDL for Procedure STAT_BASICDOSE_OLDPEOPLE
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "STAT_BASICDOSE_OLDPEOPLE" AS 
+    var_Result number;
+BEGIN
+    var_Result := 0;
+    
+    select COUNT(CertType) into var_Result
+    from CERTIFICATE, PERSON
+    where CertType = 2
+    and PersonalID = ID
+    and  extract(year from SYSDATE) - extract(year from Birthday) >= 50;
+
+    update STATISTIC
+    set Data = var_Result, LastUpdate = SYSDATE
+    where Title = 'STAT_OLDPEOPLE'; 
+    
+    commit;
+END STAT_BASICDOSE_OLDPEOPLE;
+--------------------------------------------------------
+--  DDL for Procedure STAT_BASICDOSE_TEENAGER
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "STAT_BASICDOSE_TEENAGER" AS 
+    var_Result number;
+BEGIN
+    var_Result := 0;
+    
+    select COUNT(CertType) into var_Result
+    from CERTIFICATE, PERSON
+    where CertType = 2
+    and PersonalID = ID
+    and  extract(year from SYSDATE) - extract(year from Birthday) > 12
+    and extract(year from SYSDATE) - extract(year from Birthday) <= 22;
+
+    update STATISTIC
+    set Data = var_Result, LastUpdate = SYSDATE
+    where Title = 'STAT_TEENAGER';    
+    
+    commit;
+END STAT_BASICDOSE_TEENAGER;
+--------------------------------------------------------
+--  DDL for Procedure STAT_BOOSTERDOSE
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "STAT_BOOSTERDOSE" AS 
+    var_Result number;
+BEGIN
+    var_Result := 0;
+    
+    select COUNT(DoseType) into var_Result
+    from INJECTION
+    where DoseType = 'booster';
+    
+    update STATISTIC
+    set Data = var_Result, LastUpdate = SYSDATE
+    where Title = 'STAT_BOOSTERDOSE'; 
+    
+    commit;
+END STAT_BOOSTERDOSE;
+--------------------------------------------------------
+--  DDL for Procedure STAT_TEENAGER
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "STAT_TEENAGER" AS 
+    var_Result number;
+BEGIN
+    var_Result := 0;
+    
+    select COUNT(CertType) into var_Result
+    from CERTIFICATE, PERSON
+    where CertType = 2
+    and PersonalID = ID
+    and  extract(year from SYSDATE) - extract(year from Birthday) > 12
+    and extract(year from SYSDATE) - extract(year from Birthday) <= 22;
+
+    update STATISTIC
+    set Data = var_Result, LastUpdate = SYSDATE
+    where Title = 'STAT_TEENAGER';    
+    
+    commit;
+END STAT_TEENAGER;
 --------------------------------------------------------
 --  DDL for Procedure VAC_INSERT_RECORD
 --------------------------------------------------------
-
+set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "VAC_INSERT_RECORD" 
 (par_ID VACCINE.ID%type, 
