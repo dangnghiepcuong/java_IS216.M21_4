@@ -374,8 +374,11 @@ public class OrgInformationView extends JPanel implements ActionListener
     public OrgInformationView(Organization org)
     {
         orgUser = org;
+        if (orgUser.getDistrict() == null)
+            orgUser.setDistrict("");
+        if (orgUser.getTown() == null)
+            orgUser.setTown("");
         initComponents();
-
     }
 
     /*ACTION PERFORMED*/

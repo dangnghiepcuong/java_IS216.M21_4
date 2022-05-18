@@ -30,7 +30,7 @@
 --  DDL for Table ORGANIZATION
 --------------------------------------------------------
 
-  CREATE TABLE "ORGANIZATION" ("ID" VARCHAR2(6), "NAME" VARCHAR2(100), "PROVINCE" VARCHAR2(2), "DISTRICT" VARCHAR2(50), "TOWN" VARCHAR2(50), "STREET" VARCHAR2(100), "NOTE" VARCHAR2(2000));
+  CREATE TABLE "ORGANIZATION" ("ID" VARCHAR2(10), "NAME" VARCHAR2(100), "PROVINCE" VARCHAR2(2), "DISTRICT" VARCHAR2(50), "TOWN" VARCHAR2(50), "STREET" VARCHAR2(100), "NOTE" VARCHAR2(2000));
 --------------------------------------------------------
 --  DDL for Table PARAMETER
 --------------------------------------------------------

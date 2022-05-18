@@ -185,7 +185,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
 
         query += " and (OnDate > '" + dv.oracleSysdate() + "' or OnDate is null)";
         query += " group by ORG.ID, Name, Province, District, Town, Street";
-        query += " order by ID, Province, District, Town";
+        query += " order by TO_NUMBER(SUBSTR(ID,3,LENGTH(ID))), Province, District, Town";
 
         System.out.println(query);
 

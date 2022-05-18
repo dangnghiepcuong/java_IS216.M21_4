@@ -20,14 +20,6 @@ import java.util.Properties;
 public class ManageScheduleView extends JPanel implements ActionListener
 {
     private DefaultValue dv = new DefaultValue();
-    Connection connection;
-    {
-        try {
-            connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
     private Organization orgUser = new Organization();
 
     /*Schedule List*/
@@ -222,11 +214,8 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         String query = "select DayRegistered, NoonRegistered, NightRegistered" +
                                 " from SCHEDULE where ID = '" + Sched.getID() + "' for update";
 
+                        Connection connection = null;
                         try {
-                            //check if the connection has not close due to previous click on UpdateSchedButton then close it
-                            if (connection.isClosed() == false)
-                                connection.close();
-
                             //create new connection
                             connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
                             connection.setAutoCommit(false);
@@ -242,10 +231,16 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                     + "          Buổi trưa: " + Sched.getNoonRegistered() + "/" + Sched.getLimitNoon()
                                     + "          Buổi tối: " + Sched.getNightRegistered() + "/" + Sched.getLimitNight());
 
-                        } catch (SQLException ex){
+                        } catch (SQLException ex) {
                             dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
                             ex.printStackTrace();
                             return;
+                        } finally {
+                            try {
+                                connection.close();
+                            } catch (SQLException ex) {
+                                ex.printStackTrace();
+                            }
                         }
 
                         LayeredPaneArea.removeAll();
@@ -328,8 +323,9 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                     return;
 
                                 String plsql = "{call SCHED_UPDATE_RECORD(?, ?, ?, ?)}";
-
+                                Connection connection = null;
                                 try {
+                                    connection = DriverManager.getConnection(dv.getDB_URL(),dv.getUsername(),dv.getPassword());
                                     CallableStatement cst = connection.prepareCall(plsql);
 
                                     cst.setString("par_ID", Sched.getID());
@@ -345,6 +341,15 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                         dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
                                         ex1.printStackTrace();
                                         return;
+                                    }
+                                    dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+                                    ex.printStackTrace();
+                                    return;
+                                } finally {
+                                    try {
+                                        connection.close();
+                                    } catch (SQLException ex) {
+                                        ex.printStackTrace();
                                     }
                                 }
 
@@ -428,8 +433,9 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
                         String plsql = "{call SCHED_CANCEL_SCHED(?)}";
 
+                        Connection connection = null;
                         try {
-                            Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+                            connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
                             CallableStatement cst = connection.prepareCall(plsql);
 
                             cst.setString("par_ID", Sched.getID());
@@ -441,7 +447,14 @@ public class ManageScheduleView extends JPanel implements ActionListener
                             dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
                             ex.printStackTrace();
                             return;
+                        } finally {
+                            try {
+                                connection.close();
+                            } catch (SQLException ex) {
+                                ex.printStackTrace();
+                            }
                         }
+
                         dv.popupOption(null,"Hủy lịch tiêm thành công!", "Thông báo!", 0);
                         Sched.setLimitDay(0);
                         Sched.setLimitNoon(0);
@@ -455,7 +468,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                 + "          Buổi tối: " + Sched.getNightRegistered() + "/" + Sched.getLimitNight());
                         SchedPanel.repaint(0,0,640,120);
                     }
-
                 }
             };
 
@@ -530,6 +542,12 @@ public class ManageScheduleView extends JPanel implements ActionListener
             dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
             ex.printStackTrace();
             return;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         nScheds = i;
@@ -698,9 +716,9 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         return;
 
                     String plsql = "{call REG_UPDATE_STATUS(?, ?, ?)}";
-
+                    Connection connection = null;
                     try {
-                        Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+                        connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
                         CallableStatement cst = connection.prepareCall(plsql);
                         int temp = dv.getStatusIndex(StatusChoice.getSelectedItem());
@@ -715,6 +733,12 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
                         ex.printStackTrace();
                         return;
+                    } finally {
+                        try {
+                            connection.close();
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                     }
 
                     //repaint Status on Registion Panel
@@ -774,7 +798,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
         Connection connection = null;
         try {
-
             connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
             PreparedStatement st = connection.prepareStatement(query);
             ResultSet rs = st.executeQuery(query);
@@ -802,6 +825,12 @@ public class ManageScheduleView extends JPanel implements ActionListener
             dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
             ex.printStackTrace();
             return;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         nReg = i;
@@ -901,6 +930,12 @@ public class ManageScheduleView extends JPanel implements ActionListener
             dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
             ex.printStackTrace();
             return;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         Choice VaccineChoice = new Choice();
@@ -975,36 +1010,18 @@ public class ManageScheduleView extends JPanel implements ActionListener
                     "Cảnh báo!", "Nhập số lô vaccine!") != -2)
                     return;
 
-                int InputLimitDay = 0;
-                try {
-                    InputLimitDay = Integer.parseInt(LimitDayTextField.getText());
-                } catch (NumberFormatException ex) {
-                    InputLimitDay = 0;
-                }
+                dv.checkisNumberInputValue(LimitDayTextField.getText(),"Lỗi!","Giới hạn phải là số!");
+                dv.checkisNumberInputValue(LimitNoonTextField.getText(),"Lỗi!","Giới hạn phải là số!");
+                dv.checkisNumberInputValue(LimitNightTextField.getText(),"Lỗi!","Giới hạn phải là số!");
 
-                int InputLimitNoon = 0;
-                try {
-
-                    InputLimitNoon = Integer.parseInt(LimitNoonTextField.getText());
-                } catch (NumberFormatException ex) {
-                    InputLimitNoon = 0;
-                }
-
-                int InputLimitNight = 0;
-                try {
-
-                    InputLimitNight = Integer.parseInt(LimitNightTextField.getText());
-                } catch (NumberFormatException ex) {
-                    InputLimitNight = 0;
-                }
+                int InputLimitDay = Integer.parseInt(LimitDayTextField.getText());
+                int InputLimitNoon = Integer.parseInt(LimitNoonTextField.getText());
+                int InputLimitNight = Integer.parseInt(LimitNightTextField.getText());
 
                 int answer = dv.popupConfirmOption(null,"Xác nhận tạo lịch tiêm chủng?", "Xác nhận!");
-
                 if (answer == JOptionPane.YES_OPTION)
                 {
                     String plsql = "{call SCHED_INSERT_RECORD(?,?,?,?,?,?,?,?)}";
-
-
                     Connection connection = null;
                     try {
                         connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
@@ -1025,6 +1042,12 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
                         ex.printStackTrace();
                         return;
+                    } finally {
+                        try {
+                            connection.close();
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                     }
 
                     dv.popupOption(null, "Tạo lịch tiêm chủng thành công!", "Thông báo!", 0);
