@@ -438,7 +438,7 @@ public class RegisterVaccinationView extends JPanel implements ActionListener
         OnDate.setHorizontalAlignment(JLabel.LEFT);
         //OnDate.setBorder(dv.border());
 
-        JLabel VaccineID = new JLabel("Vaccine: " + Sched.getVaccineID());
+        JLabel VaccineID = new JLabel("Vaccine: " + Sched.getVaccineID() + " - " + Sched.getSerial());
         VaccineID.setFont(new Font(dv.fontName(), 0, 16));
         VaccineID.setForeground(new Color(dv.BlackTextColor()));
         VaccineID.setBounds(30, 32+25+2,200,25);
