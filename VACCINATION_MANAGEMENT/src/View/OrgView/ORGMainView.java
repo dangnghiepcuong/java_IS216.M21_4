@@ -93,7 +93,7 @@ public class ORGMainView extends JFrame implements ActionListener
         Avatar.setHorizontalAlignment(JLabel.CENTER);
 
         JLabel Name = new JLabel("<html>" + orgUser.getName());
-        Name.setBounds(50, 300, 280, 70);
+        Name.setBounds(50, 300, 280, 150);
         Name.setFont(new Font(dv.fontName(),Font.BOLD, 24));
         Name.setHorizontalAlignment(JLabel.CENTER);
 
@@ -101,7 +101,7 @@ public class ORGMainView extends JFrame implements ActionListener
         JLabel Location = new JLabel(dv.getProvinceName(orgUser.getProvince()));
         Location.setFont(new Font(dv.fontName(),Font.BOLD, 20));
         Location.setIcon(LocationImage);
-        Location.setBounds(0,400,360,30);
+        Location.setBounds(0,450,360,30);
         Location.setHorizontalAlignment(JLabel.CENTER);
 
         initLogoutButton();
