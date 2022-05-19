@@ -176,12 +176,13 @@ public class CreateOrgAccView extends JPanel implements ActionListener
 
         //Select out the specified ORGs
         String query = "select ORG.ID, Name, Province, District, Town, Street, COUNT(SCHED.ID)"
-                + " from ORGANIZATION ORG left outer join SCHEDULE SCHED on ORG.ID = SCHED.OrgID";
+                + " from ORGANIZATION ORG left outer join SCHEDULE SCHED on ORG.ID = SCHED.OrgID"
+                + " where ORG.ID != 'MOH'";
 
         if (ProvinceChoice.getSelectedIndex() != 0)
-            query = query + " where Province = '" + ProvinceCode + "'";
+            query = query + " and Province = '" + ProvinceCode + "'";
         else
-            query = query + " where Province like '%'";
+            return;
 
         query += " and (OnDate > '" + dv.oracleSysdate() + "' or OnDate is null)";
         query += " group by ORG.ID, Name, Province, District, Town, Street";
@@ -189,14 +190,20 @@ public class CreateOrgAccView extends JPanel implements ActionListener
 
         System.out.println(query);
 
-        try
-        {
-            Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
             PreparedStatement st = connection.prepareStatement(query);
             ResultSet rs = st.executeQuery(query);
-            ResultSetMetaData rsmd = rs.getMetaData();
-            while (rs.next())
-            {
+
+            /*JLabel NumberOfOrg = new JLabel("Số lượng đơn vị: " + nORG);
+            NumberOfOrg.setFont(new Font(dv.fontName(), 2, 16));
+            NumberOfOrg.setForeground(new Color(dv.BlackTextColor()));
+            NumberOfOrg.setPreferredSize(new Dimension(640,25));
+            NumberOfOrg.setHorizontalAlignment(JLabel.LEFT);
+            OrgListPanel.add(NumberOfOrg);*/
+
+            while (rs.next()) {
                 Org = new Organization();
                 Org.setID(rs.getString("ID"));
                 Org.setName(rs.getString("Name"));
@@ -209,17 +216,24 @@ public class CreateOrgAccView extends JPanel implements ActionListener
                 i++;
             }
             nORG = i;
-            OrgListPanel.setPreferredSize(new Dimension(660, 120*nORG + nORG*5));
+            OrgListPanel.setPreferredSize(new Dimension(660, 120 * nORG + nORG * 5));
         } catch (SQLException ex) {
             dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
             ex.printStackTrace();
             return;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private void initScrollPaneOrgList()
     {
-        ScrollPaneOrgList = new JScrollPane(OrgListPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        ScrollPaneOrgList = new JScrollPane(OrgListPanel,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneOrgList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneOrgList.setBounds(0, 40, 680, 590); //320 40
     }
@@ -238,7 +252,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
     {
         ImageIcon AddNewOrgAccButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Create New Org Acc Button.png"));
         AddNewOrgAccButton = new JButton();
-        AddNewOrgAccButton.setBounds((320-AddNewOrgAccButtonIcon.getIconWidth())/2, 300, AddNewOrgAccButtonIcon.getIconWidth(), AddNewOrgAccButtonIcon.getIconHeight());
+        AddNewOrgAccButton.setBounds((320-AddNewOrgAccButtonIcon.getIconWidth())/2, 600, AddNewOrgAccButtonIcon.getIconWidth(), AddNewOrgAccButtonIcon.getIconHeight());
         AddNewOrgAccButton.setBorder(null);
         AddNewOrgAccButton.setContentAreaFilled(false);
         AddNewOrgAccButton.setIcon(AddNewOrgAccButtonIcon);
@@ -384,7 +398,8 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         this.add(AddNewOrgAccButton);
 
         //init OrgListPanel
-        initOrgListPanel("00");
+        initOrgListPanel("");
+        initScrollPaneOrgList();
 
         //init LayeredPaneArea
         JLabel OrgListLabel = new JLabel("DANH SÁCH ĐƠN VỊ");
@@ -396,6 +411,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         initLayeredPaneArea();
 
         LayeredPaneArea.add(OrgListLabel, Integer.valueOf(0));
+        LayeredPaneArea.add(ScrollPaneOrgList, Integer.valueOf(0));
         this.add(LayeredPaneArea);
 
         this.repaint(0,0, dv.FrameWidth(), dv.FrameHeight());
@@ -429,7 +445,6 @@ public class CreateOrgAccView extends JPanel implements ActionListener
             LayeredPaneArea.add(OrgListLabel, Integer.valueOf(0));
             LayeredPaneArea.add(ScrollPaneOrgList, Integer.valueOf(0));
             LayeredPaneArea.repaint(320, 40, 680, 630);
-
         }
 
         if (e.getSource() == AddNewOrgAccButton)
