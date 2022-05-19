@@ -151,8 +151,8 @@ public class FillFormView extends JPanel implements ActionListener
             FirstAns.setHorizontalAlignment(JLabel.LEFT);
             if (Heal.getHealths().substring(0,1).equals("1"))
             {
-                FirstAns.setText("<html>Có một trong các dấu hiệu sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi trong vòng 14 ngày qua");
-                FirstAns.setFont(new Font(dv.fontName(), 1, 13));
+                FirstAns.setText("<html>1. Có một trong các dấu hiệu sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi trong vòng 14 ngày qua");
+                FirstAns.setFont(new Font(dv.fontName(), 0, 13));
                 FirstAns.setForeground(new Color(dv.BlackTextColor()));
             }
             else
@@ -167,8 +167,8 @@ public class FillFormView extends JPanel implements ActionListener
             SecondAns.setHorizontalAlignment(JLabel.LEFT);
             if (Heal.getHealths().substring(1,2).equals("1"))
             {
-                SecondAns.setText("<html>Có tiếp xúc với Người bệnh hoặc nghi ngờ, mắc bệnh COVID-19 trong vòng 14 ngày qua");
-                SecondAns.setFont(new Font(dv.fontName(), 1, 13));
+                SecondAns.setText("<html>2. Có tiếp xúc với Người bệnh hoặc nghi ngờ, mắc bệnh COVID-19 trong vòng 14 ngày qua");
+                SecondAns.setFont(new Font(dv.fontName(), 0, 13));
                 SecondAns.setForeground(new Color(dv.BlackTextColor()));
             }
             else
@@ -183,13 +183,13 @@ public class FillFormView extends JPanel implements ActionListener
             ThirdAns.setHorizontalAlignment(JLabel.LEFT);
             if (Heal.getHealths().substring(2,3).equals("1"))
             {
-                ThirdAns.setText("<html>Là đối tượng đang dương tính với Covid-19");
+                ThirdAns.setText("<html>3. Là đối tượng đang dương tính với Covid-19");
                 ThirdAns.setFont(new Font(dv.fontName(), 1, 13));
                 ThirdAns.setForeground(new Color(dv.RedPastel()));
             }
             else
             {
-                ThirdAns.setText("<html>Không là đối tượng đang dương tính với Covid-19");
+                ThirdAns.setText("<html>4. Không là đối tượng đang dương tính với Covid-19");
                 ThirdAns.setFont(new Font(dv.fontName(), 0, 13));
                 ThirdAns.setForeground(new Color(dv.GreenPastel()));
             }
