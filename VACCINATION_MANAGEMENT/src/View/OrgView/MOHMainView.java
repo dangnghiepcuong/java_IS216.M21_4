@@ -239,7 +239,7 @@ public class MOHMainView extends JFrame implements ActionListener
 
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(0, 240+130, 240, 30);
-        ButtonLabel.setText("Tìm kiếm");
+        ButtonLabel.setText("Tra cứu");
         ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
