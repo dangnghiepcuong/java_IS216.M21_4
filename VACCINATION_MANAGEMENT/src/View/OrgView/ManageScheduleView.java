@@ -300,24 +300,26 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                     if (dv.checkisNumberInputValue(InputLimitDay,
                                             "Lỗi!", "Giới hạn phải là số!") != -2)
                                         return;
-                                } else
-                                    InputLimitDay = String.valueOf(Sched.getLimitDay());
 
+                                    InputLimitDay = String.valueOf(Sched.getLimitDay());
+                                } else
+                                    InputLimitDay = "0";
 
                                 if (InputLimitNoon.equals("") == false) {
                                     if (dv.checkisNumberInputValue(InputLimitNoon,
                                             "Lỗi!", "Giới hạn phải là số!") != -2)
                                         return;
-                                } else
                                     InputLimitNoon = String.valueOf(Sched.getLimitNoon());
-
+                                } else
+                                    InputLimitNoon = "0";
 
                                 if (InputLimitNight.equals("") == false) {
                                     if (dv.checkisNumberInputValue(InputLimitNight,
                                             "Lỗi!", "Giới hạn phải là số!") != -2)
                                         return;
-                                } else
                                     InputLimitNight = String.valueOf(Sched.getLimitNight());
+                                } else
+                                    InputLimitNight = "0";
 
                                 if (dv.popupConfirmOption(null, "Xác nhận cập nhật lịch tiêm?", "Xác nhận?") != 0)
                                     return;
@@ -1010,13 +1012,33 @@ public class ManageScheduleView extends JPanel implements ActionListener
                     "Cảnh báo!", "Nhập số lô vaccine!") != -2)
                     return;
 
-                dv.checkisNumberInputValue(LimitDayTextField.getText(),"Lỗi!","Giới hạn phải là số!");
-                dv.checkisNumberInputValue(LimitNoonTextField.getText(),"Lỗi!","Giới hạn phải là số!");
-                dv.checkisNumberInputValue(LimitNightTextField.getText(),"Lỗi!","Giới hạn phải là số!");
+                String InputLimitDay = LimitDayTextField.getText();
+                String InputLimitNoon = LimitNoonTextField.getText();
+                String InputLimitNight = LimitNightTextField.getText();
 
-                int InputLimitDay = Integer.parseInt(LimitDayTextField.getText());
-                int InputLimitNoon = Integer.parseInt(LimitNoonTextField.getText());
-                int InputLimitNight = Integer.parseInt(LimitNightTextField.getText());
+                if (InputLimitDay.equals("") == false) {
+                    if (dv.checkisNumberInputValue(InputLimitDay,
+                            "Lỗi!", "Giới hạn phải là số!") != -2)
+                        return;
+                    InputLimitDay = String.valueOf(LimitDayTextField.getText());
+                } else
+                    InputLimitDay = "0";
+
+                if (InputLimitNoon.equals("") == false) {
+                    if (dv.checkisNumberInputValue(InputLimitNoon,
+                            "Lỗi!", "Giới hạn phải là số!") != -2)
+                        return;
+                    InputLimitNoon = String.valueOf(LimitNoonTextField.getText());
+                } else
+                    InputLimitNoon = "0";
+
+                if (InputLimitNight.equals("") == false) {
+                    if (dv.checkisNumberInputValue(InputLimitNight,
+                            "Lỗi!", "Giới hạn phải là số!") != -2)
+                        return;
+                    InputLimitNight = String.valueOf(LimitNightTextField.getText());
+                } else
+                    InputLimitNight = "0";
 
                 int answer = dv.popupConfirmOption(null,"Xác nhận tạo lịch tiêm chủng?", "Xác nhận!");
                 if (answer == JOptionPane.YES_OPTION)
@@ -1031,9 +1053,9 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         cst.setString("par_OnDate", dv.toOracleDateFormat(InputOnDate));
                         cst.setString("par_VaccineID", InputVaccineID);
                         cst.setString("par_Serial", InputSerial);
-                        cst.setInt("par_LimitDay", InputLimitDay);
-                        cst.setInt("par_LimitNoon", InputLimitNoon);
-                        cst.setInt("par_LimitNight", InputLimitNight);
+                        cst.setInt("par_LimitDay", Integer.parseInt(InputLimitDay));
+                        cst.setInt("par_LimitNoon", Integer.parseInt(InputLimitNoon));
+                        cst.setInt("par_LimitNight", Integer.parseInt(InputLimitNight));
                         cst.setString("par_Note", "");
 
                         cst.execute();
