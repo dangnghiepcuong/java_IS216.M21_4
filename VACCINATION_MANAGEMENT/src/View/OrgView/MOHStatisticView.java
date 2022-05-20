@@ -1,6 +1,9 @@
-package View.CitizenView;
+package View.OrgView;
 
-import Process.*;
+import Process.DateLabelFormatter;
+import Process.DefaultValue;
+import Process.Health;
+import Process.Person;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -19,32 +22,23 @@ import java.util.Properties;
  *
  * @author NghiepCuong
  */
-public class FillFormView extends JPanel implements ActionListener{
+public class MOHStatisticView extends JPanel implements ActionListener, KeyListener {
     private DefaultValue dv = new DefaultValue();
     private Person personalUser = new Person();
 
-    /*Schedule List*/
-    private JPanel FormFilterPanel;
-    private JLabel FormFilterLabel;
-    private Choice FormFilterChoice;
-    private JButton FormFilterButton;
+    /*Confirm Statistic*/
+    private JPanel ConfirmStatisticPanel;
+    private JLabel ConfirmPasswordLabel;
+    private JTextField PasswordField;
+    private JButton ConfirmStatisticButton;
 
-    private JScrollPane ScrollPaneFormList;
-    private JPanel FormListPanel;
-
-    /*Create Schedule*/
-    private JButton FillFormButton;
-    private JPanel CreateFormPanel;
+    /*Statistic List*/
+    private JScrollPane ScrollPaneStatisticList;
+    private JPanel StatisticListPanel;
+    
+    private JButton ExportReportButton;
 
     private JLayeredPane LayeredPaneArea;
-
-    public Person getPersonalUser() {
-        return personalUser;
-    }
-
-    public void setPersonalUser(Person personalUser) {
-        this.personalUser = personalUser;
-    }
 
     /*
      *   INITIALIZE THE FILTER OF FILLED FORMS OF THE CITIZEN
@@ -53,51 +47,48 @@ public class FillFormView extends JPanel implements ActionListener{
      *       + CHOICE
      *       + BUTTON: SELECT
      * */
-    private void initFormFilterLabel() {
-        FormFilterLabel = new JLabel();
-        FormFilterLabel.setBounds(0, 0, dv.LabelWidth() + 50, dv.LabelHeight());
-        FormFilterLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-        FormFilterLabel.setForeground(new Color(0x666666));
-        FormFilterLabel.setText("Tờ khai trong vòng");
-        FormFilterLabel.setSize(dv.FieldWidth(), dv.FieldHeight());
+    private void initConfirmPasswordLabel() {
+        ConfirmPasswordLabel = new JLabel();
+        ConfirmPasswordLabel.setBounds(0, 0, dv.LabelWidth() + 50, dv.LabelHeight());
+        ConfirmPasswordLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        ConfirmPasswordLabel.setForeground(new Color(0x666666));
+        ConfirmPasswordLabel.setText("Tờ khai trong vòng");
+        ConfirmPasswordLabel.setSize(dv.FieldWidth(), dv.FieldHeight());
     }
 
-    private void initFormFilterChoice() {
-        FormFilterChoice = new Choice();
-        FormFilterChoice.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
-        FormFilterChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
-        FormFilterChoice.setForeground(new Color(dv.BlackTextColor()));
-
-        FormFilterChoice.add("7 ngày");
-        FormFilterChoice.add("14 ngày");
-        FormFilterChoice.add("28 ngày");
+    private void initPasswordField() {
+        PasswordField = new JPasswordField();
+        PasswordField.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
+        PasswordField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
+        PasswordField.setForeground(new Color(dv.BlackTextColor()));
+        PasswordField.addKeyListener(this);
     }
 
-    private void initFormFilterButton() {
-        FormFilterButton = new JButton();
+    private void initConfirmStatisticButton() {
+        ConfirmStatisticButton = new JButton();
         ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Resources/icon/Search Filter Button.png"));
-        FormFilterButton.setIcon(SearchIcon);
+        ConfirmStatisticButton.setIcon(SearchIcon);
 
-        FormFilterButton.setBounds(0, 70, dv.FieldWidth(), SearchIcon.getIconHeight());
-        FormFilterButton.setBorder(null);
-        FormFilterButton.setContentAreaFilled(false);
+        ConfirmStatisticButton.setBounds(0, 70, dv.FieldWidth(), SearchIcon.getIconHeight());
+        ConfirmStatisticButton.setBorder(null);
+        ConfirmStatisticButton.setContentAreaFilled(false);
 
-        FormFilterButton.addActionListener(this);
+        ConfirmStatisticButton.addActionListener(this);
     }
 
-    private void initFormFilterPanel() {
-        initFormFilterLabel();
-        initFormFilterChoice();
-        initFormFilterButton();
+    private void initConfirmStatisticPanel() {
+        initConfirmPasswordLabel();
+        initPasswordField();
+        initConfirmStatisticButton();
 
-        FormFilterPanel = new JPanel();
-        FormFilterPanel.setBounds(dv.AlignLeft(), 80, dv.LabelWidth() + 50, 125);
-        FormFilterPanel.setLayout(null);
-        FormFilterPanel.setBackground(new Color(dv.ViewBackgroundColor()));
+        ConfirmStatisticPanel = new JPanel();
+        ConfirmStatisticPanel.setBounds(dv.AlignLeft(), 80, dv.LabelWidth() + 50, 125);
+        ConfirmStatisticPanel.setLayout(null);
+        ConfirmStatisticPanel.setBackground(new Color(dv.ViewBackgroundColor()));
 
-        FormFilterPanel.add(FormFilterLabel);
-        FormFilterPanel.add(FormFilterChoice);
-        FormFilterPanel.add(FormFilterButton);
+        ConfirmStatisticPanel.add(ConfirmPasswordLabel);
+        ConfirmStatisticPanel.add(PasswordField);
+        ConfirmStatisticPanel.add(ConfirmStatisticButton);
     }
 
 
@@ -200,20 +191,14 @@ public class FillFormView extends JPanel implements ActionListener{
         return FormPanel;
     }
 
-    private void initFormListPanel(int Within) {
-        FormListPanel = new JPanel();
-        FormListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
-        FormListPanel.setLayout(new FlowLayout());
-        Health Heal;
-        int listHeight = 0;
-        int i = 0;
+    private void initStatisticListPanel() {
+        StatisticListPanel = new JPanel();
+        StatisticListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+        StatisticListPanel.setLayout(new FlowLayout());
 
-        String nDaysAgo = dv.toOracleDateFormat(String.valueOf(LocalDate.parse(dv.todayString()).minusDays(Within)));
+        JPanel Stat = new JPanel();
 
-        String query = "select * from HEALTH HEAL" +
-                " where HEAL.PersonalID = '" + personalUser.getID() + "'" +
-                " and FilledDate >= '" + nDaysAgo + "'" +
-                " order by FilledDate desc, ID desc";
+        String query = "select * from STATISTIC";
 
         Connection connection = null;
         try {
@@ -224,13 +209,13 @@ public class FillFormView extends JPanel implements ActionListener{
             ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
-                Heal = new Health();
-                Heal.setID(rs.getInt("ID"));
-                Heal.getPerson().setID(rs.getString("PersonalID"));
-                Heal.setFilledDate(LocalDate.parse(rs.getString("FilledDate").substring(0, 10)));
-                Heal.setHealths(rs.getString("Healths"));
-                FormListPanel.add(initFormPanel(Heal));
-                if (Heal.getHealths().equals("0000"))
+                Stat = new Statistic();
+                Stat.setID(rs.getInt("ID"));
+                Stat.getPerson().setID(rs.getString("PersonalID"));
+                Stat.setFilledDate(LocalDate.parse(rs.getString("FilledDate").substring(0, 10)));
+                Stat.setStatths(rs.getString("Statths"));
+                StatisticListPanel.add(initFormPanel(Stat));
+                if (Stat.getHealths().equals("0000"))
                     listHeight += 80;
                 else
                     listHeight += 150;
@@ -241,14 +226,14 @@ public class FillFormView extends JPanel implements ActionListener{
             ex.printStackTrace();
             return;
         }
-        FormListPanel.setPreferredSize(new Dimension(660, listHeight + i * 10));
+        StatisticListPanel.setPreferredSize(new Dimension(660, listHeight + i * 10));
     }
 
-    private void initScrollPaneFormList() {
-        ScrollPaneFormList = new JScrollPane(FormListPanel,
+    private void initScrollPaneStatisticList() {
+        ScrollPaneStatisticList = new JScrollPane(StatisticListPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        ScrollPaneFormList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
-        ScrollPaneFormList.setBounds(0, 40, 680, 590); //320 40
+        ScrollPaneStatisticList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+        ScrollPaneStatisticList.setBounds(0, 40, 680, 590); //320 40
     }
 
 
@@ -260,212 +245,14 @@ public class FillFormView extends JPanel implements ActionListener{
      *       + CHOICES
      *       + BUTTON: CONFIRM
      * */
-    private void initFillFormButton() {
-        ImageIcon FillFormButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Fill Form Button.png"));
-        FillFormButton = new JButton();
-        FillFormButton.setBounds((320 - FillFormButtonIcon.getIconWidth()) / 2, 600, FillFormButtonIcon.getIconWidth(), FillFormButtonIcon.getIconHeight());
-        FillFormButton.setBorder(null);
-        FillFormButton.setContentAreaFilled(false);
-        FillFormButton.setIcon(FillFormButtonIcon);
-        FillFormButton.addActionListener(this);
-    }
-
-    private void initCreateFormPanel() {
-        JLabel CreateHealLabel = new JLabel("KHAI BÁO Y TẾ");
-        CreateHealLabel.setPreferredSize(new Dimension(600, 35));
-        CreateHealLabel.setFont(new Font(dv.fontName(), 1, 20));
-        CreateHealLabel.setForeground(new Color(dv.FeatureButtonColor()));
-        CreateHealLabel.setHorizontalAlignment(JLabel.CENTER);
-
-        JLabel FilledDateLabel = new JLabel("Ngày thực hiện khai báo: ");
-        FilledDateLabel.setPreferredSize(new Dimension(200, 30));
-        FilledDateLabel.setFont(new Font(dv.fontName(), 0, 16));
-        FilledDateLabel.setForeground(new Color(dv.BlackTextColor()));
-
-        UtilDateModel model = new UtilDateModel();
-        Properties p = new Properties();
-        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
-        JDatePickerImpl FilledDateField = new JDatePickerImpl(datePanel, new DateLabelFormatter());
-
-        FilledDateField.setPreferredSize(new Dimension(150, 30));
-
-        JFormattedTextField textField = FilledDateField.getJFormattedTextField();
-        textField.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-        textField.setPreferredSize(new Dimension(150, 30));
-
-        FilledDateField.setForeground(new Color(dv.BlackTextColor()));
-        FilledDateField.setVisible(true);
-        FilledDateField.setEnabled(true);
-
-        JLabel FirstQuesLabel = new JLabel("<html>Trong vòng 14 ngày qua, Anh/Chị có thấy xuất hiện ít nhất 1 trong các dấu hiệu: " +
-                "sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi không?:");
-        FirstQuesLabel.setPreferredSize(new Dimension(600, 50));
-        FirstQuesLabel.setFont(new Font(dv.fontName(), 0, 16));
-        FirstQuesLabel.setForeground(new Color(dv.BlackTextColor()));
-
-        Choice FirstQuesChoice = new Choice();
-        FirstQuesChoice.setPreferredSize(new Dimension(80, 30));
-        FirstQuesChoice.setFont(new Font(dv.fontName(), 0, 16));
-        FirstQuesChoice.setForeground(new Color(dv.BlackTextColor()));
-        FirstQuesChoice.add("Không");
-        FirstQuesChoice.add("Có");
-
-        JLabel SecondQuesLabel = new JLabel("<html>Trong vòng 14 ngày qua, Anh/Chị có tiếp xúc với Người bệnh hoặc nghi ngờ," +
-                " mắc bệnh COVID-19 không?");
-        SecondQuesLabel.setPreferredSize(new Dimension(600, 50));
-        SecondQuesLabel.setFont(new Font(dv.fontName(), 0, 16));
-        SecondQuesLabel.setForeground(new Color(dv.BlackTextColor()));
-
-        Choice SecondQuesChoice = new Choice();
-        SecondQuesChoice.setPreferredSize(new Dimension(80, 30));
-        SecondQuesChoice.setFont(new Font(dv.fontName(), 0, 16));
-        SecondQuesChoice.setForeground(new Color(dv.BlackTextColor()));
-        SecondQuesChoice.add("Không");
-        SecondQuesChoice.add("Có");
-
-        JLabel ThirdQuesLabel = new JLabel("<html>Anh/Chị có đang dương tính với Covid-19 không?");
-        ThirdQuesLabel.setPreferredSize(new Dimension(600, 50));
-        ThirdQuesLabel.setFont(new Font(dv.fontName(), 0, 16));
-        ThirdQuesLabel.setForeground(new Color(dv.BlackTextColor()));
-
-        Choice ThirdQuesChoice = new Choice();
-        ThirdQuesChoice.setPreferredSize(new Dimension(80, 30));
-        ThirdQuesChoice.setFont(new Font(dv.fontName(), 0, 16));
-        ThirdQuesChoice.setForeground(new Color(dv.BlackTextColor()));
-        ThirdQuesChoice.add("Không");
-        ThirdQuesChoice.add("Có");
-
-        JLabel FourthQuesLabel = new JLabel("<html>Anh/Chị có đang là đối tượng trì hoãn tiêm chủng vaccine Covid-19 hoặc " +
-                "đang là đối tượng chống chỉ định với tiêm chủng Covid-19 không?");
-        FourthQuesLabel.setPreferredSize(new Dimension(600, 50));
-        FourthQuesLabel.setFont(new Font(dv.fontName(), 0, 16));
-        FourthQuesLabel.setForeground(new Color(dv.BlackTextColor()));
-
-        Choice FourthQuesChoice = new Choice();
-        FourthQuesChoice.setPreferredSize(new Dimension(80, 30));
-        FourthQuesChoice.setFont(new Font(dv.fontName(), 0, 16));
-        FourthQuesChoice.setForeground(new Color(dv.BlackTextColor()));
-        FourthQuesChoice.add("Không");
-        FourthQuesChoice.add("Có");
-
-
-        ActionListener handleCreateHeal = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                LocalDate FilledDate = LocalDate.parse(textField.getText());
-                LocalDate sysdate = LocalDate.parse(dv.todayString());
-
-                /*if (FilledDate.isAfter(sysdate))
-                {
-                    dv.popupOption(null,"Không thể khai báo y tế cho tương lai", "Lỗi!", 2);
-                    return;
-                }*/
-
-                String InputFirstQues = String.valueOf(FirstQuesChoice.getSelectedIndex());
-                String InputSecondQues = String.valueOf(SecondQuesChoice.getSelectedIndex());
-                String InputThirdQues = String.valueOf(ThirdQuesChoice.getSelectedIndex());
-                String InputFourthQues = String.valueOf(FourthQuesChoice.getSelectedIndex());
-
-                int answer = dv.popupConfirmOption(null, "Xác nhận khai báo?", "Xác nhận!");
-
-                if (answer == JOptionPane.YES_OPTION) {
-                    String plsql = "{call HEAL_INSERT_RECORD(?,?,?,?)}";
-
-                    Connection connection = null;
-                    try {
-                        connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-
-                        CallableStatement cst = connection.prepareCall(plsql);
-                        cst.setString("par_PersonalID", personalUser.getID());
-                        cst.setString("par_FilledDate", dv.toOracleDateFormat(textField.getText()));
-                        cst.setString("par_Healths", InputFirstQues + InputSecondQues + InputThirdQues + InputFourthQues);
-                        cst.setString("par_Note", "");
-
-                        cst.execute();
-                    } catch (SQLException ex) {
-                        dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
-                        ex.printStackTrace();
-                        return;
-                    }
-
-                    dv.popupOption(null, "Khai báo thành công!", "Thông báo!", 0);
-                }
-            }
-        };
-
-        ImageIcon CreateHealButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Confirm Button.png"));
-        JButton CreateHealButton = new JButton();
-        CreateHealButton.setPreferredSize(new Dimension(CreateHealButtonIcon.getIconWidth(), CreateHealButtonIcon.getIconHeight()));
-        CreateHealButton.setContentAreaFilled(false);
-        CreateHealButton.setBorder(null);
-        CreateHealButton.setIcon(CreateHealButtonIcon);
-        CreateHealButton.addActionListener(handleCreateHeal);
-
-        CreateFormPanel = new JPanel();
-        CreateFormPanel.setBounds(0, 0, 660, 630);
-        CreateFormPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
-        CreateFormPanel.setLayout(new GridBagLayout());
-        CreateFormPanel.setBorder(dv.border());
-
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
-
-        c.insets = new Insets(0, 0, 20, 0);
-        c.gridy = 0;
-        CreateFormPanel.add(CreateHealLabel, c);
-
-        c.insets = new Insets(0, 0, 20, 0);
-        c.gridy = 1;
-        CreateFormPanel.add(FilledDateLabel, c);
-
-        c.insets = new Insets(0, 0, 20, 0);
-        c.gridy = 2;
-        CreateFormPanel.add(FilledDateField, c);
-
-        c.anchor = GridBagConstraints.LINE_START;
-        c.insets = new Insets(0, 0, 0, 0);
-        c.gridy = 3;
-        CreateFormPanel.add(FirstQuesLabel, c);
-
-        c.anchor = GridBagConstraints.CENTER;
-        c.insets = new Insets(0, 0, 15, 0);
-        c.gridy = 4;
-        CreateFormPanel.add(FirstQuesChoice, c);
-
-        c.anchor = GridBagConstraints.LINE_START;
-        c.insets = new Insets(0, 0, 0, 0);
-        c.gridy = 5;
-        CreateFormPanel.add(SecondQuesLabel, c);
-
-        c.anchor = GridBagConstraints.CENTER;
-        c.insets = new Insets(0, 0, 15, 0);
-        c.gridy = 6;
-        CreateFormPanel.add(SecondQuesChoice, c);
-
-        c.anchor = GridBagConstraints.LINE_START;
-        c.insets = new Insets(0, 0, 0, 0);
-        c.gridy = 7;
-        CreateFormPanel.add(ThirdQuesLabel, c);
-
-        c.anchor = GridBagConstraints.CENTER;
-        c.insets = new Insets(0, 0, 15, 0);
-        c.gridy = 8;
-        CreateFormPanel.add(ThirdQuesChoice, c);
-
-        c.anchor = GridBagConstraints.LINE_START;
-        c.insets = new Insets(0, 0, 0, 0);
-        c.gridy = 9;
-        CreateFormPanel.add(FourthQuesLabel, c);
-
-        c.anchor = GridBagConstraints.CENTER;
-        c.insets = new Insets(0, 0, 30, 0);
-        c.gridy = 10;
-        CreateFormPanel.add(FourthQuesChoice, c);
-
-        c.anchor = GridBagConstraints.CENTER;
-        c.insets = new Insets(0, 0, 0, 0);
-        c.gridy = 11;
-        CreateFormPanel.add(CreateHealButton, c);
+    private void initExportReportButton() {
+        ImageIcon ExportReportButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Fill Form Button.png"));
+        ExportReportButton = new JButton();
+        ExportReportButton.setBounds((320 - ExportReportButtonIcon.getIconWidth()) / 2, 600, ExportReportButtonIcon.getIconWidth(), ExportReportButtonIcon.getIconHeight());
+        ExportReportButton.setBorder(null);
+        ExportReportButton.setContentAreaFilled(false);
+        ExportReportButton.setIcon(ExportReportButtonIcon);
+        ExportReportButton.addActionListener(this);
     }
 
     private void initLayeredPaneArea() {
@@ -481,36 +268,36 @@ public class FillFormView extends JPanel implements ActionListener{
         this.setBackground(new Color(dv.ViewBackgroundColor()));
         this.setLayout(null);
 
-        //initFormFilterPanel
-        initFormFilterPanel();
-        this.add(FormFilterPanel);
+        //initConfirmStatisticPanel
+        initConfirmStatisticPanel();
+        this.add(ConfirmStatisticPanel);
 
-        //init FillFormButton
-        initFillFormButton();
-        this.add(FillFormButton);
+        //init ExportReportButton
+        initExportReportButton();
+        this.add(ExportReportButton);
 
-        //init FormListPanel
+        //init StatisticListPanel
         JLabel HealListLabel = new JLabel("DANH SÁCH TỜ KHAI Y TẾ (" + personalUser.getFullName() + ")");
         HealListLabel.setBounds(0, 0, 640, 40);
         HealListLabel.setFont(new Font(dv.fontName(), 1, 20));
         HealListLabel.setForeground(new Color(dv.FeatureButtonColor()));
         HealListLabel.setHorizontalAlignment(JLabel.CENTER);
 
-        initFormListPanel(7);
-        initScrollPaneFormList();
+        initStatisticListPanel(7);
+        initScrollPaneStatisticList();
 
         //init LayeredPaneArea
         initLayeredPaneArea();
 
         LayeredPaneArea.add(HealListLabel, Integer.valueOf(0));
-        LayeredPaneArea.add(ScrollPaneFormList, Integer.valueOf(0));
+        LayeredPaneArea.add(ScrollPaneStatisticList, Integer.valueOf(0));
         this.add(LayeredPaneArea);
 
         this.repaint(0, 0, dv.FrameWidth(), dv.FrameHeight());
     }
 
     /*CONSTRUCTOR*/
-    public FillFormView(Person person) {
+    public MOHStatisticView(Person person) {
         personalUser = person;
         initComponents();
     }
@@ -518,8 +305,7 @@ public class FillFormView extends JPanel implements ActionListener{
     /*ACTION PERFORMED*/
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == FormFilterButton) {
-            CreateFormPanel = null;
+        if (e.getSource() == ConfirmStatisticButton) {
             LayeredPaneArea.removeAll();
             LayeredPaneArea.repaint(320, 40, 680, 630);
 
@@ -529,17 +315,17 @@ public class FillFormView extends JPanel implements ActionListener{
             HealListLabel.setForeground(new Color(dv.FeatureButtonColor()));
             HealListLabel.setHorizontalAlignment(JLabel.CENTER);
 
-            initFormListPanel((FormFilterChoice.getSelectedIndex() + 1) * 7);
-            initScrollPaneFormList();
+            initStatisticListPanel();
+            initScrollPaneStatisticList();
 
             LayeredPaneArea.add(HealListLabel, Integer.valueOf(0));
-            LayeredPaneArea.add(ScrollPaneFormList, Integer.valueOf(0));
+            LayeredPaneArea.add(ScrollPaneStatisticList, Integer.valueOf(0));
             LayeredPaneArea.repaint(320, 40, 680, 630);
         }
 
-        if (e.getSource() == FillFormButton) {
-            FormListPanel = null;
-            ScrollPaneFormList = null;
+        if (e.getSource() == ExportReportButton) {
+            StatisticListPanel = null;
+            ScrollPaneStatisticList = null;
 
             LayeredPaneArea.removeAll();
 
@@ -551,4 +337,13 @@ public class FillFormView extends JPanel implements ActionListener{
         }
 
     }
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyPressed(KeyEvent e) {}
+
+    @Override
+    public void keyReleased(KeyEvent e) {}
 }
