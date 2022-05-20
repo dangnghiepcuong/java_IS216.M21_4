@@ -150,7 +150,7 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             LastUpdateLabel.setForeground(new Color(dv.BlackTextColor()));
             LastUpdateLabel.setPreferredSize(new Dimension(640, 25));
             LastUpdateLabel.setHorizontalAlignment(JLabel.LEFT);
-            
+
             /*Injection Doses Statistic*/
             JPanel InjDoses = new JPanel();
             InjDoses.setLayout(null);
@@ -340,9 +340,10 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
      *       + BUTTON: CONFIRM
      * */
     private void initExportReportButton() {
-        ImageIcon ExportReportButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Fill Form Button.png"));
+        ImageIcon ExportReportButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Export Report Button.png"));
         ExportReportButton = new JButton();
-        ExportReportButton.setBounds((320 - ExportReportButtonIcon.getIconWidth()) / 2, 600, ExportReportButtonIcon.getIconWidth(), ExportReportButtonIcon.getIconHeight());
+        ExportReportButton.setBounds((320 - ExportReportButtonIcon.getIconWidth()) / 2, 600,
+                ExportReportButtonIcon.getIconWidth(), ExportReportButtonIcon.getIconHeight());
         ExportReportButton.setBorder(null);
         ExportReportButton.setContentAreaFilled(false);
         ExportReportButton.setIcon(ExportReportButtonIcon);
@@ -437,13 +438,13 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             if (dv.checkisNumberInputValue(InputWithinDays, "Lỗi!", "Số ngày thống kê phải là số!") != -2)
                 return;
 
-            String plsql = "{call STAT_ALL(?)}";
+            String plsql = "{call STAT_STATISTIC_ALL(?)}";
 
             try {
                 Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
                 CallableStatement cst = connection.prepareCall(plsql);
                 cst.setInt("par_Days", Integer.parseInt(InputWithinDays));
-
+                cst.execute();
             } catch (SQLException ex) {
                 dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
                 ex.printStackTrace();
