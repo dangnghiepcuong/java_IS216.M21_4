@@ -3,6 +3,7 @@ package View.OrgView;
 import Process.*;
 import View.CitizenView.RegisterVaccinationView;
 import View.LoginView;
+import com.sun.tools.javac.Main;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,12 +32,12 @@ public class MOHMainView extends JFrame implements ActionListener
     private JButton BackInfoButton;
     private JButton LogoutButton;
 
-    private Organization orgUser = new Organization();
+    private Organization mohUser = new Organization();
 
     private LoginView loginView;
-    private RegisterVaccinationView registerVaccinationView;
     private OrgInformationView orgInformationView;
     private CreateOrgAccView createOrgAccView;
+    private MOHStatisticView mohStatisticView;
 
     private void initBackButton()
     {
@@ -70,7 +71,6 @@ public class MOHMainView extends JFrame implements ActionListener
         InfoLayeredPane.setBounds(0,0,dv.FrameWidth()-dv.FrameHeight() + 8, dv.FrameHeight());
         InfoLayeredPane.setLayout(null);
 
-
         initInfoBackground();
         InfoLayeredPane.add(InfoBackground, Integer.valueOf(0));
 
@@ -85,13 +85,13 @@ public class MOHMainView extends JFrame implements ActionListener
                 AvatarImage.getIconWidth(),AvatarImage.getIconHeight());
         Avatar.setHorizontalAlignment(JLabel.CENTER);
 
-        JLabel Name = new JLabel(orgUser.getName());
+        JLabel Name = new JLabel(mohUser.getName());
         Name.setBounds(0, 300, 360, 35);
         Name.setFont(new Font(dv.fontName(),Font.BOLD, 24));
         Name.setHorizontalAlignment(JLabel.CENTER);
 
         ImageIcon LocationImage = new ImageIcon(getClass().getResource("/Resources/icon/Location.png"));
-        JLabel Location = new JLabel(dv.getProvinceName(orgUser.getProvince()));
+        JLabel Location = new JLabel(dv.getProvinceName(mohUser.getProvince()));
         Location.setFont(new Font(dv.fontName(),Font.BOLD, 20));
         Location.setIcon(LocationImage);
         Location.setBounds(0,400,360,30);
@@ -264,6 +264,7 @@ public class MOHMainView extends JFrame implements ActionListener
         StatisticButton.setBorder(null);
         StatisticButton.setContentAreaFilled(false);
         StatisticButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Statistic Feature Button.png")));
+        StatisticButton.addActionListener(this);
 
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(240 -10, 240+130, 240, 30);
@@ -334,12 +335,12 @@ public class MOHMainView extends JFrame implements ActionListener
             ResultSet rs = st.executeQuery(query);
 
             rs.next();
-            orgUser.setID(rs.getString("ID"));
-            orgUser.setName(rs.getString("Name"));
-            orgUser.setProvince(rs.getString("Province"));
-            orgUser.setDistrict(rs.getString("District"));
-            orgUser.setTown(rs.getString("Town"));
-            orgUser.setStreet(rs.getString("Street"));
+            mohUser.setID(rs.getString("ID"));
+            mohUser.setName(rs.getString("Name"));
+            mohUser.setProvince(rs.getString("Province"));
+            mohUser.setDistrict(rs.getString("District"));
+            mohUser.setTown(rs.getString("Town"));
+            mohUser.setStreet(rs.getString("Street"));
 
         } catch (SQLException ex) {
             dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
@@ -371,7 +372,9 @@ public class MOHMainView extends JFrame implements ActionListener
     {
         if(e.getSource() == BackButton)
         {
-            registerVaccinationView = null;
+            orgInformationView = null;
+            createOrgAccView = null;
+            mohStatisticView = null;
             MainLayeredPane.removeAll();
             MainLayeredPane.add(MainPanel, Integer.valueOf(0));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
@@ -379,7 +382,7 @@ public class MOHMainView extends JFrame implements ActionListener
 
         if (e.getSource() == LogoutButton)
         {
-            String query = "update ACCOUNT ACC set Status = 1 where ACC.Username = '" + orgUser.getID() + "'";
+            String query = "update ACCOUNT ACC set Status = 1 where ACC.Username = '" + mohUser.getID() + "'";
 
             try {
                 Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
@@ -399,7 +402,7 @@ public class MOHMainView extends JFrame implements ActionListener
 
         if (e.getSource() == InfoSettingButton)
         {
-            orgInformationView = new OrgInformationView(orgUser);
+            orgInformationView = new OrgInformationView(mohUser);
             MainLayeredPane.removeAll();
             MainLayeredPane.add(orgInformationView, Integer.valueOf(0));
 
@@ -413,7 +416,7 @@ public class MOHMainView extends JFrame implements ActionListener
 
         if(e.getSource() == BackInfoButton)
         {
-            String query = "select * from ORGANIZATION ORG where ORG.ID = '" +  orgUser.getID() + "'";
+            String query = "select * from ORGANIZATION ORG where ORG.ID = '" +  mohUser.getID() + "'";
 
             try {
                 Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
@@ -423,12 +426,12 @@ public class MOHMainView extends JFrame implements ActionListener
                 ResultSet rs = st.executeQuery(query);
 
                 rs.next();
-                orgUser.setID(rs.getString("ID"));
-                orgUser.setName(rs.getString("Name"));
-                orgUser.setProvince(rs.getString("Province"));
-                orgUser.setDistrict(rs.getString("District"));
-                orgUser.setTown(rs.getString("Town"));
-                orgUser.setStreet(rs.getString("Street"));
+                mohUser.setID(rs.getString("ID"));
+                mohUser.setName(rs.getString("Name"));
+                mohUser.setProvince(rs.getString("Province"));
+                mohUser.setDistrict(rs.getString("District"));
+                mohUser.setTown(rs.getString("Town"));
+                mohUser.setStreet(rs.getString("Street"));
 
             } catch (SQLException ex) {
                 dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
@@ -448,12 +451,9 @@ public class MOHMainView extends JFrame implements ActionListener
         if (e.getSource() == CreateOrgAccButton)
         {
             createOrgAccView = new CreateOrgAccView();
-
             MainLayeredPane.removeAll();
-
             MainLayeredPane.add(createOrgAccView, Integer.valueOf(0));
             MainLayeredPane.add(BackButton, Integer.valueOf(1));
-
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
 
@@ -467,6 +467,15 @@ public class MOHMainView extends JFrame implements ActionListener
             initBackButton();
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }*/
+
+        if (e.getSource() == StatisticButton)
+        {
+            mohStatisticView = new MOHStatisticView(mohUser);
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(mohStatisticView, Integer.valueOf(0));
+            MainLayeredPane.add(BackButton, Integer.valueOf(1));
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+        }
     }
 
 }

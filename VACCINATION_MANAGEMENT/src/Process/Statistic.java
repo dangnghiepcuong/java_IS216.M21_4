@@ -2,79 +2,43 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package doancuoiky;
+package Process;
+
+import java.time.LocalDate;
 
 /**
  *
  * @author DELL
  */
 public class Statistic {
-    private String Province;
-    private String District;
-    private String Town;
-    private int Age;
-    private int Gender;
-    private String DoseType;
+    private String Title;
+    private int Data;
+    private LocalDate LastUpdate;
 
     public Statistic() {
     }
 
-    public Statistic(String Province, String District, String Town, int Age, int Gender, String DoseType) {
-        this.Province = Province;
-        this.District = District;
-        this.Town = Town;
-        this.Age = Age;
-        this.Gender = Gender;
-        this.DoseType = DoseType;
+    public String getTitle() {
+        return Title;
     }
 
-    public String getProvince() {
-        return Province;
+    public void setTitle(String title) {
+        Title = title;
     }
 
-    public void setProvince(String Province) {
-        this.Province = Province;
+    public int getData() {
+        return Data;
     }
 
-    public String getDistrict() {
-        return District;
+    public void setData(int data) {
+        Data = data;
     }
 
-    public void setDistrict(String District) {
-        this.District = District;
+    public LocalDate getLastUpdate() {
+        return LastUpdate;
     }
 
-    public String getTown() {
-        return Town;
+    public void setLastUpdate(LocalDate lastUpdate) {
+        LastUpdate = lastUpdate;
     }
-
-    public void setTown(String Town) {
-        this.Town = Town;
-    }
-
-    public int getAge() {
-        return Age;
-    }
-
-    public void setAge(int Age) {
-        this.Age = Age;
-    }
-
-    public int getGender() {
-        return Gender;
-    }
-
-    public void setGender(int Gender) {
-        this.Gender = Gender;
-    }
-
-    public String getDoseType() {
-        return DoseType;
-    }
-
-    public void setDoseType(String DoseType) {
-        this.DoseType = DoseType;
-    }
-    
-    
 }

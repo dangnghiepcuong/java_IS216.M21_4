@@ -1,9 +1,6 @@
 package View.OrgView;
 
-import Process.DateLabelFormatter;
-import Process.DefaultValue;
-import Process.Health;
-import Process.Person;
+import Process.*;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -24,10 +21,13 @@ import java.util.Properties;
  */
 public class MOHStatisticView extends JPanel implements ActionListener, KeyListener {
     private DefaultValue dv = new DefaultValue();
-    private Person personalUser = new Person();
+    private Account acc = new Account();
+    private Organization mohUser = new Organization();
 
     /*Confirm Statistic*/
     private JPanel ConfirmStatisticPanel;
+    private JLabel WithinDaysLabel;
+    private JTextField WithinDaysField;
     private JLabel ConfirmPasswordLabel;
     private JTextField PasswordField;
     private JButton ConfirmStatisticButton;
@@ -41,35 +41,54 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
     private JLayeredPane LayeredPaneArea;
 
     /*
-     *   INITIALIZE THE FILTER OF FILLED FORMS OF THE CITIZEN
+     *   INITIALIZE CONFIRM STATISTIC PANEL
      *   - PANEL:
      *       + LABEL
-     *       + CHOICE
-     *       + BUTTON: SELECT
+     *       + PASSWORDFILED
+     *       + BUTTON: CONFIRM
      * */
+    private void initWithinDaysLabel() {
+        WithinDaysLabel = new JLabel();
+        WithinDaysLabel.setBounds(0, 0, dv.LabelWidth() + 50, dv.LabelHeight());
+        WithinDaysLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        WithinDaysLabel.setForeground(new Color(0x666666));
+        WithinDaysLabel.setText("Số ngày thống kê");
+        WithinDaysLabel.setSize(dv.FieldWidth(), dv.FieldHeight());
+    }
+
+    private void initWithinDaysField() {
+        WithinDaysField = new JTextField();
+        WithinDaysField.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
+        WithinDaysField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
+        WithinDaysField.setForeground(new Color(dv.BlackTextColor()));
+        WithinDaysField.addKeyListener(this);
+        WithinDaysField.addKeyListener(this);
+    }
+
     private void initConfirmPasswordLabel() {
         ConfirmPasswordLabel = new JLabel();
-        ConfirmPasswordLabel.setBounds(0, 0, dv.LabelWidth() + 50, dv.LabelHeight());
+        ConfirmPasswordLabel.setBounds(0, 80, dv.LabelWidth() + 50, dv.LabelHeight());
         ConfirmPasswordLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         ConfirmPasswordLabel.setForeground(new Color(0x666666));
-        ConfirmPasswordLabel.setText("Tờ khai trong vòng");
+        ConfirmPasswordLabel.setText("Xác nhận mật khẩu");
         ConfirmPasswordLabel.setSize(dv.FieldWidth(), dv.FieldHeight());
     }
 
     private void initPasswordField() {
         PasswordField = new JPasswordField();
-        PasswordField.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
+        PasswordField.setBounds(0, 110, dv.FieldWidth(), dv.FieldHeight());
         PasswordField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         PasswordField.setForeground(new Color(dv.BlackTextColor()));
+        PasswordField.addKeyListener(this);
         PasswordField.addKeyListener(this);
     }
 
     private void initConfirmStatisticButton() {
         ConfirmStatisticButton = new JButton();
-        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Resources/icon/Search Filter Button.png"));
+        ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Resources/icon/Confirm Button.png"));
         ConfirmStatisticButton.setIcon(SearchIcon);
 
-        ConfirmStatisticButton.setBounds(0, 70, dv.FieldWidth(), SearchIcon.getIconHeight());
+        ConfirmStatisticButton.setBounds(0, 150, dv.FieldWidth(), SearchIcon.getIconHeight());
         ConfirmStatisticButton.setBorder(null);
         ConfirmStatisticButton.setContentAreaFilled(false);
 
@@ -77,15 +96,19 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
     }
 
     private void initConfirmStatisticPanel() {
+        initWithinDaysLabel();
+        initWithinDaysField();
         initConfirmPasswordLabel();
         initPasswordField();
         initConfirmStatisticButton();
 
         ConfirmStatisticPanel = new JPanel();
-        ConfirmStatisticPanel.setBounds(dv.AlignLeft(), 80, dv.LabelWidth() + 50, 125);
+        ConfirmStatisticPanel.setBounds(dv.AlignLeft(), 80, dv.LabelWidth() + 50, 300);
         ConfirmStatisticPanel.setLayout(null);
         ConfirmStatisticPanel.setBackground(new Color(dv.ViewBackgroundColor()));
 
+        ConfirmStatisticPanel.add(WithinDaysLabel);
+        ConfirmStatisticPanel.add(WithinDaysField);
         ConfirmStatisticPanel.add(ConfirmPasswordLabel);
         ConfirmStatisticPanel.add(PasswordField);
         ConfirmStatisticPanel.add(ConfirmStatisticButton);
@@ -95,138 +118,209 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
     /*
      *   INITIALIZE THE LIST OF FILLED FORMS OF THE CITIZEN
      *   - SCROLLPANE:
-     *       + PANEL: LIST OF FORMS
-     *           - PANELS: FORMS
+     *       + PANEL: LIST OF STATISTIC
+     *           - PANELS: STATISTICS
      *               + LABELS
      * */
-    private JPanel initFormPanel(Health Heal) {
-        JPanel FormPanel = new JPanel();
-        FormPanel.setLayout(null);
-        FormPanel.setBackground(Color.WHITE);
 
-        JLabel Target = new JLabel("Đối tượng: " + personalUser.getFullName()
-                + " (ID: " + personalUser.getID() + ")");
-        Target.setFont(new Font(dv.fontName(), 1, 16));
-        Target.setForeground(new Color(dv.BlackTextColor()));
-        Target.setBounds(30, 1, 600, 25);
-        Target.setHorizontalAlignment(JLabel.LEFT);
-
-        JLabel FilledDate = new JLabel("Ngày thực hiện khai báo: " + Heal.getFilledDate());
-        FilledDate.setFont(new Font(dv.fontName(), 1, 16));
-        FilledDate.setForeground(new Color(dv.BlackTextColor()));
-        FilledDate.setBounds(30, 25, 600, 25);
-        FilledDate.setHorizontalAlignment(JLabel.LEFT);
-
-        FormPanel.add(Target);
-        FormPanel.add(FilledDate);
-
-        if (Heal.getHealths().equals("0000")) {
-            JLabel NormalHealth = new JLabel("Sức khỏe bình thường - Đạt điều kiện sức khỏe tiêm chủng");
-            NormalHealth.setFont(new Font(dv.fontName(), 1, 13));
-            NormalHealth.setForeground(new Color(dv.GreenPastel()));
-            NormalHealth.setBounds(30, 50, 600, 25);
-            NormalHealth.setHorizontalAlignment(JLabel.LEFT);
-
-            FormPanel.setPreferredSize(new Dimension(640, 80));
-            FormPanel.add(NormalHealth);
-        } else {
-            JLabel FirstAns = new JLabel();
-            FirstAns.setBounds(30, 50, 600, 25);
-            FirstAns.setHorizontalAlignment(JLabel.LEFT);
-            if (Heal.getHealths().substring(0, 1).equals("1")) {
-                FirstAns.setText("<html>1. Có một trong các dấu hiệu sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi trong vòng 14 ngày qua");
-                FirstAns.setFont(new Font(dv.fontName(), 0, 13));
-                FirstAns.setForeground(new Color(dv.BlackTextColor()));
-            } else {
-                FirstAns.setText("<html>Không có dấu hiệu sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi trong vòng 14 ngày qua");
-                FirstAns.setFont(new Font(dv.fontName(), 0, 13));
-                FirstAns.setForeground(new Color(dv.GreenPastel()));
-            }
-
-            JLabel SecondAns = new JLabel();
-            SecondAns.setBounds(30, 75, 600, 25);
-            SecondAns.setHorizontalAlignment(JLabel.LEFT);
-            if (Heal.getHealths().substring(1, 2).equals("1")) {
-                SecondAns.setText("<html>2. Có tiếp xúc với Người bệnh hoặc nghi ngờ, mắc bệnh COVID-19 trong vòng 14 ngày qua");
-                SecondAns.setFont(new Font(dv.fontName(), 0, 13));
-                SecondAns.setForeground(new Color(dv.BlackTextColor()));
-            } else {
-                SecondAns.setText("<html>Không tiếp xúc với Người bệnh hoặc nghi ngờ, mắc bệnh COVID-19 trong vòng 14 ngày qua");
-                SecondAns.setFont(new Font(dv.fontName(), 0, 13));
-                SecondAns.setForeground(new Color(dv.GreenPastel()));
-            }
-
-            JLabel ThirdAns = new JLabel();
-            ThirdAns.setBounds(30, 100, 600, 25);
-            ThirdAns.setHorizontalAlignment(JLabel.LEFT);
-            if (Heal.getHealths().substring(2, 3).equals("1")) {
-                ThirdAns.setText("<html>3. Là đối tượng đang dương tính với Covid-19");
-                ThirdAns.setFont(new Font(dv.fontName(), 1, 13));
-                ThirdAns.setForeground(new Color(dv.RedPastel()));
-            } else {
-                ThirdAns.setText("<html>4. Không là đối tượng đang dương tính với Covid-19");
-                ThirdAns.setFont(new Font(dv.fontName(), 0, 13));
-                ThirdAns.setForeground(new Color(dv.GreenPastel()));
-            }
-
-            JLabel FourthAns = new JLabel();
-            FourthAns.setBounds(30, 125, 600, 25);
-            FourthAns.setHorizontalAlignment(JLabel.LEFT);
-            if (Heal.getHealths().substring(3, 4).equals("1")) {
-                FourthAns.setText("<html>Là đối tượng trì hoãn tiêm chủng hoặc chống chỉ định với tiêm chủng vaccine Covid-19");
-                FourthAns.setFont(new Font(dv.fontName(), 1, 13));
-                FourthAns.setForeground(new Color(dv.RedPastel()));
-            } else {
-                FourthAns.setText("<html>Không là đối tượng trì hoãn tiêm chủng hoặc chống chỉ định với tiêm chủng vaccine Covid-19");
-                FourthAns.setFont(new Font(dv.fontName(), 0, 13));
-                FourthAns.setForeground(new Color(dv.GreenPastel()));
-            }
-
-            FormPanel.setPreferredSize(new Dimension(640, 150));
-            FormPanel.add(FirstAns);
-            FormPanel.add(SecondAns);
-            FormPanel.add(ThirdAns);
-            FormPanel.add(FourthAns);
-        }
-        return FormPanel;
-    }
-
-    private void initStatisticListPanel() {
+    private void initStatisticListPanel(int Days)
+    {
         StatisticListPanel = new JPanel();
         StatisticListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         StatisticListPanel.setLayout(new FlowLayout());
-
-        JPanel Stat = new JPanel();
+        StatisticListPanel.setPreferredSize(new Dimension(660,400));
 
         String query = "select * from STATISTIC";
 
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-
             PreparedStatement st = connection.prepareStatement(query);
-
             ResultSet rs = st.executeQuery(query);
 
-            while (rs.next()) {
-                Stat = new Statistic();
-                Stat.setID(rs.getInt("ID"));
-                Stat.getPerson().setID(rs.getString("PersonalID"));
-                Stat.setFilledDate(LocalDate.parse(rs.getString("FilledDate").substring(0, 10)));
-                Stat.setStatths(rs.getString("Statths"));
-                StatisticListPanel.add(initFormPanel(Stat));
-                if (Stat.getHealths().equals("0000"))
-                    listHeight += 80;
-                else
-                    listHeight += 150;
-                i++;
-            }
+            Statistic Stat = new Statistic();
+            rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
+            if (rs.getString("LastUpdate") != null)
+                Stat.setLastUpdate(LocalDate.parse(rs.getString("LastUpdate").substring(0, 10)));
+
+            JLabel LastUpdateLabel = new JLabel("Ngày: " + Stat.getLastUpdate());
+            LastUpdateLabel.setFont(new Font(dv.fontName(), 2, 16));
+            LastUpdateLabel.setForeground(new Color(dv.BlackTextColor()));
+            LastUpdateLabel.setPreferredSize(new Dimension(640, 25));
+            LastUpdateLabel.setHorizontalAlignment(JLabel.LEFT);
+            
+            /*Injection Doses Statistic*/
+            JPanel InjDoses = new JPanel();
+            InjDoses.setLayout(null);
+            InjDoses.setBackground(Color.WHITE);
+            InjDoses.setPreferredSize(new Dimension(640, 140));
+
+            JLabel InjDosesLabel = new JLabel("THỐNG KÊ SỐ MŨI TIÊM");
+            InjDosesLabel.setFont(new Font(dv.fontName(), 1, 18));
+            InjDosesLabel.setForeground(new Color(dv.FeatureButtonColor()));
+            InjDosesLabel.setBounds(30, 10+  1, 600, 25);
+            InjDosesLabel.setHorizontalAlignment(JLabel.LEFT);
+
+            JLabel BasicDoseLabel = new JLabel("Số mũi cơ bản hoàn thành: " + Stat.getData());
+            BasicDoseLabel.setFont(new Font(dv.fontName(), 0, 16));
+            BasicDoseLabel.setForeground(new Color(dv.BlackTextColor()));
+            BasicDoseLabel.setBounds(30, 10+  30, 600, 25);
+            BasicDoseLabel.setHorizontalAlignment(JLabel.LEFT);
+
+            rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
+            JLabel BoosterDoseLabel = new JLabel("Số mũi tăng cường hoàn thành: " + Stat.getData());
+            BoosterDoseLabel.setFont(new Font(dv.fontName(), 0, 16));
+            BoosterDoseLabel.setForeground(new Color(dv.BlackTextColor()));
+            BoosterDoseLabel.setBounds(30, 10+  60, 600, 25);
+            BoosterDoseLabel.setHorizontalAlignment(JLabel.LEFT);
+
+            rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
+            JLabel RepeatDoseLabel = new JLabel("Số mũi nhắc lại hoàn thành: " + Stat.getData());
+            RepeatDoseLabel.setFont(new Font(dv.fontName(), 0, 16));
+            RepeatDoseLabel.setForeground(new Color(dv.BlackTextColor()));
+            RepeatDoseLabel.setBounds(30, 10+  90, 600, 25);
+            RepeatDoseLabel.setHorizontalAlignment(JLabel.LEFT);
+
+            InjDoses.add(InjDosesLabel);
+            InjDoses.add(BasicDoseLabel);
+            InjDoses.add(BoosterDoseLabel);
+            InjDoses.add(RepeatDoseLabel);
+
+            /*Target Statistic*/
+            JPanel Target = new JPanel();
+            Target.setLayout(null);
+            Target.setBackground(Color.WHITE);
+            Target.setPreferredSize(new Dimension(640, 170));
+
+            JLabel TargetLabel = new JLabel("THỐNG KÊ SỐ ĐỐI TƯỢNG HOÀN THÀNH LIỀU CƠ BẢN");
+            TargetLabel.setFont(new Font(dv.fontName(), 1, 18));
+            TargetLabel.setForeground(new Color(dv.FeatureButtonColor()));
+            TargetLabel.setBounds(30, 10+  1, 600, 25);
+            TargetLabel.setHorizontalAlignment(JLabel.LEFT);
+
+            rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
+            JLabel TargetChildrenLabel = new JLabel("Số trẻ em hoàn thành liều cơ bản (dưới 12 tuổi): "
+                    + Stat.getData());
+            TargetChildrenLabel.setFont(new Font(dv.fontName(), 0, 16));
+            TargetChildrenLabel.setForeground(new Color(dv.BlackTextColor()));
+            TargetChildrenLabel.setBounds(30, 10+  30, 600, 25);
+            TargetChildrenLabel.setHorizontalAlignment(JLabel.LEFT);
+
+            rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
+            JLabel TargetTeenagerLabel = new JLabel("Số thanh thiếu niên hoàn thành liều cơ bản (từ 13 đến 22 tuổi): "
+                    + Stat.getData());
+            TargetTeenagerLabel.setFont(new Font(dv.fontName(), 0, 16));
+            TargetTeenagerLabel.setForeground(new Color(dv.BlackTextColor()));
+            TargetTeenagerLabel.setBounds(30, 10+  60, 600, 25);
+            TargetTeenagerLabel.setHorizontalAlignment(JLabel.LEFT);
+
+            rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
+            JLabel TargetAdultLabel = new JLabel("Số người lớn hoàn thành liều cơ bản (trên 22 đến dưới 50 tuổi): "
+                    + Stat.getData());
+            TargetAdultLabel.setFont(new Font(dv.fontName(), 0, 16));
+            TargetAdultLabel.setForeground(new Color(dv.BlackTextColor()));
+            TargetAdultLabel.setBounds(30, 10+  90, 600, 25);
+            TargetAdultLabel.setHorizontalAlignment(JLabel.LEFT);
+
+            rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
+            JLabel TargetOldPeopleLabel = new JLabel("Số người cao tuổi hoàn thành liều cơ bản (trên 50 tuổi): "
+                    + Stat.getData());
+            TargetOldPeopleLabel.setFont(new Font(dv.fontName(), 0, 16));
+            TargetOldPeopleLabel.setForeground(new Color(dv.BlackTextColor()));
+            TargetOldPeopleLabel.setBounds(30, 10+  120, 600, 25);
+            TargetOldPeopleLabel.setHorizontalAlignment(JLabel.LEFT);
+
+            Target.add(TargetLabel);
+            Target.add(TargetChildrenLabel);
+            Target.add(TargetTeenagerLabel);
+            Target.add(TargetAdultLabel);
+            Target.add(TargetOldPeopleLabel);
+
+
+            /*Affected by Covid-19 Stattistic*/
+            JPanel Affected = new JPanel();
+            Affected.setLayout(null);
+            Affected.setBackground(Color.WHITE);
+            Affected.setPreferredSize(new Dimension(640, 170));
+
+            JLabel AffectedLabel = new JLabel("THỐNG KÊ SỐ CA NHIỄM COVID-19 ");
+            AffectedLabel.setFont(new Font(dv.fontName(), 1, 18));
+            AffectedLabel.setForeground(new Color(dv.FeatureButtonColor()));
+            AffectedLabel.setBounds(30, 10+  1, 600, 25);
+            AffectedLabel.setHorizontalAlignment(JLabel.LEFT);
+
+            rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
+            JLabel AffectedChildrenLabel = new JLabel("Số trẻ em nhiễm Covid-19 (dưới 12 tuổi) trong vòng "
+                    + Days + " ngày: " + Stat.getData());
+            AffectedChildrenLabel.setFont(new Font(dv.fontName(), 0, 16));
+            AffectedChildrenLabel.setForeground(new Color(dv.BlackTextColor()));
+            AffectedChildrenLabel.setBounds(30, 10+  30, 600, 25);
+            AffectedChildrenLabel.setHorizontalAlignment(JLabel.LEFT);
+
+            rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
+            JLabel AffectedTeenagerLabel = new JLabel("Số thanh thiếu niên nhiễm Covid-19 (từ 13 đến 22 tuổi) trong vòng "
+                    + Days + " ngày: " + Stat.getData());
+            AffectedTeenagerLabel.setFont(new Font(dv.fontName(), 0, 16));
+            AffectedTeenagerLabel.setForeground(new Color(dv.BlackTextColor()));
+            AffectedTeenagerLabel.setBounds(30, 10+  60, 600, 25);
+            AffectedTeenagerLabel.setHorizontalAlignment(JLabel.LEFT);
+
+            rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
+            JLabel AffectedAdultLabel = new JLabel("Số người lớn nhiễm Covid-19 (trên 22 đến dưới 50 tuổi) trong vòng "
+                    + Days + " ngày: " + Stat.getData());
+            AffectedAdultLabel.setFont(new Font(dv.fontName(), 0, 16));
+            AffectedAdultLabel.setForeground(new Color(dv.BlackTextColor()));
+            AffectedAdultLabel.setBounds(30, 10+  90, 600, 25);
+            AffectedAdultLabel.setHorizontalAlignment(JLabel.LEFT);
+
+            rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
+            JLabel AffectedOldPeopleLabel = new JLabel("Số người cao tuổi nhiễm Covid-19 (trên 50 tuổi) trong vòng "
+                    + Days + " ngày: " + Stat.getData());
+            AffectedOldPeopleLabel.setFont(new Font(dv.fontName(), 0, 16));
+            AffectedOldPeopleLabel.setForeground(new Color(dv.BlackTextColor()));
+            AffectedOldPeopleLabel.setBounds(30, 10+  120, 600, 25);
+            AffectedOldPeopleLabel.setHorizontalAlignment(JLabel.LEFT);
+
+            Affected.add(AffectedLabel);
+            Affected.add(AffectedChildrenLabel);
+            Affected.add(AffectedTeenagerLabel);
+            Affected.add(AffectedAdultLabel);
+            Affected.add(AffectedOldPeopleLabel);
+
+            StatisticListPanel.add(LastUpdateLabel);
+            StatisticListPanel.add(InjDoses);
+            StatisticListPanel.add(Target);
+            StatisticListPanel.add(Affected);
+
         } catch (SQLException ex) {
             dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
             ex.printStackTrace();
             return;
         }
-        StatisticListPanel.setPreferredSize(new Dimension(660, listHeight + i * 10));
+
+        StatisticListPanel.setPreferredSize(new Dimension(660, 600));
     }
 
     private void initScrollPaneStatisticList() {
@@ -277,11 +371,11 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
         this.add(ExportReportButton);
 
         //init StatisticListPanel
-        JLabel HealListLabel = new JLabel("DANH SÁCH TỜ KHAI Y TẾ (" + personalUser.getFullName() + ")");
-        HealListLabel.setBounds(0, 0, 640, 40);
-        HealListLabel.setFont(new Font(dv.fontName(), 1, 20));
-        HealListLabel.setForeground(new Color(dv.FeatureButtonColor()));
-        HealListLabel.setHorizontalAlignment(JLabel.CENTER);
+        JLabel StatisticListLabel = new JLabel("BẢNG THỐNG KÊ SỐ LIỆU TIÊM CHỦNG");
+        StatisticListLabel.setBounds(0, 0, 640, 40);
+        StatisticListLabel.setFont(new Font(dv.fontName(), 1, 20));
+        StatisticListLabel.setForeground(new Color(dv.FeatureButtonColor()));
+        StatisticListLabel.setHorizontalAlignment(JLabel.CENTER);
 
         initStatisticListPanel(7);
         initScrollPaneStatisticList();
@@ -289,7 +383,7 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
         //init LayeredPaneArea
         initLayeredPaneArea();
 
-        LayeredPaneArea.add(HealListLabel, Integer.valueOf(0));
+        LayeredPaneArea.add(StatisticListLabel, Integer.valueOf(0));
         LayeredPaneArea.add(ScrollPaneStatisticList, Integer.valueOf(0));
         this.add(LayeredPaneArea);
 
@@ -297,33 +391,83 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
     }
 
     /*CONSTRUCTOR*/
-    public MOHStatisticView(Person person) {
-        personalUser = person;
+    public MOHStatisticView(Organization moh)
+    {
+        mohUser = moh;
         initComponents();
     }
 
     /*ACTION PERFORMED*/
     @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == ConfirmStatisticButton) {
+    public void actionPerformed(ActionEvent e)
+    {
+        if (e.getSource() == ConfirmStatisticButton)
+        {
+            String InputPassword = PasswordField.getText();
+
+            if ( dv.checkStringInputValue(InputPassword, "Cảnh báo!","Xác nhận mật khẩu để cập nhật thông tin!") != -2 )
+                return;
+
+            String query = "select *" +
+                    " from ACCOUNT" +
+                    " where Username = '" + mohUser.getID() + "'";
+            try {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+                PreparedStatement st = connection.prepareStatement(query);
+                ResultSet rs = st.executeQuery(query);
+
+                rs.next();
+                acc.setUsername(rs.getString("Username"));
+                acc.setPassword(rs.getString("Password"));
+                acc.setRole(rs.getInt("Role"));
+                acc.setStatus(rs.getInt("Status"));
+                if (acc.getPassword().equals(InputPassword) == false)
+                {
+                    dv.popupOption(null, "Mật khẩu không đúng!", "Lỗi!", 2);
+                    return;
+                }
+            } catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+                ex.printStackTrace();
+                return;
+            }
+
+            String InputWithinDays = WithinDaysField.getText();
+
+            if (dv.checkisNumberInputValue(InputWithinDays, "Lỗi!", "Số ngày thống kê phải là số!") != -2)
+                return;
+
+            String plsql = "{call STAT_ALL(?)}";
+
+            try {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+                CallableStatement cst = connection.prepareCall(plsql);
+                cst.setInt("par_Days", Integer.parseInt(InputWithinDays));
+
+            } catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+                ex.printStackTrace();
+                return;
+            }
+
             LayeredPaneArea.removeAll();
             LayeredPaneArea.repaint(320, 40, 680, 630);
 
-            JLabel HealListLabel = new JLabel("DANH SÁCH TỜ KHAI Y TẾ (" + personalUser.getFullName() + ")");
-            HealListLabel.setBounds(0, 0, 640, 40);
-            HealListLabel.setFont(new Font(dv.fontName(), 1, 20));
-            HealListLabel.setForeground(new Color(dv.FeatureButtonColor()));
-            HealListLabel.setHorizontalAlignment(JLabel.CENTER);
+            JLabel StatisticListLabel = new JLabel("BẢNG THỐNG KÊ SỐ LIỆU TIÊM CHỦNG");
+            StatisticListLabel.setBounds(0, 0, 640, 40);
+            StatisticListLabel.setFont(new Font(dv.fontName(), 1, 20));
+            StatisticListLabel.setForeground(new Color(dv.FeatureButtonColor()));
+            StatisticListLabel.setHorizontalAlignment(JLabel.CENTER);
 
-            initStatisticListPanel();
+            initStatisticListPanel(Integer.parseInt(InputWithinDays));
             initScrollPaneStatisticList();
 
-            LayeredPaneArea.add(HealListLabel, Integer.valueOf(0));
+            LayeredPaneArea.add(StatisticListLabel, Integer.valueOf(0));
             LayeredPaneArea.add(ScrollPaneStatisticList, Integer.valueOf(0));
             LayeredPaneArea.repaint(320, 40, 680, 630);
         }
 
-        if (e.getSource() == ExportReportButton) {
+/*        if (e.getSource() == ExportReportButton) {
             StatisticListPanel = null;
             ScrollPaneStatisticList = null;
 
@@ -334,7 +478,7 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             LayeredPaneArea.add(CreateFormPanel, Integer.valueOf(0));
 
             LayeredPaneArea.repaint(320, 40, 680, 630);
-        }
+        }*/
 
     }
 
@@ -342,7 +486,74 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
     public void keyTyped(KeyEvent e) {}
 
     @Override
-    public void keyPressed(KeyEvent e) {}
+    public void keyPressed(KeyEvent e)
+    {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            String InputPassword = PasswordField.getText();
+
+            if ( dv.checkStringInputValue(InputPassword, "Cảnh báo!","Xác nhận mật khẩu để cập nhật thông tin!") != -2 )
+                return;
+
+            String query = "select *" +
+                    " from ACCOUNT" +
+                    " where Username = '" + mohUser.getID() + "'";
+            try {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+                PreparedStatement st = connection.prepareStatement(query);
+                ResultSet rs = st.executeQuery(query);
+
+                rs.next();
+                acc.setUsername(rs.getString("Username"));
+                acc.setPassword(rs.getString("Password"));
+                acc.setRole(rs.getInt("Role"));
+                acc.setStatus(rs.getInt("Status"));
+                if (acc.getPassword().equals(InputPassword) == false)
+                {
+                    dv.popupOption(null, "Mật khẩu không đúng!", "Lỗi!", 2);
+                    return;
+                }
+            } catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+                ex.printStackTrace();
+                return;
+            }
+
+            String InputWithinDays = WithinDaysField.getText();
+
+            if (dv.checkisNumberInputValue(InputWithinDays, "Lỗi!", "Số ngày thống kê phải là số!") != -2)
+                return;
+
+            String plsql = "{call STAT_ALL(?)}";
+
+            try {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+                CallableStatement cst = connection.prepareCall(plsql);
+                cst.setInt("par_Days", Integer.parseInt(InputWithinDays));
+
+            } catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+                ex.printStackTrace();
+                return;
+            }
+
+            LayeredPaneArea.removeAll();
+            LayeredPaneArea.repaint(320, 40, 680, 630);
+
+            JLabel StatisticListLabel = new JLabel("BẢNG THỐNG KÊ SỐ LIỆU TIÊM CHỦNG");
+            StatisticListLabel.setBounds(0, 0, 640, 40);
+            StatisticListLabel.setFont(new Font(dv.fontName(), 1, 20));
+            StatisticListLabel.setForeground(new Color(dv.FeatureButtonColor()));
+            StatisticListLabel.setHorizontalAlignment(JLabel.CENTER);
+
+            initStatisticListPanel(Integer.parseInt(InputWithinDays));
+            initScrollPaneStatisticList();
+
+            LayeredPaneArea.add(StatisticListLabel, Integer.valueOf(0));
+            LayeredPaneArea.add(ScrollPaneStatisticList, Integer.valueOf(0));
+            LayeredPaneArea.repaint(320, 40, 680, 630);
+        }
+    }
 
     @Override
     public void keyReleased(KeyEvent e) {}
