@@ -202,9 +202,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener, 
 
             try {
                 Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-
                 PreparedStatement st = connection.prepareStatement(query);
-
                 ResultSet rs = st.executeQuery(query);
 
                 rs.next();

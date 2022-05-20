@@ -103,9 +103,10 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
         initConfirmStatisticButton();
 
         ConfirmStatisticPanel = new JPanel();
-        ConfirmStatisticPanel.setBounds(dv.AlignLeft(), 80, dv.LabelWidth() + 50, 300);
+        ConfirmStatisticPanel.setBounds(dv.AlignLeft(), 80, dv.LabelWidth() + 50, 250);
         ConfirmStatisticPanel.setLayout(null);
         ConfirmStatisticPanel.setBackground(new Color(dv.ViewBackgroundColor()));
+//        ConfirmStatisticPanel.setBorder(dv.border());
 
         ConfirmStatisticPanel.add(WithinDaysLabel);
         ConfirmStatisticPanel.add(WithinDaysField);
@@ -128,7 +129,7 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
         StatisticListPanel = new JPanel();
         StatisticListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         StatisticListPanel.setLayout(new FlowLayout());
-        StatisticListPanel.setPreferredSize(new Dimension(660,400));
+        StatisticListPanel.setPreferredSize(new Dimension(660,500));
 
         String query = "select * from STATISTIC";
 
@@ -319,8 +320,6 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             ex.printStackTrace();
             return;
         }
-
-        StatisticListPanel.setPreferredSize(new Dimension(660, 600));
     }
 
     private void initScrollPaneStatisticList() {

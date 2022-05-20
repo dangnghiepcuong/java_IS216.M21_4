@@ -386,14 +386,10 @@ public class UserInformationView extends JPanel implements ActionListener, KeyLi
         BirthdayField = new JDatePickerImpl(datePanel, new DateLabelFormatter());
 
         BirthdayField.setBounds(50, 60 + 3*dv.LabelHeight()+2*dv.FieldHeight()  + dv.AlignTop_InfoView(),170,27);
-
         JFormattedTextField textField = BirthdayField.getJFormattedTextField();
-
         textField.setText(personalUser.getBirthday().substring(0,10));
-
         textField.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-
-        textField.setBounds(50, 100 + 3*dv.LabelHeight()+2*dv.FieldHeight(),170,30);
+        textField.setBounds(50, 60 + 3*dv.LabelHeight()+2*dv.FieldHeight(),170,30);
 
         BirthdayField.setTextEditable(true);
         BirthdayField.setForeground(new Color(dv.BlackTextColor()));
