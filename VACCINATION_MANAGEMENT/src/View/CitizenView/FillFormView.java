@@ -23,7 +23,7 @@ public class FillFormView extends JPanel implements ActionListener{
     private DefaultValue dv = new DefaultValue();
     private Person personalUser = new Person();
 
-    /*Schedule List*/
+    /*Form List*/
     private JPanel FormFilterPanel;
     private JLabel FormFilterLabel;
     private Choice FormFilterChoice;
@@ -32,7 +32,7 @@ public class FillFormView extends JPanel implements ActionListener{
     private JScrollPane ScrollPaneFormList;
     private JPanel FormListPanel;
 
-    /*Create Schedule*/
+    /*Create Form*/
     private JButton FillFormButton;
     private JPanel CreateFormPanel;
 
