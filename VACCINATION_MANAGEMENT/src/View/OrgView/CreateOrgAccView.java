@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.*;
 
 /**
@@ -291,7 +293,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         QuantityTextField.setFont(new Font(dv.fontName(), 0 ,16));
         QuantityTextField.setForeground(new Color(dv.BlackTextColor()));
 
-        ActionListener handleCreateOrgAcc = new ActionListener()
+        ActionListener handleConfirmButton = new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
@@ -331,13 +333,61 @@ public class CreateOrgAccView extends JPanel implements ActionListener
             }
         };
 
+        KeyListener handleEnterConfirmation = new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                {
+                    String InputProvinceCode = dv.getProvinceCode(ProvinceChoice.getSelectedItem());
+                    String InputQuantity = QuantityTextField.getText();
+
+                    if (dv.checkisNumberInputValue(InputQuantity,
+                            "Cảnh báo!", "Nhập số cho số lượng!") != -2)
+                        return;
+
+                    int answer = dv.popupConfirmOption(null,"Xác nhận tạo lịch " + InputQuantity
+                            + " tài khoản đơn vị cho tỉnh/thành phố " + ProvinceChoice.getSelectedItem() + "?", "Xác nhận!");
+
+                    if (answer == JOptionPane.YES_OPTION)
+                    {
+                        String plsql = "{call ACC_CREATE_ORG(?,?)}";
+
+
+                        Connection connection = null;
+                        try {
+                            connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                            CallableStatement cst = connection.prepareCall(plsql);
+                            cst.setString("par_Quantity", InputQuantity);
+                            cst.setString("par_Province", InputProvinceCode);
+
+                            cst.execute();
+                        } catch (SQLException ex)
+                        {
+                            dv.popupOption(null,  ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+                            ex.printStackTrace();
+                        }
+
+                        dv.popupOption(null, "Tạo tài khoản đơn vị thành công!", "Thông báo!", 0);
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        };
+        QuantityTextField.addKeyListener(handleEnterConfirmation);
+
         ImageIcon CreateOrgAccButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Confirm Button.png"));
         JButton CreateOrgAccButton = new JButton();
         CreateOrgAccButton.setPreferredSize(new Dimension(CreateOrgAccButtonIcon.getIconWidth(), CreateOrgAccButtonIcon.getIconHeight()));
         CreateOrgAccButton.setContentAreaFilled(false);
         CreateOrgAccButton.setBorder(null);
         CreateOrgAccButton.setIcon(CreateOrgAccButtonIcon);
-        CreateOrgAccButton.addActionListener(handleCreateOrgAcc);
+        CreateOrgAccButton.addActionListener(handleConfirmButton);
 
         CreateOrgAccPanel = new JPanel();
         CreateOrgAccPanel.setBounds(0, 0, 660, 630);
@@ -460,7 +510,5 @@ public class CreateOrgAccView extends JPanel implements ActionListener
 
             LayeredPaneArea.repaint(320, 40, 680, 630);
         }
-
     }
-
 }
