@@ -37,6 +37,7 @@ public class MOHMainView extends JFrame implements ActionListener
     private LoginView loginView;
     private OrgInformationView orgInformationView;
     private CreateOrgAccView createOrgAccView;
+    private SearchCitizenView searchCitizenView;
     private MOHStatisticView mohStatisticView;
 
     private void initBackButton()
@@ -247,7 +248,7 @@ public class MOHMainView extends JFrame implements ActionListener
 
         JLabel ButtonLabel2 = new JLabel();
         ButtonLabel2.setBounds(0, 240+130 +25, 240, 30);
-        ButtonLabel2.setText("thông tin");
+        ButtonLabel2.setText("công dân");
         ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
@@ -457,16 +458,16 @@ public class MOHMainView extends JFrame implements ActionListener
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
 
-        /*if (e.getSource() == SearchButton)
+        if (e.getSource() == SearchButton)
         {
-            searchOrgView = new SearchOrgView();
-            MainLayeredPane.add(searchOrgView, Integer.valueOf(1));
+            searchCitizenView = new SearchCitizenView();
+            MainLayeredPane.add(searchCitizenView, Integer.valueOf(1));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
 
             //init BackButton
             initBackButton();
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
-        }*/
+        }
 
         if (e.getSource() == StatisticButton)
         {
