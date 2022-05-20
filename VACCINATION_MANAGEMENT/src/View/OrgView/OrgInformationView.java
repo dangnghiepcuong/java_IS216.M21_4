@@ -412,9 +412,7 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
                     " where Username = '" + InputID + "'";
             try {
                 Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-
                 PreparedStatement st = connection.prepareStatement(query);
-
                 ResultSet rs = st.executeQuery(query);
 
                 rs.next();
@@ -427,7 +425,6 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
                     dv.popupOption(null, "Mật khẩu không đúng!", "Lỗi!", 2);
                     return;
                 }
-
             } catch (SQLException ex) {
                 dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
                 ex.printStackTrace();
