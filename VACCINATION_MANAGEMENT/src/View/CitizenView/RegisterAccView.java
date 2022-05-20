@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.*;
 import java.util.Properties;
 
@@ -15,7 +17,7 @@ import java.util.Properties;
  *
  * @author LeHoangDuyen
  */
-public class RegisterAccView extends JFrame implements ActionListener
+public class RegisterAccView extends JFrame implements ActionListener, KeyListener
 {
     DefaultValue dv = new DefaultValue();
     private JLabel UsernameLabel;
@@ -236,6 +238,7 @@ public class RegisterAccView extends JFrame implements ActionListener
         PasswordField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         PasswordField.setForeground(new Color(0x333333));
         PasswordField.setBackground(Color.WHITE);
+        PasswordField.addKeyListener(this);
     }
 
     private void initRepeatPasswordLabel()
@@ -255,6 +258,7 @@ public class RegisterAccView extends JFrame implements ActionListener
         RepeatPasswordField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         RepeatPasswordField.setForeground(new Color(0x333333));
         RepeatPasswordField.setBackground(Color.WHITE);
+        RepeatPasswordField.addKeyListener(this);
     }
 
     private void initRegisterAccButton()
@@ -555,8 +559,8 @@ public class RegisterAccView extends JFrame implements ActionListener
             LoginView loginView = new LoginView();
         }
 
-        if (e.getSource() == RegisterAccButton) {
-
+        if (e.getSource() == RegisterAccButton)
+        {
             JFormattedTextField textField = BirthdayField.getJFormattedTextField();
             
             String InputUsername = UsernameTextField.getText();
@@ -645,5 +649,102 @@ public class RegisterAccView extends JFrame implements ActionListener
             dv.popupOption(null, "Đăng ký thành công!", "Thông báo!", 0);
         }
     }
-    
+
+    @Override
+    public void keyTyped(KeyEvent e) {    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            JFormattedTextField textField = BirthdayField.getJFormattedTextField();
+
+            String InputUsername = UsernameTextField.getText();
+            String InputPassword = String.valueOf(PasswordField.getPassword());
+            String InputRepeatPassword = String.valueOf(RepeatPasswordField.getPassword());
+            String InputID = IDTextField.getText();
+            String InputLastName = LastNameTextField.getText();
+            String InputFirstName = FirstNameTextField.getText();
+            String InputBirthday = textField.getText();
+            int InputGender = GenderChoice.getSelectedIndex();
+            String InputHomeTown = HomeTownChoice.getSelectedItem();
+            String InputProvince = ProvinceChoice.getSelectedItem();
+            String InputDistrict = DistrictChoice.getSelectedItem();
+            String InputTown = TownChoice.getSelectedItem();
+            String InputStreet = StreetTextField.getText();
+            String InputEmail = EmailTextField.getText();
+
+            if (dv.checkStringInputValue(InputUsername, "Cảnh báo!", "Nhập tên tài khoản!") != -2)
+                return;
+            if (dv.checkStringInputValue(InputPassword, "Cảnh báo!", "Nhập mật khẩu!") != -2)
+                return;
+            if (dv.checkStringInputValue(InputRepeatPassword, "Cảnh báo!", "Nhập lại mật khẩu!") != -2)
+                return;
+            if (dv.checkStringInputValue(InputID, "Cảnh báo!", "Nhập mã định danh cá nhân!") != -2)
+                return;
+            if (dv.checkStringInputValue(InputFirstName, "Cảnh báo!", "Nhập tên công dân!") != -2)
+                return;
+            if (dv.checkStringInputValue(InputBirthday, "Cảnh báo!", "Nhập ngày sinh!") != -2)
+                return;
+            if (dv.checkStringInputValue(InputProvince, "Cảnh báo!", "Nhập tỉnh!") != -2)
+                return;
+            else
+                InputProvince = dv.getProvinceCode(InputProvince);
+            if (InputGender == 0)
+                InputGender = 3;
+
+            if (InputPassword.equals(InputRepeatPassword) == false) {
+                System.out.println("Mật khẩu không trùng khớp!");
+                return;
+            }
+
+            InputBirthday = dv.toOracleDateFormat(InputBirthday);
+            InputGender -= 1;
+
+
+            String plsql = "{call ACC_INSERT_RECORD(?,?,?,?,?)}";
+
+            String plsql2 = "{call PERSON_INSERT_RECORD(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+
+            try {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                CallableStatement cst = connection.prepareCall(plsql);
+                cst.setString(1, InputUsername);
+                cst.setString(2, InputPassword);
+                cst.setInt(3, Integer.valueOf(2));
+                cst.setInt(4, Integer.valueOf(1));
+                cst.setString(5, "");
+
+                cst.execute();
+
+                cst = connection.prepareCall(plsql2);
+                cst.setString("par_ID", InputID);
+                cst.setString("par_LastName", InputLastName);
+                cst.setString("par_FirstName", InputFirstName);
+                cst.setString("par_Birthday", InputBirthday);
+                cst.setInt("par_Gender", Integer.valueOf(InputGender));
+                cst.setString("par_Hometown", InputHomeTown);
+                cst.setString("par_Province", InputProvince);
+                cst.setString("par_District", InputDistrict);
+                cst.setString("par_Town", InputTown);
+                cst.setString("par_Street", InputStreet);
+                cst.setString("par_Phone", InputUsername);
+                cst.setString("par_Email", InputEmail);
+                cst.setString("par_Guardian", "");
+                cst.setString("par_Note", "");
+
+                cst.execute();
+
+            } catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+                ex.printStackTrace();
+                return;
+            }
+
+            dv.popupOption(null, "Đăng ký thành công!", "Thông báo!", 0);
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {}
 }

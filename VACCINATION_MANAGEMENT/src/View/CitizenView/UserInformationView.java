@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,7 +20,7 @@ import java.util.Properties;
  *
  * @author LeHoangDuyen
  */
-public class UserInformationView extends JPanel implements ActionListener
+public class UserInformationView extends JPanel implements ActionListener, KeyListener
 {
     DefaultValue dv = new DefaultValue();
     private JLabel UsernameLabel;
@@ -236,6 +238,7 @@ public class UserInformationView extends JPanel implements ActionListener
         OldPasswordField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         OldPasswordField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         OldPasswordField.setForeground(new Color(dv.BlackTextColor()));
+        OldPasswordField.addKeyListener(this);
     }
 
     private void initChangePasswordLabel()
@@ -261,6 +264,7 @@ public class UserInformationView extends JPanel implements ActionListener
         NewPasswordField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         NewPasswordField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         NewPasswordField.setForeground(new Color(dv.BlackTextColor()));
+        NewPasswordField.addKeyListener(this);
     }
     
     private void initRepeatNewPasswordLabel()
@@ -278,6 +282,7 @@ public class UserInformationView extends JPanel implements ActionListener
         RepeatNewPasswordField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         RepeatNewPasswordField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         RepeatNewPasswordField.setForeground(new Color(dv.BlackTextColor()));
+        RepeatNewPasswordField.addKeyListener(this);
     }
 
     private void initUpdateAccButton()
@@ -704,4 +709,133 @@ public class UserInformationView extends JPanel implements ActionListener
             dv.popupOption(null, "Cập nhật thành công!", "Thông báo!", 0);
         }
     }
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            JFormattedTextField textField = BirthdayField.getJFormattedTextField();
+
+            String InputUsername = UsernameTextField.getText();
+            String OldPhone = personalUser.getPhone();
+            String InputLastName = LastNameTextField.getText();
+            String InputFirstName = FirstNameTextField.getText();
+            String InputPassword = String.valueOf(OldPasswordField.getPassword());
+            String InputNewPassword = String.valueOf(NewPasswordField.getPassword());
+            String InputRepeatNewPassword = String.valueOf(RepeatNewPasswordField.getPassword());
+            String InputID = IDTextField.getText();
+            String OldID = personalUser.getID();
+            String InputBirthday = textField.getText();
+            int InputGender = dv.getGenderIndex(GenderChoice.getSelectedItem());
+            String InputHomeTown =HomeTownChoice.getSelectedItem();
+            String InputProvince = ProvinceChoice.getSelectedItem();
+            String InputDistrict = DistrictChoice.getSelectedItem();
+            String InputTown = TownChoice.getSelectedItem();
+            String InputStreet = StreetTextField.getText();
+            String InputEmail = EmailTextField.getText();
+
+            if ( dv.checkStringInputValue(InputPassword, "Cảnh báo!","Xác nhận mật khẩu để cập nhật thông tin!") != -2 )
+                return;
+            if ( dv.checkStringInputValue(InputFirstName, "Cảnh báo!", "Nhập tên!") != -2)
+                return;
+            if ( dv.checkStringInputValue(InputUsername, "Cảnh báo!", "Nhập số điện thoại!") != -2 )
+                return;
+            if ( dv.checkStringInputValue(InputID, "Cảnh báo!","Nhập mã định danh cá nhân!") != -2 )
+                return;
+            if ( dv.checkStringInputValue(InputBirthday, "Cảnh báo!","Nhập ngày sinh!") != -2 )
+                return;
+            if ( dv.checkStringInputValue(InputProvince, "Cảnh báo!", "Nhập tỉnh cư trú!") != -2 )
+                return;
+            else
+                InputProvince = dv.getProvinceCode(InputProvince);
+
+            String query = "select *" +
+                    " from ACCOUNT" +
+                    " where Username = '" + personalUser.getPhone() + "'";
+            try {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                PreparedStatement st = connection.prepareStatement(query);
+
+                ResultSet rs = st.executeQuery(query);
+
+                rs.next();
+                acc.setUsername(rs.getString("Username"));
+                acc.setPassword(rs.getString("Password"));
+                acc.setRole(rs.getInt("Role"));
+                acc.setStatus(rs.getInt("Status"));
+                if (acc.getPassword().equals(InputPassword) == false)
+                {
+                    dv.popupOption(null, "Mật khẩu không đúng!", "Lỗi!", 2);
+                    return;
+                }
+
+            } catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+                ex.printStackTrace();
+                return;
+            }
+
+            if (InputRepeatNewPassword.equals(InputNewPassword) == false)
+            {
+                dv.popupOption(null,"Mật khẩu mới không trùng khớp với ô nhập lại mật khẩu mới!", "Lỗi!", 2);
+                return;
+            }
+
+            InputBirthday = dv.toOracleDateFormat(InputBirthday);
+
+
+            String plsql = "{call PERSON_UPDATE_RECORD(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+
+            String plsql2 = "{call ACC_UPDATE_PASSWORD(?,?,?)}";
+
+            try {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                CallableStatement cst;
+
+                if (InputNewPassword.equals("") == false) {
+                    cst = connection.prepareCall(plsql2);
+                    cst.setString(1, personalUser.getPhone());
+                    cst.setString(2, InputPassword);
+                    cst.setString(3, InputNewPassword);
+
+                    cst.execute();
+                }
+
+                cst = connection.prepareCall(plsql);
+                cst.setString("par_OldID", OldID);
+                cst.setString("par_ID", InputID);
+                cst.setString("par_LastName", InputLastName);
+                cst.setString("par_FirstName", InputFirstName);
+                cst.setString("par_Birthday", InputBirthday);
+                cst.setInt("par_Gender", InputGender);
+                cst.setString("par_HomeTown", InputHomeTown);
+                cst.setString("par_Province", InputProvince);
+                cst.setString("par_District", InputDistrict);
+                cst.setString("par_Town", InputTown);
+                cst.setString("par_Street", InputStreet);
+                cst.setString("par_Phone", InputUsername);
+                cst.setString("par_OldPhone", OldPhone);
+                cst.setString("par_Email", InputEmail);
+                cst.setString("par_Note", "");
+
+                cst.execute();
+            }
+            catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+                ex.printStackTrace();
+                return;
+            }
+
+            personalUser.setPhone(InputUsername);
+            dv.popupOption(null, "Cập nhật thành công!", "Thông báo!", 0);
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {}
 }

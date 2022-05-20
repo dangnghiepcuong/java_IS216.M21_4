@@ -8,13 +8,15 @@ import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.*;
 
 /**
  *
  * @author LeHoangDuyen
  */
-public class OrgInformationView extends JPanel implements ActionListener
+public class OrgInformationView extends JPanel implements ActionListener, KeyListener
 {
     DefaultValue dv = new DefaultValue();
     private JLabel IDLabel;
@@ -183,6 +185,7 @@ public class OrgInformationView extends JPanel implements ActionListener
         PasswordField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         PasswordField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         PasswordField.setForeground(new Color(dv.BlackTextColor()));
+        PasswordField.addKeyListener(this);
     }
 
     private void initChangePasswordLabel()
@@ -208,6 +211,7 @@ public class OrgInformationView extends JPanel implements ActionListener
         NewPasswordField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         NewPasswordField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         NewPasswordField.setForeground(new Color(dv.BlackTextColor()));
+        NewPasswordField.addKeyListener(this);
     }
 
     private void initRepeatNewPasswordLabel()
@@ -225,6 +229,7 @@ public class OrgInformationView extends JPanel implements ActionListener
         RepeatNewPasswordField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         RepeatNewPasswordField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         RepeatNewPasswordField.setForeground(new Color(dv.BlackTextColor()));
+        RepeatNewPasswordField.addKeyListener(this);
     }
 
     private void initUpdateAccButton()
@@ -475,4 +480,103 @@ public class OrgInformationView extends JPanel implements ActionListener
             dv.popupOption(null, "Cập nhật thành công!", "Thông báo!", 0);
         }
     }
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            String InputID = IDTextField.getText();
+            String InputPassword = String.valueOf(PasswordField.getPassword());
+            String InputName = NameTextField.getText();
+            String InputDistrict = DistrictChoice.getSelectedItem();
+            String InputTown = TownChoice.getSelectedItem();
+            String InputStreet = StreetTextField.getText();
+            String InputNewPassword = String.valueOf(NewPasswordField.getPassword());
+            String InputRepeatNewPassword = String.valueOf(RepeatNewPasswordField.getPassword());
+
+            if ( dv.checkStringInputValue(InputName, "Cảnh báo!", "Nhập tên đơn vị!") != -2 )
+                return;
+
+            if ( dv.checkStringInputValue(InputPassword, "Cảnh báo!","Xác nhận mật khẩu để cập nhật thông tin!") != -2 )
+                return;
+
+            String query = "select *" +
+                    " from ACCOUNT" +
+                    " where Username = '" + InputID + "'";
+            try {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                PreparedStatement st = connection.prepareStatement(query);
+
+                ResultSet rs = st.executeQuery(query);
+
+                rs.next();
+                acc.setUsername(rs.getString("Username"));
+                acc.setPassword(rs.getString("Password"));
+                acc.setRole(rs.getInt("Role"));
+                acc.setStatus(rs.getInt("Status"));
+                if (acc.getPassword().equals(InputPassword) == false)
+                {
+                    dv.popupOption(null, "Mật khẩu không đúng!", "Lỗi!", 2);
+                    return;
+                }
+
+            } catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+                ex.printStackTrace();
+                return;
+            }
+
+            if (InputRepeatNewPassword.equals(InputNewPassword) == false)
+            {
+                dv.popupOption(null,"Mật khẩu mới không trùng khớp với ô nhập lại mật khẩu mới!", "Lỗi!", 2);
+                JOptionPane OptionFrame = new JOptionPane();
+                return;
+            }
+
+            String plsql = "{call ORG_UPDATE_RECORD(?, ?, ?, ?, ?, ?)}";
+
+            String plsql2 = "{call ACC_UPDATE_PASSWORD(?,?,?)}";
+
+            try {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                CallableStatement cst;
+
+                if (InputNewPassword.equals("") == false) {
+                    cst = connection.prepareCall(plsql2);
+                    cst.setString(1, orgUser.getID());
+                    cst.setString(2, InputPassword);
+                    cst.setString(3, InputNewPassword);
+
+                    cst.execute();
+                }
+
+                CallableStatement cst2;
+
+                cst2 = connection.prepareCall(plsql);
+                cst2.setString("par_ID", InputID);
+                cst2.setString("par_Name", InputName);
+                cst2.setString("par_District", InputDistrict);
+                cst2.setString("par_Town", InputTown);
+                cst2.setString("par_Street", InputStreet);
+                cst2.setString("par_Note", "");
+
+                cst2.execute();
+            }
+            catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+                ex.printStackTrace();
+                return;
+            }
+
+            dv.popupOption(null, "Cập nhật thành công!", "Thông báo!", 0);
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {}
 }
