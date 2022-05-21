@@ -41,7 +41,7 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
     private JLabel PersonalIDLabel;
     private  JTextField PersonalIDField;
     private JLabel BirthdayLabel;
-    private JDatePickerImpl BirthdayField;
+    private JTextField BirthdayField;
     private JLabel GenderLabel;
     private Choice GenderChoice;
     private  JButton SearchButton;
@@ -100,57 +100,23 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
         PersonalIDField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         PersonalIDField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         PersonalIDField.setForeground(new Color(dv.BlackTextColor()));
-        PersonalIDField.addKeyListener(this);
     }
 
     private void initBirthdayLabel()
     {
-        BirthdayLabel = new JLabel("Ngày sinh");
+        BirthdayLabel = new JLabel("Năm sinh");
         BirthdayLabel.setBounds(70, 70 + 6 * dv.LabelHeight() +dv.AlignTop_InfoView(),220,30);
         BirthdayLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         BirthdayLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
 
-
-    public class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
-
-        private String datePattern = "yyyy-MM-dd";
-        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
-
-        @Override
-        public Object stringToValue(String text) throws ParseException {
-            return dateFormatter.parseObject(text);
-        }
-
-        @Override
-        public String valueToString(Object value) throws ParseException {
-            if (value != null) {
-                Calendar cal = (Calendar) value;
-                return dateFormatter.format(cal.getTime());
-            }
-            return "";
-        }
-    }
-
     private void initBirthdayField()
     {
-        UtilDateModel model=new UtilDateModel();
-        Properties p = new Properties();
-        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
-        BirthdayField = new JDatePickerImpl(datePanel, new DateLabelFormatter());
-
-        BirthdayField.setBounds(70, 70 + 7*dv.LabelHeight() +dv.AlignTop_InfoView(),170,30);
-
-        JFormattedTextField textField = BirthdayField.getJFormattedTextField();
-
-        textField.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-
-        textField.setBounds(0, 100 + 7*dv.LabelHeight() +dv.AlignTop_InfoView(),170,30);
-
-        BirthdayField.setTextEditable(true);
+        BirthdayField = new JTextField();
+        BirthdayField.setBounds(70, 70  + 7 * dv.LabelHeight() +dv.AlignTop_InfoView(), 220, 30);
+        BirthdayField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+        BirthdayField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         BirthdayField.setForeground(new Color(dv.BlackTextColor()));
-        BirthdayField.setVisible(true);
-        BirthdayField.setEnabled(true);
     }
 
     private void initGenderLabel()
@@ -293,12 +259,13 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
        int i =0;
        int nInj = 0;
 
-        String query = "select *" +
+        String query = "select * " +
                         "from INJECTION INJ, SCHEDULE SCHED, ORGANIZATION ORG " +
                         "where INJ.PersonalID = " + personalUser.getID() + " and" +
                         "      INJ.Schedid = SCHED.ID and" +
                         "      SCHED.OrgID = ORG.ID " +
                         "order by InjNO";
+
         try {
             Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
             PreparedStatement st = connection.prepareStatement(query);
@@ -437,17 +404,15 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
     {
         if (e.getSource() == SearchButton)
         {
-            JFormattedTextField textField = BirthdayField.getJFormattedTextField();
-
             String InputFullName = FullNameField.getText();
-            String InputBirthday = textField.getText();
+            String InputBirthday = BirthdayField.getText();
             int InputGender = GenderChoice.getSelectedIndex()-1;
             String InputPhone = PhoneNumberField.getText();
             String InputPersonalID = PersonalIDField.getText();
 
             if (dv.checkStringInputValue(InputFullName, "Cảnh báo!","Nhập họ và tên!" ) != -2)
                 return;
-            if (dv.checkStringInputValue(InputBirthday, "Nhập ngày sinh!", "Cảnh báo!") != -2)
+            if (dv.checkisNumberInputValue(InputBirthday, "Cảnh báo!", "Nhập ngày sinh là số!") != -2)
                 return;
             if (dv.checkStringInputValue(GenderChoice.getSelectedItem(), "Cảnh báo!", "Chọn giới tính!") != -2)
                 return;
@@ -459,7 +424,7 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
             String query = "select LastName, FirstName, Birthday, Gender, Phone, ID" +
                             " from PERSON" +
                             " where (LastName || ' ' || FirstName) = '" + InputFullName + "'" +
-                            " and Birthday = '" + dv.toOracleDateFormat(InputBirthday) + "'" +
+                            " and extract(year from Birthday) = '" + InputBirthday + "'" +
                             " and Gender = " + InputGender +
                             " and ID = '" + InputPersonalID + "'" +
                             " and Phone = '" + InputPhone + "'";

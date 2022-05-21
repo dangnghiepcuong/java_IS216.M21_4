@@ -2,7 +2,6 @@ package View.CitizenView;
 
 
 import Process.*;
-import com.sun.tools.javac.Main;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,7 +34,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
     /*Data Stored Class*/
     private DefaultValue dv = new DefaultValue();
     private Person personalUser = new Person();
-    private RegisteredScheds Reg=new RegisteredScheds();
+    private Register Reg=new Register();
 
     private File file;
     private FileInputStream input=null;

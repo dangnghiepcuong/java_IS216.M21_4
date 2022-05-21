@@ -12,7 +12,7 @@ import java.sql.*;
  *
  * @author NghiepCuong
  */
-public class ManageRegistionView extends JPanel implements ActionListener
+public class ManageRegistrationView extends JPanel implements ActionListener
 {
     private DefaultValue dv = new DefaultValue();
     private Person personalUser;
@@ -36,7 +36,7 @@ public class ManageRegistionView extends JPanel implements ActionListener
     }
 
     /*
-    *   INITIALIZE THE REGISTION FILTER PANEL
+    *   INITIALIZE THE REGISTRATION FILTER PANEL
     *   - LABEL
     *   - CHOCIE
     *   - BUTTON: SELECT
@@ -97,13 +97,13 @@ public class ManageRegistionView extends JPanel implements ActionListener
     }
 
     /*
-     *       INITIALIZE THE LIST OF REGISTIONS OF THE CITIZEN
+     *       INITIALIZE THE LIST OF REGISTRATIONS OF THE CITIZEN
      *       - SCROLLPANE:
-     *           + PANEL: LIST OF REGISTIONS
-     *               - PANELS: REGISTIONS
+     *           + PANEL: LIST OF REGISTRATIONS
+     *               - PANELS: REGISTRATIONS
      *                   + LABELS
      * */
-    private JPanel initRegPanel(RegisteredScheds Reg)
+    private JPanel initRegPanel(Register Reg)
     {
         JPanel RegPanel = new JPanel();
 
@@ -240,7 +240,7 @@ public class ManageRegistionView extends JPanel implements ActionListener
 
             while(rs.next())
             {
-                RegisteredScheds Reg = new RegisteredScheds();
+                Register Reg = new Register();
                 Reg.setDoseType(rs.getString("DoseType"));
                 Reg.setTime(rs.getInt("Time"));
                 Reg.setNO(rs.getInt("NO"));
@@ -317,7 +317,7 @@ public class ManageRegistionView extends JPanel implements ActionListener
     }
 
     /*CONSTRUCTOR*/
-    public ManageRegistionView(Person person)
+    public ManageRegistrationView(Person person)
     {
         personalUser = person;
         initComponents();

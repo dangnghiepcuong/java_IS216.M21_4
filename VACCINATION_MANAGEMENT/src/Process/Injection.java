@@ -13,7 +13,7 @@ public class Injection {
     private int InjNo;
     private Schedule Sched = new Schedule();
     private Organization Org = new Organization();
-    private RegisteredScheds Reg = new RegisteredScheds();
+    private Register Reg = new Register();
     private String DoseType;
     private String Note;
 
@@ -76,11 +76,11 @@ public class Injection {
         Org = org;
     }
 
-    public RegisteredScheds getReg() {
+    public Register getReg() {
         return Reg;
     }
 
-    public void setReg(RegisteredScheds reg) {
+    public void setReg(Register reg) {
         Reg = reg;
     }
 }

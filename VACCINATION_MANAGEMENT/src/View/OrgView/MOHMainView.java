@@ -451,6 +451,10 @@ public class MOHMainView extends JFrame implements ActionListener
 
         if (e.getSource() == CreateOrgAccButton)
         {
+            orgInformationView = null;
+            searchCitizenView = null;
+            mohStatisticView = null;
+
             createOrgAccView = new CreateOrgAccView();
             MainLayeredPane.removeAll();
             MainLayeredPane.add(createOrgAccView, Integer.valueOf(0));
@@ -460,20 +464,30 @@ public class MOHMainView extends JFrame implements ActionListener
 
         if (e.getSource() == SearchButton)
         {
-            searchCitizenView = new SearchCitizenView();
-            MainLayeredPane.add(searchCitizenView, Integer.valueOf(1));
-            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+            orgInformationView = null;
+            createOrgAccView = null;
+            mohStatisticView = null;
 
-            //init BackButton
+            searchCitizenView = new SearchCitizenView();
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(searchCitizenView, Integer.valueOf(1));
+
             initBackButton();
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
 
         if (e.getSource() == StatisticButton)
         {
+            orgInformationView = null;
+            createOrgAccView = null;
+            searchCitizenView = null;
+
             mohStatisticView = new MOHStatisticView(mohUser);
             MainLayeredPane.removeAll();
             MainLayeredPane.add(mohStatisticView, Integer.valueOf(0));
+
+            initBackButton();
             MainLayeredPane.add(BackButton, Integer.valueOf(1));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
