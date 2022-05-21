@@ -9,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.Properties;
@@ -17,12 +19,11 @@ import java.util.Properties;
  *
  * @author NghiepCuong
  */
-public class FillFormView extends JPanel implements ActionListener
-{
+public class FillFormView extends JPanel implements ActionListener{
     private DefaultValue dv = new DefaultValue();
     private Person personalUser = new Person();
 
-    /*Schedule List*/
+    /*Form List*/
     private JPanel FormFilterPanel;
     private JLabel FormFilterLabel;
     private Choice FormFilterChoice;
@@ -31,7 +32,7 @@ public class FillFormView extends JPanel implements ActionListener
     private JScrollPane ScrollPaneFormList;
     private JPanel FormListPanel;
 
-    /*Create Schedule*/
+    /*Create Form*/
     private JButton FillFormButton;
     private JPanel CreateFormPanel;
 
@@ -46,24 +47,22 @@ public class FillFormView extends JPanel implements ActionListener
     }
 
     /*
-    *   INITIALIZE THE FILTER OF FILLED FORMS OF THE CITIZEN
-    *   - PANEL:
-    *       + LABEL
-    *       + CHOICE
-    *       + BUTTON: SELECT
-    * */
-    private void initFormFilterLabel()
-    {
+     *   INITIALIZE THE FILTER OF FILLED FORMS OF THE CITIZEN
+     *   - PANEL:
+     *       + LABEL
+     *       + CHOICE
+     *       + BUTTON: SELECT
+     * */
+    private void initFormFilterLabel() {
         FormFilterLabel = new JLabel();
-        FormFilterLabel.setBounds(0, 0, dv.LabelWidth()+50, dv.LabelHeight());
+        FormFilterLabel.setBounds(0, 0, dv.LabelWidth() + 50, dv.LabelHeight());
         FormFilterLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         FormFilterLabel.setForeground(new Color(0x666666));
         FormFilterLabel.setText("Tờ khai trong vòng");
-        FormFilterLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
+        FormFilterLabel.setSize(dv.FieldWidth(), dv.FieldHeight());
     }
 
-    private void initFormFilterChoice()
-    {
+    private void initFormFilterChoice() {
         FormFilterChoice = new Choice();
         FormFilterChoice.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
         FormFilterChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
@@ -74,8 +73,7 @@ public class FillFormView extends JPanel implements ActionListener
         FormFilterChoice.add("28 ngày");
     }
 
-    private void initFormFilterButton()
-    {
+    private void initFormFilterButton() {
         FormFilterButton = new JButton();
         ImageIcon SearchIcon = new ImageIcon(getClass().getResource("/Resources/icon/Search Filter Button.png"));
         FormFilterButton.setIcon(SearchIcon);
@@ -87,14 +85,13 @@ public class FillFormView extends JPanel implements ActionListener
         FormFilterButton.addActionListener(this);
     }
 
-    private void initFormFilterPanel()
-    {
+    private void initFormFilterPanel() {
         initFormFilterLabel();
         initFormFilterChoice();
         initFormFilterButton();
 
         FormFilterPanel = new JPanel();
-        FormFilterPanel.setBounds(dv.AlignLeft(), 80, dv.LabelWidth()+50, 125);
+        FormFilterPanel.setBounds(dv.AlignLeft(), 80, dv.LabelWidth() + 50, 125);
         FormFilterPanel.setLayout(null);
         FormFilterPanel.setBackground(new Color(dv.ViewBackgroundColor()));
 
@@ -105,14 +102,13 @@ public class FillFormView extends JPanel implements ActionListener
 
 
     /*
-    *   INITIALIZE THE LIST OF FILLED FORMS OF THE CITIZEN
-    *   - SCROLLPANE:
-    *       + PANEL: LIST OF FORMS
-    *           - PANELS: FORMS
-    *               + LABELS
-    * */
-    private JPanel initFormPanel(Health Heal)
-    {
+     *   INITIALIZE THE LIST OF FILLED FORMS OF THE CITIZEN
+     *   - SCROLLPANE:
+     *       + PANEL: LIST OF FORMS
+     *           - PANELS: FORMS
+     *               + LABELS
+     * */
+    private JPanel initFormPanel(Health Heal) {
         JPanel FormPanel = new JPanel();
         FormPanel.setLayout(null);
         FormPanel.setBackground(Color.WHITE);
@@ -121,96 +117,81 @@ public class FillFormView extends JPanel implements ActionListener
                 + " (ID: " + personalUser.getID() + ")");
         Target.setFont(new Font(dv.fontName(), 1, 16));
         Target.setForeground(new Color(dv.BlackTextColor()));
-        Target.setBounds(30,1,600,25);
+        Target.setBounds(30, 1, 600, 25);
         Target.setHorizontalAlignment(JLabel.LEFT);
 
         JLabel FilledDate = new JLabel("Ngày thực hiện khai báo: " + Heal.getFilledDate());
         FilledDate.setFont(new Font(dv.fontName(), 1, 16));
         FilledDate.setForeground(new Color(dv.BlackTextColor()));
-        FilledDate.setBounds(30,25,600,25);
+        FilledDate.setBounds(30, 25, 600, 25);
         FilledDate.setHorizontalAlignment(JLabel.LEFT);
 
         FormPanel.add(Target);
         FormPanel.add(FilledDate);
 
-        if (Heal.getHealths().equals("0000"))
-        {
+        if (Heal.getHealths().equals("0000")) {
             JLabel NormalHealth = new JLabel("Sức khỏe bình thường - Đạt điều kiện sức khỏe tiêm chủng");
             NormalHealth.setFont(new Font(dv.fontName(), 1, 13));
             NormalHealth.setForeground(new Color(dv.GreenPastel()));
-            NormalHealth.setBounds(30,50,600,25);
+            NormalHealth.setBounds(30, 50, 600, 25);
             NormalHealth.setHorizontalAlignment(JLabel.LEFT);
 
-            FormPanel.setPreferredSize(new Dimension(640,80));
+            FormPanel.setPreferredSize(new Dimension(640, 80));
             FormPanel.add(NormalHealth);
-        }
-        else
-        {
+        } else {
             JLabel FirstAns = new JLabel();
-            FirstAns.setBounds(30,50,600,25);
+            FirstAns.setBounds(30, 50, 600, 25);
             FirstAns.setHorizontalAlignment(JLabel.LEFT);
-            if (Heal.getHealths().substring(0,1).equals("1"))
-            {
-                FirstAns.setText("<html>Có một trong các dấu hiệu sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi trong vòng 14 ngày qua");
-                FirstAns.setFont(new Font(dv.fontName(), 1, 13));
+            if (Heal.getHealths().substring(0, 1).equals("1")) {
+                FirstAns.setText("<html>1. Có một trong các dấu hiệu sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi trong vòng 14 ngày qua");
+                FirstAns.setFont(new Font(dv.fontName(), 0, 13));
                 FirstAns.setForeground(new Color(dv.BlackTextColor()));
-            }
-            else
-            {
+            } else {
                 FirstAns.setText("<html>Không có dấu hiệu sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi trong vòng 14 ngày qua");
                 FirstAns.setFont(new Font(dv.fontName(), 0, 13));
                 FirstAns.setForeground(new Color(dv.GreenPastel()));
             }
 
             JLabel SecondAns = new JLabel();
-            SecondAns.setBounds(30,75,600,25);
+            SecondAns.setBounds(30, 75, 600, 25);
             SecondAns.setHorizontalAlignment(JLabel.LEFT);
-            if (Heal.getHealths().substring(1,2).equals("1"))
-            {
-                SecondAns.setText("<html>Có tiếp xúc với Người bệnh hoặc nghi ngờ, mắc bệnh COVID-19 trong vòng 14 ngày qua");
-                SecondAns.setFont(new Font(dv.fontName(), 1, 13));
+            if (Heal.getHealths().substring(1, 2).equals("1")) {
+                SecondAns.setText("<html>2. Có tiếp xúc với Người bệnh hoặc nghi ngờ, mắc bệnh COVID-19 trong vòng 14 ngày qua");
+                SecondAns.setFont(new Font(dv.fontName(), 0, 13));
                 SecondAns.setForeground(new Color(dv.BlackTextColor()));
-            }
-            else
-            {
+            } else {
                 SecondAns.setText("<html>Không tiếp xúc với Người bệnh hoặc nghi ngờ, mắc bệnh COVID-19 trong vòng 14 ngày qua");
                 SecondAns.setFont(new Font(dv.fontName(), 0, 13));
                 SecondAns.setForeground(new Color(dv.GreenPastel()));
             }
 
             JLabel ThirdAns = new JLabel();
-            ThirdAns.setBounds(30,100,600,25);
+            ThirdAns.setBounds(30, 100, 600, 25);
             ThirdAns.setHorizontalAlignment(JLabel.LEFT);
-            if (Heal.getHealths().substring(2,3).equals("1"))
-            {
-                ThirdAns.setText("<html>Là đối tượng đang dương tính với Covid-19");
+            if (Heal.getHealths().substring(2, 3).equals("1")) {
+                ThirdAns.setText("<html>3. Là đối tượng đang dương tính với Covid-19");
                 ThirdAns.setFont(new Font(dv.fontName(), 1, 13));
                 ThirdAns.setForeground(new Color(dv.RedPastel()));
-            }
-            else
-            {
-                ThirdAns.setText("<html>Không là đối tượng đang dương tính với Covid-19");
+            } else {
+                ThirdAns.setText("<html>4. Không là đối tượng đang dương tính với Covid-19");
                 ThirdAns.setFont(new Font(dv.fontName(), 0, 13));
                 ThirdAns.setForeground(new Color(dv.GreenPastel()));
             }
 
             JLabel FourthAns = new JLabel();
-            FourthAns.setBounds(30,125,600,25);
+            FourthAns.setBounds(30, 125, 600, 25);
             FourthAns.setHorizontalAlignment(JLabel.LEFT);
-            if (Heal.getHealths().substring(3,4).equals("1"))
-            {
+            if (Heal.getHealths().substring(3, 4).equals("1")) {
                 FourthAns.setText("<html>Là đối tượng trì hoãn tiêm chủng hoặc chống chỉ định với tiêm chủng vaccine Covid-19");
                 FourthAns.setFont(new Font(dv.fontName(), 1, 13));
                 FourthAns.setForeground(new Color(dv.RedPastel()));
-            }
-            else
-            {
+            } else {
                 FourthAns.setText("<html>Không là đối tượng trì hoãn tiêm chủng hoặc chống chỉ định với tiêm chủng vaccine Covid-19");
                 FourthAns.setFont(new Font(dv.fontName(), 0, 13));
                 FourthAns.setForeground(new Color(dv.GreenPastel()));
             }
 
-            FormPanel.setPreferredSize(new Dimension(640,150));
+            FormPanel.setPreferredSize(new Dimension(640, 150));
             FormPanel.add(FirstAns);
             FormPanel.add(SecondAns);
             FormPanel.add(ThirdAns);
@@ -219,8 +200,7 @@ public class FillFormView extends JPanel implements ActionListener
         return FormPanel;
     }
 
-    private void initFormListPanel(int Within)
-    {
+    private void initFormListPanel(int Within) {
         FormListPanel = new JPanel();
         FormListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         FormListPanel.setLayout(new FlowLayout());
@@ -243,12 +223,11 @@ public class FillFormView extends JPanel implements ActionListener
 
             ResultSet rs = st.executeQuery(query);
 
-            while(rs.next())
-            {
+            while (rs.next()) {
                 Heal = new Health();
                 Heal.setID(rs.getInt("ID"));
                 Heal.getPerson().setID(rs.getString("PersonalID"));
-                Heal.setFilledDate(LocalDate.parse(rs.getString("FilledDate").substring(0,10)));
+                Heal.setFilledDate(LocalDate.parse(rs.getString("FilledDate").substring(0, 10)));
                 Heal.setHealths(rs.getString("Healths"));
                 FormListPanel.add(initFormPanel(Heal));
                 if (Heal.getHealths().equals("0000"))
@@ -258,15 +237,14 @@ public class FillFormView extends JPanel implements ActionListener
                 i++;
             }
         } catch (SQLException ex) {
-            dv.popupOption(null,ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
+            dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
             ex.printStackTrace();
             return;
         }
-        FormListPanel.setPreferredSize(new Dimension(660, listHeight + i*10));
+        FormListPanel.setPreferredSize(new Dimension(660, listHeight + i * 10));
     }
 
-    private void initScrollPaneFormList()
-    {
+    private void initScrollPaneFormList() {
         ScrollPaneFormList = new JScrollPane(FormListPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneFormList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
@@ -275,26 +253,24 @@ public class FillFormView extends JPanel implements ActionListener
 
 
     /*
-    *   INITIALIZE A FILL FORM PANEL
-    *   - BUTTON: FILL FORM
-    *   - PANEL:
-    *       + LABELS
-    *       + CHOICES
-    *       + BUTTON: CONFIRM
-    * */
-    private void initFillFormButton()
-    {
+     *   INITIALIZE A FILL FORM PANEL
+     *   - BUTTON: FILL FORM
+     *   - PANEL:
+     *       + LABELS
+     *       + CHOICES
+     *       + BUTTON: CONFIRM
+     * */
+    private void initFillFormButton() {
         ImageIcon FillFormButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Fill Form Button.png"));
         FillFormButton = new JButton();
-        FillFormButton.setBounds((320-FillFormButtonIcon.getIconWidth())/2, 600, FillFormButtonIcon.getIconWidth(), FillFormButtonIcon.getIconHeight());
+        FillFormButton.setBounds((320 - FillFormButtonIcon.getIconWidth()) / 2, 600, FillFormButtonIcon.getIconWidth(), FillFormButtonIcon.getIconHeight());
         FillFormButton.setBorder(null);
         FillFormButton.setContentAreaFilled(false);
         FillFormButton.setIcon(FillFormButtonIcon);
         FillFormButton.addActionListener(this);
     }
 
-    private void initCreateFormPanel()
-    {
+    private void initCreateFormPanel() {
         JLabel CreateHealLabel = new JLabel("KHAI BÁO Y TẾ");
         CreateHealLabel.setPreferredSize(new Dimension(600, 35));
         CreateHealLabel.setFont(new Font(dv.fontName(), 1, 20));
@@ -306,7 +282,7 @@ public class FillFormView extends JPanel implements ActionListener
         FilledDateLabel.setFont(new Font(dv.fontName(), 0, 16));
         FilledDateLabel.setForeground(new Color(dv.BlackTextColor()));
 
-        UtilDateModel model=new UtilDateModel();
+        UtilDateModel model = new UtilDateModel();
         Properties p = new Properties();
         JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
         JDatePickerImpl FilledDateField = new JDatePickerImpl(datePanel, new DateLabelFormatter());
@@ -324,12 +300,12 @@ public class FillFormView extends JPanel implements ActionListener
         JLabel FirstQuesLabel = new JLabel("<html>Trong vòng 14 ngày qua, Anh/Chị có thấy xuất hiện ít nhất 1 trong các dấu hiệu: " +
                 "sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi không?:");
         FirstQuesLabel.setPreferredSize(new Dimension(600, 50));
-        FirstQuesLabel.setFont(new Font(dv.fontName(), 0 ,16));
+        FirstQuesLabel.setFont(new Font(dv.fontName(), 0, 16));
         FirstQuesLabel.setForeground(new Color(dv.BlackTextColor()));
 
         Choice FirstQuesChoice = new Choice();
         FirstQuesChoice.setPreferredSize(new Dimension(80, 30));
-        FirstQuesChoice.setFont(new Font(dv.fontName(), 0 ,16));
+        FirstQuesChoice.setFont(new Font(dv.fontName(), 0, 16));
         FirstQuesChoice.setForeground(new Color(dv.BlackTextColor()));
         FirstQuesChoice.add("Không");
         FirstQuesChoice.add("Có");
@@ -337,24 +313,24 @@ public class FillFormView extends JPanel implements ActionListener
         JLabel SecondQuesLabel = new JLabel("<html>Trong vòng 14 ngày qua, Anh/Chị có tiếp xúc với Người bệnh hoặc nghi ngờ," +
                 " mắc bệnh COVID-19 không?");
         SecondQuesLabel.setPreferredSize(new Dimension(600, 50));
-        SecondQuesLabel.setFont(new Font(dv.fontName(), 0 ,16));
+        SecondQuesLabel.setFont(new Font(dv.fontName(), 0, 16));
         SecondQuesLabel.setForeground(new Color(dv.BlackTextColor()));
 
         Choice SecondQuesChoice = new Choice();
         SecondQuesChoice.setPreferredSize(new Dimension(80, 30));
-        SecondQuesChoice.setFont(new Font(dv.fontName(), 0 ,16));
+        SecondQuesChoice.setFont(new Font(dv.fontName(), 0, 16));
         SecondQuesChoice.setForeground(new Color(dv.BlackTextColor()));
         SecondQuesChoice.add("Không");
         SecondQuesChoice.add("Có");
 
         JLabel ThirdQuesLabel = new JLabel("<html>Anh/Chị có đang dương tính với Covid-19 không?");
         ThirdQuesLabel.setPreferredSize(new Dimension(600, 50));
-        ThirdQuesLabel.setFont(new Font(dv.fontName(), 0 ,16));
+        ThirdQuesLabel.setFont(new Font(dv.fontName(), 0, 16));
         ThirdQuesLabel.setForeground(new Color(dv.BlackTextColor()));
 
         Choice ThirdQuesChoice = new Choice();
         ThirdQuesChoice.setPreferredSize(new Dimension(80, 30));
-        ThirdQuesChoice.setFont(new Font(dv.fontName(), 0 ,16));
+        ThirdQuesChoice.setFont(new Font(dv.fontName(), 0, 16));
         ThirdQuesChoice.setForeground(new Color(dv.BlackTextColor()));
         ThirdQuesChoice.add("Không");
         ThirdQuesChoice.add("Có");
@@ -362,40 +338,37 @@ public class FillFormView extends JPanel implements ActionListener
         JLabel FourthQuesLabel = new JLabel("<html>Anh/Chị có đang là đối tượng trì hoãn tiêm chủng vaccine Covid-19 hoặc " +
                 "đang là đối tượng chống chỉ định với tiêm chủng Covid-19 không?");
         FourthQuesLabel.setPreferredSize(new Dimension(600, 50));
-        FourthQuesLabel.setFont(new Font(dv.fontName(), 0 ,16));
+        FourthQuesLabel.setFont(new Font(dv.fontName(), 0, 16));
         FourthQuesLabel.setForeground(new Color(dv.BlackTextColor()));
 
         Choice FourthQuesChoice = new Choice();
         FourthQuesChoice.setPreferredSize(new Dimension(80, 30));
-        FourthQuesChoice.setFont(new Font(dv.fontName(), 0 ,16));
+        FourthQuesChoice.setFont(new Font(dv.fontName(), 0, 16));
         FourthQuesChoice.setForeground(new Color(dv.BlackTextColor()));
         FourthQuesChoice.add("Không");
         FourthQuesChoice.add("Có");
 
 
-        ActionListener handleCreateHeal = new ActionListener()
-        {
+        ActionListener handleCreateHeal = new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e)
-            {
+            public void actionPerformed(ActionEvent e) {
                 LocalDate FilledDate = LocalDate.parse(textField.getText());
                 LocalDate sysdate = LocalDate.parse(dv.todayString());
 
-                if (FilledDate.isAfter(sysdate))
+                /*if (FilledDate.isAfter(sysdate))
                 {
                     dv.popupOption(null,"Không thể khai báo y tế cho tương lai", "Lỗi!", 2);
                     return;
-                }
+                }*/
 
                 String InputFirstQues = String.valueOf(FirstQuesChoice.getSelectedIndex());
                 String InputSecondQues = String.valueOf(SecondQuesChoice.getSelectedIndex());
                 String InputThirdQues = String.valueOf(ThirdQuesChoice.getSelectedIndex());
                 String InputFourthQues = String.valueOf(FourthQuesChoice.getSelectedIndex());
 
-                int answer = dv.popupConfirmOption(null,"Xác nhận khai báo?", "Xác nhận!");
+                int answer = dv.popupConfirmOption(null, "Xác nhận khai báo?", "Xác nhận!");
 
-                if (answer == JOptionPane.YES_OPTION)
-                {
+                if (answer == JOptionPane.YES_OPTION) {
                     String plsql = "{call HEAL_INSERT_RECORD(?,?,?,?)}";
 
                     Connection connection = null;
@@ -409,9 +382,8 @@ public class FillFormView extends JPanel implements ActionListener
                         cst.setString("par_Note", "");
 
                         cst.execute();
-                    } catch (SQLException ex)
-                    {
-                        dv.popupOption(null,  ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+                    } catch (SQLException ex) {
+                        dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
                         ex.printStackTrace();
                         return;
                     }
@@ -438,57 +410,57 @@ public class FillFormView extends JPanel implements ActionListener
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
 
-        c.insets = new Insets(0,0,20,0);
+        c.insets = new Insets(0, 0, 20, 0);
         c.gridy = 0;
         CreateFormPanel.add(CreateHealLabel, c);
 
-        c.insets = new Insets(0,0,20,0);
+        c.insets = new Insets(0, 0, 20, 0);
         c.gridy = 1;
-        CreateFormPanel.add(FilledDateLabel,c);
+        CreateFormPanel.add(FilledDateLabel, c);
 
-        c.insets = new Insets(0,0,20,0);
+        c.insets = new Insets(0, 0, 20, 0);
         c.gridy = 2;
         CreateFormPanel.add(FilledDateField, c);
 
         c.anchor = GridBagConstraints.LINE_START;
         c.insets = new Insets(0, 0, 0, 0);
         c.gridy = 3;
-        CreateFormPanel.add(FirstQuesLabel,c);
+        CreateFormPanel.add(FirstQuesLabel, c);
 
         c.anchor = GridBagConstraints.CENTER;
-        c.insets = new Insets(0,0,15,0);
+        c.insets = new Insets(0, 0, 15, 0);
         c.gridy = 4;
-        CreateFormPanel.add(FirstQuesChoice,c);
+        CreateFormPanel.add(FirstQuesChoice, c);
 
         c.anchor = GridBagConstraints.LINE_START;
         c.insets = new Insets(0, 0, 0, 0);
         c.gridy = 5;
-        CreateFormPanel.add(SecondQuesLabel,c);
+        CreateFormPanel.add(SecondQuesLabel, c);
 
         c.anchor = GridBagConstraints.CENTER;
-        c.insets = new Insets(0,0,15,0);
+        c.insets = new Insets(0, 0, 15, 0);
         c.gridy = 6;
-        CreateFormPanel.add(SecondQuesChoice,c);
+        CreateFormPanel.add(SecondQuesChoice, c);
 
         c.anchor = GridBagConstraints.LINE_START;
         c.insets = new Insets(0, 0, 0, 0);
         c.gridy = 7;
-        CreateFormPanel.add(ThirdQuesLabel,c);
+        CreateFormPanel.add(ThirdQuesLabel, c);
 
         c.anchor = GridBagConstraints.CENTER;
-        c.insets = new Insets(0,0,15,0);
+        c.insets = new Insets(0, 0, 15, 0);
         c.gridy = 8;
-        CreateFormPanel.add(ThirdQuesChoice,c);
+        CreateFormPanel.add(ThirdQuesChoice, c);
 
         c.anchor = GridBagConstraints.LINE_START;
         c.insets = new Insets(0, 0, 0, 0);
         c.gridy = 9;
-        CreateFormPanel.add(FourthQuesLabel,c);
+        CreateFormPanel.add(FourthQuesLabel, c);
 
         c.anchor = GridBagConstraints.CENTER;
-        c.insets = new Insets(0,0,30,0);
+        c.insets = new Insets(0, 0, 30, 0);
         c.gridy = 10;
-        CreateFormPanel.add(FourthQuesChoice,c);
+        CreateFormPanel.add(FourthQuesChoice, c);
 
         c.anchor = GridBagConstraints.CENTER;
         c.insets = new Insets(0, 0, 0, 0);
@@ -496,16 +468,14 @@ public class FillFormView extends JPanel implements ActionListener
         CreateFormPanel.add(CreateHealButton, c);
     }
 
-    private void initLayeredPaneArea()
-    {
+    private void initLayeredPaneArea() {
         LayeredPaneArea = new JLayeredPane();
         LayeredPaneArea.setLayout(null);
         LayeredPaneArea.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         LayeredPaneArea.setBounds(320, 40, 680, 630);
     }
 
-    private void initComponents()
-    {
+    private void initComponents() {
         this.setSize(dv.FrameWidth(), dv.FrameHeight());
         this.setVisible(true);
         this.setBackground(new Color(dv.ViewBackgroundColor()));
@@ -521,7 +491,7 @@ public class FillFormView extends JPanel implements ActionListener
 
         //init FormListPanel
         JLabel HealListLabel = new JLabel("DANH SÁCH TỜ KHAI Y TẾ (" + personalUser.getFullName() + ")");
-        HealListLabel.setBounds(0,0,640,40);
+        HealListLabel.setBounds(0, 0, 640, 40);
         HealListLabel.setFont(new Font(dv.fontName(), 1, 20));
         HealListLabel.setForeground(new Color(dv.FeatureButtonColor()));
         HealListLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -536,33 +506,30 @@ public class FillFormView extends JPanel implements ActionListener
         LayeredPaneArea.add(ScrollPaneFormList, Integer.valueOf(0));
         this.add(LayeredPaneArea);
 
-        this.repaint(0,0, dv.FrameWidth(), dv.FrameHeight());
+        this.repaint(0, 0, dv.FrameWidth(), dv.FrameHeight());
     }
 
     /*CONSTRUCTOR*/
-    public FillFormView(Person person)
-    {
+    public FillFormView(Person person) {
         personalUser = person;
         initComponents();
     }
 
     /*ACTION PERFORMED*/
     @Override
-    public void actionPerformed(ActionEvent e)
-    {
-        if (e.getSource() == FormFilterButton)
-        {
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == FormFilterButton) {
             CreateFormPanel = null;
             LayeredPaneArea.removeAll();
             LayeredPaneArea.repaint(320, 40, 680, 630);
 
             JLabel HealListLabel = new JLabel("DANH SÁCH TỜ KHAI Y TẾ (" + personalUser.getFullName() + ")");
-            HealListLabel.setBounds(0,0,640,40);
+            HealListLabel.setBounds(0, 0, 640, 40);
             HealListLabel.setFont(new Font(dv.fontName(), 1, 20));
             HealListLabel.setForeground(new Color(dv.FeatureButtonColor()));
             HealListLabel.setHorizontalAlignment(JLabel.CENTER);
 
-            initFormListPanel((FormFilterChoice.getSelectedIndex()+1)*7);
+            initFormListPanel((FormFilterChoice.getSelectedIndex() + 1) * 7);
             initScrollPaneFormList();
 
             LayeredPaneArea.add(HealListLabel, Integer.valueOf(0));
@@ -570,8 +537,7 @@ public class FillFormView extends JPanel implements ActionListener
             LayeredPaneArea.repaint(320, 40, 680, 630);
         }
 
-        if (e.getSource() == FillFormButton)
-        {
+        if (e.getSource() == FillFormButton) {
             FormListPanel = null;
             ScrollPaneFormList = null;
 
@@ -585,5 +551,4 @@ public class FillFormView extends JPanel implements ActionListener
         }
 
     }
-
 }

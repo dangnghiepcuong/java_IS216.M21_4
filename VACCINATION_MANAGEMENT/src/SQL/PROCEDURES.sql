@@ -16,11 +16,13 @@ begin
     --select out the last ID of the ORG in the par_Province
     select ID into temp_ID
     from ORGANIZATION
-    where Province = par_Province and rownum = 1
-    order by ID desc;
+    where Province = par_Province 
+    and TO_NUMBER(SUBSTR(ID,3,5)) = (select COUNT(ID) 
+                                    from ORGANIZATION
+                                    where Province = par_Province);
 
     --The start ID is (the selected ID + 1)
-    Last_Seq := TO_NUMBER(SUBSTR(TO_CHAR(temp_ID), -3, 3)) + 1;
+    Last_Seq := SUBSTR(temp_ID, -3, 3) + 1;
 
     --Loop to create the continue ORGs with the serializable ID
     for i in Last_Seq .. Last_Seq + par_Quantity - 1
@@ -50,6 +52,7 @@ EXCEPTION
     end loop;
 
 end ACC_CREATE_ORG;
+
 --------------------------------------------------------
 --  DDL for Procedure ACC_DELETE_RECORD
 --------------------------------------------------------

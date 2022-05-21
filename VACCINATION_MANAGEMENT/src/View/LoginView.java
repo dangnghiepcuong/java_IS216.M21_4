@@ -15,7 +15,7 @@ import java.sql.*;
  *
  * @author NghiepCuong
  */
-public class LoginView extends JFrame implements ActionListener, MouseListener {
+public class LoginView extends JFrame implements ActionListener, MouseListener, KeyListener {
     private JLabel ViewSymbol;
     private JLabel UsernameLabel;
     private JLabel PasswordLabel;
@@ -58,6 +58,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
         UsernameTextField.setFont(new Font(dv.fontName(), Font.PLAIN, 16));
         UsernameTextField.setForeground(new Color(0x333333));
         UsernameTextField.setBackground(Color.WHITE);
+        UsernameTextField.addKeyListener(this);
     }
 
     private void initPasswordLabel()
@@ -79,6 +80,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
         PasswordField.setFont(new Font(dv.fontName(), Font.PLAIN, 16));
         PasswordField.setForeground(new Color(dv.FieldLabelColor()));
         PasswordField.setBackground(Color.WHITE);
+        PasswordField.addKeyListener(this);
     }
 
     private void initForgotPasswordLabel()
@@ -189,7 +191,6 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
             String InputUsername = UsernameTextField.getText();
             String InputPassword = String.valueOf(PasswordField.getPassword());
 
-
             if (InputUsername.equals("") || InputPassword.equals("")) {
                 dv.popupOption(this, "Nhập vào tài khoản/mật khẩu!", "Cảnh báo!", 1);
                 return;
@@ -201,9 +202,7 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
 
             try {
                 Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-
                 PreparedStatement st = connection.prepareStatement(query);
-
                 ResultSet rs = st.executeQuery(query);
 
                 rs.next();
@@ -289,4 +288,85 @@ public class LoginView extends JFrame implements ActionListener, MouseListener {
     public void mouseEntered(MouseEvent e) {}
     @Override
     public void mouseExited(MouseEvent e) {}
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyPressed(KeyEvent e){
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            String InputUsername = UsernameTextField.getText();
+            String InputPassword = String.valueOf(PasswordField.getPassword());
+
+            if (InputUsername.equals("") || InputPassword.equals("")) {
+                dv.popupOption(this, "Nhập vào tài khoản/mật khẩu!", "Cảnh báo!", 1);
+                return;
+            }
+
+            String query = "select *" +
+                    " from ACCOUNT" +
+                    " where Username = '" + InputUsername + "'";
+
+            try {
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                PreparedStatement st = connection.prepareStatement(query);
+
+                ResultSet rs = st.executeQuery(query);
+
+                rs.next();
+                acc.setUsername(rs.getString("Username"));
+                acc.setPassword(rs.getString("Password"));
+                acc.setRole(rs.getInt("Role"));
+                acc.setStatus(rs.getInt("Status"));
+
+            } catch (SQLException ex) {
+                dv.popupOption(this, "Tài khoản không tồn tại!", "Lỗi " + ex.getErrorCode(), 2);
+                ex.printStackTrace();
+                return;
+            }
+
+            if (acc.getPassword().equals(InputPassword) == false)
+            {
+                dv.popupOption(this, "Mật khẩu không đúng!", "Lỗi!", 2);
+                return;
+            }
+
+            if (acc.getStatus() == 0)
+            {
+                dv.popupOption(this, "Tài khoản đã bị khóa!", "Cảnh báo!", 1);
+                return;
+            }
+
+            if (acc.getStatus() == 2)
+            {
+                dv.popupOption(this, "Tài khoản đang được đăng nhập!", "Cảnh báo!", 1);
+                return;
+            }
+
+            else
+            {
+                switch (acc.getRole()) {
+                    case 0:
+//                        this.dispose();
+                        MOHMainView mohMainView = new MOHMainView(acc.getUsername());
+                        break;
+                    case 1:
+//                        this.dispose();
+                        ORGMainView orgMainView = new ORGMainView(acc.getUsername());
+                        break;
+                    case 2:
+//                        this.dispose();
+                        CitizenMainView citizenMainView = new CitizenMainView(acc.getUsername());
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {}
 }
