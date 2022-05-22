@@ -31,7 +31,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
     private JScrollPane ScrollPaneSchedList;
     private JPanel SchedListPanel;
 
-    /*Registion List*/
+    /*Registration List*/
     private JPanel RegFilterPanel;
     private JLabel RegFilterLabel;
     private Choice RegFilterChoice;
@@ -125,7 +125,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
     *       + A PANEL: LIST OF SCHEDULES
     *           - PANELS: SCHEDULES
     *               + LABELS
-    *               + BUTTONS: WATCH LIST OF REGISTION
+    *               + BUTTONS: WATCH LIST OF REGISTRATION
     */
     private JPanel initSchedPanel(Schedule Sched)
     {
@@ -155,7 +155,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         Time.setBounds(30, 55+2,600,25);
         Time.setHorizontalAlignment(JLabel.LEFT);
 
-        ActionListener handleRegistionsButton = new ActionListener()
+        ActionListener handleRegistrationsButton = new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
@@ -182,17 +182,17 @@ public class ManageScheduleView extends JPanel implements ActionListener
             }
         };
 
-        JButton SchedRegistionButton = new JButton();
-        SchedRegistionButton.setBounds(30, 80, 150+7, 30+6);
-        SchedRegistionButton.setBorder(null);
-        SchedRegistionButton.setContentAreaFilled(false);
-        SchedRegistionButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Sched Registion Button.png")));
-        SchedRegistionButton.addActionListener(handleRegistionsButton);
+        JButton SchedRegistrationButton = new JButton();
+        SchedRegistrationButton.setBounds(30, 80, 150+7, 30+6);
+        SchedRegistrationButton.setBorder(null);
+        SchedRegistrationButton.setContentAreaFilled(false);
+        SchedRegistrationButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Sched Registration Button.png")));
+        SchedRegistrationButton.addActionListener(handleRegistrationsButton);
 
         SchedPanel.add(OnDateVaccine);
         SchedPanel.add(SchedID);
         SchedPanel.add(Time);
-        SchedPanel.add(SchedRegistionButton);
+        SchedPanel.add(SchedRegistrationButton);
 
         LocalDate SchedOnDate = LocalDate.parse(Sched.getOnDate().substring(0, 10));
 
@@ -630,15 +630,15 @@ public class ManageScheduleView extends JPanel implements ActionListener
     }
 
     /*
-    *       INITIALIZE THE LIST OF REGISTIONS OF THE SELECTED SCHEDULE
+    *       INITIALIZE THE LIST OF REGISTRATIONS OF THE SELECTED SCHEDULE
     *       - SCROLLPANE:
-    *           + PANEL: LIST OF REGISTIONS
-    *               - PANELS: REGISTIONS
-    *                   + CHOICE: STATUS OF REGISTION
+    *           + PANEL: LIST OF REGISTRATIONS
+    *               - PANELS: REGISTRATIONS
+    *                   + CHOICE: STATUS OF REGISTRATION
     *                   + BUTTON: UPDATE STATUS
     * */
 
-    private JPanel initRegPanel(RegisteredScheds Reg)
+    private JPanel initRegPanel(Register Reg)
     {
         JPanel RegPanel = new JPanel();
         RegPanel.setLayout(null);
@@ -699,7 +699,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
             }
 
             JButton UpdateStatusButton = new JButton();
-            ActionListener handleUpdateRegistions = new ActionListener()
+            ActionListener handleUpdateRegistrations = new ActionListener()
             {
                 @Override
                 public void actionPerformed(ActionEvent e)
@@ -743,7 +743,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         }
                     }
 
-                    //repaint Status on Registion Panel
+                    //repaint Status on Registration Panel
                     Reg.setStatus(dv.getStatusIndex(StatusChoice.getSelectedItem()));
                     TimeNOStatus.setText("Buổi: " + dv.getTimeName(Reg.getTime())
                             + "          STT: " + Reg.getNO() + "          Tình trạng: " + dv.getStatusName(Reg.getStatus()));
@@ -768,7 +768,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
             UpdateStatusButton.setContentAreaFilled(false);
             UpdateStatusButton.setBorder(null);
             UpdateStatusButton.setIcon(UpdateStatusButtonIcon);
-            UpdateStatusButton.addActionListener(handleUpdateRegistions);
+            UpdateStatusButton.addActionListener(handleUpdateRegistrations);
 
             RegPanel.add(StatusChoice);
             RegPanel.add(UpdateStatusButton);
@@ -807,7 +807,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
             while(rs.next())
             {
                 //PersonalID, LastName, FirstName, Birthday, Gender, Phone, Time, NO, DoseType, Status, Image
-                RegisteredScheds Reg = new RegisteredScheds();
+                Register Reg = new Register();
                 Reg.setSched(Sched);
                 Reg.getCitizen().setID(rs.getString("PersonalID"));
                 Reg.getCitizen().setLastName(rs.getString("LastName"));

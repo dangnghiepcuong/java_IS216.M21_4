@@ -24,7 +24,7 @@ public class CitizenMainView extends JFrame implements ActionListener
     private JButton RegisterVaccinationFButton;
     private JButton NotificationFButton;
     private JButton FillFormFButton;
-    private JButton ManageRegistionFButton;
+    private JButton ManageRegistrationFButton;
     private JButton UpdateInjectionFButton;
     private JButton CertificateFButton;
 
@@ -37,7 +37,7 @@ public class CitizenMainView extends JFrame implements ActionListener
     private UserInformationView userInformationView;
     private RegisterVaccinationView registerVaccinationView;
     private FillFormView fillFormView;
-    private ManageRegistionView manageRegistionView;
+    private ManageRegistrationView manageRegistrationView;
     private UpdateInjectionView updateInjectionView;
     private CertificateView certificateView;
 
@@ -263,14 +263,14 @@ public class CitizenMainView extends JFrame implements ActionListener
         FeatureLayeredPane.add(ButtonLabel);
     }
 
-    private void initManageRegistionFButton()
+    private void initManageRegistrationFButton()
     {
-        ManageRegistionFButton = new JButton();
-        ManageRegistionFButton.setBounds(240 + 30+15, 240 , 133, 133);
-        ManageRegistionFButton.setBorder(null);
-        ManageRegistionFButton.setContentAreaFilled(false);
-        ManageRegistionFButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Manage Registion Feature Button.png")));
-        ManageRegistionFButton.addActionListener(this);
+        ManageRegistrationFButton = new JButton();
+        ManageRegistrationFButton.setBounds(240 + 30+15, 240 , 133, 133);
+        ManageRegistrationFButton.setBorder(null);
+        ManageRegistrationFButton.setContentAreaFilled(false);
+        ManageRegistrationFButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Manage Registration Feature Button.png")));
+        ManageRegistrationFButton.addActionListener(this);
 
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(240 -10, 240+130, 240, 30);
@@ -368,8 +368,8 @@ public class CitizenMainView extends JFrame implements ActionListener
         initFillFormFButton();
         FeatureLayeredPane.add(FillFormFButton);
 
-        initManageRegistionFButton();
-        FeatureLayeredPane.add(ManageRegistionFButton);
+        initManageRegistrationFButton();
+        FeatureLayeredPane.add(ManageRegistrationFButton);
 
         initUpdateInjectionFButton();
         FeatureLayeredPane.add(UpdateInjectionFButton);
@@ -482,7 +482,7 @@ public class CitizenMainView extends JFrame implements ActionListener
             userInformationView = null;
             registerVaccinationView = null;
             fillFormView = null;
-            manageRegistionView = null;
+            manageRegistrationView = null;
             updateInjectionView = null;
             certificateView = null;
             MainLayeredPane.removeAll();
@@ -557,12 +557,12 @@ public class CitizenMainView extends JFrame implements ActionListener
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }
 
-        if(e.getSource() == ManageRegistionFButton)
+        if(e.getSource() == ManageRegistrationFButton)
         {
-            manageRegistionView = new ManageRegistionView(personalUser);
+            manageRegistrationView = new ManageRegistrationView(personalUser);
             initVaccinationRegButton();
             MainLayeredPane.removeAll();
-            MainLayeredPane.add(manageRegistionView, Integer.valueOf(0));
+            MainLayeredPane.add(manageRegistrationView, Integer.valueOf(0));
             MainLayeredPane.add(VaccinationRegButton, Integer.valueOf(1));
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }

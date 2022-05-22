@@ -4,7 +4,7 @@ package Process;
  *
  * @author DELL
  */
-public class RegisteredScheds {
+public class Register {
     private Person Citizen = new Person();
     private Schedule Sched = new Schedule();
     private Organization Org = new Organization();
@@ -15,10 +15,10 @@ public class RegisteredScheds {
     private byte[] Image;
     private String Note;
 
-    public RegisteredScheds() {
+    public Register() {
     }
 
-    public RegisteredScheds(Person Citizen, Schedule Sched, Organization Org, String DoseType, int Time, int NO, int Status, byte[] Image, String Note) {
+    public Register(Person Citizen, Schedule Sched, Organization Org, String DoseType, int Time, int NO, int Status, byte[] Image, String Note) {
         this.Citizen = Citizen;
         this.Sched = Sched;
         this.Org = Org;

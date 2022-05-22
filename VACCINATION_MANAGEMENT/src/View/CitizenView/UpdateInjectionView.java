@@ -2,7 +2,6 @@ package View.CitizenView;
 
 
 import Process.*;
-import com.sun.tools.javac.Main;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,7 +34,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
     /*Data Stored Class*/
     private DefaultValue dv = new DefaultValue();
     private Person personalUser = new Person();
-    private RegisteredScheds Reg=new RegisteredScheds();
+    private Register Reg=new Register();
 
     private File file;
     private FileInputStream input=null;
@@ -193,10 +192,10 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
        UpLoadImageButton.addActionListener(this);
 
        RemoveImageButton = new JButton();
-       ImageIcon RemoveImage = new ImageIcon(getClass().getResource("/Resources/icon/Remove Pic Button.png"));
-       RemoveImageButton.setIcon(RemoveImage);
-       RemoveImageButton.setBounds(dv.AlignLeft() + 350 + UploadImage.getIconWidth() + 5, 330,
-               RemoveImage.getIconWidth(), RemoveImage.getIconHeight());
+       ImageIcon RemoveImageIcon = new ImageIcon(getClass().getResource("/Resources/icon/Remove Pic Button.png"));
+       RemoveImageButton.setIcon(RemoveImageIcon);
+       RemoveImageButton.setBounds(dv.AlignLeft() + 350 + RemoveImageIcon.getIconWidth() + 5, 330,
+               RemoveImageIcon.getIconWidth(), RemoveImageIcon.getIconHeight());
        RemoveImageButton.setBorder(null);
        RemoveImageButton.setContentAreaFilled(false);
        RemoveImageButton.addActionListener(this);
