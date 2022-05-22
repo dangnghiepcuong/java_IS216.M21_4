@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package doancuoiky;
+package Process;
 
 import java.time.LocalDate;
 
@@ -10,7 +10,7 @@ import java.time.LocalDate;
  *
  * @author DELL
  */
-public class Post {
+public class Annoucement {
     private String ID;
     private String OrgID;
     private String Title;
@@ -19,10 +19,10 @@ public class Post {
     private byte Image;
     private String Note;
 
-    public Post() {
+    public Annoucement() {
     }
 
-    public Post(String ID, String OrgID, String Title, String Content, LocalDate PublishDate, byte Image, String Note) {
+    public Annoucement(String ID, String OrgID, String Title, String Content, LocalDate PublishDate, byte Image, String Note) {
         this.ID = ID;
         this.OrgID = OrgID;
         this.Title = Title;
