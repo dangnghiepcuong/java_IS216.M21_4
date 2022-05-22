@@ -1,8 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package doancuoiky;
+package Process;
 
 import java.time.LocalDate;
 
@@ -10,19 +6,19 @@ import java.time.LocalDate;
  *
  * @author DELL
  */
-public class Post {
+public class Annoucement {
     private String ID;
     private String OrgID;
     private String Title;
     private String Content;
     private LocalDate PublishDate;
-    private byte Image;
+    private byte[] Image;
     private String Note;
 
-    public Post() {
+    public Annoucement() {
     }
 
-    public Post(String ID, String OrgID, String Title, String Content, LocalDate PublishDate, byte Image, String Note) {
+    public Annoucement(String ID, String OrgID, String Title, String Content, LocalDate PublishDate, byte[] Image, String Note) {
         this.ID = ID;
         this.OrgID = OrgID;
         this.Title = Title;
@@ -72,11 +68,11 @@ public class Post {
         this.PublishDate = PublishDate;
     }
 
-    public byte getImage() {
+    public byte[] getImage() {
         return Image;
     }
 
-    public void setImage(byte Image) {
+    public void setImage(byte[] Image) {
         this.Image = Image;
     }
 
