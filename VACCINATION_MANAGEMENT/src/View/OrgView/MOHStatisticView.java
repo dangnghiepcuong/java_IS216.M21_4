@@ -146,7 +146,7 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             if (rs.getString("LastUpdate") != null)
                 Stat.setLastUpdate(LocalDate.parse(rs.getString("LastUpdate").substring(0, 10)));
 
-            JLabel LastUpdateLabel = new JLabel("Ngày: " + Stat.getLastUpdate());
+            JLabel LastUpdateLabel = new JLabel("Cập nhật ngày: " + Stat.getLastUpdate());
             LastUpdateLabel.setFont(new Font(dv.fontName(), 2, 16));
             LastUpdateLabel.setForeground(new Color(dv.BlackTextColor()));
             LastUpdateLabel.setPreferredSize(new Dimension(640, 25));
@@ -258,7 +258,7 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             Affected.setBackground(Color.WHITE);
             Affected.setPreferredSize(new Dimension(640, 170));
 
-            JLabel AffectedLabel = new JLabel("THỐNG KÊ SỐ CA NHIỄM COVID-19 ");
+            JLabel AffectedLabel = new JLabel("THỐNG KÊ SỐ CA NHIỄM COVID-19 TRONG VÒNG " + Days + " NGÀY QUA");
             AffectedLabel.setFont(new Font(dv.fontName(), 1, 18));
             AffectedLabel.setForeground(new Color(dv.FeatureButtonColor()));
             AffectedLabel.setBounds(30, 10+  1, 600, 25);
@@ -267,8 +267,7 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             rs.next();
             Stat.setTitle(rs.getString("Title"));
             Stat.setData(rs.getInt("Data"));
-            JLabel AffectedChildrenLabel = new JLabel("Số trẻ em nhiễm Covid-19 (dưới 12 tuổi) trong vòng "
-                    + Days + " ngày: " + Stat.getData());
+            JLabel AffectedChildrenLabel = new JLabel("Số trẻ em nhiễm Covid-19 (dưới 12 tuổi): " + Stat.getData());
             AffectedChildrenLabel.setFont(new Font(dv.fontName(), 0, 16));
             AffectedChildrenLabel.setForeground(new Color(dv.BlackTextColor()));
             AffectedChildrenLabel.setBounds(30, 10+  30, 600, 25);
@@ -277,8 +276,7 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             rs.next();
             Stat.setTitle(rs.getString("Title"));
             Stat.setData(rs.getInt("Data"));
-            JLabel AffectedTeenagerLabel = new JLabel("Số thanh thiếu niên nhiễm Covid-19 (từ 13 đến 22 tuổi) trong vòng "
-                    + Days + " ngày: " + Stat.getData());
+            JLabel AffectedTeenagerLabel = new JLabel("Số thanh thiếu niên nhiễm Covid-19 (từ 13 đến 22 tuổi): " + Stat.getData());
             AffectedTeenagerLabel.setFont(new Font(dv.fontName(), 0, 16));
             AffectedTeenagerLabel.setForeground(new Color(dv.BlackTextColor()));
             AffectedTeenagerLabel.setBounds(30, 10+  60, 600, 25);
@@ -287,8 +285,7 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             rs.next();
             Stat.setTitle(rs.getString("Title"));
             Stat.setData(rs.getInt("Data"));
-            JLabel AffectedAdultLabel = new JLabel("Số người lớn nhiễm Covid-19 (trên 22 đến dưới 50 tuổi) trong vòng "
-                    + Days + " ngày: " + Stat.getData());
+            JLabel AffectedAdultLabel = new JLabel("Số người lớn nhiễm Covid-19 (trên 22 đến dưới 50 tuổi): " + Stat.getData());
             AffectedAdultLabel.setFont(new Font(dv.fontName(), 0, 16));
             AffectedAdultLabel.setForeground(new Color(dv.BlackTextColor()));
             AffectedAdultLabel.setBounds(30, 10+  90, 600, 25);
@@ -297,8 +294,7 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             rs.next();
             Stat.setTitle(rs.getString("Title"));
             Stat.setData(rs.getInt("Data"));
-            JLabel AffectedOldPeopleLabel = new JLabel("Số người cao tuổi nhiễm Covid-19 (trên 50 tuổi) trong vòng "
-                    + Days + " ngày: " + Stat.getData());
+            JLabel AffectedOldPeopleLabel = new JLabel("Số người cao tuổi nhiễm Covid-19 (trên 50 tuổi): " + Stat.getData());
             AffectedOldPeopleLabel.setFont(new Font(dv.fontName(), 0, 16));
             AffectedOldPeopleLabel.setForeground(new Color(dv.BlackTextColor()));
             AffectedOldPeopleLabel.setBounds(30, 10+  120, 600, 25);
@@ -325,7 +321,6 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
     private void initScrollPaneStatisticList() {
         ScrollPaneStatisticList = new JScrollPane(StatisticListPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        ScrollPaneStatisticList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneStatisticList.setBounds(0, 40, 680, 590); //320 40
     }
 

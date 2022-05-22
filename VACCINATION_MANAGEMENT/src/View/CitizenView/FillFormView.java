@@ -289,10 +289,6 @@ public class FillFormView extends JPanel implements ActionListener{
 
         FilledDateField.setPreferredSize(new Dimension(150, 30));
 
-        JFormattedTextField textField = FilledDateField.getJFormattedTextField();
-        textField.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-        textField.setPreferredSize(new Dimension(150, 30));
-
         FilledDateField.setForeground(new Color(dv.BlackTextColor()));
         FilledDateField.setVisible(true);
         FilledDateField.setEnabled(true);
@@ -352,7 +348,7 @@ public class FillFormView extends JPanel implements ActionListener{
         ActionListener handleCreateHeal = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LocalDate FilledDate = LocalDate.parse(textField.getText());
+                LocalDate FilledDate = LocalDate.parse(FilledDateField.getJFormattedTextField().getText());
                 LocalDate sysdate = LocalDate.parse(dv.todayString());
 
                 /*if (FilledDate.isAfter(sysdate))
@@ -377,7 +373,7 @@ public class FillFormView extends JPanel implements ActionListener{
 
                         CallableStatement cst = connection.prepareCall(plsql);
                         cst.setString("par_PersonalID", personalUser.getID());
-                        cst.setString("par_FilledDate", dv.toOracleDateFormat(textField.getText()));
+                        cst.setString("par_FilledDate", dv.toOracleDateFormat(FilledDateField.getJFormattedTextField().getText()));
                         cst.setString("par_Healths", InputFirstQues + InputSecondQues + InputThirdQues + InputFourthQues);
                         cst.setString("par_Note", "");
 

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Process;
 
 import java.time.LocalDate;
@@ -16,13 +12,13 @@ public class Annoucement {
     private String Title;
     private String Content;
     private LocalDate PublishDate;
-    private byte Image;
+    private byte[] Image;
     private String Note;
 
     public Annoucement() {
     }
 
-    public Annoucement(String ID, String OrgID, String Title, String Content, LocalDate PublishDate, byte Image, String Note) {
+    public Annoucement(String ID, String OrgID, String Title, String Content, LocalDate PublishDate, byte[] Image, String Note) {
         this.ID = ID;
         this.OrgID = OrgID;
         this.Title = Title;
@@ -72,11 +68,11 @@ public class Annoucement {
         this.PublishDate = PublishDate;
     }
 
-    public byte getImage() {
+    public byte[] getImage() {
         return Image;
     }
 
-    public void setImage(byte Image) {
+    public void setImage(byte[] Image) {
         this.Image = Image;
     }
 

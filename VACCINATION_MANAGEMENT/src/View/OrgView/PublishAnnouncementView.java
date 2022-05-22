@@ -1,17 +1,27 @@
 package View.OrgView;
 
-import Process.Certificate;
-import Process.DefaultValue;
-import Process.Injection;
-import Process.Person;
+import Process.*;
+import View.CitizenView.ImageHelper;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.*;
+import java.nio.CharBuffer;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Properties;
+import java.util.Scanner;
 
 /**
  *
@@ -19,188 +29,341 @@ import java.sql.*;
  */
 public class PublishAnnouncementView extends JPanel implements ActionListener, KeyListener {
 
-    /*Search Result*/
-    private JScrollPane ScrollPaneInjList;
-    private JPanel InjectionListPanel;
-    private JLayeredPane LayeredPaneArea;
+    /*Announcement Content*/
+    private JPanel AnnContentPanel;
+    private JPanel AnnTextImage;
+    private JTextArea AnnContent;
+    private JScrollPane ScrollPaneContent;
 
-    /*Search Info*/
-    private JPanel PersonalInfoPanel;
-    private JLabel FullNameLabel;
-    private JTextField FullNameField;
-    private JLabel PhoneNumberLabel;
-    private JTextField PhoneNumberField;
-    private JLabel PersonalIDLabel;
-    private  JTextField PersonalIDField;
-    private JLabel BirthdayLabel;
-    private JTextField BirthdayField;
-    private JLabel GenderLabel;
-    private Choice GenderChoice;
-    private  JButton SearchButton;
+    /*Announcement Info*/
+    private JPanel AnnInfoPanel;
+    private JLabel OrgNameLabel;
+    private JLabel TitleLabel;
+    private JTextField TitleField;
+    private JLabel AnnNumberLabel;
+    private  JTextField AnnNumberField;
+    private JLabel PublishDateLabel;
+    private JDatePickerImpl PublishDateField;
+    private JLabel ContentLabel;
+    private File ContentFilePath;
+    private Scanner ContentFile;
+    private JButton UploadContentButton;
+    private JLabel ImageLabel;
+    private JLabel ImageFileLabel;
+    private File ImageFilePath;
+    private JLabel AttachedImage;
+    private int ImageHeight;
+    private JButton UploadImageButton;
+    private  JButton RemoveImageButton;
+
+    private JButton ConfirmButton;
+    private  JButton PublishButton;
 
     /*Object Class*/
     private DefaultValue dv = new DefaultValue();
-    private Person personalUser = new Person();
+    private Organization orgUser = new Organization();
     private Certificate cert = new Certificate();
 
-    private void initFullNameLabel()
+    private void initOrgNameLabel()
     {
-        FullNameLabel = new JLabel("Họ và tên");
-        FullNameLabel.setBounds(70, 40 +dv.AlignTop_InfoView(), 240, 30);
-        FullNameLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-        FullNameLabel.setForeground(new Color(dv.FieldLabelColor()));
+        OrgNameLabel = new JLabel("Đơn vị: " + orgUser.getName());
+        OrgNameLabel.setBounds(70, 40 +dv.AlignTop_InfoView(), 240, 30);
+        OrgNameLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        OrgNameLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
 
-    private void initFullNameField()
+    private void initTitleLabel()
     {
-        FullNameField = new JTextField();
-        FullNameField.setBounds(70, 40+dv.LabelHeight() +dv.AlignTop_InfoView(), 220, 30);
-        FullNameField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
-        FullNameField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
-        FullNameField.setForeground(new Color(dv.BlackTextColor()));
-        FullNameField.addKeyListener(this);
+        TitleLabel = new JLabel("Tiêu đề");
+        TitleLabel.setBounds(70, 50 + dv.LabelHeight() + dv.AlignTop_InfoView(), 240, 30);
+        TitleLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        TitleLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
 
-    private void initPhoneNumberLabel()
+    private void initTitleField()
     {
-        PhoneNumberLabel = new JLabel("Số điện thoại");
-        PhoneNumberLabel.setBounds(70, 50 + 2*dv.LabelHeight() + dv.AlignTop_InfoView(), 240, 30);
-        PhoneNumberLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-        PhoneNumberLabel.setForeground(new Color(dv.FieldLabelColor()));
+        TitleField = new JTextField();
+        TitleField.setBounds(70, 50 + 2*dv.LabelHeight() +dv.AlignTop_InfoView(), 220, 30);
+        TitleField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
+        TitleField.setForeground(new Color(dv.BlackTextColor()));
+        TitleField.addKeyListener(this);
     }
 
-    private void initPhoneNumberField()
+    private void initAnnNumberLabel()
     {
-        PhoneNumberField = new JTextField();
-        PhoneNumberField.setBounds(70, 50 + 3*dv.LabelHeight() +dv.AlignTop_InfoView(), 220, 30);
-        PhoneNumberField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
-        PhoneNumberField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
-        PhoneNumberField.setForeground(new Color(dv.BlackTextColor()));
-        PhoneNumberField.addKeyListener(this);
+        AnnNumberLabel = new JLabel("Số hiệu");
+        AnnNumberLabel.setBounds(70, 60  + 3*dv.LabelHeight() +dv.AlignTop_InfoView(), 270, 30);
+        AnnNumberLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        AnnNumberLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
 
-    private void initPersonalIDLabel()
+    private void initAnnNumberField()
     {
-        PersonalIDLabel = new JLabel("CMND/CCCD");
-        PersonalIDLabel.setBounds(70, 60  + 4*dv.LabelHeight() +dv.AlignTop_InfoView(), 270, 30);
-        PersonalIDLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-        PersonalIDLabel.setForeground(new Color(dv.FieldLabelColor()));
+        AnnNumberField = new JTextField();
+        AnnNumberField.setBounds(70, 60  + 4 * dv.LabelHeight() +dv.AlignTop_InfoView(), 220, 30);
+        AnnNumberField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
+        AnnNumberField.setForeground(new Color(dv.BlackTextColor()));
+        AnnNumberField.addKeyListener(this);
     }
 
-    private void initPersonalIDField()
+    private void initPublishDateLabel()
     {
-        PersonalIDField = new JTextField();
-        PersonalIDField.setBounds(70, 60  + 5 * dv.LabelHeight() +dv.AlignTop_InfoView(), 220, 30);
-        PersonalIDField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
-        PersonalIDField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
-        PersonalIDField.setForeground(new Color(dv.BlackTextColor()));
-        PersonalIDField.addKeyListener(this);
+        PublishDateLabel = new JLabel("Ngày đăng");
+        PublishDateLabel.setBounds(70, 70 + 5 * dv.LabelHeight() +dv.AlignTop_InfoView(),220,30);
+        PublishDateLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        PublishDateLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
 
-    private void initBirthdayLabel()
+    private void initPublishDateField()
     {
-        BirthdayLabel = new JLabel("Năm sinh");
-        BirthdayLabel.setBounds(70, 70 + 6 * dv.LabelHeight() +dv.AlignTop_InfoView(),220,30);
-        BirthdayLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-        BirthdayLabel.setForeground(new Color(dv.FieldLabelColor()));
+        UtilDateModel model=new UtilDateModel();
+        Properties p = new Properties();
+        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+        PublishDateField = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+
+        JFormattedTextField textField = PublishDateField.getJFormattedTextField();
+        textField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
+        textField.setBounds(70, 70  + 6 * dv.LabelHeight() +dv.AlignTop_InfoView(), 220, 28);
+
+        PublishDateField.setBounds(70, 70  + 6 * dv.LabelHeight() +dv.AlignTop_InfoView(), 220, 28);
+        PublishDateField.setTextEditable(true);
+        PublishDateField.setForeground(new Color(dv.BlackTextColor()));
+        PublishDateField.setVisible(true);
+        PublishDateField.setEnabled(true);
     }
 
-    private void initBirthdayField()
+    private void UploadTextFile()
     {
-        BirthdayField = new JTextField();
-        BirthdayField.setBounds(70, 70  + 7 * dv.LabelHeight() +dv.AlignTop_InfoView(), 220, 30);
-        BirthdayField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
-        BirthdayField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
-        BirthdayField.setForeground(new Color(dv.BlackTextColor()));
-        BirthdayField.addKeyListener(this);
+        JFileChooser chooser=new JFileChooser();
+        chooser.setFileFilter(new FileFilter()
+                              {
+                                  @Override
+                                  public boolean accept(File f)
+                                  {
+                                      if(f.isDirectory())
+                                          return true;
+                                      else
+                                          return f.getName().toLowerCase().endsWith(".txt");
+                                  }
+                                  @Override
+                                  public String getDescription()
+                                  {
+                                      return "Text File (*.txt)";
+                                  }
+                              }
+        );
+        if(chooser.showOpenDialog(this) == JFileChooser.CANCEL_OPTION)
+            return;
+
+        ContentFilePath = chooser.getSelectedFile();
+        try
+        {
+            JLabel ContentFileLabel = new JLabel(ContentFilePath.getName());
+            ContentFileLabel.setBounds(70, 80 + 8 * dv.LabelHeight() +dv.AlignTop_InfoView(),220,30);
+            ContentFileLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+            ContentFileLabel.setForeground(new Color(dv.FieldLabelColor()));
+            AnnInfoPanel.add(ContentFileLabel);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            dv.popupOption(null, ex.getMessage(), "Lỗi!",2);
+        }
     }
 
-    private void initGenderLabel()
+    private void initContentLabel()
     {
-        GenderLabel = new JLabel("Giới tính");
-        GenderLabel.setBounds(70, 80 + 8*dv.LabelHeight() +dv.AlignTop_InfoView(), 200, 30);
-        GenderLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-        GenderLabel.setForeground(new Color(dv.FieldLabelColor()));
+        ContentLabel = new JLabel("Tải lên file.txt nội dung");
+        ContentLabel.setBounds(70, 80 + 7 * dv.LabelHeight() +dv.AlignTop_InfoView(),220,30);
+        ContentLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        ContentLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
 
-    private void initGenderChoice()
+    private void initUploadContentButton()
     {
-        GenderChoice = new Choice();
-        GenderChoice.setBounds(70, 80 + 9*dv.LabelHeight() +dv.AlignTop_InfoView(), 80, 28);
-        GenderChoice.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-        GenderChoice.setForeground(new Color(dv.FieldLabelColor()));
-        GenderChoice.addKeyListener(this);
+        ImageIcon UploadContentButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Memo.png"));
+        UploadContentButton = new JButton();
+        UploadContentButton.setBounds(70 + 220, 80 + 7 * dv.LabelHeight() +dv.AlignTop_InfoView(),
+                UploadContentButtonIcon.getIconWidth(), UploadContentButtonIcon.getIconHeight());
+//        UploadContentButton.setBorder(null);
+        UploadContentButton.setContentAreaFilled(false);
+        UploadContentButton.setIcon(UploadContentButtonIcon);
 
-        GenderChoice.add("");
-        GenderChoice.add("Nữ");
-        GenderChoice.add("Nam");
-        GenderChoice.add("Khác");
+        UploadContentButton.addActionListener(this);
+        UploadContentButton.addKeyListener(this);
     }
 
-    private void initSearchButton()
+    private void UploadImageFile()
     {
-        ImageIcon RegisterButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Search Filter Button.png"));
-        SearchButton = new JButton();
-        SearchButton.setBounds(70, 600, RegisterButtonIcon.getIconWidth(), RegisterButtonIcon.getIconHeight());
-        SearchButton.setBorder(null);
-        SearchButton.setContentAreaFilled(false);
-        SearchButton.setIcon(RegisterButtonIcon);
+        JFileChooser chooser=new JFileChooser();
+        chooser.setFileFilter(new FileFilter()
+                              {
+                                  @Override
+                                  public boolean accept(File f)
+                                  {
+                                      if(f.isDirectory())
+                                          return true;
+                                      else
+                                          return f.getName().toLowerCase().endsWith(".jpg");
+                                  }
 
-        SearchButton.addActionListener(this);
-        SearchButton.addKeyListener(this);
+                                  @Override
+                                  public String getDescription()
+                                  {
+                                      return "Image File (*.jpg)";
+                                  }
+                              }
+        );
+        if(chooser.showOpenDialog(this) == JFileChooser.CANCEL_OPTION)
+            return;
+
+        ImageFilePath = chooser.getSelectedFile();
+        try
+        {
+            ImageIcon TakenImage = new ImageIcon(ImageFilePath.getPath());
+            Image ResizedImg = ImageHelper.reSize(TakenImage.getImage(),
+                    600, (int) (600.0 / TakenImage.getIconWidth() * TakenImage.getIconHeight()));
+            AttachedImage = new JLabel(new ImageIcon(ResizedImg));
+            AttachedImage.setPreferredSize(new Dimension( 600, (int) (600.0 / TakenImage.getIconWidth() * TakenImage.getIconHeight())));
+            AttachedImage.setHorizontalAlignment(JLabel.LEFT);
+            ImageHeight = (int) (600.0 / TakenImage.getIconWidth() * TakenImage.getIconHeight());
+
+            ImageFileLabel = new JLabel(ImageFilePath.getName());
+            ImageFileLabel.setBounds(70, 90 + 10 * dv.LabelHeight() +dv.AlignTop_InfoView(),220,30);
+            ImageFileLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+            ImageFileLabel.setForeground(new Color(dv.FieldLabelColor()));
+            AnnInfoPanel.add(ImageFileLabel);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            dv.popupOption(null, ex.getMessage(), "Lỗi!",2);
+        }
+
+        RemoveImageButton.setEnabled(true);
     }
 
-    private void initPersonalInfoPanel()
+    private void initImageLabel()
     {
-        PersonalInfoPanel = new JPanel();
+        ImageLabel = new JLabel("Tải lên file.jpg hình ảnh");
+        ImageLabel.setBounds(70, 90 + 9 * dv.LabelHeight() +dv.AlignTop_InfoView(),220,30);
+        ImageLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        ImageLabel.setForeground(new Color(dv.FieldLabelColor()));
+    }
 
-        PersonalInfoPanel.setLayout(null);
-        PersonalInfoPanel.setBounds(0,0,dv.FrameWidth()-dv.FrameHeight(),dv.FrameHeight());
-        PersonalInfoPanel.setBackground(new Color(dv.ViewBackgroundColor()));
-        PersonalInfoPanel.setBorder(dv.border());
+    private void initUploadImageButton()
+    {
+        ImageIcon UploadImageButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/ImageIcon.png"));
+        UploadImageButton = new JButton();
+        UploadImageButton.setBounds(70 + 220, 90 + 9 * dv.LabelHeight() +dv.AlignTop_InfoView(),
+                UploadImageButtonIcon.getIconWidth(), UploadImageButtonIcon.getIconHeight());
+        UploadImageButton.setBorder(null);
+        UploadImageButton.setContentAreaFilled(false);
+        UploadImageButton.setIcon(UploadImageButtonIcon);
+        UploadImageButton.addActionListener(this);
+        UploadImageButton.addKeyListener(this);
+    }
 
-        JLabel PersonalInfoLabel = new JLabel("THÔNG TIN CÁ NHÂN");
-        PersonalInfoLabel.setBounds((PersonalInfoPanel.getWidth()-300)/2, 40, 300, 30);
-        PersonalInfoLabel.setFont(new Font(dv.fontName(), 1, 20));
-        PersonalInfoLabel.setForeground(new Color(dv.FeatureButtonColor()));
-        PersonalInfoLabel.setHorizontalAlignment(JLabel.CENTER);
+    private void initRemoveImageButton()
+    {
+        RemoveImageButton = new JButton();
+        ImageIcon RemoveImageIcon = new ImageIcon(getClass().getResource("/Resources/icon/Remove Pic Button.png"));
+        RemoveImageButton.setIcon(RemoveImageIcon);
+        RemoveImageButton.setBounds((360-RemoveImageIcon.getIconWidth())/2, 100 + 11 * dv.LabelHeight() +dv.AlignTop_InfoView(),
+                RemoveImageIcon.getIconWidth(), RemoveImageIcon.getIconHeight());
+        RemoveImageButton.setBorder(null);
+        RemoveImageButton.setContentAreaFilled(false);
+        RemoveImageButton.addActionListener(this);
+        RemoveImageButton.setEnabled(false);
+    }
 
-        PersonalInfoPanel.add(PersonalInfoLabel);
+    private void initConfirmButton()
+    {
+        ImageIcon ConfirmButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Confirm Button.png"));
+        ConfirmButton = new JButton();
+        ConfirmButton.setBounds((360-ConfirmButtonIcon.getIconWidth())/2, 150  + 11 * dv.LabelHeight() +dv.AlignTop_InfoView(), ConfirmButtonIcon.getIconWidth(), ConfirmButtonIcon.getIconHeight());
+        ConfirmButton.setBorder(null);
+        ConfirmButton.setContentAreaFilled(false);
+        ConfirmButton.setIcon(ConfirmButtonIcon);
 
-        initFullNameLabel();
-        PersonalInfoPanel.add(FullNameLabel);
+        ConfirmButton.addActionListener(this);
+        ConfirmButton.addKeyListener(this);
+    }
 
-        initFullNameField();
-        PersonalInfoPanel.add(FullNameField);
+    private void initPublishButton()
+    {
+        ImageIcon PublishButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Publish Ann Button.png"));
+        PublishButton = new JButton();
+        PublishButton.setBounds((360-PublishButtonIcon.getIconWidth())/2, 600, PublishButtonIcon.getIconWidth(), PublishButtonIcon.getIconHeight());
+        PublishButton.setBorder(null);
+        PublishButton.setContentAreaFilled(false);
+        PublishButton.setIcon(PublishButtonIcon);
+        PublishButton.setEnabled(false);
 
-        initBirthdayLabel();
-        PersonalInfoPanel.add(BirthdayLabel);
+        PublishButton.addActionListener(this);
+        PublishButton.addKeyListener(this);
+    }
 
-        initBirthdayField();
-        PersonalInfoPanel.add(BirthdayField);
+    private void initAnnInfoPanel()
+    {
+        AnnInfoPanel = new JPanel();
 
-        initGenderLabel();
-        PersonalInfoPanel.add(GenderLabel);
+        AnnInfoPanel.setLayout(null);
+        AnnInfoPanel.setBounds(0,0,dv.FrameWidth()-dv.FrameHeight(),dv.FrameHeight());
+        AnnInfoPanel.setBackground(new Color(dv.ViewBackgroundColor()));
+        AnnInfoPanel.setBorder(dv.border());
 
-        initGenderChoice();
-        PersonalInfoPanel.add(GenderChoice);
+        JLabel AnnoucementInfoLabel = new JLabel("THIẾT LẬP THÔNG BÁO");
+        AnnoucementInfoLabel.setBounds((AnnInfoPanel.getWidth()-300)/2, 40, 300, 30);
+        AnnoucementInfoLabel.setFont(new Font(dv.fontName(), 1, 20));
+        AnnoucementInfoLabel.setForeground(new Color(dv.FeatureButtonColor()));
+        AnnoucementInfoLabel.setHorizontalAlignment(JLabel.CENTER);
 
-        initPhoneNumberLabel();
-        PersonalInfoPanel.add(PhoneNumberLabel);
+        AnnInfoPanel.add(AnnoucementInfoLabel);
 
-        initPhoneNumberField();
-        PersonalInfoPanel.add(PhoneNumberField);
+        initOrgNameLabel();
+        AnnInfoPanel.add(OrgNameLabel);
 
-        initPersonalIDLabel();
-        PersonalInfoPanel.add(PersonalIDLabel);
+        initTitleLabel();
+        AnnInfoPanel.add(TitleLabel);
 
-        initPersonalIDField();
-        PersonalInfoPanel.add(PersonalIDField);
+        initTitleField();
+        AnnInfoPanel.add(TitleField);
 
-        initSearchButton();
-        PersonalInfoPanel.add(SearchButton);
+        initAnnNumberLabel();
+        AnnInfoPanel.add(AnnNumberLabel);
 
-        PersonalInfoPanel.validate();
+        initAnnNumberField();
+        AnnInfoPanel.add(AnnNumberField);
+
+        initPublishDateLabel();
+        AnnInfoPanel.add(PublishDateLabel);
+
+        initPublishDateField();
+        AnnInfoPanel.add(PublishDateField);
+
+        initContentLabel();
+        AnnInfoPanel.add(ContentLabel);
+
+        initImageLabel();
+        AnnInfoPanel.add(ImageLabel);
+
+        initUploadContentButton();
+        AnnInfoPanel.add(UploadContentButton);
+
+        initUploadImageButton();
+        AnnInfoPanel.add(UploadImageButton);
+
+        initRemoveImageButton();
+        AnnInfoPanel.add(RemoveImageButton);
+
+        initConfirmButton();
+        AnnInfoPanel.add(ConfirmButton);
+
+        initPublishButton();
+        AnnInfoPanel.add(PublishButton);
+
+        AnnInfoPanel.validate();
     }
 
     /*
@@ -211,187 +374,98 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
     *               + PANELS: INJECTIONS
     *                  - LABELS
     * */
-   private JPanel initInjectionPanel(Injection Inj)
-   {
-       JLabel NameOrg = new JLabel("Mũi: " + Inj.getInjNo()
-               + " ("+dv.getDoseTypeName(Inj.getDoseType()) +")");
-       NameOrg.setBounds(20, 2, 400, 25);
-       NameOrg.setFont(new Font(dv.fontName(),1, 20));
-       NameOrg.setForeground(new Color(dv.BlackTextColor()));
-
-       JLabel Vaccine = new JLabel("Vaccine: " + Inj.getSched().getVaccineID());
-       Vaccine.setBounds(20, 30, 350, 25);
-       Vaccine.setFont(new Font(dv.fontName(),2,20));
-       Vaccine.setForeground(new Color(dv.BlackTextColor()));
-
-       JLabel InjNOType=new JLabel("Đơn vị tiêm chủng: " + Inj.getOrg().getName());
-       InjNOType.setBounds(20, 30*2, 600, 25);
-       InjNOType.setFont(new Font(dv.fontName(),0, 18));
-       InjNOType.setForeground(new Color(dv.BlackTextColor()));
-
-       JLabel OnDateTime = new JLabel("Lịch tiêm ngày: " + Inj.getSched().getOnDate());
-       OnDateTime.setFont(new Font(dv.fontName(),0, 18));
-       OnDateTime.setBounds(20,30*3,500,25);
-       OnDateTime.setForeground(new Color(dv.BlackTextColor()));
-
-       JPanel InjectionPanel = new JPanel();
-       InjectionPanel.setPreferredSize(new Dimension(560, 120));
-       InjectionPanel.setLayout(null);
-       InjectionPanel.setBackground(Color.WHITE);
-       InjectionPanel.setBorder(dv.border());
-
-       InjectionPanel.add(NameOrg);
-       InjectionPanel.add(Vaccine);
-       InjectionPanel.add(InjNOType);
-       InjectionPanel.add(OnDateTime);
-       InjectionPanel.validate();
-
-       return InjectionPanel;
-   }
-
-   private void initInjectionListPanel()
-   {
-       InjectionListPanel = new JPanel();
-       InjectionListPanel.setLayout(new FlowLayout());
-       InjectionListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
-
-       int i =0;
-       int nInj = 0;
-
-       Connection connection = null;
-
-       String query = "";
-       query = "select *" +
-               "from INJECTION INJ, SCHEDULE SCHED, ORGANIZATION ORG " +
-               "where INJ.PersonalID = " + personalUser.getID() + " and" +
-               "      INJ.Schedid = SCHED.ID and" +
-               "      SCHED.OrgID = ORG.ID " +
-               "order by InjNO";
-
-       try {
-           connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-           PreparedStatement st = connection.prepareStatement(query);
-           ResultSet rs = st.executeQuery(query);
-
-           while(rs.next())
-           {
-               cert.getInjectionList()[i] = new Injection();
-               cert.getInjectionList()[i].setInjNo(rs.getInt("InjNO"));
-               cert.getInjectionList()[i].getOrg().setName(rs.getString("Name"));
-               cert.getInjectionList()[i].getOrg().setProvince(rs.getString("Province"));
-               cert.getInjectionList()[i].getOrg().setDistrict(rs.getString("District"));
-               cert.getInjectionList()[i].getOrg().setTown(rs.getString("Town"));
-               cert.getInjectionList()[i].getOrg().setStreet(rs.getString("Street"));
-               cert.getInjectionList()[i].getSched().setOnDate(rs.getString("OnDate").substring(0,10));
-               cert.getInjectionList()[i].getSched().setVaccineID(rs.getString("VaccineID"));
-               cert.getInjectionList()[i].setDoseType(rs.getString("DoseType"));
-               InjectionListPanel.add(initInjectionPanel(cert.getInjectionList()[i]));
-               i++;
-           }
-       } catch (SQLException ex) {
-           dv.popupOption(null,ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
-           ex.printStackTrace();
-           return;
-       }finally {
-           try {
-               connection.close();
-           } catch (SQLException ex) {
-               ex.printStackTrace();
-           }
-       }
-
-       query = "select * from CERTIFICATE CERT where PersonalID = '" + personalUser.getID() + "'";
-       try {
-           connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-           PreparedStatement st = connection.prepareStatement(query);
-           ResultSet rs = st.executeQuery(query);
-
-           rs.next();
-           cert.setDose(rs.getInt("Dose"));
-           cert.setCertType(rs.getInt("CertType"));
-       }
-       catch (SQLException ex)
-       {
-           dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
-           ex.printStackTrace();
-           return;
-       }finally {
-           try {
-               connection.close();
-           } catch (SQLException ex) {
-               ex.printStackTrace();
-           }
-       }
-
-       nInj = i;
-
-       InjectionListPanel.setPreferredSize(new Dimension(580, 120*nInj + nInj*10));
-       InjectionListPanel.setBounds(0,120,600, 550);
-       InjectionListPanel.validate();
-   }
 
 
-   private void initScrollPaneInjList()
-    {
-        ScrollPaneInjList = new JScrollPane(InjectionListPanel,
+    public void initAnnContentPanel() {
+        JTextArea Title = new JTextArea(TitleField.getText());
+        Title.setBounds(0, 0, 630, 80);
+        Title.setFont(new Font(dv.fontName(), Font.BOLD, 26));
+        Title.setForeground(new Color(dv.FeatureButtonColor()));
+        Title.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+        Title.setWrapStyleWord(true);
+        Title.setLineWrap(true);
+        Title.setEditable(false);
+        Title.setAutoscrolls(true);
+
+        JScrollPane ScrollPaneTitle = new JScrollPane(Title,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        ScrollPaneInjList.setBounds(0,120,600, 550);; //320 40
-    }
+        ScrollPaneTitle.setBounds(40, 40, 630, 80);
+        ScrollPaneTitle.setBorder(null);
 
-    public void initLayeredPaneArea()
-    {
-        JLabel InfoLabel = new JLabel("CHỨNG NHẬN TIÊM CHỦNG");
-        InfoLabel.setBounds(0, 0, 600, 40);
-        InfoLabel.setFont(new Font(dv.fontName(),Font.BOLD, 24));
-        InfoLabel.setHorizontalAlignment(JLabel.CENTER);
+        JLabel AnnNumber = new JLabel("Thông báo số: " + AnnNumberField.getText());
+        AnnNumber.setBounds(80, 125, 640, 25);
+        AnnNumber.setFont(new Font(dv.fontName(), Font.ITALIC, 18));
+        AnnNumber.setForeground(Color.BLACK);
 
-        JLabel InfoLabel2 = new JLabel(personalUser.getFullName() + " (" + dv.getGenderName(personalUser.getGender()) + " - "
-                + personalUser.getBirthday().substring(0,4) + ")");
-        InfoLabel2.setBounds(0, 40, 600, 40);
-        InfoLabel2.setFont(new Font(dv.fontName(),Font.BOLD, 24));
-        InfoLabel2.setHorizontalAlignment(JLabel.CENTER);
+        JLabel Date = new JLabel("Ngày: " + PublishDateField.getJFormattedTextField().getText());
+        Date.setBounds(80, 145 + 2, 640, 30);
+        Date.setFont(new Font(dv.fontName(), Font.ITALIC, 18));
+        Date.setForeground(Color.BLACK);
 
-        JLabel InfoLabel3 = new JLabel();
-        InfoLabel3.setBounds(0, 80, 600, 40);
-        InfoLabel3.setFont(new Font(dv.fontName(),Font.ITALIC, 24));
-        InfoLabel3.setHorizontalAlignment(JLabel.CENTER);
-
-        if (cert.getCertType() == 0)
-        {
-            InfoLabel.setForeground(Color.WHITE);
-            InfoLabel2.setForeground(Color.WHITE);
-            InfoLabel3.setForeground(Color.WHITE);
-            InfoLabel3.setText("Chưa thực hiện tiêm chủng vaccine Covid-19");
+        try {
+            ContentFile = new Scanner(new File(ContentFilePath.getPath()));
+        } catch (FileNotFoundException ex) {
+            dv.popupOption(null,"Không tìm thấy file nội dung!", "Lỗi!", 2);
+            ex.printStackTrace();
+            return;
+        } catch (Exception ex){
+            dv.popupOption(null,"Không tìm thấy file nội dung!", "Lỗi!", 2);
+            ex.printStackTrace();
+            return;
         }
-        if (cert.getCertType() == 1)
-        {
-            InfoLabel.setForeground(new Color(dv.BlackTextColor()));
-            InfoLabel2.setForeground(new Color(dv.BlackTextColor()));
-            InfoLabel3.setForeground(new Color(dv.BlackTextColor()));
-            InfoLabel3.setText("Chưa tiêm đủ liều cơ bản vaccine Covid-19");
-        }
-        if (cert.getCertType() == 2)
-        {
-            InfoLabel.setForeground(Color.WHITE);
-            InfoLabel2.setForeground(Color.WHITE);
-            InfoLabel3.setForeground(Color.WHITE);
-            InfoLabel3.setText("Đã hoàn thành tiêm chủng vaccine Covid-19");
+        AnnContent = new JTextArea("");
+        AnnContent.setBounds(0,0,300,1);
+        AnnContent.setFont(new Font(dv.fontName(), Font.PLAIN, 18));
+        AnnContent.setForeground(new Color(dv.BlackTextColor()));
+        AnnContent.setBackground(Color.WHITE);
+        AnnContent.setAutoscrolls(true);
+        AnnContent.setWrapStyleWord(true);
+        AnnContent.setLineWrap(true);
+        AnnContent.setEditable(false);
+
+        int line=0;
+        while (ContentFile.hasNextLine()) {
+            AnnContent.append(ContentFile.nextLine() + '\n');
+            line++;
         }
 
-        LayeredPaneArea = new JLayeredPane();
-        LayeredPaneArea.setBounds(360+(720-600)/2,(this.getHeight()-630)/2,600, 630);
-        LayeredPaneArea.setLayout(null);
+        AnnTextImage = new JPanel();
+        BoxLayout boxLayout = new BoxLayout(AnnTextImage, BoxLayout.Y_AXIS);
+        AnnTextImage.setLayout(boxLayout);
+//        AnnTextImage.setPreferredSize(new Dimension(610, line*51 + ImageHeight+10));
+        AnnTextImage.setBounds(0,0,610,1);
+        AnnTextImage.add(AnnContent);
+        if (AttachedImage != null)
+        {
+            JPanel ImagePanel = new JPanel();
+            ImagePanel.add(AttachedImage);
+            AnnTextImage.add(ImagePanel);
+        }
 
-        if (cert.getCertType() == 0)
-            this.setBackground(new Color(dv.RedPastel()));
-        if (cert.getCertType() == 1)
-            this.setBackground(new Color(dv.YellowPastel()));
-        if (cert.getCertType() == 2)
-            this.setBackground(new Color(dv.GreenPastel()));
+        ScrollPaneContent = new JScrollPane(AnnTextImage,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        ScrollPaneContent.setLayout(new ScrollPaneLayout());
+        ScrollPaneContent.setBounds(40, 180, 630, 450);
 
-        LayeredPaneArea.add(InfoLabel);
-        LayeredPaneArea.add(InfoLabel2);
-        LayeredPaneArea.add(InfoLabel3);
+
+        JLabel Publisher = new JLabel("Đơn vị: " + orgUser.getName());
+        Publisher.setBounds(80, 640, 560, 30);
+        Publisher.setFont(new Font(dv.fontName(), Font.ITALIC, 18));
+        Publisher.setForeground(Color.BLACK);
+        Publisher.setHorizontalAlignment(JLabel.RIGHT);
+
+        AnnContentPanel = new JPanel();
+        AnnContentPanel.setBounds(360, 0, 720, 720);
+        AnnContentPanel.setLayout(null);
+        AnnContentPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+
+        AnnContentPanel.add(ScrollPaneTitle);
+        AnnContentPanel.add(AnnNumber);
+        AnnContentPanel.add(Date);
+        AnnContentPanel.add(ScrollPaneContent);
+        AnnContentPanel.add(Publisher);
+
+        AnnContentPanel.repaint(360, 0, 720, 720);
     }
 
     private void initComponents()
@@ -401,78 +475,115 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         this.setBackground(new Color(dv.ViewBackgroundColor()));
         this.setLayout(null);
 
-        initPersonalInfoPanel();
+        initAnnInfoPanel();
 
-        this.add(PersonalInfoPanel);
+        this.add(AnnInfoPanel);
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
     }
 
     /*CONSTRUCTOR*/
 
-    public PublishAnnouncementView()
+    public PublishAnnouncementView(Organization org)
     {
+        orgUser = org;
         initComponents();
     }
 
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        if (e.getSource() == SearchButton)
+        if (e.getSource() == UploadContentButton)
         {
-            String InputFullName = FullNameField.getText();
-            String InputBirthday = BirthdayField.getText();
-            int InputGender = GenderChoice.getSelectedIndex()-1;
-            String InputPhone = PhoneNumberField.getText();
-            String InputPersonalID = PersonalIDField.getText();
+            UploadTextFile();
+            AnnInfoPanel.repaint();
+        }
 
-            if (dv.checkStringInputValue(InputFullName, "Cảnh báo!","Nhập họ và tên!" ) != -2)
+        if (e.getSource() == ConfirmButton)
+        {
+            this.removeAll();
+            this.add(AnnInfoPanel);
+            String InputTitle = TitleField.getText();
+            String InputAnnNumber = AnnNumberField.getText();
+            String InputPublishDate = PublishDateField.getJFormattedTextField().getText();
+
+            if (dv.checkStringInputValue(InputTitle, "Cảnh báo!", "Nhập tiêu đề thông báo") != -2)
                 return;
-            if (dv.checkisNumberInputValue(InputBirthday, "Cảnh báo!", "Nhập ngày sinh là số!") != -2)
+            if (dv.checkStringInputValue(InputAnnNumber, "Cảnh báo!", "Nhập số hiệu thông báo!") != -2)
                 return;
-            if (dv.checkStringInputValue(GenderChoice.getSelectedItem(), "Cảnh báo!", "Chọn giới tính!") != -2)
-                return;
-            if (dv.checkStringInputValue(InputPhone, "Cảnh báo!", "Nhập số điện thoại!") != -2)
-                return;
-            if (dv.checkStringInputValue(InputPersonalID, "Cảnh báo!", "Nhập CMND/CCCD!") != -2)
+            if (dv.checkStringInputValue(InputPublishDate, "Cảnh báo!", "Nhập ngày đăng thông báo!") != -2)
                 return;
 
-            String query = "select LastName, FirstName, Birthday, Gender, Phone, ID" +
-                    " from PERSON" +
-                    " where (LastName || ' ' || FirstName) = '" + InputFullName + "'" +
-                    " and extract(year from Birthday) = '" + InputBirthday + "'" +
-                    " and Gender = " + InputGender +
-                    " and ID = '" + InputPersonalID + "'" +
-                    " and Phone = '" + InputPhone + "'";
+            LocalDate PublishDate = LocalDate.parse(InputPublishDate);
+            LocalDate sysdate = LocalDate.parse(dv.todayString());
+
+            if (PublishDate.isBefore(sysdate))
+            {
+                dv.popupOption(null, "Ngày đăng phải lớn hơn hoặc bằng ngày hiện tại!", "Lỗi!", 2);
+                return;
+            }
+
+            initAnnContentPanel();
+            this.add(AnnContentPanel);
+            this.repaint(0,0,dv.FrameWidth(),dv.FrameHeight());
+            PublishButton.setEnabled(true);
+        }
+
+        if (e.getSource() == UploadImageButton)
+        {
+            UploadImageFile();
+        }
+
+        if (e.getSource() == RemoveImageButton)
+        {
+            RemoveImageButton.setEnabled(false);
+            ImageFilePath = null;
+            AttachedImage = null;
+            ImageHeight = 0;
+        }
+
+        if (e.getSource() == PublishButton)
+        {
+            if (dv.popupConfirmOption(null,"Xác nhận đăng thông báo?", "Xác nhận?") != 0 )
+                return;
+
+            PublishButton.setEnabled(false);
+
+            String InputTitle = TitleField.getText();
+            String InputAnnNumber = AnnNumberField.getText();
+            String InputContent = AnnContent.getText();
+            String InputPublishDate = dv.toOracleDateFormat(PublishDateField.getJFormattedTextField().getText());
+
+            if (dv.checkStringInputValue(InputContent, "Cảnh báo!", "Nhập nội dung thông báo!") != -2)
+                return;
+
+            String plsql = "{call ANN_INSERT_RECORD(?, ?, ?, ?, ?, ?)}";
 
             Connection connection = null;
             try {
                 connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-                PreparedStatement st = connection.prepareStatement(query);
-                ResultSet rs = st.executeQuery(query);
+                CallableStatement cst = connection.prepareCall(plsql);
 
-                rs.next();
-                personalUser.setLastName(rs.getString("LastName"));
-                personalUser.setFirstName(rs.getString("FirstName"));
-                personalUser.setBirthday(rs.getString("Birthday"));
-                personalUser.setGender(rs.getInt("Gender"));
-                personalUser.setPhone(rs.getString("Phone"));
-                personalUser.setID(rs.getString("ID"));
+                FileReader ReadContent = new FileReader(ContentFilePath.getPath());
+
+                FileInputStream blobFile = new FileInputStream(ImageFilePath);
+
+                cst.setString("par_OrgID", orgUser.getID());
+                cst.setString("par_Title", InputTitle);
+                cst.setString("par_ID", InputAnnNumber);
+                cst.setClob("par_Content", ReadContent);
+                cst.setBinaryStream("par_Image",blobFile);
+                cst.setString("par_PublishDate", InputPublishDate);
+                cst.execute();
             } catch (SQLException ex)
             {
-                if (ex.getErrorCode() == 17289)
-                {
-                    if (LayeredPaneArea != null)
-                    {
-                        LayeredPaneArea.removeAll();
-                        this.setBackground(new Color(dv.ViewBackgroundColor()));
-                        this.removeAll();
-                        this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
-                        this.add(PersonalInfoPanel);
-                    }
-                    dv.popupOption(null, "Không tìm thấy thông tin người dùng!", "Lỗi " + ex.getErrorCode(), 2);
-                }
+                if (ex.getErrorCode() == 1)
+                    dv.popupOption(null,"Số hiệu bài viết đã được sử dụng!", "Lỗi!", 2);
                 else
                     dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+                return;
+            } catch (FileNotFoundException ex) {
+                dv.popupOption(null,"Không tìm thấy file nội dung!", "Lỗi!", 2);
+                ex.printStackTrace();
                 return;
             } finally {
                 try {
@@ -481,15 +592,12 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
                     ex.printStackTrace();
                 }
             }
-
-            initInjectionListPanel();
-            initScrollPaneInjList();
-
-            initLayeredPaneArea();
-            LayeredPaneArea.add(ScrollPaneInjList, Integer.valueOf(0));
-
-            this.add(LayeredPaneArea);
-            this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+            LocalDate PublishDate = LocalDate.parse(PublishDateField.getJFormattedTextField().getText());
+            LocalDate sysdate = LocalDate.parse(dv.todayString());
+            if (PublishDate.isAfter(sysdate))
+                dv.popupOption(null,"Đã lên lịch bài viết!", "Thông báo!", 0);
+            else
+                dv.popupOption(null,"Đã đăng bài viết!", "Thông báo!", 0);
         }
     }
 
@@ -501,77 +609,7 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
     {
         if (e.getKeyCode() == KeyEvent.VK_ENTER)
         {
-            String InputFullName = FullNameField.getText();
-            String InputBirthday = BirthdayField.getText();
-            int InputGender = GenderChoice.getSelectedIndex()-1;
-            String InputPhone = PhoneNumberField.getText();
-            String InputPersonalID = PersonalIDField.getText();
 
-            if (dv.checkStringInputValue(InputFullName, "Cảnh báo!","Nhập họ và tên!" ) != -2)
-                return;
-            if (dv.checkisNumberInputValue(InputBirthday, "Cảnh báo!", "Nhập ngày sinh là số!") != -2)
-                return;
-            if (dv.checkStringInputValue(GenderChoice.getSelectedItem(), "Cảnh báo!", "Chọn giới tính!") != -2)
-                return;
-            if (dv.checkStringInputValue(InputPhone, "Cảnh báo!", "Nhập số điện thoại!") != -2)
-                return;
-            if (dv.checkStringInputValue(InputPersonalID, "Cảnh báo!", "Nhập CMND/CCCD!") != -2)
-                return;
-
-            String query = "select LastName, FirstName, Birthday, Gender, Phone, ID" +
-                    " from PERSON" +
-                    " where (LastName || ' ' || FirstName) = '" + InputFullName + "'" +
-                    " and extract(year from Birthday) = '" + InputBirthday + "'" +
-                    " and Gender = " + InputGender +
-                    " and ID = '" + InputPersonalID + "'" +
-                    " and Phone = '" + InputPhone + "'";
-
-            Connection connection = null;
-            try {
-                connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-                PreparedStatement st = connection.prepareStatement(query);
-                ResultSet rs = st.executeQuery(query);
-
-                rs.next();
-                personalUser.setLastName(rs.getString("LastName"));
-                personalUser.setFirstName(rs.getString("FirstName"));
-                personalUser.setBirthday(rs.getString("Birthday"));
-                personalUser.setGender(rs.getInt("Gender"));
-                personalUser.setPhone(rs.getString("Phone"));
-                personalUser.setID(rs.getString("ID"));
-            } catch (SQLException ex)
-            {
-                if (ex.getErrorCode() == 17289)
-                {
-                    if (LayeredPaneArea != null)
-                    {
-                        LayeredPaneArea.removeAll();
-                        this.setBackground(new Color(dv.ViewBackgroundColor()));
-                        this.removeAll();
-                        this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
-                        this.add(PersonalInfoPanel);
-                    }
-                    dv.popupOption(null, "Không tìm thấy thông tin người dùng!", "Lỗi " + ex.getErrorCode(), 2);
-                }
-                else
-                    dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
-                return;
-            } finally {
-                try {
-                    connection.close();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }
-
-            initInjectionListPanel();
-            initScrollPaneInjList();
-
-            initLayeredPaneArea();
-            LayeredPaneArea.add(ScrollPaneInjList, Integer.valueOf(2));
-
-            this.add(LayeredPaneArea);
-            this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
     }
 

@@ -24,7 +24,7 @@ public class MOHMainView extends JFrame implements ActionListener
     private JLayeredPane FeatureLayeredPane;
     private JButton InfoSettingButton;
     private JButton CreateOrgAccButton;
-    private JButton PublishPostButton;
+    private JButton PublishAnnButton;
     private JButton SearchButton;
     private JButton StatisticButton;
 
@@ -37,6 +37,7 @@ public class MOHMainView extends JFrame implements ActionListener
     private LoginView loginView;
     private OrgInformationView orgInformationView;
     private CreateOrgAccView createOrgAccView;
+    private PublishAnnouncementView publishAnnouncementView;
     private SearchCitizenView searchCitizenView;
     private MOHStatisticView mohStatisticView;
 
@@ -123,8 +124,8 @@ public class MOHMainView extends JFrame implements ActionListener
         initCreateOrgAccButton();
         FeatureLayeredPane.add(CreateOrgAccButton);
 
-        initPublishPostButton();
-        FeatureLayeredPane.add(PublishPostButton);
+        initPublishAnnButton();
+        FeatureLayeredPane.add(PublishAnnButton);
 
         initSearchButton();
         FeatureLayeredPane.add(SearchButton);
@@ -201,13 +202,14 @@ public class MOHMainView extends JFrame implements ActionListener
         FeatureLayeredPane.add(ButtonLabel2);
     }
 
-    private void initPublishPostButton()
+    private void initPublishAnnButton()
     {
-        PublishPostButton = new JButton();
-        PublishPostButton.setBounds(240*2+30, 30, 133,133);
-        PublishPostButton.setBorder(null);
-        PublishPostButton.setContentAreaFilled(false);
-        PublishPostButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Send Notification Feature Button.png")));
+        PublishAnnButton = new JButton();
+        PublishAnnButton.setBounds(240*2+30, 30, 133,133);
+        PublishAnnButton.setBorder(null);
+        PublishAnnButton.setContentAreaFilled(false);
+        PublishAnnButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Send Notification Feature Button.png")));
+        PublishAnnButton.addActionListener(this);
 
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(240*2 -15, 160, 240-20, 30);
@@ -367,15 +369,22 @@ public class MOHMainView extends JFrame implements ActionListener
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
     }
 
+    private void nullFeatureViews()
+    {
+        orgInformationView = null;
+        createOrgAccView = null;
+        publishAnnouncementView = null;
+        searchCitizenView = null;
+        mohStatisticView = null;
+    }
+
     /*ACTION PERFORMED*/
     @Override
     public void actionPerformed(ActionEvent e)
     {
         if(e.getSource() == BackButton)
         {
-            orgInformationView = null;
-            createOrgAccView = null;
-            mohStatisticView = null;
+            nullFeatureViews();
             MainLayeredPane.removeAll();
             MainLayeredPane.add(MainPanel, Integer.valueOf(0));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
@@ -403,6 +412,7 @@ public class MOHMainView extends JFrame implements ActionListener
 
         if (e.getSource() == InfoSettingButton)
         {
+            nullFeatureViews();
             orgInformationView = new OrgInformationView(mohUser);
             MainLayeredPane.removeAll();
             MainLayeredPane.add(orgInformationView, Integer.valueOf(0));
@@ -451,9 +461,7 @@ public class MOHMainView extends JFrame implements ActionListener
 
         if (e.getSource() == CreateOrgAccButton)
         {
-            orgInformationView = null;
-            searchCitizenView = null;
-            mohStatisticView = null;
+            nullFeatureViews();
 
             createOrgAccView = new CreateOrgAccView();
             MainLayeredPane.removeAll();
@@ -462,11 +470,20 @@ public class MOHMainView extends JFrame implements ActionListener
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
 
+        if (e.getSource() == PublishAnnButton)
+        {
+            nullFeatureViews();
+
+            publishAnnouncementView = new PublishAnnouncementView(mohUser);
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(publishAnnouncementView, Integer.valueOf(0));
+            MainLayeredPane.add(BackButton, Integer.valueOf(1));
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+        }
+
         if (e.getSource() == SearchButton)
         {
-            orgInformationView = null;
-            createOrgAccView = null;
-            mohStatisticView = null;
+            nullFeatureViews();
 
             searchCitizenView = new SearchCitizenView();
             MainLayeredPane.removeAll();
@@ -479,9 +496,7 @@ public class MOHMainView extends JFrame implements ActionListener
 
         if (e.getSource() == StatisticButton)
         {
-            orgInformationView = null;
-            createOrgAccView = null;
-            searchCitizenView = null;
+            nullFeatureViews();
 
             mohStatisticView = new MOHStatisticView(mohUser);
             MainLayeredPane.removeAll();

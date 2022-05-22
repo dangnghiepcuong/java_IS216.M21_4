@@ -89,8 +89,6 @@ public class CertificateView extends JPanel{
                         "order by InjNO";
         try {
             Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-
-
             PreparedStatement st = connection.prepareStatement(query);
             ResultSet rs = st.executeQuery(query);
 
@@ -142,7 +140,6 @@ public class CertificateView extends JPanel{
     {
         ScrollPaneInjList = new JScrollPane(InjectionListPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
         ScrollPaneInjList.setBounds(0,120,600, 550);; //320 40
     }
 
@@ -190,6 +187,13 @@ public class CertificateView extends JPanel{
         LayeredPaneArea.setBounds((this.getWidth()-600)/2,(this.getHeight()-630)/2,600, 630);
         LayeredPaneArea.setLayout(null);
 
+        if (cert.getCertType() == 0)
+            this.setBackground(new Color(dv.RedPastel()));
+        if (cert.getCertType() == 1)
+            this.setBackground(new Color(dv.YellowPastel()));
+        if (cert.getCertType() == 2)
+            this.setBackground(new Color(dv.GreenPastel()));
+
         LayeredPaneArea.add(InfoLabel);
         LayeredPaneArea.add(InfoLabel2);
         LayeredPaneArea.add(InfoLabel3);
@@ -207,13 +211,6 @@ public class CertificateView extends JPanel{
 
         initLayeredPaneArea();
         LayeredPaneArea.add(ScrollPaneInjList, Integer.valueOf(0));
-
-        if (cert.getCertType() == 0)
-            this.setBackground(new Color(dv.RedPastel()));
-        if (cert.getCertType() == 1)
-            this.setBackground(new Color(dv.YellowPastel()));
-        if (cert.getCertType() == 2)
-            this.setBackground(new Color(dv.GreenPastel()));
 
         this.add(LayeredPaneArea);
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());

@@ -1,9 +1,6 @@
 package View.OrgView;
 
-import Process.Certificate;
-import Process.DefaultValue;
-import Process.Injection;
-import Process.Person;
+import Process.*;
 import View.CitizenView.UserInformationView;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -66,6 +63,7 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
         FullNameField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         FullNameField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         FullNameField.setForeground(new Color(dv.BlackTextColor()));
+        FullNameField.addKeyListener(this);
     }
 
     private void initPhoneNumberLabel()
@@ -83,6 +81,7 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
         PhoneNumberField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         PhoneNumberField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         PhoneNumberField.setForeground(new Color(dv.BlackTextColor()));
+        PhoneNumberField.addKeyListener(this);
     }
 
     private void initPersonalIDLabel()
@@ -100,6 +99,7 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
         PersonalIDField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         PersonalIDField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         PersonalIDField.setForeground(new Color(dv.BlackTextColor()));
+        PersonalIDField.addKeyListener(this);
     }
 
     private void initBirthdayLabel()
@@ -117,6 +117,7 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
         BirthdayField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         BirthdayField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         BirthdayField.setForeground(new Color(dv.BlackTextColor()));
+        BirthdayField.addKeyListener(this);
     }
 
     private void initGenderLabel()
@@ -133,6 +134,7 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
         GenderChoice.setBounds(70, 80 + 9*dv.LabelHeight() +dv.AlignTop_InfoView(), 80, 28);
         GenderChoice.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         GenderChoice.setForeground(new Color(dv.FieldLabelColor()));
+        GenderChoice.addKeyListener(this);
 
         GenderChoice.add("");
         GenderChoice.add("Nữ");
@@ -142,14 +144,15 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
 
     private void initSearchButton()
     {
-        ImageIcon RegisterButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Search Filter Button.png"));
+        ImageIcon SearchButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Search Filter Button.png"));
         SearchButton = new JButton();
-        SearchButton.setBounds(70, 600, RegisterButtonIcon.getIconWidth(), RegisterButtonIcon.getIconHeight());
+        SearchButton.setBounds(70, 600, SearchButtonIcon.getIconWidth(), SearchButtonIcon.getIconHeight());
         SearchButton.setBorder(null);
         SearchButton.setContentAreaFilled(false);
-        SearchButton.setIcon(RegisterButtonIcon);
+        SearchButton.setIcon(SearchButtonIcon);
 
         SearchButton.addActionListener(this);
+        SearchButton.addKeyListener(this);
     }
 
     private void initPersonalInfoPanel()
@@ -202,7 +205,7 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
         initSearchButton();
         PersonalInfoPanel.add(SearchButton);
 
-        PersonalInfoPanel.repaint(0,0,dv.FrameWidth()-dv.FrameHeight(),dv.FrameHeight());
+        PersonalInfoPanel.validate();
     }
 
     /*
@@ -240,12 +243,13 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
        InjectionPanel.setPreferredSize(new Dimension(560, 120));
        InjectionPanel.setLayout(null);
        InjectionPanel.setBackground(Color.WHITE);
-//       InjectionPanel.setBorder(dv.border());
+       InjectionPanel.setBorder(dv.border());
 
        InjectionPanel.add(NameOrg);
        InjectionPanel.add(Vaccine);
        InjectionPanel.add(InjNOType);
        InjectionPanel.add(OnDateTime);
+       InjectionPanel.validate();
 
        return InjectionPanel;
    }
@@ -259,42 +263,51 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
        int i =0;
        int nInj = 0;
 
-        String query = "select * " +
-                        "from INJECTION INJ, SCHEDULE SCHED, ORGANIZATION ORG " +
-                        "where INJ.PersonalID = " + personalUser.getID() + " and" +
-                        "      INJ.Schedid = SCHED.ID and" +
-                        "      SCHED.OrgID = ORG.ID " +
-                        "order by InjNO";
+       Connection connection = null;
 
-        try {
-            Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-            PreparedStatement st = connection.prepareStatement(query);
-            ResultSet rs = st.executeQuery(query);
+       String query = "";
+       query = "select *" +
+               "from INJECTION INJ, SCHEDULE SCHED, ORGANIZATION ORG " +
+               "where INJ.PersonalID = " + personalUser.getID() + " and" +
+               "      INJ.Schedid = SCHED.ID and" +
+               "      SCHED.OrgID = ORG.ID " +
+               "order by InjNO";
 
-            while(rs.next())
-            {
-                cert.getInjectionList()[i] = new Injection();
-                cert.getInjectionList()[i].setInjNo(rs.getInt("InjNO"));
-                cert.getInjectionList()[i].getOrg().setName(rs.getString("Name"));
-                cert.getInjectionList()[i].getOrg().setProvince(rs.getString("Province"));
-                cert.getInjectionList()[i].getOrg().setDistrict(rs.getString("District"));
-                cert.getInjectionList()[i].getOrg().setTown(rs.getString("Town"));
-                cert.getInjectionList()[i].getOrg().setStreet(rs.getString("Street"));
-                cert.getInjectionList()[i].getSched().setOnDate(rs.getString("OnDate").substring(0,10));
-                cert.getInjectionList()[i].getSched().setVaccineID(rs.getString("VaccineID"));
-                cert.getInjectionList()[i].setDoseType(rs.getString("DoseType"));
-                InjectionListPanel.add(initInjectionPanel(cert.getInjectionList()[i]));
-                i++;
-            }
-        } catch (SQLException ex) {
-            dv.popupOption(null,ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
-            ex.printStackTrace();
-            return;
-        }
+       try {
+           connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+           PreparedStatement st = connection.prepareStatement(query);
+           ResultSet rs = st.executeQuery(query);
+
+           while(rs.next())
+           {
+               cert.getInjectionList()[i] = new Injection();
+               cert.getInjectionList()[i].setInjNo(rs.getInt("InjNO"));
+               cert.getInjectionList()[i].getOrg().setName(rs.getString("Name"));
+               cert.getInjectionList()[i].getOrg().setProvince(rs.getString("Province"));
+               cert.getInjectionList()[i].getOrg().setDistrict(rs.getString("District"));
+               cert.getInjectionList()[i].getOrg().setTown(rs.getString("Town"));
+               cert.getInjectionList()[i].getOrg().setStreet(rs.getString("Street"));
+               cert.getInjectionList()[i].getSched().setOnDate(rs.getString("OnDate").substring(0,10));
+               cert.getInjectionList()[i].getSched().setVaccineID(rs.getString("VaccineID"));
+               cert.getInjectionList()[i].setDoseType(rs.getString("DoseType"));
+               InjectionListPanel.add(initInjectionPanel(cert.getInjectionList()[i]));
+               i++;
+           }
+       } catch (SQLException ex) {
+           dv.popupOption(null,ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
+           ex.printStackTrace();
+           return;
+       }finally {
+           try {
+               connection.close();
+           } catch (SQLException ex) {
+               ex.printStackTrace();
+           }
+       }
 
        query = "select * from CERTIFICATE CERT where PersonalID = '" + personalUser.getID() + "'";
        try {
-           Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+           connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
            PreparedStatement st = connection.prepareStatement(query);
            ResultSet rs = st.executeQuery(query);
 
@@ -304,14 +317,22 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
        }
        catch (SQLException ex)
        {
-            dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
-            ex.printStackTrace();
-            return;
+           dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+           ex.printStackTrace();
+           return;
+       }finally {
+           try {
+               connection.close();
+           } catch (SQLException ex) {
+               ex.printStackTrace();
+           }
        }
 
        nInj = i;
 
        InjectionListPanel.setPreferredSize(new Dimension(580, 120*nInj + nInj*10));
+       InjectionListPanel.setBounds(0,120,600, 550);
+       InjectionListPanel.validate();
    }
 
 
@@ -320,7 +341,6 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
         ScrollPaneInjList = new JScrollPane(InjectionListPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneInjList.setBounds(0,120,600, 550);; //320 40
-        ScrollPaneInjList.repaint(0,120,600, 550);
     }
 
     public void initLayeredPaneArea()
@@ -363,16 +383,16 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
             InfoLabel3.setText("Đã hoàn thành tiêm chủng vaccine Covid-19");
         }
 
+        LayeredPaneArea = new JLayeredPane();
+        LayeredPaneArea.setBounds(360+(720-600)/2,(this.getHeight()-630)/2,600, 630);
+        LayeredPaneArea.setLayout(null);
+
         if (cert.getCertType() == 0)
             this.setBackground(new Color(dv.RedPastel()));
         if (cert.getCertType() == 1)
             this.setBackground(new Color(dv.YellowPastel()));
         if (cert.getCertType() == 2)
             this.setBackground(new Color(dv.GreenPastel()));
-
-        LayeredPaneArea = new JLayeredPane();
-        LayeredPaneArea.setBounds(360+(720-600)/2,(this.getHeight()-630)/2,600, 630);
-        LayeredPaneArea.setLayout(null);
 
         LayeredPaneArea.add(InfoLabel);
         LayeredPaneArea.add(InfoLabel2);
@@ -383,7 +403,7 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
     {
         this.setSize(dv.FrameWidth(), dv.FrameHeight());
         this.setVisible(true);
-        //this.setBackground(new Color(dv.ViewBackgroundColor()));
+        this.setBackground(new Color(dv.ViewBackgroundColor()));
         this.setLayout(null);
 
         initPersonalInfoPanel();
@@ -422,15 +442,16 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
                 return;
 
             String query = "select LastName, FirstName, Birthday, Gender, Phone, ID" +
-                            " from PERSON" +
-                            " where (LastName || ' ' || FirstName) = '" + InputFullName + "'" +
-                            " and extract(year from Birthday) = '" + InputBirthday + "'" +
-                            " and Gender = " + InputGender +
-                            " and ID = '" + InputPersonalID + "'" +
-                            " and Phone = '" + InputPhone + "'";
+                    " from PERSON" +
+                    " where (LastName || ' ' || FirstName) = '" + InputFullName + "'" +
+                    " and extract(year from Birthday) = '" + InputBirthday + "'" +
+                    " and Gender = " + InputGender +
+                    " and ID = '" + InputPersonalID + "'" +
+                    " and Phone = '" + InputPhone + "'";
 
+            Connection connection = null;
             try {
-                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+                connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
                 PreparedStatement st = connection.prepareStatement(query);
                 ResultSet rs = st.executeQuery(query);
 
@@ -444,26 +465,26 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
             } catch (SQLException ex)
             {
                 if (ex.getErrorCode() == 17289)
+                {
+                    if (LayeredPaneArea != null)
+                    {
+                        LayeredPaneArea.removeAll();
+                        this.setBackground(new Color(dv.ViewBackgroundColor()));
+                        this.removeAll();
+                        this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+                        this.add(PersonalInfoPanel);
+                    }
                     dv.popupOption(null, "Không tìm thấy thông tin người dùng!", "Lỗi " + ex.getErrorCode(), 2);
+                }
                 else
                     dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
                 return;
-            }
-
-            String plsql = "{call CERT_UPDATE_RECORD(?)}";
-
-            try {
-                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-                CallableStatement cst;
-                cst = connection.prepareCall(plsql);
-                cst.setString("par_PersonalID", personalUser.getID());
-                cst.execute();
-            }
-            catch (SQLException ex)
-            {
-                dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
-                ex.printStackTrace();
-                return;
+            } finally {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
 
             initInjectionListPanel();
@@ -472,11 +493,7 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
             initLayeredPaneArea();
             LayeredPaneArea.add(ScrollPaneInjList, Integer.valueOf(0));
 
-            this.removeAll();
-
             this.add(LayeredPaneArea);
-            this.add(PersonalInfoPanel);
-            this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight()-1);
             this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
     }
@@ -487,7 +504,80 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
     @Override
     public void keyPressed(KeyEvent e)
     {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            String InputFullName = FullNameField.getText();
+            String InputBirthday = BirthdayField.getText();
+            int InputGender = GenderChoice.getSelectedIndex()-1;
+            String InputPhone = PhoneNumberField.getText();
+            String InputPersonalID = PersonalIDField.getText();
 
+            if (dv.checkStringInputValue(InputFullName, "Cảnh báo!","Nhập họ và tên!" ) != -2)
+                return;
+            if (dv.checkisNumberInputValue(InputBirthday, "Cảnh báo!", "Nhập ngày sinh là số!") != -2)
+                return;
+            if (dv.checkStringInputValue(GenderChoice.getSelectedItem(), "Cảnh báo!", "Chọn giới tính!") != -2)
+                return;
+            if (dv.checkStringInputValue(InputPhone, "Cảnh báo!", "Nhập số điện thoại!") != -2)
+                return;
+            if (dv.checkStringInputValue(InputPersonalID, "Cảnh báo!", "Nhập CMND/CCCD!") != -2)
+                return;
+
+            String query = "select LastName, FirstName, Birthday, Gender, Phone, ID" +
+                    " from PERSON" +
+                    " where (LastName || ' ' || FirstName) = '" + InputFullName + "'" +
+                    " and extract(year from Birthday) = '" + InputBirthday + "'" +
+                    " and Gender = " + InputGender +
+                    " and ID = '" + InputPersonalID + "'" +
+                    " and Phone = '" + InputPhone + "'";
+
+            Connection connection = null;
+            try {
+                connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+                PreparedStatement st = connection.prepareStatement(query);
+                ResultSet rs = st.executeQuery(query);
+
+                rs.next();
+                personalUser.setLastName(rs.getString("LastName"));
+                personalUser.setFirstName(rs.getString("FirstName"));
+                personalUser.setBirthday(rs.getString("Birthday"));
+                personalUser.setGender(rs.getInt("Gender"));
+                personalUser.setPhone(rs.getString("Phone"));
+                personalUser.setID(rs.getString("ID"));
+            } catch (SQLException ex)
+            {
+                if (ex.getErrorCode() == 17289)
+                {
+                    if (LayeredPaneArea != null)
+                    {
+                        LayeredPaneArea.removeAll();
+                        this.setBackground(new Color(dv.ViewBackgroundColor()));
+                        this.removeAll();
+                        this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+                        this.add(PersonalInfoPanel);
+                    }
+                    dv.popupOption(null, "Không tìm thấy thông tin người dùng!", "Lỗi " + ex.getErrorCode(), 2);
+                }
+                else
+                    dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+                return;
+            } finally {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            initInjectionListPanel();
+            initScrollPaneInjList();
+
+            initLayeredPaneArea();
+            LayeredPaneArea.add(ScrollPaneInjList, Integer.valueOf(2));
+
+            this.add(LayeredPaneArea);
+            this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+        }
     }
 
     @Override
