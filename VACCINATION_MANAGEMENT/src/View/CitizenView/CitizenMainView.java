@@ -40,6 +40,7 @@ public class CitizenMainView extends JFrame implements ActionListener
     private ManageRegistrationView manageRegistrationView;
     private UpdateInjectionView updateInjectionView;
     private CertificateView certificateView;
+    private AnnouncementView announcementView;
 
     private JButton LogoutButton;
     private JButton BackButton;
@@ -592,6 +593,14 @@ public class CitizenMainView extends JFrame implements ActionListener
             certificateView = new CertificateView(personalUser);
             MainLayeredPane.removeAll();
             MainLayeredPane.add(certificateView, Integer.valueOf(0));
+            MainLayeredPane.add(BackButton, Integer.valueOf(5));
+        }
+        
+        if(e.getSource()==NotificationFButton)
+        {
+            announcementView=new AnnouncementView();
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(announcementView, Integer.valueOf(0));
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
         }
     }
