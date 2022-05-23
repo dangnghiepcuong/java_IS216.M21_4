@@ -14,11 +14,12 @@ public class Annoucement {
     private LocalDate PublishDate;
     private byte[] Image;
     private String Note;
+    private Organization Org = new Organization();
 
     public Annoucement() {
     }
 
-    public Annoucement(String ID, String OrgID, String Title, String Content, LocalDate PublishDate, byte[] Image, String Note) {
+    public Annoucement(String ID, String OrgID, String Title, String Content, LocalDate PublishDate, byte[] Image, String Note, Organization Org) {
         this.ID = ID;
         this.OrgID = OrgID;
         this.Title = Title;
@@ -26,7 +27,10 @@ public class Annoucement {
         this.PublishDate = PublishDate;
         this.Image = Image;
         this.Note = Note;
+        this.Org = Org;
     }
+
+    
 
     public String getID() {
         return ID;
@@ -82,6 +86,14 @@ public class Annoucement {
 
     public void setNote(String Note) {
         this.Note = Note;
+    }
+
+    public Organization getOrg() {
+        return Org;
+    }
+
+    public void setOrg(Organization Org) {
+        this.Org = Org;
     }
     
     
