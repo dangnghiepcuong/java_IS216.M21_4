@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package View.OrgView;
+package View.CitizenView;
 
 import Process.DefaultValue;
 import Process.Annoucement;
@@ -35,7 +35,7 @@ import javax.swing.JTextField;
 
 
 
-public class AnnouncemnetView extends JPanel implements ActionListener {
+public class AnnouncementView extends JPanel implements ActionListener {
     
     private JLayeredPane MainLayeredPane;
     private JScrollPane AnnouncementNew;
@@ -54,7 +54,7 @@ public class AnnouncemnetView extends JPanel implements ActionListener {
 //   
     private DefaultValue dv= new DefaultValue();
     
-    public AnnouncemnetView()//Constructor
+    public AnnouncementView()//Constructor
     {
         this.setSize(1080, 720);
         //this.setSize(1080, 720); --Main View
