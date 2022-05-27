@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Thursday-May-12-2022   
+--  File created - Friday-May-27-2022   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Table ACCOUNT
@@ -10,7 +10,7 @@
 --  DDL for Table ANNOUNCEMENT
 --------------------------------------------------------
 
-  CREATE TABLE "ANNOUNCEMENT" ("ID" VARCHAR2(50), "ORGID" VARCHAR2(16), "TITLE" VARCHAR2(200), "CONTENT" VARCHAR2(4000), "PUBLISHDATE" DATE, "IMAGE" BLOB, "NOTE" VARCHAR2(2000));
+  CREATE TABLE "ANNOUNCEMENT" ("ID" VARCHAR2(50), "ORGID" VARCHAR2(16), "TITLE" VARCHAR2(200), "PUBLISHDATE" DATE, "IMAGE" BLOB, "NOTE" VARCHAR2(2000), "CONTENT" CLOB);
 --------------------------------------------------------
 --  DDL for Table CERTIFICATE
 --------------------------------------------------------
@@ -50,7 +50,7 @@
 --  DDL for Table REGISTER
 --------------------------------------------------------
 
-  CREATE TABLE "REGISTER" ("PERSONALID" VARCHAR2(12), "SCHEDID" VARCHAR2(15), "TIME" NUMBER(1,0), "NO" NUMBER(5,0), "STATUS" NUMBER(1,0), "IMAGE" BLOB, "NOTE" VARCHAR2(2000), "DOSETYPE" VARCHAR2(50));
+  CREATE TABLE "REGISTER" ("PERSONALID" VARCHAR2(12), "SCHEDID" VARCHAR2(15), "TIME" NUMBER(1,0), "NO" NUMBER(5,0), "STATUS" NUMBER(1,0), "IMAGE" BLOB, "NOTE" VARCHAR2(2000), "DOSETYPE" VARCHAR2(50), "ID" NUMBER);
 --------------------------------------------------------
 --  DDL for Table SCHEDULE
 --------------------------------------------------------
@@ -65,4 +65,4 @@
 --  DDL for Table VACCINE
 --------------------------------------------------------
 
-  CREATE TABLE "VACCINE" ("ID" VARCHAR2(8), "NAME" VARCHAR2(100), "TECHNOLOGY" VARCHAR2(100), "COUNTRY" VARCHAR2(100), "NOTE" VARCHAR2(2000));
+  CREATE TABLE "VACCINE" ("ID" VARCHAR2(10), "NAME" VARCHAR2(100), "TECHNOLOGY" VARCHAR2(100), "COUNTRY" VARCHAR2(100), "NOTE" VARCHAR2(2000));

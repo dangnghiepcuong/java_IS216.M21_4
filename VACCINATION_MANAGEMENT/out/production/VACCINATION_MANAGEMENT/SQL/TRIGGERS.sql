@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Tuesday-April-26-2022   
+--  File created - Friday-May-27-2022   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Trigger PERSON_VALUE
@@ -9,21 +9,24 @@
 BEFORE INSERT OR UPDATE ON PERSON 
 FOR EACH ROW
 BEGIN
-    if (:new.FirstName = null or :new.FirstName like '% %')
+    if (:new.FirstName like '% %')
     then
-        raise_application_error(-20008, 'First name can not be empty or contain space!');
+        raise_application_error(-20008, 'First name can not contain space!');
     end if;
-    
+
     if (:new.BirthDay > sysdate)
     then
         raise_application_error(-20009, 'Birthday must not be a future day!');
     end if;
-    
-    if (:new.Email like '% %' or :new.Email not like '%@%')
+
+    if (:new.Email != '')
     then
-        raise_application_error(-20010, 'Email must not contains space and must contains "@" !');
+        if (:new.Email like '% %' or :new.Email not like '%@%')
+        then
+            raise_application_error(-20010, 'Email must not contains space and must contains "@" !');
+        end if;
     end if;
-END "PERSON_VALUE";
+END;
 
 --------------------------------------------------------
 --  DDL for Trigger REG_VACCINATION_AGE_STATUS
@@ -50,11 +53,9 @@ begin
 
     --select out the last registion
     select Status into LastReg
-    from REGISTER REG, SCHEDULE SCHED
+    from REGISTER REG
     where REG.PersonalID = :new.PersonalID
-    and REG.SchedID = SCHED.ID
-    and rownum = 1
-    order by OnDate desc;
+    and Status = 0 or Status = 1;
 
     if (LastReg < 2)
     then
@@ -67,6 +68,7 @@ begin
         then
             NULL;    
 end REG_VACCINATION_AGE_STATUS;
+
 --------------------------------------------------------
 --  DDL for Trigger REG_VACCINATION_RULE
 --------------------------------------------------------
@@ -128,11 +130,11 @@ begin
     select OnDate into var_PreOnDate
     from SCHEDULE SCHED
     where SCHED.ID = PreInj.SchedID;
-    
+
     select OnDate into var_OnDate
     from SCHEDULE SCHED
     where SCHED.ID = :new.SchedID;
-    
+
     --Check spacing rule between 2 injections      
     if (abs(months_between(var_OnDate, var_PreOnDate)) < (ParCase.MinDistance-3)/30)
 	then
@@ -152,6 +154,7 @@ begin
 		when no_data_found
         then NULL;
 end REG_VACCINATION_RULE;
+
 --------------------------------------------------------
 --  DDL for Trigger REG_VACCINATION_TARGET
 --------------------------------------------------------
@@ -173,17 +176,24 @@ begin
 	where HEALTH.PersonalID = :new.PersonalID
 	and rownum = 1
     order by ID desc;
-    
+
     --Check expire date of filled form (within 7 days)
     select OnDate into var_OnDate
     from SCHEDULE SCHED
     where SCHED.ID = :new.SchedID;
-    
+
     if ( months_between(var_OnDate, LastHealth.FilledDate) > 0.25) 
     then
         raise_application_error(-20005,'You must fill out medical form before registion with 7 days');
     end if;
     
+    --Check the ability to be affected by Covid-19 virus
+    if ( SUBSTR(LastHealth.Healths, 4, 1) = '1' )
+	then	
+		raise_application_error
+        (-20005, 'You can not register vaccination due to your target type!');
+	end if;
+
 	--Check vaccination target type
 	if ( SUBSTR(LastHealth.Healths, 4, 1) = '1' )
 	then	
@@ -198,13 +208,14 @@ begin
 		raise_application_error
         (-20006, 'You have been affected by Covid-19 recent days, please wait until you completely healed');
 	end if;
-    
+
     EXCEPTION
         when no_data_found
         then
             raise_application_error
             (-20007,'You have not fill out any medical form within 7 days yet!');
 end REG_VACCINATION_TARGET;
+
 --------------------------------------------------------
 --  DDL for Trigger SCHED_VALUE
 --------------------------------------------------------
@@ -224,4 +235,4 @@ BEGIN
         raise_application_error(-20011,'Number of registion is limited!');
     end if;
 END;
-ALTER TRIGGER "SCHED_VALUE" ENABLE
+

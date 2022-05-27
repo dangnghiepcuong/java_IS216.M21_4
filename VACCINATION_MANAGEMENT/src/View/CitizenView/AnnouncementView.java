@@ -40,9 +40,9 @@ public class AnnouncementView extends JPanel implements ActionListener {
     private JLayeredPane MainLayeredPane;
     private JScrollPane AnnouncementNew;
     private JTextField SearchAnnouncement;
-    private JScrollPane Announcement;
+    private JScrollPane ScrollPaneAnn;
     private JPanel MainPane;
-    private JPanel FormListPanel;
+    private JPanel AnnListPanel;
     private JLayeredPane LayeredPaneArea; 
     
     private JLabel TittleAnnNew;
@@ -70,10 +70,10 @@ public class AnnouncementView extends JPanel implements ActionListener {
         initMainPane();
         
         initSearchAnnouncement();
-        initAnnouncement();
+        initScrollPaneAnn();
         initSearchButton();
         
-        initFormListPanel();
+        initAnnListPanel();
        
         initAnnouncementNew();
         
@@ -81,7 +81,7 @@ public class AnnouncementView extends JPanel implements ActionListener {
         MainLayeredPane.add(MainPane,Integer.valueOf(0));
         MainPane.add(AnnouncementNew);
         MainPane.add(SearchAnnouncement);
-        MainPane.add(Announcement);
+        MainPane.add(ScrollPaneAnn);
         MainPane.add(SearchButton);
     }
     
@@ -158,9 +158,6 @@ public class AnnouncementView extends JPanel implements ActionListener {
         PublishDateLabel.setBounds(10, 51, 600, 25);
         PublishDateLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        
-
-        
         FormPanel.add(TitelLabel);
         FormPanel.add(ORGLabel);
         FormPanel.add(PublishDateLabel);
@@ -169,11 +166,11 @@ public class AnnouncementView extends JPanel implements ActionListener {
         return FormPanel;
     }
     
-    private void initFormListPanel()
+    private void initAnnListPanel()
     {
-        FormListPanel= new JPanel();
-        FormListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
-        FormListPanel.setLayout(new FlowLayout());
+        AnnListPanel= new JPanel();
+        AnnListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+        AnnListPanel.setLayout(new FlowLayout());
         
         Annoucement ann;
         int listAnn = 0;
@@ -204,7 +201,7 @@ public class AnnouncementView extends JPanel implements ActionListener {
                 System.out.print("b");
                 ann.setTitle(rs.getString("Title"));         
                 ann.setPublishDate(LocalDate.parse(rs.getString("PublishDate").substring(0, 10)));
-                FormListPanel.add(initFormPanel(ann));
+                AnnListPanel.add(initFormPanel(ann));
                 listAnn += 100;
                 i++;
             }
@@ -218,28 +215,26 @@ public class AnnouncementView extends JPanel implements ActionListener {
             return;
         }
        
-        FormListPanel.setPreferredSize(new Dimension(350, listAnn + i * 10));
+        AnnListPanel.setPreferredSize(new Dimension(350, listAnn + i * 10));
         
     }
     
     private void initAnnouncementNew()// View Announcement new
     {
-        AnnouncementNew =  new JScrollPane(FormListPanel,
+        AnnouncementNew =  new JScrollPane(AnnListPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS , JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
       
         AnnouncementNew.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         AnnouncementNew.setBounds(20,170,250 ,500);
     }
     
-    
-    
-    private void initAnnouncement()// view detailed announcement
+    private void initScrollPaneAnn()// view detailed announcement
     {
-        Announcement = new JScrollPane(null,
+        ScrollPaneAnn = new JScrollPane(null,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        Announcement.setBounds(280,20,770 ,650);
-        Announcement.setLayout(null);
-        Announcement.setOpaque(true);
+        ScrollPaneAnn.setBounds(280,20,770 ,650);
+        ScrollPaneAnn.setLayout(null);
+        ScrollPaneAnn.setOpaque(true);
         
     }
     
@@ -255,9 +250,6 @@ public class AnnouncementView extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        
-        
-        
         //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
