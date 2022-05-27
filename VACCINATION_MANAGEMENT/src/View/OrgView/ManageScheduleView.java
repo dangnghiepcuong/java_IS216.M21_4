@@ -300,26 +300,22 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                     if (dv.checkisNumberInputValue(InputLimitDay,
                                             "Lỗi!", "Giới hạn phải là số!") != -2)
                                         return;
-
-                                    InputLimitDay = String.valueOf(Sched.getLimitDay());
                                 } else
-                                    InputLimitDay = "0";
+                                    InputLimitDay = String.valueOf(Sched.getLimitDay());
 
                                 if (InputLimitNoon.equals("") == false) {
                                     if (dv.checkisNumberInputValue(InputLimitNoon,
                                             "Lỗi!", "Giới hạn phải là số!") != -2)
                                         return;
-                                    InputLimitNoon = String.valueOf(Sched.getLimitNoon());
                                 } else
-                                    InputLimitNoon = "0";
+                                    InputLimitNoon = String.valueOf(Sched.getLimitNoon());
 
                                 if (InputLimitNight.equals("") == false) {
                                     if (dv.checkisNumberInputValue(InputLimitNight,
                                             "Lỗi!", "Giới hạn phải là số!") != -2)
                                         return;
-                                    InputLimitNight = String.valueOf(Sched.getLimitNight());
                                 } else
-                                    InputLimitNight = "0";
+                                    InputLimitNight = String.valueOf(Sched.getLimitNight());
 
                                 if (dv.popupConfirmOption(null, "Xác nhận cập nhật lịch tiêm?", "Xác nhận?") != 0)
                                     return;
@@ -355,8 +351,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                     }
                                 }
 
-                                dv.popupOption(null, "Cập nhật thành công!", "Thông báo!", 0);
-
                                 Sched.setLimitDay(Integer.parseInt(InputLimitDay));
                                 Sched.setLimitNoon(Integer.parseInt(InputLimitNoon));
                                 Sched.setLimitNight(Integer.parseInt(InputLimitNight));
@@ -365,6 +359,8 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                         + "          Buổi tối: " + Sched.getNightRegistered() + "/" + Sched.getLimitNight());
 
                                 UpdateSchedPanel.repaint(0, 0, 680, 630);
+
+                                dv.popupOption(null, "Cập nhật thành công!", "Thông báo!", 0);
                             }
                         };
 
