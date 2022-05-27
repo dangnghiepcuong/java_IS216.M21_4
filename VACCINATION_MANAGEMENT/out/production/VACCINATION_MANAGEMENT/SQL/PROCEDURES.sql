@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Wednesday-May-18-2022   
+--  File created - Friday-May-27-2022   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Procedure ACC_CREATE_ORG
@@ -52,7 +52,6 @@ EXCEPTION
     end loop;
 
 end ACC_CREATE_ORG;
-
 --------------------------------------------------------
 --  DDL for Procedure ACC_DELETE_RECORD
 --------------------------------------------------------
@@ -122,6 +121,32 @@ begin
         then
             raise_application_error(-20014,'Username does not exist!');
 end ACC_UPDATE_PASSWORD;
+--------------------------------------------------------
+--  DDL for Procedure ANN_INSERT_RECORD
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "ANN_INSERT_RECORD" 
+(
+par_ID ANNOUNCEMENT.ID%type,
+par_OrgID ORGANIZATION.ID%type, 
+par_Title ANNOUNCEMENT.Title%type,
+par_Content ANNOUNCEMENT.Content%type,
+par_PublishDate ANNOUNCEMENT.PublishDate%type,
+par_Image ANNOUNCEMENT.Image%type DEFAULT NULL,
+par_Note ANNOUNCEMENT.Note%type DEFAULT NULL
+)
+AS 
+    var_ID ANNOUNCEMENT.ID%type;
+BEGIN
+    --Calc the ID for this ANN
+    var_ID := ANN_ID(par_OrgID);
+    
+    insert into ANNOUNCEMENT(ID, OrgID, Title, Content, PublishDate, Image, Note)
+    values (par_ID, par_OrgID, par_Title, par_Content, par_PublishDate, par_Image, par_Note);
+
+    commit;
+END ANN_INSERT_RECORD;
 --------------------------------------------------------
 --  DDL for Procedure CERT_INSERT_RECORD
 --------------------------------------------------------
@@ -230,8 +255,8 @@ set define off;
 as 
 begin
     --insert new ORGANIZATION
-	insert into ORGANIZATION(ID, Province, Note) 
-	values (par_ID, par_Province, par_Note);
+	insert into ORGANIZATION(ID, Province, District, Town, Note) 
+	values (par_ID, par_Province, '', '', par_Note);
 end ORG_INSERT_RECORD;
 --------------------------------------------------------
 --  DDL for Procedure ORG_UPDATE_RECORD
@@ -595,12 +620,12 @@ BEGIN
     where SchedID = par_ID;
     
     update SCHEDULE
-    set LimitDay = 0, 
-    LimitNoon = 0, 
-    LimitNight = 0,
-    DayRegistered = 0,
+    set DayRegistered = 0,
     NoonRegistered = 0,
-    NightRegistered = 0
+    NightRegistered = 0,
+    LimitDay = 0, 
+    LimitNoon = 0, 
+    LimitNight = 0
     where ID = par_ID;
     
     commit;
@@ -770,9 +795,12 @@ BEGIN
                     from HEALTH
                     where PersonalID = c_Person_row.ID)
         and substr(Healths, 3, 1) = '1'
-        and SYSDATE - FilledDate >= par_Days;
+        and SYSDATE - FilledDate <= par_Days;
         
-        var_Result := var_Result + var_Check;
+        if (var_Check > 0)
+        then
+            var_Result := var_Result + 1;
+        end if;
         
         var_Check := 0;
     end loop;
@@ -811,9 +839,12 @@ BEGIN
                     from HEALTH
                     where PersonalID = c_Person_row.ID)
         and substr(Healths, 3, 1) = '1'
-        and SYSDATE - FilledDate >= par_Days;
+        and SYSDATE - FilledDate <= par_Days;
         
-        var_Result := var_Result + var_Check;
+        if (var_Check > 0)
+        then
+            var_Result := var_Result + 1;
+        end if;
         
         var_Check := 0;
     end loop;
@@ -852,16 +883,19 @@ BEGIN
                     from HEALTH
                     where PersonalID = c_Person_row.ID)
         and substr(Healths, 3, 1) = '1'
-        and SYSDATE - FilledDate >= par_Days;
+        and SYSDATE - FilledDate <= par_Days;
         
-        var_Result := var_Result + var_Check;
+        if (var_Check > 0)
+        then
+            var_Result := var_Result + 1;
+        end if;
         
         var_Check := 0;
     end loop;
     
     update STATISTIC
     set Data = var_Result, LastUpdate = SYSDATE
-    where Title = 'STAT_AFFECTED_CHILDREN';
+    where Title = 'STAT_AFFECTED_OLDPEOPLE';
     
     commit;
 END STAT_AFFECTED_OLDPEOPLE;
@@ -894,9 +928,12 @@ BEGIN
                     from HEALTH
                     where PersonalID = c_Person_row.ID)
         and substr(Healths, 3, 1) = '1'
-        and SYSDATE - FilledDate >= par_Days;
+        and SYSDATE - FilledDate <= par_Days;
         
-        var_Result := var_Result + var_Check;
+        if (var_Check > 0)
+        then
+            var_Result := var_Result + 1;
+        end if;
         
         var_Check := 0;
     end loop;
@@ -917,9 +954,9 @@ set define off;
 BEGIN
     var_Result := 0;
     
-    select COUNT(CertType) into var_Result
-    from CERTIFICATE
-    where CertType = 2;
+    select COUNT(InjNO) into var_Result
+    from INJECTION
+    where DoseType = 'basic';
     
     update STATISTIC
     set Data = var_Result, LastUpdate = SYSDATE
@@ -968,7 +1005,7 @@ BEGIN
 
     update STATISTIC
     set Data = var_Result, LastUpdate = SYSDATE
-    where Title = 'STAT_CHILDREN';
+    where Title = 'STAT_BASICDOSE_CHILDREN';
     
     commit;
 END STAT_BASICDOSE_CHILDREN;
@@ -990,7 +1027,7 @@ BEGIN
 
     update STATISTIC
     set Data = var_Result, LastUpdate = SYSDATE
-    where Title = 'STAT_OLDPEOPLE'; 
+    where Title = 'STAT_BASICDOSE_OLDPEOPLE'; 
     
     commit;
 END STAT_BASICDOSE_OLDPEOPLE;
@@ -1013,7 +1050,7 @@ BEGIN
 
     update STATISTIC
     set Data = var_Result, LastUpdate = SYSDATE
-    where Title = 'STAT_TEENAGER';    
+    where Title = 'STAT_BASICDOSE_TEENAGER';    
     
     commit;
 END STAT_BASICDOSE_TEENAGER;
@@ -1038,28 +1075,46 @@ BEGIN
     commit;
 END STAT_BOOSTERDOSE;
 --------------------------------------------------------
---  DDL for Procedure STAT_TEENAGER
+--  DDL for Procedure STAT_REPEATDOSE
 --------------------------------------------------------
 set define off;
 
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "STAT_TEENAGER" AS 
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "STAT_REPEATDOSE" AS 
     var_Result number;
 BEGIN
     var_Result := 0;
     
-    select COUNT(CertType) into var_Result
-    from CERTIFICATE, PERSON
-    where CertType = 2
-    and PersonalID = ID
-    and  extract(year from SYSDATE) - extract(year from Birthday) > 12
-    and extract(year from SYSDATE) - extract(year from Birthday) <= 22;
-
+    select COUNT(DoseType) into var_Result
+    from INJECTION
+    where DoseType = 'repeat';
+    
     update STATISTIC
     set Data = var_Result, LastUpdate = SYSDATE
-    where Title = 'STAT_TEENAGER';    
+    where Title = 'STAT_REPEATDOSE'; 
     
     commit;
-END STAT_TEENAGER;
+END STAT_REPEATDOSE;
+--------------------------------------------------------
+--  DDL for Procedure STAT_STATISTIC_ALL
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "STAT_STATISTIC_ALL" (par_Days int)
+AS 
+BEGIN
+    STAT_BASICDOSE();
+    STAT_BOOSTERDOSE();
+    STAT_REPEATDOSE();
+    STAT_BASICDOSE_CHILDREN();
+    STAT_BASICDOSE_TEENAGER();
+    STAT_BASICDOSE_ADULT();
+    STAT_BASICDOSE_OLDPEOPLE();
+    STAT_AFFECTED_CHILDREN(par_Days);
+    STAT_AFFECTED_TEENAGER(par_Days);
+    STAT_AFFECTED_ADULT(par_Days);
+    STAT_AFFECTED_OLDPEOPLE(par_Days);
+    commit;
+END STAT_STATISTIC_ALL;
 --------------------------------------------------------
 --  DDL for Procedure VAC_INSERT_RECORD
 --------------------------------------------------------

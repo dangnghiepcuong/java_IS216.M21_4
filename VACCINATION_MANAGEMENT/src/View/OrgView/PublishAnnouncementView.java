@@ -52,7 +52,7 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
     private JLabel ImageFileLabel;
     private File ImageFilePath;
     private JLabel AttachedImage;
-    private int ImageHeight;
+    private int ImageHeight = 0;
     private JButton UploadImageButton;
     private  JButton RemoveImageButton;
 
