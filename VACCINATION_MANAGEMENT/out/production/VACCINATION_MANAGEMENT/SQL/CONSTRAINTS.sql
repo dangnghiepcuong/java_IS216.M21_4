@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Thursday-May-12-2022   
+--  File created - Friday-May-27-2022   
 --------------------------------------------------------
 --------------------------------------------------------
 --  Constraints for Table ACCOUNT
@@ -31,7 +31,7 @@
 --  Constraints for Table INJECTION
 --------------------------------------------------------
 
-  ALTER TABLE "INJECTION" MODIFY ("PERSONALID" NOT NULL ENABLE)
+  ALTER TABLE "INJECTION" MODIFY ("PERSONALID" NOT NULL ENABLE);
   ALTER TABLE "INJECTION" ADD CONSTRAINT "PK_INJ" PRIMARY KEY ("PERSONALID", "INJNO") USING INDEX  ENABLE;
   ALTER TABLE "INJECTION" ADD CONSTRAINT "CK_INJ_INJNO" CHECK (InjNO in (1, 2, 3, 4)) ENABLE;
   ALTER TABLE "INJECTION" ADD CONSTRAINT "CK_INJ_SCHEDID" CHECK (SchedID is not null) ENABLE;
@@ -67,8 +67,8 @@
 --  Constraints for Table REGISTER
 --------------------------------------------------------
 
-  ALTER TABLE "REGISTER" ADD CONSTRAINT "CK_REG_DOSETYPE" CHECK (DoseType in ('basic', 'booster', 'repeat')) ENABLE;
   ALTER TABLE "REGISTER" ADD CONSTRAINT "PK_REG" PRIMARY KEY ("PERSONALID", "SCHEDID", "ID") USING INDEX  ENABLE;
+  ALTER TABLE "REGISTER" ADD CONSTRAINT "CK_REG_DOSETYPE" CHECK (DoseType in ('basic', 'booster', 'repeat')) ENABLE;
   ALTER TABLE "REGISTER" ADD CONSTRAINT "CK_REG_TIME" CHECK (Time in (0,1,2)) ENABLE;
   ALTER TABLE "REGISTER" ADD CONSTRAINT "CK_REG_STATUS" CHECK (Status in (0,1,2,3)) ENABLE;
 --------------------------------------------------------
@@ -87,8 +87,8 @@
 --  Constraints for Table STATISTIC
 --------------------------------------------------------
 
-  ALTER TABLE "STATISTIC" ADD CONSTRAINT "PK_STAT" PRIMARY KEY ("TITLE") USING INDEX  ENABLE;
   ALTER TABLE "STATISTIC" ADD CONSTRAINT "CK_STAT_DATA" CHECK (Data>=0) ENABLE;
+  ALTER TABLE "STATISTIC" ADD CONSTRAINT "PK_STAT" PRIMARY KEY ("TITLE") USING INDEX  ENABLE;
 --------------------------------------------------------
 --  Constraints for Table VACCINE
 --------------------------------------------------------
@@ -100,21 +100,6 @@
 --------------------------------------------------------
 
   ALTER TABLE "ANNOUNCEMENT" ADD CONSTRAINT "FK_ANN_ORG" FOREIGN KEY ("ORGID") REFERENCES "ORGANIZATION" ("ID") ENABLE;
---------------------------------------------------------
---  Ref Constraints for Table CERTIFICATE
---------------------------------------------------------
-
-  ALTER TABLE "CERTIFICATE" ADD CONSTRAINT "FK_CERT_PERSON" FOREIGN KEY ("PERSONALID") REFERENCES "PERSON" ("ID") ENABLE;
---------------------------------------------------------
---  Ref Constraints for Table HEALTH
---------------------------------------------------------
-
-  ALTER TABLE "HEALTH" ADD CONSTRAINT "FK_HEAL_PERSON" FOREIGN KEY ("PERSONALID") REFERENCES "PERSON" ("ID") ENABLE;
---------------------------------------------------------
---  Ref Constraints for Table INJECTION
---------------------------------------------------------
-
-  ALTER TABLE "INJECTION" ADD CONSTRAINT "FK_INJ_PERSON" FOREIGN KEY ("PERSONALID") REFERENCES "PERSON" ("ID") ENABLE;
 --------------------------------------------------------
 --  Ref Constraints for Table ORGANIZATION
 --------------------------------------------------------
@@ -133,11 +118,6 @@
   ALTER TABLE "PERSON" ADD CONSTRAINT "FK_PERSON_REGION" FOREIGN KEY ("PROVINCE") REFERENCES "REGION" ("CODE") ENABLE;
   ALTER TABLE "PERSON" ADD CONSTRAINT "FK_PERSON_GUAR" FOREIGN KEY ("GUARDIAN") REFERENCES "PERSON" ("ID") ENABLE;
   ALTER TABLE "PERSON" ADD CONSTRAINT "FK_PERSON_ACC" FOREIGN KEY ("PHONE") REFERENCES "ACCOUNT" ("USERNAME") ENABLE;
---------------------------------------------------------
---  Ref Constraints for Table REGISTER
---------------------------------------------------------
-
-  ALTER TABLE "REGISTER" ADD CONSTRAINT "FK_REG_PERSON" FOREIGN KEY ("PERSONALID") REFERENCES "PERSON" ("ID") ENABLE;
 --------------------------------------------------------
 --  Ref Constraints for Table SCHEDULE
 --------------------------------------------------------

@@ -1,9 +1,10 @@
 --------------------------------------------------------
---  File created - Tuesday-April-26-2022   
+--  File created - Friday-May-27-2022   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Function ACC_CONVERT_SEQ_TO_STR
 --------------------------------------------------------
+
   CREATE OR REPLACE EDITIONABLE FUNCTION "ACC_CONVERT_SEQ_TO_STR" 
 (par_Last_Seq int)
 return varchar2 is
@@ -12,12 +13,12 @@ begin
 	then
 		return ('00' || TO_CHAR(par_Last_Seq));
 	end if;
-    
+
     if ( par_Last_Seq < 100 )
 	then
 		return ('0' || TO_CHAR(par_Last_Seq));
 	end if;
-    
+
     if ( par_Last_Seq <1000 )
     then
         return (TO_CHAR(par_Last_Seq));
@@ -27,56 +28,40 @@ begin
 
 end ACC_CONVERT_SEQ_TO_STR;
 
+/
 --------------------------------------------------------
 --  DDL for Function ANN_ID
 --------------------------------------------------------
+
   CREATE OR REPLACE EDITIONABLE FUNCTION "ANN_ID" (par_OrgID ANNOUNCEMENT.OrgID%type)
 return number
 is
-    par_ID number;
-    temp_OrgID ANNOUNCEMENT.OrgID%type;
+    var_ID number;
+    last_ID ANNOUNCEMENT.OrgID%type;
 begin 
-    --select out the last ID of the ORG in the Organization
-    select OrgID into temp_OrgID
+    --select out the last ID of the ORG in the Organization    
+    select COUNT(ID) into last_ID
     from ANNOUNCEMENT
-    where OrgID=par_OrgID and rownum=1
-    order by OrgID desc;
+    where OrgID = par_OrgID;
 
     --The next value of ID
-    par_ID := TO_NUMBER(SUBSTR(TO_CHAR(par_OrgID), -3, 3)) + 1;
-	
-	return par_ID;
+    var_ID := last_ID + 1;
+
+	return var_ID;
 
 EXCEPTION 
     when no_data_found
- 	then par_ID := 1;
-
-    return par_ID;
+ 	then 
+        return 1;
 end "ANN_ID";
 
---------------------------------------------------------
---  DDL for Function PERSON_AGE
---------------------------------------------------------
-  CREATE OR REPLACE EDITIONABLE FUNCTION "PERSON_AGE" (par_PersonalID PERSON.ID%type)
-RETURN NUMBER 
-AS 
-    var_BirthDay PERSON.BirthDay%type;
-    var_Age number;
-BEGIN
-    --select out day of birth
-    select BirthDay into var_BirthDay
-    from PERSON
-    where PERSON.ID = par_PersonalID;
-    
-    --count months between sysdate and birthday then div 12
-    var_Age := trunc(months_between(sysdate, var_BirthDay)/12);
-    RETURN var_Age;
-END PERSON_AGE;
-
+/
 --------------------------------------------------------
 --  DDL for Function HEAL_FORM_ID
 --------------------------------------------------------
-  CREATE OR REPLACE EDITIONABLE FUNCTION "HEAL_FORM_ID" (par_PersonalID PERSON.ID%type)
+
+  CREATE OR REPLACE EDITIONABLE FUNCTION "HEAL_FORM_ID" 
+(par_PersonalID PERSON.ID%type)
 return number
 is
     var_ID HEALTH.ID%type;
@@ -95,6 +80,8 @@ begin
         then
             return 1;
 end HEAL_FORM_ID;
+
+/
 --------------------------------------------------------
 --  DDL for Function INJ_COUNT_INJ
 --------------------------------------------------------
@@ -111,9 +98,11 @@ begin
     return var_n_Injection;
 end INJ_COUNT_INJ;
 
+/
 --------------------------------------------------------
 --  DDL for Function INJ_DIFFERENCE
 --------------------------------------------------------
+
   CREATE OR REPLACE EDITIONABLE FUNCTION "INJ_DIFFERENCE" (par_PersonalID PERSON.ID%type)
 return number 
 is
@@ -128,22 +117,24 @@ is
 
     var_VaccineID_1 VACCINE.ID%type;
     var_VaccineID_2 VACCINE.ID%type;
-    
+
     var_Distinct int;
 begin
-      
+
     select COUNT(distinct SCHED.VaccineID) into var_Distinct
     from INJECTION INJ, SCHEDULE SCHED
     where INJ.PersonalID = par_PersonalID
     and INJ.SchedID = SCHED.ID;
-    
+
     if (var_Distinct > 1)
     then
         return 1;
     end if;
-    
+
     return 0;
 end INJ_DIFFERENCE;
+
+/
 --------------------------------------------------------
 --  DDL for Function ORG_COUNT_SCHED
 --------------------------------------------------------
@@ -176,9 +167,59 @@ begin
     from SCHEDULE SCHED
     where SCHED.OnDate >= par_StartDate 
     and SCHED.OnDate <= par_EndDate;
-    
+
     return Count_Sched;
 end ORG_COUNT_SCHED;
+
+/
+--------------------------------------------------------
+--  DDL for Function PERSON_AGE
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE FUNCTION "PERSON_AGE" (par_PersonalID PERSON.ID%type)
+RETURN NUMBER 
+AS 
+    var_BirthDay PERSON.BirthDay%type;
+    var_Age number;
+BEGIN
+    --select out day of birth
+    select BirthDay into var_BirthDay
+    from PERSON
+    where PERSON.ID = par_PersonalID;
+
+    --count months between sysdate and birthday then div 12
+    var_Age := trunc(months_between(sysdate, var_BirthDay)/12);
+    RETURN var_Age;
+END PERSON_AGE;
+
+/
+--------------------------------------------------------
+--  DDL for Function REG_REG_ID
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE FUNCTION "REG_REG_ID" 
+(
+par_PersonalID PERSON.ID%type,
+par_SchedID SCHEDULE.ID%type
+)
+RETURN NUMBER
+AS
+    var_ID REGISTER.ID%type;
+BEGIN
+    select COUNT(ID) into var_ID
+    from REGISTER
+    where PersonalID = par_PersonalID
+    and SchedID = par_SchedID;
+    
+    RETURN var_ID + 1;
+    
+EXCEPTION
+    when no_data_found
+    then
+        return 1;
+END REG_REG_ID;
+
+/
 --------------------------------------------------------
 --  DDL for Function REG_SIGNED_NO
 --------------------------------------------------------
@@ -192,7 +233,7 @@ return number is
 begin
 	--from the registered time, 
     --take out its limit number and number of registion from SCHEDULE
-    
+
     if (par_Time = 0)
     then
         select LimitDay, DayRegistered
@@ -223,6 +264,8 @@ begin
 	return (RegNumber + 1);
 
 end REG_SIGNED_NO;
+
+/
 --------------------------------------------------------
 --  DDL for Function SCHED_GENERATE_ID
 --------------------------------------------------------
@@ -255,3 +298,5 @@ begin
             return par_OrgID || StringDate || TO_CHAR(n_Scheds_OnDate+1);
 
 end SCHED_GENERATE_ID;
+
+/
