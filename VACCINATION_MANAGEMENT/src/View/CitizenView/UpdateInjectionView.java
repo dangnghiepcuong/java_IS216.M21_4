@@ -88,12 +88,12 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
 
        //InjectionInfoPanel.setBorder(border);
 
-       String query = "select SCHED.ID, VaccineID, OnDate, Serial, Name, Province, District, Town, Street, DoseType, Status, Image " +
+       String query = "select SCHED.ID, VaccineID, OnDate, Serial, Name, ProvinceName, DistrictName, TownName, Street, DoseType, Status, Image " +
                "from REGISTER REG, SCHEDULE SCHED, ORGANIZATION ORG " +
-               "where REG.PersonalID = '" + personalUser.getID() + "' and" +
-               "      REG.SchedID = SCHED.ID and " +
-               "      SCHED.OrgID = ORG.ID and " +
-               "      Status = 1";
+               "where REG.PersonalID = '" + personalUser.getID() + "' " +
+               "and REG.SchedID = SCHED.ID " +
+               "and SCHED.OrgID = ORG.ID " +
+               "and Status = 1 ";
        try {
            Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
@@ -106,9 +106,9 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
            Reg.getSched().setOnDate(rs.getString("OnDate").substring(0, 10));
            Reg.getSched().setSerial(rs.getString("Serial"));
            Reg.getOrg().setName(rs.getString("Name"));
-           Reg.getOrg().setProvince(rs.getString("Province"));
-           Reg.getOrg().setDistrict(rs.getString("District"));
-           Reg.getOrg().setTown(rs.getString("Town"));
+           Reg.getOrg().setProvince(rs.getString("ProvinceName"));
+           Reg.getOrg().setDistrict(rs.getString("DistrictName"));
+           Reg.getOrg().setTown(rs.getString("TownName"));
            Reg.getOrg().setStreet(rs.getString("Street"));
            Reg.setDoseType(rs.getString("DoseType"));
            Reg.setStatus(rs.getInt("Status"));
@@ -160,7 +160,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
        doseType.setFont(new Font(dv.fontName(), Font.PLAIN, 20));
        doseType.setHorizontalAlignment(JLabel.LEFT);
 
-       JLabel Address = new JLabel("Đ/c: " + dv.getProvinceName(Reg.getOrg().getProvince()) + ", "
+       JLabel Address = new JLabel("Đ/c: " + Reg.getOrg().getProvince() + ", "
                + Reg.getOrg().getDistrict() + ", " + Reg.getOrg().getTown() + ", " + Reg.getOrg().getStreet());
        Address.setBounds(50, 230, 712, 35);
        Address.setFont(new Font(dv.fontName(), Font.PLAIN, 20));

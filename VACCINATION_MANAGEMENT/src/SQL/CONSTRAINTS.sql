@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Monday-May-30-2022   
+--  File created - Tuesday-May-31-2022   
 --------------------------------------------------------
 --------------------------------------------------------
 --  Constraints for Table ACCOUNT
@@ -41,7 +41,7 @@
 --------------------------------------------------------
 
   ALTER TABLE "ORGANIZATION" ADD CONSTRAINT "PK_ORG" PRIMARY KEY ("ID") USING INDEX  ENABLE
-  ALTER TABLE "ORGANIZATION" ADD CONSTRAINT "CK_ORG_PROVINCE" CHECK ("PROVINCECODE" IS NOT NULL) ENABLE
+  ALTER TABLE "ORGANIZATION" ADD CONSTRAINT "CK_ORG_PROVINCE" CHECK ("PROVINCENAME" IS NOT NULL) ENABLE
 --------------------------------------------------------
 --  Constraints for Table PARAMETER
 --------------------------------------------------------
@@ -103,7 +103,6 @@
 --  Ref Constraints for Table ORGANIZATION
 --------------------------------------------------------
 
-  ALTER TABLE "ORGANIZATION" ADD CONSTRAINT "FK_ORG_REGION" FOREIGN KEY ("PROVINCECODE", "DISTRICTCODE", "TOWNCODE") REFERENCES "REGION" ("PROVINCECODE", "DISTRICTCODE", "TOWNCODE") ENABLE
   ALTER TABLE "ORGANIZATION" ADD CONSTRAINT "FK_ORG_ACC" FOREIGN KEY ("ID") REFERENCES "ACCOUNT" ("USERNAME") ENABLE
 --------------------------------------------------------
 --  Ref Constraints for Table PARAMETER
@@ -114,7 +113,6 @@
 --  Ref Constraints for Table PERSON
 --------------------------------------------------------
 
-  ALTER TABLE "PERSON" ADD CONSTRAINT "FK_PERSON_REGION" FOREIGN KEY ("PROVINCECODE", "DISTRICTCODE", "TOWNCODE") REFERENCES "REGION" ("PROVINCECODE", "DISTRICTCODE", "TOWNCODE") ENABLE
   ALTER TABLE "PERSON" ADD CONSTRAINT "FK_PERSON_GUAR" FOREIGN KEY ("GUARDIAN") REFERENCES "PERSON" ("ID") ENABLE
   ALTER TABLE "PERSON" ADD CONSTRAINT "FK_PERSON_ACC" FOREIGN KEY ("PHONE") REFERENCES "ACCOUNT" ("USERNAME") ENABLE
 --------------------------------------------------------

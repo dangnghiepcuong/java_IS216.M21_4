@@ -6,10 +6,7 @@ import org.jdatepicker.impl.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.sql.*;
 import java.util.Properties;
 
@@ -17,8 +14,7 @@ import java.util.Properties;
  *
  * @author LeHoangDuyen
  */
-public class RegisterAccView extends JFrame implements ActionListener, KeyListener
-{
+public class RegisterAccView extends JFrame implements ActionListener, KeyListener, ItemListener {
     DefaultValue dv = new DefaultValue();
     private JLabel UsernameLabel;
     private JLabel PasswordLabel;
@@ -394,10 +390,7 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
         HomeTownChoice.setForeground(new Color(0x666666));
         HomeTownChoice.setBackground(Color.WHITE);
 
-        HomeTownChoice.add("");
-        for (int i = 1; i <= 64; i++)
-            if (i != 20)
-                HomeTownChoice.add(dv.getProvinceList()[i]);
+        HomeTownChoice.addItemListener(this);
     }
 
     private void initAddressLabel()
@@ -426,28 +419,27 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
         ProvinceChoice.setForeground(new Color(0x666666));
         ProvinceChoice.setBackground(Color.WHITE);
 
-        /*ProvinceChoice.add("");
-        for (int i = 1; i <= 64; i++)
-            if (i != 20)
-                ProvinceChoice.add(dv.getProvinceList()[i]);*/
-
         try {
             Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
-            String query = "select ProvinceName from REGION";
+            String query = "select distinct ProvinceCode, ProvinceName from REGION order by ProvinceCode";
             PreparedStatement st = connection.prepareStatement(query);
             ResultSet rs = st.executeQuery();
 
+            HomeTownChoice.add("");
             ProvinceChoice.add("");
             while (rs.next())
+            {
+                HomeTownChoice.add(rs.getString("ProvinceName"));
                 ProvinceChoice.add(rs.getString("ProvinceName"));
+            }
         } catch (SQLException ex) {
             dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
             ex.printStackTrace();
             return;
         }
 
-        ProvinceChoice.addItemListener();
+        ProvinceChoice.addItemListener(this);
     }
 
     private void initDistrictLabel()
@@ -466,14 +458,7 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
         DistrictChoice.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         DistrictChoice.setForeground(new Color(0x666666));
         DistrictChoice.setBackground(Color.WHITE);
-
-        DistrictChoice.add("");
-        DistrictChoice.add("Dầu Tiếng");
-        DistrictChoice.add("Thuận An");
-        DistrictChoice.add("Thủ Đức");
-        DistrictChoice.add("Biên Hòa");
-        DistrictChoice.add("Cẩm Mỹ");
-        DistrictChoice.add("Thủ Dầu Một");
+        DistrictChoice.addItemListener(this);
     }
 
     private void initTownLabel()
@@ -492,13 +477,6 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
         TownChoice.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         TownChoice.setForeground(new Color(0x666666));
         TownChoice.setBackground(Color.WHITE);
-
-        TownChoice.add("");
-        TownChoice.add("Dầu Tiếng");
-        TownChoice.add("Lái Thiêu");
-        TownChoice.add("Linh Trung");
-        TownChoice.add("Tân Hòa");
-        TownChoice.add("Sông Ray");
     }
 
     private void initStreetLabel()
@@ -610,8 +588,7 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
                 return;
             if (dv.checkStringInputValue(InputProvince, "Cảnh báo!", "Nhập tỉnh!") != -2)
                 return;
-            else
-                InputProvince = dv.getProvinceCode(InputProvince);
+
             if (InputGender == 0)
                 InputGender = 3;
 
@@ -628,9 +605,10 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
 
             String plsql2 = "{call PERSON_INSERT_RECORD(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 
+            Connection connection = null;
             try {
-                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-
+                connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+                connection.setAutoCommit(false);
                 CallableStatement cst = connection.prepareCall(plsql);
                 cst.setString(1, InputUsername);
                 cst.setString(2, InputPassword);
@@ -647,9 +625,9 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
                 cst.setString("par_Birthday", InputBirthday);
                 cst.setInt("par_Gender", Integer.valueOf(InputGender));
                 cst.setString("par_Hometown", InputHomeTown);
-                cst.setString("par_Province", InputProvince);
-                cst.setString("par_District", InputDistrict);
-                cst.setString("par_Town", InputTown);
+                cst.setString("par_ProvinceName", InputProvince);
+                cst.setString("par_DistrictName", InputDistrict);
+                cst.setString("par_TownName", InputTown);
                 cst.setString("par_Street", InputStreet);
                 cst.setString("par_Phone", InputUsername);
                 cst.setString("par_Email", InputEmail);
@@ -661,7 +639,18 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
             } catch (SQLException ex) {
                 dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
                 ex.printStackTrace();
+                try {
+                    connection.rollback();
+                } catch (SQLException exc) {
+                    exc.printStackTrace();
+                }
                 return;
+            } finally {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
 
             dv.popupOption(null, "Đăng ký thành công!", "Thông báo!", 0);
@@ -705,8 +694,7 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
                 return;
             if (dv.checkStringInputValue(InputProvince, "Cảnh báo!", "Nhập tỉnh!") != -2)
                 return;
-            else
-                InputProvince = dv.getProvinceCode(InputProvince);
+
             if (InputGender == 0)
                 InputGender = 3;
 
@@ -723,9 +711,10 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
 
             String plsql2 = "{call PERSON_INSERT_RECORD(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 
+            Connection connection = null;
             try {
-                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-
+                connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+                connection.setAutoCommit(false);
                 CallableStatement cst = connection.prepareCall(plsql);
                 cst.setString(1, InputUsername);
                 cst.setString(2, InputPassword);
@@ -742,9 +731,9 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
                 cst.setString("par_Birthday", InputBirthday);
                 cst.setInt("par_Gender", Integer.valueOf(InputGender));
                 cst.setString("par_Hometown", InputHomeTown);
-                cst.setString("par_Province", InputProvince);
-                cst.setString("par_District", InputDistrict);
-                cst.setString("par_Town", InputTown);
+                cst.setString("par_ProvinceName", InputProvince);
+                cst.setString("par_DistrictName", InputDistrict);
+                cst.setString("par_TownName", InputTown);
                 cst.setString("par_Street", InputStreet);
                 cst.setString("par_Phone", InputUsername);
                 cst.setString("par_Email", InputEmail);
@@ -756,7 +745,18 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
             } catch (SQLException ex) {
                 dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
                 ex.printStackTrace();
+                try {
+                    connection.rollback();
+                } catch (SQLException exc) {
+                    exc.printStackTrace();
+                }
                 return;
+            } finally {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
 
             dv.popupOption(null, "Đăng ký thành công!", "Thông báo!", 0);
@@ -765,4 +765,58 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
 
     @Override
     public void keyReleased(KeyEvent e) {}
+
+    @Override
+    public void itemStateChanged(ItemEvent e)
+    {
+        if (e.getSource() == ProvinceChoice)
+        {
+            try {
+                DistrictChoice.removeAll();
+                TownChoice.removeAll();
+
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                String query = "select distinct DistrictCode, DistrictName from REGION " +
+                        "where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "' " +
+                        "order by DistrictCode";
+                PreparedStatement st = connection.prepareStatement(query);
+                ResultSet rs = st.executeQuery();
+
+                DistrictChoice.add("");
+                while (rs.next())
+                    DistrictChoice.add(rs.getString("DistrictName"));
+            } catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+                ex.printStackTrace();
+                return;
+            }
+
+            DistrictChoice.addItemListener(this);
+        }
+
+        if (e.getSource() == DistrictChoice)
+        {
+            try {
+                TownChoice.removeAll();
+
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                String query = "select distinct TownCode, TownName from REGION " +
+                        "where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "' " +
+                        "and DistrictName = '" + DistrictChoice.getSelectedItem() + "' " +
+                        "order by TownCode";
+                PreparedStatement st = connection.prepareStatement(query);
+                ResultSet rs = st.executeQuery();
+
+                TownChoice.add("");
+                while (rs.next())
+                    TownChoice.add(rs.getString("TownName"));
+            } catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+                ex.printStackTrace();
+                return;
+            }
+        }
+    }
 }

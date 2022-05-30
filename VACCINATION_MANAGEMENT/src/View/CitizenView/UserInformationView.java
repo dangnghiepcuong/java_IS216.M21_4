@@ -6,10 +6,7 @@ import org.jdatepicker.impl.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,8 +17,7 @@ import java.util.Properties;
  *
  * @author LeHoangDuyen
  */
-public class UserInformationView extends JPanel implements ActionListener, KeyListener
-{
+public class UserInformationView extends JPanel implements ActionListener, KeyListener, ItemListener {
     DefaultValue dv = new DefaultValue();
     private JLabel UsernameLabel;
     private JLabel OldPasswordLabel;
@@ -413,12 +409,8 @@ public class UserInformationView extends JPanel implements ActionListener, KeyLi
         HomeTownChoice.setBounds(50, 70 + 4*dv.LabelHeight()+3*dv.FieldHeight() + dv.AlignTop_InfoView(), 170, 30);
         HomeTownChoice.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         HomeTownChoice.setForeground(new Color(dv.FieldLabelColor()));
-
-        HomeTownChoice.add(dv.getProvinceName(personalUser.getProvince()));
-
-        for (int i = 1; i <= 64; i++)
-            if (dv.getProvinceList()[i] != dv.getProvinceName(personalUser.getProvince()) && i != 20)
-                HomeTownChoice.add(dv.getProvinceList()[i]);
+        HomeTownChoice.add(personalUser.getHomeTown());
+        HomeTownChoice.addItemListener(this);
     }
 
     private void initAddressLabel()
@@ -445,11 +437,31 @@ public class UserInformationView extends JPanel implements ActionListener, KeyLi
         ProvinceChoice.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         ProvinceChoice.setForeground(new Color(dv.FieldLabelColor()));
 
-        ProvinceChoice.add(dv.getProvinceName(personalUser.getProvince()));
+        ProvinceChoice.add(personalUser.getProvince());
 
-        for (int i = 1; i <= 64; i++)
-            if (dv.getProvinceList()[i] != dv.getProvinceName(personalUser.getProvince()) && i != 20)
-                ProvinceChoice.add(dv.getProvinceList()[i]);
+        try {
+            Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+            String query = "select distinct ProvinceCode, ProvinceName from REGION order by ProvinceCode";
+            PreparedStatement st = connection.prepareStatement(query);
+            ResultSet rs = st.executeQuery();
+
+            HomeTownChoice.add("");
+            ProvinceChoice.add("");
+            while (rs.next())
+            {
+                if (rs.getString("ProvinceName").equals(personalUser.getHomeTown()) == false)
+                    HomeTownChoice.add(rs.getString("ProvinceName"));
+                if (rs.getString("ProvinceName").equals(personalUser.getProvince()) == false)
+                    ProvinceChoice.add(rs.getString("ProvinceName"));
+            }
+        } catch (SQLException ex) {
+            dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+            ex.printStackTrace();
+            return;
+        }
+
+        ProvinceChoice.addItemListener(this);
     }
 
     private void initDistrictLabel()
@@ -599,8 +611,6 @@ public class UserInformationView extends JPanel implements ActionListener, KeyLi
                 return;
             if ( dv.checkStringInputValue(InputProvince, "Cảnh báo!", "Nhập tỉnh cư trú!") != -2 )
                 return;
-            else
-                InputProvince = dv.getProvinceCode(InputProvince);
 
             String query = "select *" +
                     " from ACCOUNT" +
@@ -664,9 +674,9 @@ public class UserInformationView extends JPanel implements ActionListener, KeyLi
                 cst.setString("par_Birthday", InputBirthday);
                 cst.setInt("par_Gender", InputGender);
                 cst.setString("par_HomeTown", InputHomeTown);
-                cst.setString("par_Province", InputProvince);
-                cst.setString("par_District", InputDistrict);
-                cst.setString("par_Town", InputTown);
+                cst.setString("par_ProvinceName", InputProvince);
+                cst.setString("par_DistrictName", InputDistrict);
+                cst.setString("par_TownName", InputTown);
                 cst.setString("par_Street", InputStreet);
                 cst.setString("par_Phone", InputUsername);
                 cst.setString("par_OldPhone", OldPhone);
@@ -725,8 +735,6 @@ public class UserInformationView extends JPanel implements ActionListener, KeyLi
                 return;
             if ( dv.checkStringInputValue(InputProvince, "Cảnh báo!", "Nhập tỉnh cư trú!") != -2 )
                 return;
-            else
-                InputProvince = dv.getProvinceCode(InputProvince);
 
             String query = "select *" +
                     " from ACCOUNT" +
@@ -790,9 +798,9 @@ public class UserInformationView extends JPanel implements ActionListener, KeyLi
                 cst.setString("par_Birthday", InputBirthday);
                 cst.setInt("par_Gender", InputGender);
                 cst.setString("par_HomeTown", InputHomeTown);
-                cst.setString("par_Province", InputProvince);
-                cst.setString("par_District", InputDistrict);
-                cst.setString("par_Town", InputTown);
+                cst.setString("par_ProvinceName", InputProvince);
+                cst.setString("par_DistrictName", InputDistrict);
+                cst.setString("par_TownName", InputTown);
                 cst.setString("par_Street", InputStreet);
                 cst.setString("par_Phone", InputUsername);
                 cst.setString("par_OldPhone", OldPhone);
@@ -814,4 +822,60 @@ public class UserInformationView extends JPanel implements ActionListener, KeyLi
 
     @Override
     public void keyReleased(KeyEvent e) {}
+
+    @Override
+    public void itemStateChanged(ItemEvent e)
+    {
+        if (e.getSource() == ProvinceChoice)
+        {
+            try {
+                DistrictChoice.removeAll();
+                TownChoice.removeAll();
+
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                String query = "select distinct DistrictCode, DistrictName from REGION " +
+                        "where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "' " +
+                        "order by DistrictCode";
+                PreparedStatement st = connection.prepareStatement(query);
+                ResultSet rs = st.executeQuery();
+
+                DistrictChoice.add("");
+                while (rs.next())
+                    if (rs.getString("DistrictName").equals(personalUser.getDistrict()) == false)
+                        DistrictChoice.add(rs.getString("DistrictName"));
+            } catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+                ex.printStackTrace();
+                return;
+            }
+
+            DistrictChoice.addItemListener(this);
+        }
+
+        if (e.getSource() == DistrictChoice)
+        {
+            try {
+                TownChoice.removeAll();
+
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                String query = "select distinct TownCode, TownName from REGION " +
+                        "where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "' " +
+                        "and DistrictName = '" + DistrictChoice.getSelectedItem() + "' " +
+                        "order by TownCode";
+                PreparedStatement st = connection.prepareStatement(query);
+                ResultSet rs = st.executeQuery();
+
+                TownChoice.add("");
+                while (rs.next())
+                    if (rs.getString("TownName").equals(personalUser.getTown()) == false)
+                        TownChoice.add(rs.getString("TownName"));
+            } catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+                ex.printStackTrace();
+                return;
+            }
+        }
+    }
 }

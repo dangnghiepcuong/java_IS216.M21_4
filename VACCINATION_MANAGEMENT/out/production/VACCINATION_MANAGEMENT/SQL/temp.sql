@@ -7,7 +7,7 @@ select * from vaccine;
 select * from schedule
 order by OnDate desc;
 
-select * from person;
+select * from person where ID = '281325656';
 
 select * from register;
 
@@ -18,36 +18,34 @@ select * from health;
 
 select * from parameter;
 
-select * from region;
+select COUNT(*) from region;
 
 select * from certificate;
 
-/* DELETE */
-delete from parameter;
+DELETE FROM HEALTH;
+DELETE FROM INJECTION;
+DELETE FROM REGISTER;
+DELETE FROM SCHEDULE;
+DELETE FROM ANNOUNCEMENT;
+DELETE FROM CERTIFICATE;
 
-delete from health;
-
-delete from injection;
-
-delete from register;
-
-delete from schedule;
-
-delete from vaccine;
-
-delete from organization
-where ID != '44001' and ID != 'MOH';
-
-delete from person;
-
-delete from account
-where username != '44001' and username != 'MOH'
-and role = 1;
-
-select ORG.ID, Name, Province, District, Town, Street, COUNT(SCHED.ID) 
-from ORGANIZATION ORG left outer join SCHEDULE SCHED on ORG.ID = SCHED.OrgID 
-where Province like '%' and (OnDate > '18-MAY-2022' or OnDate is null) 
-group by ORG.ID, Name, Province, District, Town, Street 
-order by TO_NUMBER(SUBSTR(ID,3,LENGTH(ID))), Province, District, Town;
+DELETE FROM PERSON;
+DELETE FROM ORGANIZATION;
+DELETE FROM ACCOUNT;
 
 commit;
+
+delete account where role = 2;
+
+insert into ACCOUNT (Username, Password, Role, Status, Note)
+values ('MOH', '123', 0, 1, null);
+
+insert into ORGANIZATION (ID, Name, ProvinceName, DistrictName, TownName, Street, Note)
+values ('01000', 'B? Y t?', 'Hà N?i', 'Ba ?ình', 'Kim Mã', '138A ???ng Gi?ng Võ', null);
+
+select ID into temp_ID
+    from ORGANIZATION
+    where ProvinceName = 'Hà N?i' 
+    and TO_NUMBER(SUBSTR(ID,3,5)) = (select COUNT(ID) 
+                                    from ORGANIZATION
+                                    where ProvinceName = 'Hà N?i');

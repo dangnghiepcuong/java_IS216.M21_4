@@ -565,7 +565,9 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
 
                 FileReader ReadContent = new FileReader(ContentFilePath.getPath());
 
-                FileInputStream blobFile = new FileInputStream(ImageFilePath);
+                FileInputStream blobFile = null;
+                if (ImageFilePath != null)
+                    blobFile = new FileInputStream(ImageFilePath);
 
                 cst.setString("par_OrgID", orgUser.getID());
                 cst.setString("par_Title", InputTitle);
