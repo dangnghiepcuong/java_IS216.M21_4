@@ -93,6 +93,8 @@ public class AnnouncementView extends JPanel implements ActionListener {
         MainPane.add(SearchAnnouncement);
         //MainPane.add(ScrollPaneAnn);
         MainPane.add(SearchButton);
+        
+        
     }
     
     private void initMainLayeredPane() 
@@ -181,13 +183,14 @@ public class AnnouncementView extends JPanel implements ActionListener {
             {
                 annID=ann.getID();
                 initScrollPaneAnn();                 
-                MainPane.add(ScrollPaneAnn);
+                
                 
                 JPanel ContentPanelAnn= new JPanel();
-                ContentPanelAnn.add(PublishDateLabel);
-                ContentPanelAnn.setPreferredSize(new Dimension(650, 670));
                 
+                ContentPanelAnn.setBounds(875, 630, 200, 80);
+                ContentPanelAnn.add(PublishDateLabel);               
                 MainPane.add(ContentPanelAnn);
+                System.out.print("vkajdbvlskjdfbv");
             }
 
             @Override
@@ -259,8 +262,6 @@ public class AnnouncementView extends JPanel implements ActionListener {
     
     private void initAnnouncementNew()// View Announcement new
     {
-        
-        
         AnnouncementNew =  new JScrollPane(AnnListPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
       
@@ -340,6 +341,8 @@ public class AnnouncementView extends JPanel implements ActionListener {
         ScrollPaneAnn = new JScrollPane(ContentPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneAnn.setBounds(300,55,750 ,550);
+        
+        MainPane.add(ScrollPaneAnn);
     }
     
     private void initLayeredPaneArea() // Panel chứa scroll DS tờ khai
