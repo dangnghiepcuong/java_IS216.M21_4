@@ -181,7 +181,7 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
 
     private void initUploadContentButton()
     {
-        ImageIcon UploadContentButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Memo.png"));
+        ImageIcon UploadContentButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Form.png"));
         UploadContentButton = new JButton();
         UploadContentButton.setBounds(70 + 220, 80 + 7 * dv.LabelHeight() +dv.AlignTop_InfoView(),
                 UploadContentButtonIcon.getIconWidth(), UploadContentButtonIcon.getIconHeight());
@@ -257,7 +257,7 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         UploadImageButton = new JButton();
         UploadImageButton.setBounds(70 + 220, 90 + 9 * dv.LabelHeight() +dv.AlignTop_InfoView(),
                 UploadImageButtonIcon.getIconWidth(), UploadImageButtonIcon.getIconHeight());
-        UploadImageButton.setBorder(null);
+//        UploadImageButton.setBorder(null);
         UploadImageButton.setContentAreaFilled(false);
         UploadImageButton.setIcon(UploadImageButtonIcon);
         UploadImageButton.addActionListener(this);
