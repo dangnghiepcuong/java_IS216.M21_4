@@ -10,22 +10,31 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Scanner;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.event.AncestorListener;
 
 /**
  *
@@ -53,6 +62,8 @@ public class AnnouncementView extends JPanel implements ActionListener {
 //    private JButton RefreshButton;
 //   
     private DefaultValue dv= new DefaultValue();
+    private String annID;
+    private Scanner ContentFile;
     
     public AnnouncementView()//Constructor
     {
@@ -70,18 +81,17 @@ public class AnnouncementView extends JPanel implements ActionListener {
         initMainPane();
         
         initSearchAnnouncement();
-        initScrollPaneAnn();
+        //initScrollPaneAnn();
         initSearchButton();
         
         initAnnListPanel();
-       
         initAnnouncementNew();
         
         this.add(MainLayeredPane);
         MainLayeredPane.add(MainPane,Integer.valueOf(0));
         MainPane.add(AnnouncementNew);
         MainPane.add(SearchAnnouncement);
-        MainPane.add(ScrollPaneAnn);
+        //MainPane.add(ScrollPaneAnn);
         MainPane.add(SearchButton);
     }
     
@@ -163,6 +173,34 @@ public class AnnouncementView extends JPanel implements ActionListener {
         FormPanel.add(PublishDateLabel);
         
         FormPanel.setPreferredSize(new Dimension(350, 100));
+        
+        MouseListener handleMouseAction = new MouseListener()
+        {
+            @Override
+            public void mouseClicked(MouseEvent e)
+            {
+                annID=ann.getID();
+                initScrollPaneAnn();                 
+                MainPane.add(ScrollPaneAnn);
+                
+                JPanel ContentPanelAnn= new JPanel();
+                ContentPanelAnn.add(PublishDateLabel);
+                ContentPanelAnn.setPreferredSize(new Dimension(650, 670));
+                
+                MainPane.add(ContentPanelAnn);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        };
+        
+        FormPanel.addMouseListener(handleMouseAction);
         return FormPanel;
     }
     
@@ -221,8 +259,10 @@ public class AnnouncementView extends JPanel implements ActionListener {
     
     private void initAnnouncementNew()// View Announcement new
     {
+        
+        
         AnnouncementNew =  new JScrollPane(AnnListPanel,
-                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS , JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
       
         AnnouncementNew.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         AnnouncementNew.setBounds(20,170,250 ,500);
@@ -230,12 +270,76 @@ public class AnnouncementView extends JPanel implements ActionListener {
     
     private void initScrollPaneAnn()// view detailed announcement
     {
-        ScrollPaneAnn = new JScrollPane(null,
-                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        ScrollPaneAnn.setBounds(280,20,770 ,650);
-        ScrollPaneAnn.setLayout(null);
-        ScrollPaneAnn.setOpaque(true);
         
+        String query= "Select Announcement.ID, ORGID, Name, Title, PublishDate, Content, Image "
+                    + "From Announcement join Organization on Announcement.OrgID= Organization.ID "
+                    + "Where Announcement.ID="+ annID;
+        
+        Connection connection=null;
+        JPanel AnnPanel=new JPanel();
+        Annoucement Ann=new Annoucement();   
+        try
+        {
+            connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());           
+            
+            PreparedStatement st = connection.prepareStatement(query);
+            ResultSet rs = st.executeQuery(query);
+            
+            while(rs.next())
+            {           
+                Ann.setID(rs.getString("ID"));
+                Ann.setOrgID(rs.getString("OrgID"));
+                Ann.getOrg().setName(rs.getString("Name"));
+                System.out.print(Ann.getOrg().getName());
+                Ann.setTitle(rs.getString("Title"));         
+                Ann.setPublishDate(LocalDate.parse(rs.getString("PublishDate").substring(0, 10)));
+                Ann.setContent(rs.getString("Content"));
+                Ann.setImage(rs.getBytes("Image"));
+                System.out.print(Ann.getContent());
+            }
+           
+        }
+        catch(SQLException ex)
+        {
+            dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+            ex.printStackTrace();
+        
+            return;
+        }
+
+        JTextArea ContentLabel = new JTextArea(Ann.getContent());
+        ContentLabel.setBounds(0,0, 700, 1);
+        ContentLabel.setFont(new Font(dv.fontName(), Font.PLAIN, 20));
+        ContentLabel.setForeground(new Color(dv.BlackTextColor()));
+        ContentLabel.setBackground(Color.WHITE);
+        ContentLabel.setAutoscrolls(true);
+        ContentLabel.setWrapStyleWord(true);
+        ContentLabel.setLineWrap(true);
+        ContentLabel.setEditable(false);
+        
+        JPanel ContentPanel = new JPanel();
+        
+        ContentPanel.setBounds(0,0, 700, 1);
+        BoxLayout boxLayout = new BoxLayout(ContentPanel, BoxLayout.Y_AXIS);
+        ContentPanel.setLayout(boxLayout);
+        ContentPanel.add(ContentLabel);
+        
+        if(Ann.getImage() != null)
+       {
+           ImageIcon TakenImage = new ImageIcon(Ann.getImage());
+           Image ResizedImg = ImageHelper.reSize(TakenImage.getImage(),
+                    700, 400);
+           JLabel ImagePlace = new JLabel(new ImageIcon(ResizedImg));
+           ImagePlace.setPreferredSize(new Dimension( 700, 400));
+           ImagePlace.setHorizontalAlignment(JLabel.LEFT);
+           JPanel ImagePanel = new JPanel();
+           ImagePanel.add(ImagePlace);
+           ContentPanel.add(ImagePanel);   
+       }
+                
+        ScrollPaneAnn = new JScrollPane(ContentPanel,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        ScrollPaneAnn.setBounds(300,55,750 ,550);
     }
     
     private void initLayeredPaneArea() // Panel chứa scroll DS tờ khai
