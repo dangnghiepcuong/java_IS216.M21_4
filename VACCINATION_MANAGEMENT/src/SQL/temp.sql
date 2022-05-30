@@ -18,36 +18,17 @@ select * from health;
 
 select * from parameter;
 
-select * from region;
+select COUNT(*) from region;
 
 select * from certificate;
 
-/* DELETE */
-delete from parameter;
+alter table REGION
+add constraint PK_REGION primary key (ProvinceCode,DistrictCode,TownCode);
 
-delete from health;
+insert into REGION (ProvinceCode, ProvinceName, DistrictCode, DistrictName, TownCode, TownName, Note) values ('62', 'T?nh Kon Tum', '618', 'Huy?n Ia H'' Drai', '23537', 'Xã Ia Dom', null);
 
-delete from injection;
+insert into REGION (ProvinceCode, ProvinceName, DistrictCode, DistrictName, TownCode, TownName, Note) values ('62', 'T?nh Kon Tum', '618', 'Huy?n Ia H'' Drai', '23535', 'Xã Ia ?al', null);
 
-delete from register;
-
-delete from schedule;
-
-delete from vaccine;
-
-delete from organization
-where ID != '44001' and ID != 'MOH';
-
-delete from person;
-
-delete from account
-where username != '44001' and username != 'MOH'
-and role = 1;
-
-select ORG.ID, Name, Province, District, Town, Street, COUNT(SCHED.ID) 
-from ORGANIZATION ORG left outer join SCHEDULE SCHED on ORG.ID = SCHED.OrgID 
-where Province like '%' and (OnDate > '18-MAY-2022' or OnDate is null) 
-group by ORG.ID, Name, Province, District, Town, Street 
-order by TO_NUMBER(SUBSTR(ID,3,LENGTH(ID))), Province, District, Town;
+select * from REGION where towncode = '23535';
 
 commit;

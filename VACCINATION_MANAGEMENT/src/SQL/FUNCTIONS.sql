@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Friday-May-27-2022   
+--  File created - Monday-May-30-2022   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Function ACC_CONVERT_SEQ_TO_STR
@@ -27,8 +27,6 @@ begin
 	return TO_CHAR(par_Last_Seq);
 
 end ACC_CONVERT_SEQ_TO_STR;
-
-/
 --------------------------------------------------------
 --  DDL for Function ANN_ID
 --------------------------------------------------------
@@ -54,8 +52,6 @@ EXCEPTION
  	then 
         return 1;
 end "ANN_ID";
-
-/
 --------------------------------------------------------
 --  DDL for Function HEAL_FORM_ID
 --------------------------------------------------------
@@ -80,8 +76,6 @@ begin
         then
             return 1;
 end HEAL_FORM_ID;
-
-/
 --------------------------------------------------------
 --  DDL for Function INJ_COUNT_INJ
 --------------------------------------------------------
@@ -97,8 +91,6 @@ begin
 
     return var_n_Injection;
 end INJ_COUNT_INJ;
-
-/
 --------------------------------------------------------
 --  DDL for Function INJ_DIFFERENCE
 --------------------------------------------------------
@@ -133,8 +125,6 @@ begin
 
     return 0;
 end INJ_DIFFERENCE;
-
-/
 --------------------------------------------------------
 --  DDL for Function ORG_COUNT_SCHED
 --------------------------------------------------------
@@ -170,8 +160,6 @@ begin
 
     return Count_Sched;
 end ORG_COUNT_SCHED;
-
-/
 --------------------------------------------------------
 --  DDL for Function PERSON_AGE
 --------------------------------------------------------
@@ -191,8 +179,6 @@ BEGIN
     var_Age := trunc(months_between(sysdate, var_BirthDay)/12);
     RETURN var_Age;
 END PERSON_AGE;
-
-/
 --------------------------------------------------------
 --  DDL for Function REG_REG_ID
 --------------------------------------------------------
@@ -218,8 +204,6 @@ EXCEPTION
     then
         return 1;
 END REG_REG_ID;
-
-/
 --------------------------------------------------------
 --  DDL for Function REG_SIGNED_NO
 --------------------------------------------------------
@@ -264,8 +248,6 @@ begin
 	return (RegNumber + 1);
 
 end REG_SIGNED_NO;
-
-/
 --------------------------------------------------------
 --  DDL for Function SCHED_GENERATE_ID
 --------------------------------------------------------
@@ -298,5 +280,3 @@ begin
             return par_OrgID || StringDate || TO_CHAR(n_Scheds_OnDate+1);
 
 end SCHED_GENERATE_ID;
-
-/
