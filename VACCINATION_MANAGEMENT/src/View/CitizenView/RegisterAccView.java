@@ -426,10 +426,28 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
         ProvinceChoice.setForeground(new Color(0x666666));
         ProvinceChoice.setBackground(Color.WHITE);
 
-        ProvinceChoice.add("");
+        /*ProvinceChoice.add("");
         for (int i = 1; i <= 64; i++)
             if (i != 20)
-                ProvinceChoice.add(dv.getProvinceList()[i]);
+                ProvinceChoice.add(dv.getProvinceList()[i]);*/
+
+        try {
+            Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+            String query = "select ProvinceName from REGION";
+            PreparedStatement st = connection.prepareStatement(query);
+            ResultSet rs = st.executeQuery();
+
+            ProvinceChoice.add("");
+            while (rs.next())
+                ProvinceChoice.add(rs.getString("ProvinceName"));
+        } catch (SQLException ex) {
+            dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+            ex.printStackTrace();
+            return;
+        }
+
+        ProvinceChoice.addItemListener();
     }
 
     private void initDistrictLabel()
