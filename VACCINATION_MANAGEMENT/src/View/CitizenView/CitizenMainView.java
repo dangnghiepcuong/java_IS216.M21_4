@@ -140,7 +140,7 @@ public class CitizenMainView extends JFrame implements ActionListener
         BasicInfo.setHorizontalAlignment(JLabel.CENTER);
 
         ImageIcon LocationImage = new ImageIcon(getClass().getResource("/Resources/icon/Location.png"));
-        JLabel Location = new JLabel(dv.getProvinceName(personalUser.getProvince()));
+        JLabel Location = new JLabel(personalUser.getProvince());
         Location.setFont(new Font(dv.fontName(),Font.BOLD, 20));
         Location.setIcon(LocationImage);
         Location.setBounds(0,400,360,30);
@@ -422,9 +422,9 @@ public class CitizenMainView extends JFrame implements ActionListener
             personalUser.setBirthday(rs.getString("Birthday"));
             personalUser.setGender(rs.getInt("Gender"));
             personalUser.setHomeTown(rs.getString("HomeTown"));
-            personalUser.setProvince(rs.getString("Province"));
-            personalUser.setDistrict(rs.getString("District"));
-            personalUser.setTown(rs.getString("Town"));
+            personalUser.setProvince(rs.getString("ProvinceName"));
+            personalUser.setDistrict(rs.getString("DistrictName"));
+            personalUser.setTown(rs.getString("TownName"));
             personalUser.setStreet(rs.getString("Street"));
             personalUser.setPhone(rs.getString("Phone"));
             personalUser.setEmail(rs.getString("Email"));
@@ -511,9 +511,9 @@ public class CitizenMainView extends JFrame implements ActionListener
                 personalUser.setBirthday(rs.getString("Birthday"));
                 personalUser.setGender(rs.getInt("Gender"));
                 personalUser.setHomeTown(rs.getString("HomeTown"));
-                personalUser.setProvince(rs.getString("Province"));
-                personalUser.setDistrict(rs.getString("District"));
-                personalUser.setTown(rs.getString("Town"));
+                personalUser.setProvince(rs.getString("ProvinceName"));
+                personalUser.setDistrict(rs.getString("DistrictName"));
+                personalUser.setTown(rs.getString("TownName"));
                 personalUser.setStreet(rs.getString("Street"));
                 personalUser.setPhone(rs.getString("Phone"));
                 personalUser.setEmail(rs.getString("Email"));
