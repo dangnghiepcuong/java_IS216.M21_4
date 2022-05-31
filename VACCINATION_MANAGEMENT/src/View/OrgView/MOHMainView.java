@@ -1,9 +1,7 @@
 package View.OrgView;
 
 import Process.*;
-import View.CitizenView.RegisterVaccinationView;
 import View.LoginView;
-import com.sun.tools.javac.Main;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,7 +36,7 @@ public class MOHMainView extends JFrame implements ActionListener
     private OrgInformationView orgInformationView;
     private CreateOrgAccView createOrgAccView;
     private PublishAnnouncementView publishAnnouncementView;
-    private SearchCitizenView searchCitizenView;
+    private MOHSearchCitizenView searchCitizenView;
     private MOHStatisticView mohStatisticView;
 
     private void initBackButton()
@@ -485,7 +483,7 @@ public class MOHMainView extends JFrame implements ActionListener
         {
             nullFeatureViews();
 
-            searchCitizenView = new SearchCitizenView();
+            searchCitizenView = new MOHSearchCitizenView();
             MainLayeredPane.removeAll();
             MainLayeredPane.add(searchCitizenView, Integer.valueOf(1));
 

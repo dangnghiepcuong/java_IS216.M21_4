@@ -1,10 +1,6 @@
 package View.OrgView;
 
 import Process.*;
-import View.CitizenView.UserInformationView;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,16 +9,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Properties;
 
 /**
  *
  * @author ASUS
  */
-public class SearchCitizenView extends JPanel implements ActionListener, KeyListener {
+public class MOHSearchCitizenView extends JPanel implements ActionListener, KeyListener {
 
     /*Search Result*/
     private JScrollPane ScrollPaneInjList;
@@ -414,7 +406,7 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
 
     /*CONSTRUCTOR*/
 
-    public SearchCitizenView()
+    public MOHSearchCitizenView()
     {
         initComponents();
     }
