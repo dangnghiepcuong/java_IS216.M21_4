@@ -68,6 +68,7 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
         ProvinceChoice.setForeground(new Color(dv.BlackTextColor()));
         ProvinceChoice.setBackground(Color.WHITE);
 
+        ProvinceChoice.add(personalUser.getProvince());
         try {
             Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
@@ -78,7 +79,8 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
             ProvinceChoice.add("");
             while (rs.next())
             {
-                ProvinceChoice.add(rs.getString("ProvinceName"));
+                if (rs.getString("ProvinceName").equals(personalUser.getProvince()) == false)
+                    ProvinceChoice.add(rs.getString("ProvinceName"));
             }
         } catch (SQLException ex) {
             dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
@@ -107,6 +109,26 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
         DistrictChoice.setForeground(new Color(0x333333));
         DistrictChoice.setBackground(Color.WHITE);
         DistrictChoice.addItemListener(this);
+
+        DistrictChoice.add(personalUser.getDistrict());
+        try {
+            Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+            String query = "select distinct DistrictCode, DistrictName from REGION " +
+                    "where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "' " +
+                    "order by DistrictCode";
+            PreparedStatement st = connection.prepareStatement(query);
+            ResultSet rs = st.executeQuery();
+
+            DistrictChoice.add("");
+            while (rs.next())
+                if (rs.getString("DistrictName").equals(personalUser.getDistrict()) == false)
+                    DistrictChoice.add(rs.getString("DistrictName"));
+        } catch (SQLException ex) {
+            dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+            ex.printStackTrace();
+            return;
+        }
     }
 
     private void initTownLabel()
@@ -127,6 +149,27 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
         TownChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         TownChoice.setBackground(Color.WHITE);
         TownChoice.addItemListener(this);
+
+        TownChoice.add(personalUser.getTown());
+        try {
+            Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+            String query = "select distinct TownCode, TownName from REGION " +
+                    "where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "' " +
+                    "and DistrictName = '" + DistrictChoice.getSelectedItem() + "' " +
+                    "order by TownCode";
+            PreparedStatement st = connection.prepareStatement(query);
+            ResultSet rs = st.executeQuery();
+
+            TownChoice.add("");
+            while (rs.next())
+                if (rs.getString("TownName").equals(personalUser.getTown()) == false)
+                    TownChoice.add(rs.getString("TownName"));
+        } catch (SQLException ex) {
+            dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+            ex.printStackTrace();
+            return;
+        }
     }
 
     private void initOrgFilterButton() 
@@ -288,15 +331,15 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
         String query = "select ORG.ID, Name, ProvinceName, DistrictName, TownName, Street, COUNT(SCHED.ID)"
                 + " from ORGANIZATION ORG left outer join SCHEDULE SCHED on ORG.ID = SCHED.OrgID";
 
-        if (ProvinceChoice.getSelectedIndex() != 1)
+        if (ProvinceChoice.getSelectedItem().equals("") == false)
             query = query + " where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "'";
         else
             query = query + " where ProvinceName like '%'";
 
-        if (DistrictChoice.getSelectedIndex() > 0)
+        if (DistrictChoice.getSelectedItem().equals("") == false)
             query = query + " and DistrictName = '" + DistrictChoice.getSelectedItem() + "'";
 
-        if (TownChoice.getSelectedIndex() > 0)
+        if (TownChoice.getSelectedItem().equals("") == false)
             query = query + " and TownName = '" + TownChoice.getSelectedItem() + "'";
 
         query += " and (OnDate > TO_DATE('" + dv.oracleSysdate() + "') or OnDate is null)";
@@ -756,8 +799,6 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
                 ex.printStackTrace();
                 return;
             }
-
-            DistrictChoice.addItemListener(this);
         }
 
         if (e.getSource() == DistrictChoice)
