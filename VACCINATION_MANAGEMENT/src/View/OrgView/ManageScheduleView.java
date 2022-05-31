@@ -561,6 +561,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         ScrollPaneSchedList = new JScrollPane(SchedListPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneSchedList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneSchedList.setBounds(0, 40, 680, 590); //320 40
+        ScrollPaneSchedList.setBorder(null);
     }
 
 
@@ -866,9 +867,11 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
     private void initScrollPaneRegList()
     {
-        ScrollPaneRegList = new JScrollPane(RegListPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        ScrollPaneRegList = new JScrollPane(RegListPanel,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneRegList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneRegList.setBounds(0, 40, 680, 590); //320 40
+        ScrollPaneRegList.setBorder(null);
     }
 
 

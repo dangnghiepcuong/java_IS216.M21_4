@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import javax.swing.JFrame;
 import java.sql.*;
 
 /**
@@ -19,7 +20,7 @@ public class MOHSearchCitizenView extends JPanel implements ActionListener, KeyL
     /*Search Result*/
     private JScrollPane ScrollPaneInjList;
     private JPanel InjectionListPanel;
-    private JLayeredPane LayeredPaneArea;
+    private JPanel CertificatePanel;
 
     /*Search Info*/
     private JPanel PersonalInfoPanel;
@@ -235,13 +236,12 @@ public class MOHSearchCitizenView extends JPanel implements ActionListener, KeyL
        InjectionPanel.setPreferredSize(new Dimension(560, 120));
        InjectionPanel.setLayout(null);
        InjectionPanel.setBackground(Color.WHITE);
-       InjectionPanel.setBorder(dv.border());
+//       InjectionPanel.setBorder(dv.border());
 
        InjectionPanel.add(NameOrg);
        InjectionPanel.add(Vaccine);
        InjectionPanel.add(InjNOType);
        InjectionPanel.add(OnDateTime);
-       InjectionPanel.validate();
 
        return InjectionPanel;
    }
@@ -255,8 +255,6 @@ public class MOHSearchCitizenView extends JPanel implements ActionListener, KeyL
        int i =0;
        int nInj = 0;
 
-       Connection connection = null;
-
        String query = "";
        query = "select *" +
                "from INJECTION INJ, SCHEDULE SCHED, ORGANIZATION ORG " +
@@ -266,7 +264,7 @@ public class MOHSearchCitizenView extends JPanel implements ActionListener, KeyL
                "order by InjNO";
 
        try {
-           connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+           Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
            PreparedStatement st = connection.prepareStatement(query);
            ResultSet rs = st.executeQuery(query);
 
@@ -289,17 +287,11 @@ public class MOHSearchCitizenView extends JPanel implements ActionListener, KeyL
            dv.popupOption(null,ex.getMessage(), String.valueOf(ex.getErrorCode()),2);
            ex.printStackTrace();
            return;
-       }finally {
-           try {
-               connection.close();
-           } catch (SQLException ex) {
-               ex.printStackTrace();
-           }
        }
 
        query = "select * from CERTIFICATE CERT where PersonalID = '" + personalUser.getID() + "'";
        try {
-           connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+           Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
            PreparedStatement st = connection.prepareStatement(query);
            ResultSet rs = st.executeQuery(query);
 
@@ -312,19 +304,11 @@ public class MOHSearchCitizenView extends JPanel implements ActionListener, KeyL
            dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
            ex.printStackTrace();
            return;
-       }finally {
-           try {
-               connection.close();
-           } catch (SQLException ex) {
-               ex.printStackTrace();
-           }
        }
 
        nInj = i;
 
        InjectionListPanel.setPreferredSize(new Dimension(580, 120*nInj + nInj*10));
-       InjectionListPanel.setBounds(0,120,600, 550);
-       InjectionListPanel.validate();
    }
 
 
@@ -332,24 +316,29 @@ public class MOHSearchCitizenView extends JPanel implements ActionListener, KeyL
     {
         ScrollPaneInjList = new JScrollPane(InjectionListPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        ScrollPaneInjList.setBounds(0,120,600, 550);; //320 40
+        ScrollPaneInjList.setBounds(60 ,40 + 120,600, 500);
+        ScrollPaneInjList.setBorder(null);
     }
 
-    public void initLayeredPaneArea()
+    public void initCertificatePanel()
     {
+        CertificatePanel = new JPanel();
+        CertificatePanel.setBounds(360,0,720, 720);
+        CertificatePanel.setLayout(null);
+
         JLabel InfoLabel = new JLabel("CHỨNG NHẬN TIÊM CHỦNG");
-        InfoLabel.setBounds(0, 0, 600, 40);
+        InfoLabel.setBounds(0 , 40, CertificatePanel.getWidth(), 40);
         InfoLabel.setFont(new Font(dv.fontName(),Font.BOLD, 24));
         InfoLabel.setHorizontalAlignment(JLabel.CENTER);
 
         JLabel InfoLabel2 = new JLabel(personalUser.getFullName() + " (" + dv.getGenderName(personalUser.getGender()) + " - "
                 + personalUser.getBirthday().substring(0,4) + ")");
-        InfoLabel2.setBounds(0, 40, 600, 40);
+        InfoLabel2.setBounds(0 , 40 + 40, CertificatePanel.getWidth(), 40);
         InfoLabel2.setFont(new Font(dv.fontName(),Font.BOLD, 24));
         InfoLabel2.setHorizontalAlignment(JLabel.CENTER);
 
         JLabel InfoLabel3 = new JLabel();
-        InfoLabel3.setBounds(0, 80, 600, 40);
+        InfoLabel3.setBounds(0 , 40 + 80, CertificatePanel.getWidth(), 40);
         InfoLabel3.setFont(new Font(dv.fontName(),Font.ITALIC, 24));
         InfoLabel3.setHorizontalAlignment(JLabel.CENTER);
 
@@ -375,20 +364,17 @@ public class MOHSearchCitizenView extends JPanel implements ActionListener, KeyL
             InfoLabel3.setText("Đã hoàn thành tiêm chủng vaccine Covid-19");
         }
 
-        LayeredPaneArea = new JLayeredPane();
-        LayeredPaneArea.setBounds(360+(720-600)/2,(this.getHeight()-630)/2,600, 630);
-        LayeredPaneArea.setLayout(null);
-
         if (cert.getCertType() == 0)
-            this.setBackground(new Color(dv.RedPastel()));
+            CertificatePanel.setBackground(new Color(dv.RedPastel()));
         if (cert.getCertType() == 1)
-            this.setBackground(new Color(dv.YellowPastel()));
+            CertificatePanel.setBackground(new Color(dv.YellowPastel()));
         if (cert.getCertType() == 2)
-            this.setBackground(new Color(dv.GreenPastel()));
+            CertificatePanel.setBackground(new Color(dv.GreenPastel()));
 
-        LayeredPaneArea.add(InfoLabel);
-        LayeredPaneArea.add(InfoLabel2);
-        LayeredPaneArea.add(InfoLabel3);
+        CertificatePanel.add(InfoLabel);
+        CertificatePanel.add(InfoLabel2);
+        CertificatePanel.add(InfoLabel3);
+        CertificatePanel.add(ScrollPaneInjList);
     }
 
     private void initComponents()
@@ -458,9 +444,9 @@ public class MOHSearchCitizenView extends JPanel implements ActionListener, KeyL
             {
                 if (ex.getErrorCode() == 17289)
                 {
-                    if (LayeredPaneArea != null)
+                    if (CertificatePanel != null)
                     {
-                        LayeredPaneArea.removeAll();
+                        CertificatePanel.removeAll();
                         this.setBackground(new Color(dv.ViewBackgroundColor()));
                         this.removeAll();
                         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
@@ -481,11 +467,8 @@ public class MOHSearchCitizenView extends JPanel implements ActionListener, KeyL
 
             initInjectionListPanel();
             initScrollPaneInjList();
-
-            initLayeredPaneArea();
-            LayeredPaneArea.add(ScrollPaneInjList, Integer.valueOf(0));
-
-            this.add(LayeredPaneArea);
+            initCertificatePanel();
+            this.add(CertificatePanel);
             this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
     }
@@ -540,9 +523,9 @@ public class MOHSearchCitizenView extends JPanel implements ActionListener, KeyL
             {
                 if (ex.getErrorCode() == 17289)
                 {
-                    if (LayeredPaneArea != null)
+                    if (CertificatePanel != null)
                     {
-                        LayeredPaneArea.removeAll();
+                        CertificatePanel.removeAll();
                         this.setBackground(new Color(dv.ViewBackgroundColor()));
                         this.removeAll();
                         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
@@ -563,11 +546,8 @@ public class MOHSearchCitizenView extends JPanel implements ActionListener, KeyL
 
             initInjectionListPanel();
             initScrollPaneInjList();
-
-            initLayeredPaneArea();
-            LayeredPaneArea.add(ScrollPaneInjList, Integer.valueOf(2));
-
-            this.add(LayeredPaneArea);
+            initCertificatePanel();
+            this.add(CertificatePanel);
             this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
     }

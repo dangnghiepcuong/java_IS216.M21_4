@@ -341,7 +341,8 @@ public class AnnouncementView extends JPanel implements ActionListener {
         ScrollPaneAnn = new JScrollPane(ContentPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneAnn.setBounds(300,55,750 ,550);
-        
+        ScrollPaneAnn.setBorder(null);
+
         MainPane.add(ScrollPaneAnn);
     }
     

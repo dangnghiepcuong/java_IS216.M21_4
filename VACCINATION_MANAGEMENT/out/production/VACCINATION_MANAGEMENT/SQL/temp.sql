@@ -22,18 +22,6 @@ select COUNT(*) from region;
 
 select * from certificate;
 
-<<<<<<< HEAD
-alter table REGION
-add constraint PK_REGION primary key (ProvinceCode,DistrictCode,TownCode);
-
-insert into REGION (ProvinceCode, ProvinceName, DistrictCode, DistrictName, TownCode, TownName, Note) values ('62', 'T?nh Kon Tum', '618', 'Huy?n Ia H'' Drai', '23537', 'Xã Ia Dom', null);
-
-insert into REGION (ProvinceCode, ProvinceName, DistrictCode, DistrictName, TownCode, TownName, Note) values ('62', 'T?nh Kon Tum', '618', 'Huy?n Ia H'' Drai', '23535', 'Xã Ia ?al', null);
-
-select * from REGION where towncode = '23535';
-
-commit;
-=======
 DELETE FROM HEALTH;
 DELETE FROM INJECTION;
 DELETE FROM REGISTER;
@@ -61,4 +49,3 @@ select ID into temp_ID
     and TO_NUMBER(SUBSTR(ID,3,5)) = (select COUNT(ID) 
                                     from ORGANIZATION
                                     where ProvinceName = 'Hà N?i');
->>>>>>> origin/main

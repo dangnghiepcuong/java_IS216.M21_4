@@ -381,6 +381,7 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneOrgList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneOrgList.setBounds(0, 40, 680, 590); //320-40
+        ScrollPaneOrgList.setBorder(null);
     }
 
 
@@ -680,6 +681,7 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneSchedList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneSchedList.setBounds(0, 40, 680, 590);
+        ScrollPaneOrgList.setBorder(null);
     }
 
     private void initLayeredPaneArea()
@@ -707,8 +709,22 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
         this.add(SchedFilterPanel);
         SchedFilterButton.setEnabled(false);
 
+        //init OrgListLabel
+        JLabel OrgListLabel = new JLabel("DANH SÁCH CÁC ĐƠN VỊ TIÊM CHỦNG ("
+                + ProvinceChoice.getSelectedItem() + "-" + DistrictChoice.getSelectedItem() + "-" + TownChoice.getSelectedItem() + ")");
+        OrgListLabel.setBounds(0, 0, 640, 40);
+        OrgListLabel.setFont(new Font(dv.fontName(), 1, 20));
+        OrgListLabel.setForeground(new Color(dv.FeatureButtonColor()));
+        OrgListLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        //init ScrollPaneOrgList
+        initOrgListPanel();
+        initScrollPaneOrgList();
+
         //init LayeredPane
         initLayeredPaneArea();
+        LayeredPaneArea.add(OrgListLabel, Integer.valueOf(0));
+        LayeredPaneArea.add(ScrollPaneOrgList, Integer.valueOf(0));
         this.add(LayeredPaneArea);
 
         this.repaint(0,0, dv.FrameWidth(), dv.FrameHeight());
@@ -748,7 +764,6 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
             initScrollPaneOrgList();
 
             LayeredPaneArea.add(OrgListLabel, Integer.valueOf(0));
-
             LayeredPaneArea.add(ScrollPaneOrgList, Integer.valueOf(0));
 
             SchedListPanel = null;
@@ -792,6 +807,7 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
                 ResultSet rs = st.executeQuery();
 
                 DistrictChoice.add("");
+                TownChoice.add("");
                 while (rs.next())
                     DistrictChoice.add(rs.getString("DistrictName"));
             } catch (SQLException ex) {

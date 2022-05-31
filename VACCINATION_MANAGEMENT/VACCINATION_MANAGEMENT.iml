@@ -43,18 +43,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/src/Resources/lib/iText" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/src/Resources/lib/iText" />
-        </SOURCES>
-        <jarDirectory url="file://$MODULE_DIR$/src/Resources/lib/iText" recursive="false" />
-        <jarDirectory url="file://$MODULE_DIR$/src/Resources/lib/iText" recursive="false" type="SOURCES" />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="itext-4.2.1" level="project" />
   </component>
 </module>

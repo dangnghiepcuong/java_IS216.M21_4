@@ -19,7 +19,7 @@ public class CertificateView extends JPanel{
     private JScrollPane ScrollPaneInjList;
 
     private JPanel InjectionListPanel;
-    private JLayeredPane LayeredPaneArea;
+    private JPanel CertificatePanel;
 
     /*Object Class*/
     private DefaultValue dv = new DefaultValue();
@@ -61,7 +61,7 @@ public class CertificateView extends JPanel{
        InjectionPanel.setPreferredSize(new Dimension(560, 120));
        InjectionPanel.setLayout(null);
        InjectionPanel.setBackground(Color.WHITE);
-//       InjectionPanel.setBorder(dv.border());
+       InjectionPanel.setBorder(dv.border());
 
        InjectionPanel.add(NameOrg);
        InjectionPanel.add(Vaccine);
@@ -140,24 +140,26 @@ public class CertificateView extends JPanel{
     {
         ScrollPaneInjList = new JScrollPane(InjectionListPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        ScrollPaneInjList.setBounds(0,120,600, 550);; //320 40
+        ScrollPaneInjList.setBounds(0,160,600, 500);
+        ScrollPaneInjList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+        ScrollPaneInjList.setBorder(null);
     }
 
-    public void initLayeredPaneArea()
+    public void initCertificatePanel()
     {
         JLabel InfoLabel = new JLabel("CHỨNG NHẬN TIÊM CHỦNG");
-        InfoLabel.setBounds(0, 0, 600, 40);
+        InfoLabel.setBounds(0, 40, 600, 40);
         InfoLabel.setFont(new Font(dv.fontName(),Font.BOLD, 24));
         InfoLabel.setHorizontalAlignment(JLabel.CENTER);
 
         JLabel InfoLabel2 = new JLabel(personalUser.getFullName() + " (" + dv.getGenderName(personalUser.getGender()) + " - "
                 + personalUser.getBirthday().substring(0,4) + ")");
-        InfoLabel2.setBounds(0, 40, 600, 40);
+        InfoLabel2.setBounds(0, 80, 600, 40);
         InfoLabel2.setFont(new Font(dv.fontName(),Font.BOLD, 24));
         InfoLabel2.setHorizontalAlignment(JLabel.CENTER);
 
         JLabel InfoLabel3 = new JLabel();
-        InfoLabel3.setBounds(0, 80, 600, 40);
+        InfoLabel3.setBounds(0, 120, 600, 40);
         InfoLabel3.setFont(new Font(dv.fontName(),Font.ITALIC, 24));
         InfoLabel3.setHorizontalAlignment(JLabel.CENTER);
 
@@ -183,9 +185,10 @@ public class CertificateView extends JPanel{
             InfoLabel3.setText("Đã hoàn thành tiêm chủng vaccine Covid-19");
         }
 
-        LayeredPaneArea = new JLayeredPane();
-        LayeredPaneArea.setBounds((this.getWidth()-600)/2,(this.getHeight()-630)/2,600, 630);
-        LayeredPaneArea.setLayout(null);
+        CertificatePanel = new JPanel();
+        CertificatePanel.setBounds((this.getWidth()-600)/2,0,600, 720);
+        CertificatePanel.setLayout(null);
+        CertificatePanel.setOpaque(false);
 
         if (cert.getCertType() == 0)
             this.setBackground(new Color(dv.RedPastel()));
@@ -194,9 +197,10 @@ public class CertificateView extends JPanel{
         if (cert.getCertType() == 2)
             this.setBackground(new Color(dv.GreenPastel()));
 
-        LayeredPaneArea.add(InfoLabel);
-        LayeredPaneArea.add(InfoLabel2);
-        LayeredPaneArea.add(InfoLabel3);
+        CertificatePanel.add(InfoLabel);
+        CertificatePanel.add(InfoLabel2);
+        CertificatePanel.add(InfoLabel3);
+        CertificatePanel.add(ScrollPaneInjList);
     }
 
     private void initComponents()
@@ -209,10 +213,9 @@ public class CertificateView extends JPanel{
         initInjectionListPanel();
         initScrollPaneInjList();
 
-        initLayeredPaneArea();
-        LayeredPaneArea.add(ScrollPaneInjList, Integer.valueOf(0));
+        initCertificatePanel();
 
-        this.add(LayeredPaneArea);
+        this.add(CertificatePanel);
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
     }
 
