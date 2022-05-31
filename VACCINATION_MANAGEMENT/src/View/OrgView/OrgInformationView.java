@@ -6,18 +6,14 @@ import Process.*;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.sql.*;
 
 /**
  *
  * @author LeHoangDuyen
  */
-public class OrgInformationView extends JPanel implements ActionListener, KeyListener
-{
+public class OrgInformationView extends JPanel implements ActionListener, KeyListener, ItemListener {
     DefaultValue dv = new DefaultValue();
     private JLabel IDLabel;
     private JLabel PasswordLabel;
@@ -279,11 +275,7 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
         ProvinceChoice.setForeground(new Color(dv.FieldLabelColor()));
         ProvinceChoice.setEnabled(false);
 
-        ProvinceChoice.add(dv.getProvinceName(orgUser.getProvince()));
-
-        for (int i = 1; i <= 64; i++)
-            if (dv.getProvinceList()[i] != dv.getProvinceName(orgUser.getProvince()) && i != 20)
-                ProvinceChoice.add(dv.getProvinceList()[i]);
+        ProvinceChoice.add(orgUser.getProvince());
     }
 
     private void initDistrictLabel()
@@ -304,13 +296,28 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
 
         DistrictChoice.add(orgUser.getDistrict());
 
-        DistrictChoice.add("");
-        DistrictChoice.add("Dầu Tiếng");
-        DistrictChoice.add("Thuận An");
-        DistrictChoice.add("Thủ Đức");
-        DistrictChoice.add("Biên Hòa");
-        DistrictChoice.add("Cẩm Mỹ");
-        DistrictChoice.add("Thủ Dầu Một");
+        try {
+            Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+            String query = "select distinct DistrictCode, DistrictName from REGION " +
+                    "where ProvinceName = '" + orgUser.getProvince() + "' " +
+                    "order by DistrictCode";
+            PreparedStatement st = connection.prepareStatement(query);
+            ResultSet rs = st.executeQuery();
+
+            DistrictChoice.add("");
+            while (rs.next())
+            {
+                if (rs.getString("DistrictName").equals(orgUser.getDistrict()) == false)
+                    DistrictChoice.add(rs.getString("DistrictName"));
+            }
+        } catch (SQLException ex) {
+            dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+            ex.printStackTrace();
+            return;
+        }
+
+        DistrictChoice.addItemListener(this);
     }
 
     private void initTownLabel()
@@ -330,13 +337,6 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
         TownChoice.setForeground(new Color(dv.FieldLabelColor()));
 
         TownChoice.add(orgUser.getTown());
-
-        TownChoice.add("");
-        TownChoice.add("Dầu Tiếng");
-        TownChoice.add("Lái Thiêu");
-        TownChoice.add("Linh Trung");
-        TownChoice.add("Tân Hòa");
-        TownChoice.add("Sông Ray");
     }
 
     private void initStreetLabel()
@@ -461,8 +461,8 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
                 cst2 = connection.prepareCall(plsql);
                 cst2.setString("par_ID", InputID);
                 cst2.setString("par_Name", InputName);
-                cst2.setString("par_District", InputDistrict);
-                cst2.setString("par_Town", InputTown);
+                cst2.setString("par_DistrictName", InputDistrict);
+                cst2.setString("par_TownName", InputTown);
                 cst2.setString("par_Street", InputStreet);
                 cst2.setString("par_Note", "");
 
@@ -505,9 +505,7 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
                     " where Username = '" + InputID + "'";
             try {
                 Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-
                 PreparedStatement st = connection.prepareStatement(query);
-
                 ResultSet rs = st.executeQuery(query);
 
                 rs.next();
@@ -520,7 +518,6 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
                     dv.popupOption(null, "Mật khẩu không đúng!", "Lỗi!", 2);
                     return;
                 }
-
             } catch (SQLException ex) {
                 dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
                 ex.printStackTrace();
@@ -557,8 +554,8 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
                 cst2 = connection.prepareCall(plsql);
                 cst2.setString("par_ID", InputID);
                 cst2.setString("par_Name", InputName);
-                cst2.setString("par_District", InputDistrict);
-                cst2.setString("par_Town", InputTown);
+                cst2.setString("par_DistrictName", InputDistrict);
+                cst2.setString("par_TownName", InputTown);
                 cst2.setString("par_Street", InputStreet);
                 cst2.setString("par_Note", "");
 
@@ -576,4 +573,31 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
 
     @Override
     public void keyReleased(KeyEvent e) {}
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        if (e.getSource() == DistrictChoice)
+        {
+            try {
+                TownChoice.removeAll();
+
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                String query = "select distinct TownCode, TownName from REGION " +
+                        "where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "' " +
+                        "and DistrictName = '" + DistrictChoice.getSelectedItem() + "' " +
+                        "order by TownCode";
+                PreparedStatement st = connection.prepareStatement(query);
+                ResultSet rs = st.executeQuery();
+
+                TownChoice.add("");
+                while (rs.next())
+                    TownChoice.add(rs.getString("TownName"));
+            } catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+                ex.printStackTrace();
+                return;
+            }
+        }
+    }
 }

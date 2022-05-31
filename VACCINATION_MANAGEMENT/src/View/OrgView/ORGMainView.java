@@ -98,7 +98,7 @@ public class ORGMainView extends JFrame implements ActionListener
         Name.setHorizontalAlignment(JLabel.CENTER);
 
         ImageIcon LocationImage = new ImageIcon(getClass().getResource("/Resources/icon/Location.png"));
-        JLabel Location = new JLabel(dv.getProvinceName(orgUser.getProvince()));
+        JLabel Location = new JLabel(orgUser.getProvince());
         Location.setFont(new Font(dv.fontName(),Font.BOLD, 20));
         Location.setIcon(LocationImage);
         Location.setBounds(0,450,360,30);
@@ -344,9 +344,9 @@ public class ORGMainView extends JFrame implements ActionListener
             rs.next();
             orgUser.setID(rs.getString("ID"));
             orgUser.setName(rs.getString("Name"));
-            orgUser.setProvince(rs.getString("Province"));
-            orgUser.setDistrict(rs.getString("District"));
-            orgUser.setTown(rs.getString("Town"));
+            orgUser.setProvince(rs.getString("ProvinceName"));
+            orgUser.setDistrict(rs.getString("DistrictName"));
+            orgUser.setTown(rs.getString("TownName"));
             orgUser.setStreet(rs.getString("Street"));
 
         } catch (SQLException ex) {
@@ -432,9 +432,9 @@ public class ORGMainView extends JFrame implements ActionListener
                 rs.next();
                 orgUser.setID(rs.getString("ID"));
                 orgUser.setName(rs.getString("Name"));
-                orgUser.setProvince(rs.getString("Province"));
-                orgUser.setDistrict(rs.getString("District"));
-                orgUser.setTown(rs.getString("Town"));
+                orgUser.setProvince(rs.getString("ProvinceName"));
+                orgUser.setDistrict(rs.getString("DistrictName"));
+                orgUser.setTown(rs.getString("TownName"));
                 orgUser.setStreet(rs.getString("Street"));
 
             } catch (SQLException ex) {

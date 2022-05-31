@@ -59,10 +59,23 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         ProvinceChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         ProvinceChoice.setForeground(new Color(dv.BlackTextColor()));
 
-        ProvinceChoice.add("");
-        for (int i = 1; i<=64; i++)
-            if (i != 20)
-                ProvinceChoice.add(dv.getProvinceList()[i]);
+        try {
+            Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+            String query = "select distinct ProvinceCode, ProvinceName from REGION order by ProvinceCode";
+            PreparedStatement st = connection.prepareStatement(query);
+            ResultSet rs = st.executeQuery();
+
+            ProvinceChoice.add("");
+            while (rs.next())
+            {
+                ProvinceChoice.add(rs.getString("ProvinceName"));
+            }
+        } catch (SQLException ex) {
+            dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+            ex.printStackTrace();
+            return;
+        }
     }
 
     private void initProvinceFilterButton()
@@ -113,7 +126,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         OrgName.setHorizontalAlignment(JLabel.LEFT);
         //OrgName.setBorder(dv.border());
 
-        JLabel OrgProvince = new JLabel("Tỉnh/TP: " + dv.getProvinceName(Org.getProvince()));
+        JLabel OrgProvince = new JLabel("Tỉnh/TP: " + Org.getProvince());
         OrgProvince.setFont(new Font(dv.fontName(), 0, 16));
         OrgProvince.setForeground(new Color(dv.BlackTextColor()));
         OrgProvince.setBounds(30,32,250,25);
@@ -166,7 +179,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         return OrgPanel;
     }
 
-    private void initOrgListPanel(String ProvinceCode)
+    private void initOrgListPanel(String ProvinceName)
     {
         OrgListPanel = new JPanel();
         OrgListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
@@ -177,18 +190,18 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         int nORG = 0;
 
         //Select out the specified ORGs
-        String query = "select ORG.ID, Name, Province, District, Town, Street, COUNT(SCHED.ID)"
+        String query = "select ORG.ID, Name, ProvinceName, DistrictName, TownName, Street, COUNT(SCHED.ID)"
                 + " from ORGANIZATION ORG left outer join SCHEDULE SCHED on ORG.ID = SCHED.OrgID"
                 + " where ORG.ID != 'MOH'";
 
         if (ProvinceChoice.getSelectedIndex() != 0)
-            query = query + " and Province = '" + ProvinceCode + "'";
+            query = query + " and ProvinceName = '" + ProvinceName + "'";
         else
             return;
 
         query += " and (OnDate > '" + dv.oracleSysdate() + "' or OnDate is null)";
-        query += " group by ORG.ID, Name, Province, District, Town, Street";
-        query += " order by TO_NUMBER(SUBSTR(ID,3,LENGTH(ID))), Province, District, Town";
+        query += " group by ORG.ID, Name, ProvinceName, DistrictName, TownName, Street";
+        query += " order by TO_NUMBER(SUBSTR(ID,3,LENGTH(ID))), ProvinceName, DistrictName, TownName";
 
         System.out.println(query);
 
@@ -209,9 +222,9 @@ public class CreateOrgAccView extends JPanel implements ActionListener
                 Org = new Organization();
                 Org.setID(rs.getString("ID"));
                 Org.setName(rs.getString("Name"));
-                Org.setProvince(rs.getString("Province"));
-                Org.setDistrict(rs.getString("District"));
-                Org.setTown(rs.getString("Town"));
+                Org.setProvince(rs.getString("Provincename"));
+                Org.setDistrict(rs.getString("DistrictName"));
+                Org.setTown(rs.getString("TownName"));
                 Org.setStreet(rs.getString("Street"));
                 Org.setAvaiScheds(rs.getInt("COUNT(SCHED.ID)"));
                 OrgListPanel.add(initOrgPanel(Org));
@@ -279,9 +292,23 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         ProvinceChoice.setFont(new Font(dv.fontName(), 0, 16));
         ProvinceChoice.setForeground(new Color(dv.BlackTextColor()));
 
-        ProvinceChoice.add("");
-        for (int i = 1; i<=64; i++)
-            ProvinceChoice.add(dv.getProvinceList()[i]);
+        try {
+            Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+            String query = "select distinct ProvinceCode, ProvinceName from REGION order by ProvinceCode";
+            PreparedStatement st = connection.prepareStatement(query);
+            ResultSet rs = st.executeQuery();
+
+            ProvinceChoice.add("");
+            while (rs.next())
+            {
+                ProvinceChoice.add(rs.getString("ProvinceName"));
+            }
+        } catch (SQLException ex) {
+            dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+            ex.printStackTrace();
+            return;
+        }
 
         JLabel QuantityLabel = new JLabel("Số lượng tài khoản cần tạo");
         QuantityLabel.setPreferredSize(new Dimension(220, 30));
@@ -298,14 +325,14 @@ public class CreateOrgAccView extends JPanel implements ActionListener
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                String InputProvinceCode = dv.getProvinceCode(ProvinceChoice.getSelectedItem());
+                String InputProvince = ProvinceChoice.getSelectedItem();
                 String InputQuantity = QuantityTextField.getText();
 
                 if (dv.checkisNumberInputValue(InputQuantity,
                     "Cảnh báo!", "Nhập số cho số lượng!") != -2)
                     return;
 
-                int answer = dv.popupConfirmOption(null,"Xác nhận tạo lịch " + InputQuantity
+                int answer = dv.popupConfirmOption(null,"Xác nhận tạo" + InputQuantity
                         + " tài khoản đơn vị cho tỉnh/thành phố " + ProvinceChoice.getSelectedItem() + "?", "Xác nhận!");
 
                 if (answer == JOptionPane.YES_OPTION)
@@ -319,13 +346,14 @@ public class CreateOrgAccView extends JPanel implements ActionListener
 
                         CallableStatement cst = connection.prepareCall(plsql);
                         cst.setString("par_Quantity", InputQuantity);
-                        cst.setString("par_Province", InputProvinceCode);
+                        cst.setString("par_ProvinceName", InputProvince);
 
                         cst.execute();
                     } catch (SQLException ex)
                     {
                         dv.popupOption(null,  ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
                         ex.printStackTrace();
+                        return;
                     }
 
                     dv.popupOption(null, "Tạo tài khoản đơn vị thành công!", "Thông báo!", 0);
@@ -341,7 +369,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER)
                 {
-                    String InputProvinceCode = dv.getProvinceCode(ProvinceChoice.getSelectedItem());
+                    String InputProvince = ProvinceChoice.getSelectedItem();
                     String InputQuantity = QuantityTextField.getText();
 
                     if (dv.checkisNumberInputValue(InputQuantity,
@@ -362,7 +390,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
 
                             CallableStatement cst = connection.prepareCall(plsql);
                             cst.setString("par_Quantity", InputQuantity);
-                            cst.setString("par_Province", InputProvinceCode);
+                            cst.setString("par_Province", InputProvince);
 
                             cst.execute();
                         } catch (SQLException ex)
@@ -489,7 +517,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
             OrgListLabel.setForeground(new Color(dv.FeatureButtonColor()));
             OrgListLabel.setHorizontalAlignment(JLabel.CENTER);
 
-            initOrgListPanel(dv.getProvinceCode(ProvinceChoice.getSelectedItem()));
+            initOrgListPanel(ProvinceChoice.getSelectedItem());
             initScrollPaneOrgList();
 
             LayeredPaneArea.add(OrgListLabel, Integer.valueOf(0));

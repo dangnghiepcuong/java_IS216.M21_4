@@ -275,9 +275,9 @@ public class MOHSearchCitizenView extends JPanel implements ActionListener, KeyL
                cert.getInjectionList()[i] = new Injection();
                cert.getInjectionList()[i].setInjNo(rs.getInt("InjNO"));
                cert.getInjectionList()[i].getOrg().setName(rs.getString("Name"));
-               cert.getInjectionList()[i].getOrg().setProvince(rs.getString("Province"));
-               cert.getInjectionList()[i].getOrg().setDistrict(rs.getString("District"));
-               cert.getInjectionList()[i].getOrg().setTown(rs.getString("Town"));
+               cert.getInjectionList()[i].getOrg().setProvince(rs.getString("ProvinceName"));
+               cert.getInjectionList()[i].getOrg().setDistrict(rs.getString("DistrictName"));
+               cert.getInjectionList()[i].getOrg().setTown(rs.getString("TownName"));
                cert.getInjectionList()[i].getOrg().setStreet(rs.getString("Street"));
                cert.getInjectionList()[i].getSched().setOnDate(rs.getString("OnDate").substring(0,10));
                cert.getInjectionList()[i].getSched().setVaccineID(rs.getString("VaccineID"));
