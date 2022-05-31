@@ -784,7 +784,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
                     ImageIcon icon = new ImageIcon(getClass().getResource("/Resources/icon/Infomation Icon.png"));
                     JOptionPane CertImageViewPane = new JOptionPane();
-                    CertImageViewPane.set
                     CertImageViewPane.showMessageDialog(null,
                             null,"Ảnh giấy chứng nhận mũi tiêm - " + Reg.getCitizen().getFullName(),0,new ImageIcon(ResizedImg));
                 }
