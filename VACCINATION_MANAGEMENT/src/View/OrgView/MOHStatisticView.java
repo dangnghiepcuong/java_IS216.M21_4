@@ -1,9 +1,7 @@
 package View.OrgView;
 
 import Process.*;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
+import com.lowagie.text.DocumentException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,9 +9,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.FileNotFoundException;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.Properties;
 
 /**
  *
@@ -35,6 +33,9 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
     /*Statistic List*/
     private JScrollPane ScrollPaneStatisticList;
     private JPanel StatisticListPanel;
+    private  JPanel InjDosesPanel;
+    private JPanel TargetPanel;
+    private JPanel AffectedPanel;
     
     private JButton ExportReportButton;
 
@@ -278,7 +279,7 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             Affected.add(AffectedAdultLabel);
             Affected.add(AffectedOldPeopleLabel);*/
 
-            JPanel InjDosesPanel = new JPanel();
+            InjDosesPanel = new JPanel();
             InjDosesPanel.setLayout(null);
             InjDosesPanel.setBackground(Color.WHITE);
             InjDosesPanel.setPreferredSize(new Dimension(640, 400));
@@ -301,7 +302,7 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             InjDosesPanel.add(InjDosesChart.ChartPanel(620,350));
 
 
-            JPanel TargetPanel = new JPanel();
+            TargetPanel = new JPanel();
             TargetPanel.setLayout(null);
             TargetPanel.setBackground(Color.WHITE);
             TargetPanel.setPreferredSize(new Dimension(640, 400));
@@ -328,7 +329,7 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
 
 
 
-            JPanel AffectedPanel = new JPanel();
+            AffectedPanel = new JPanel();
             AffectedPanel.setLayout(null);
             AffectedPanel.setBackground(Color.WHITE);
             AffectedPanel.setPreferredSize(new Dimension(640, 400));
@@ -357,8 +358,6 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             StatisticListPanel.add(InjDosesPanel);
             StatisticListPanel.add(TargetPanel);
             StatisticListPanel.add(AffectedPanel);
-
-
 
         } catch (SQLException ex) {
             dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
@@ -512,18 +511,35 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             LayeredPaneArea.repaint(320, 40, 680, 630);
         }
 
-/*        if (e.getSource() == ExportReportButton) {
-            StatisticListPanel = null;
-            ScrollPaneStatisticList = null;
+        if (e.getSource() == ExportReportButton)
+        {
+            JOptionPane InputOption = new JOptionPane(null, 0, 0, null);
+            String fileName = InputOption.showInputDialog(null, "Tên tệp");
 
-            LayeredPaneArea.removeAll();
+            ExportPDF pdfFile = new ExportPDF();
 
-            initCreateFormPanel();
-
-            LayeredPaneArea.add(CreateFormPanel, Integer.valueOf(0));
-
-            LayeredPaneArea.repaint(320, 40, 680, 630);
-        }*/
+            try {
+                pdfFile.chooseDirectory();
+                pdfFile.savePDF(fileName);
+                pdfFile.openPDF();
+                pdfFile.addMetaData("MOHStatistic", "", "Vaccination Statistic", "MOH", "MOH");
+                pdfFile.addParagraph("BẢNG THỐNG KÊ SỐ LIỆU TIÊM CHỦNG", pdfFile.getNormalStyle());
+                pdfFile.addEmptyLine(3);
+                pdfFile.addObject(InjDosesPanel);
+                pdfFile.addNewPage();
+                pdfFile.addObject(TargetPanel);
+                pdfFile.addNewPage();
+                pdfFile.addObject(AffectedPanel);
+                pdfFile.closePDF();
+            } catch (DocumentException ex) {
+                ex.printStackTrace();
+                return;
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+                return;
+            }
+            dv.popupOption(null,"Xuất báo cáo thành công!", "Thông báo!", 0);
+        }
 
     }
 

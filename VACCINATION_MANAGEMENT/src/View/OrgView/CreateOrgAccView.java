@@ -1,6 +1,7 @@
 package View.OrgView;
 
-import Process.*;
+import Process.DefaultValue;
+import Process.Organization;
 
 import javax.swing.*;
 import java.awt.*;
