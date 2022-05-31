@@ -1,6 +1,7 @@
 package View.OrgView;
 
 import Process.*;
+import View.CitizenView.ImageHelper;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -768,6 +769,34 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
             RegPanel.add(StatusChoice);
             RegPanel.add(UpdateStatusButton);
+        }
+
+        if (Reg.getImage() != null)
+        {
+            ImageIcon CertImage = new ImageIcon(getClass().getResource("/Resources/icon/ImageIcon.png"));
+
+            JButton CertImageButton = new JButton();
+            ActionListener handleViewCertImage = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ImageIcon TakenImage = new ImageIcon(Reg.getImage());
+                    Image ResizedImg = ImageHelper.reSize(TakenImage.getImage(), 460, 720);
+
+                    ImageIcon icon = new ImageIcon(getClass().getResource("/Resources/icon/Infomation Icon.png"));
+                    JOptionPane CertImageViewPane = new JOptionPane();
+                    CertImageViewPane.set
+                    CertImageViewPane.showMessageDialog(null,
+                            null,"Ảnh giấy chứng nhận mũi tiêm - " + Reg.getCitizen().getFullName(),0,new ImageIcon(ResizedImg));
+                }
+            };
+
+            CertImageButton.setBounds(430,32*2+5,CertImage.getIconWidth(),CertImage.getIconHeight());
+            CertImageButton.setContentAreaFilled(false);
+//            CertImageButton.setBorder(null);
+            CertImageButton.setIcon(CertImage);
+            CertImageButton.addActionListener(handleViewCertImage);
+
+            RegPanel.add(CertImageButton);
         }
 
         return RegPanel;

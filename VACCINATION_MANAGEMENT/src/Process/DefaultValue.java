@@ -118,7 +118,7 @@ public class DefaultValue
     {
         JOptionPane OptionFrame = new JOptionPane();
 
-        String responses[] = {"Có", "Không"};
+//        String responses[] = {"Có", "Không"};
 
         switch (Option)
         {

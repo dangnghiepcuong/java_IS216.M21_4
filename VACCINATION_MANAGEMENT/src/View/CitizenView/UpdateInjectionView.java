@@ -88,7 +88,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
 
        //InjectionInfoPanel.setBorder(border);
 
-       String query = "select SCHED.ID, VaccineID, OnDate, Serial, Name, ProvinceName, DistrictName, TownName, Street, DoseType, Status, Image " +
+       String query = "select SCHED.ID, VaccineID, OnDate, NO, Serial, Name, ProvinceName, DistrictName, TownName, Street, DoseType, Status, Image " +
                "from REGISTER REG, SCHEDULE SCHED, ORGANIZATION ORG " +
                "where REG.PersonalID = '" + personalUser.getID() + "' " +
                "and REG.SchedID = SCHED.ID " +
@@ -105,6 +105,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
            Reg.getSched().setVaccineID(rs.getString("VaccineID"));
            Reg.getSched().setOnDate(rs.getString("OnDate").substring(0, 10));
            Reg.getSched().setSerial(rs.getString("Serial"));
+           Reg.setNO(rs.getInt("NO"));
            Reg.getOrg().setName(rs.getString("Name"));
            Reg.getOrg().setProvince(rs.getString("ProvinceName"));
            Reg.getOrg().setDistrict(rs.getString("DistrictName"));
@@ -184,17 +185,17 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
 
 
        UpLoadImageButton = new JButton();
-       ImageIcon UploadImage = new ImageIcon(getClass().getResource("/Resources/icon/image-gallery.png"));
+       ImageIcon UploadImage = new ImageIcon(getClass().getResource("/Resources/icon/ImageIcon.png"));
        UpLoadImageButton.setIcon(UploadImage);
-       UpLoadImageButton.setBounds(dv.AlignLeft() + 350, 315, UploadImage.getIconWidth(), UploadImage.getIconHeight());
-       UpLoadImageButton.setBorder(null);
+       UpLoadImageButton.setBounds(dv.AlignLeft() + 350, 330, UploadImage.getIconWidth(), UploadImage.getIconHeight());
+//       UpLoadImageButton.setBorder(null);
        UpLoadImageButton.setContentAreaFilled(false);
        UpLoadImageButton.addActionListener(this);
 
        RemoveImageButton = new JButton();
        ImageIcon RemoveImageIcon = new ImageIcon(getClass().getResource("/Resources/icon/Remove Pic Button.png"));
        RemoveImageButton.setIcon(RemoveImageIcon);
-       RemoveImageButton.setBounds(dv.AlignLeft() + 350 + RemoveImageIcon.getIconWidth() + 5, 330,
+       RemoveImageButton.setBounds(dv.AlignLeft() + 280 + RemoveImageIcon.getIconWidth() + 5, 330,
                RemoveImageIcon.getIconWidth(), RemoveImageIcon.getIconHeight());
        RemoveImageButton.setBorder(null);
        RemoveImageButton.setContentAreaFilled(false);
