@@ -249,6 +249,7 @@ public class FillFormView extends JPanel implements ActionListener{
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneFormList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneFormList.setBounds(0, 40, 680, 590); //320 40
+        ScrollPaneFormList.setBorder(null);
     }
 
 

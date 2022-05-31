@@ -371,6 +371,7 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
         ScrollPaneStatisticList = new JScrollPane(StatisticListPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneStatisticList.setBounds(0, 40, 680, 590); //320 40
+        ScrollPaneStatisticList.setBorder(null);
     }
 
 

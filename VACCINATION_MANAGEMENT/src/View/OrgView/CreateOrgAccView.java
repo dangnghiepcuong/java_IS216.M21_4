@@ -179,7 +179,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         return OrgPanel;
     }
 
-    private void initOrgListPanel(String ProvinceName)
+    private void initOrgListPanel()
     {
         OrgListPanel = new JPanel();
         OrgListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
@@ -195,7 +195,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
                 + " where ORG.ID != 'MOH'";
 
         if (ProvinceChoice.getSelectedIndex() != 0)
-            query = query + " and ProvinceName = '" + ProvinceName + "'";
+            query = query + " and ProvinceName = '" + ProvinceChoice.getSelectedItem() + "'";
         else
             return;
 
@@ -251,6 +251,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneOrgList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneOrgList.setBounds(0, 40, 680, 590); //320 40
+        ScrollPaneOrgList.setBorder(null);
     }
 
 
@@ -476,7 +477,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         this.add(AddNewOrgAccButton);
 
         //init OrgListPanel
-        initOrgListPanel("");
+        initOrgListPanel();
         initScrollPaneOrgList();
 
         //init LayeredPaneArea
@@ -517,7 +518,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
             OrgListLabel.setForeground(new Color(dv.FeatureButtonColor()));
             OrgListLabel.setHorizontalAlignment(JLabel.CENTER);
 
-            initOrgListPanel(ProvinceChoice.getSelectedItem());
+            initOrgListPanel();
             initScrollPaneOrgList();
 
             LayeredPaneArea.add(OrgListLabel, Integer.valueOf(0));
