@@ -22,6 +22,8 @@ select COUNT(*) from region;
 
 select * from certificate;
 
+select * from statistic;
+
 DELETE FROM HEALTH;
 DELETE FROM INJECTION;
 DELETE FROM REGISTER;

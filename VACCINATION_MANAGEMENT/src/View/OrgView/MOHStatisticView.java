@@ -175,8 +175,12 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             InjDosesChart = new BarChart("","Số mũi", "Loại mũi");
             InjDosesChart.addDataSetValue(Stat.getData(), "Số mũi", "Cơ bản");
             rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
             InjDosesChart.addDataSetValue(Stat.getData(), "Số mũi", "Tăng cường");
             rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
             InjDosesChart.addDataSetValue(Stat.getData(), "Số mũi", "Nhắc lại");
 
             InjDosesPanel.add(InjDosesLabel);
@@ -196,12 +200,20 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
 
             VaccinationTargetChart  = new BarChart("","Số đối tượng", "Đối tượng");
             rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
             VaccinationTargetChart.addDataSetValue(Stat.getData(),"Số đối tượng", "Trẻ em");
             rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
             VaccinationTargetChart.addDataSetValue(Stat.getData(),"Số đối tượng", "Thanh-thiếu niên");
             rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
             VaccinationTargetChart.addDataSetValue(Stat.getData(),"Số đối tượng", "Người lớn");
             rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
             VaccinationTargetChart.addDataSetValue(Stat.getData(),"Số đối tượng", "Người cao tuổi");
 
             TargetPanel.add(TargetLabel);
@@ -221,12 +233,20 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
 
             AffectedTargetChart = new BarChart("", "Số ca nhiễm", "Đối tượng");
             rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
             AffectedTargetChart.addDataSetValue(Stat.getData(),"Số ca nhiễm", "Trẻ em");
             rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
             AffectedTargetChart.addDataSetValue(Stat.getData(),"Số ca nhiễm", "Thanh-thiếu niên");
             rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
             AffectedTargetChart.addDataSetValue(Stat.getData(),"Số ca nhiễm", "Người lớn");
             rs.next();
+            Stat.setTitle(rs.getString("Title"));
+            Stat.setData(rs.getInt("Data"));
             AffectedTargetChart.addDataSetValue(Stat.getData(),"Số ca nhiễm", "Người cao tuổi");
 
             AffectedPanel.add(AffectedLabel);
@@ -391,19 +411,12 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
 
         if (e.getSource() == ExportReportButton)
         {
-//            JOptionPane InputOption = new JOptionPane(null, 0, 0, null);
-//            String fileName = InputOption.showInputDialog(null, "Tên tệp");
-
             PrintedPanel statisticPaper = new PrintedPanel();
-//            statisticPaper.setWidth(550);
-//            statisticPaper.setHeight(800);
 
             statisticPaper.addLabel(new JLabel(new ImageIcon(getClass().getResource("/Resources/icon/MOH-logo.png"))),
                     0, 1, 1, 2.5F, 2.5F);
-
             statisticPaper.addLabel(new JLabel("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM"),
                     PrintedPanel.NORMAL, 8, 3, 11.5F, 0.6F);
-
             statisticPaper.addLabel(new JLabel("Độc lập - Tự do - Hạnh phúc"),
                     0, 10.5F, 4F, 6.5F, 0.6F);
 
@@ -423,10 +436,6 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             statisticPaper.addLabel(InjDosesLabel, 1,2,8,17,0.8F);
             statisticPaper.addPanel(chartPanel,2,9,17,9);
 
-            /*JPanel chartPanel2 = new JPanel();
-            chartPanel2.setBounds(0,0,550+1,320);
-            chartPanel2.setLayout(new FlowLayout());
-            chartPanel2.add(InjDosesChart.getChartPanel2(550,320));*/
             chartPanel = new JPanel();
             chartPanel.setBounds(0,0,550+1,320);
             chartPanel.setLayout(new FlowLayout());
@@ -449,17 +458,12 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
                 pdfFile.addMetaData("MOHStatistic", "", "Vaccination Statistic", "MOH", "MOH");
                 pdfFile.getPdfwriter();
                 pdfFile.openPDF();
-
                 pdfFile.addObject(statisticPaper.getPrintedPanel());
-//                pdfFile.addObject(StatisticListPanel);
-
                 pdfFile.closePDF();
             } catch (DocumentException | FileNotFoundException ex) {
                 ex.printStackTrace();
                 return;
             }
-
-
         }
 
     }
@@ -506,13 +510,13 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             if (dv.checkisNumberInputValue(InputWithinDays, "Lỗi!", "Số ngày thống kê phải là số!") != -2)
                 return;
 
-            String plsql = "{call STAT_ALL(?)}";
+            String plsql = "{call STAT_STATISTIC_ALL(?)}";
 
             try {
                 Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
                 CallableStatement cst = connection.prepareCall(plsql);
                 cst.setInt("par_Days", Integer.parseInt(InputWithinDays));
-
+                cst.execute();
             } catch (SQLException ex) {
                 dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
                 ex.printStackTrace();
@@ -534,6 +538,62 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             LayeredPaneArea.add(StatisticListLabel, Integer.valueOf(0));
             LayeredPaneArea.add(ScrollPaneStatisticList, Integer.valueOf(0));
             LayeredPaneArea.repaint(320, 40, 680, 630);
+        }
+
+        if (e.getSource() == ExportReportButton)
+        {
+            PrintedPanel statisticPaper = new PrintedPanel();
+
+            statisticPaper.addLabel(new JLabel(new ImageIcon(getClass().getResource("/Resources/icon/MOH-logo.png"))),
+                    0, 1, 1, 2.5F, 2.5F);
+            statisticPaper.addLabel(new JLabel("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM"),
+                    PrintedPanel.NORMAL, 8, 3, 11.5F, 0.6F);
+            statisticPaper.addLabel(new JLabel("Độc lập - Tự do - Hạnh phúc"),
+                    0, 10.5F, 4F, 6.5F, 0.6F);
+
+            statisticPaper.addLabel(LastUpdateLabel, 2, 2,5,6,0.5F);
+            JLabel StatisticPaperLabel = new JLabel("BÁO CÁO THỐNG KÊ SỐ LIỆU TIÊM CHỦNG");
+            StatisticPaperLabel.setBounds(0, 0, 640, 40);
+            StatisticPaperLabel.setFont(new Font(dv.fontName(), 1, 20));
+            StatisticPaperLabel.setForeground(new Color(dv.BlackTextColor()));
+            StatisticPaperLabel.setHorizontalAlignment(JLabel.CENTER);
+            statisticPaper.addLabel(StatisticPaperLabel, 1, 2,6,17,1);
+
+            JPanel chartPanel = new JPanel();
+            chartPanel.setBounds(0,0,550,320);
+            chartPanel.setLayout(new FlowLayout());
+            chartPanel.add(InjDosesChart.getChartPanel2(550,320));
+
+            statisticPaper.addLabel(InjDosesLabel, 1,2,8,17,0.8F);
+            statisticPaper.addPanel(chartPanel,2,9,17,9);
+
+            chartPanel = new JPanel();
+            chartPanel.setBounds(0,0,550+1,320);
+            chartPanel.setLayout(new FlowLayout());
+            chartPanel.add(VaccinationTargetChart.getChartPanel2(550,320));
+
+            statisticPaper.addLabel(TargetLabel, 1, 2, 19,17, 0.8F);
+            statisticPaper.addPanel(chartPanel,2,20,17,9);
+
+            StatisticListPanel.removeAll();
+            StatisticListPanel.setBounds(0,0,dv.A4Width(), dv.A4Height());
+            StatisticListPanel.add(statisticPaper.getPrintedPanel());
+
+            this.repaint(0,0,dv.FrameWidth(),dv.FrameHeight());
+
+            ExportPDF pdfFile = new ExportPDF();
+
+            try {
+                pdfFile.chooseDirectory();
+                pdfFile.addMetaData("MOHStatistic", "", "Vaccination Statistic", "MOH", "MOH");
+                pdfFile.getPdfwriter();
+                pdfFile.openPDF();
+                pdfFile.addObject(statisticPaper.getPrintedPanel());
+                pdfFile.closePDF();
+            } catch (DocumentException | FileNotFoundException ex) {
+                ex.printStackTrace();
+                return;
+            }
         }
     }
 
