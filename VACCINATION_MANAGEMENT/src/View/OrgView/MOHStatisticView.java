@@ -435,8 +435,6 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             statisticPaper.addLabel(TargetLabel, 1, 2, 19,17, 0.8F);
             statisticPaper.addPanel(chartPanel,2,20,17,9);
 
-//            statisticPaper.addLabel(new JLabel("."),3,2,28.5F,1,1);
-
             StatisticListPanel.removeAll();
             StatisticListPanel.setLayout(null);
             StatisticListPanel.setBounds(0,0,dv.A4Width(), dv.A4Height());
