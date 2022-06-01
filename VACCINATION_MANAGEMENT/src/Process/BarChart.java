@@ -1,14 +1,12 @@
 package Process;
 
-import javax.swing.*;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class BarChart
@@ -78,10 +76,19 @@ public class BarChart
         dataset.addValue(value, rowKey, columnKey);
     }
 
-    public JPanel ChartPanel(int width, int height)
+    public JPanel getChartPanel(int width, int height)
     {
         ChartPanel chartPanel = new ChartPanel(createChart());
         chartPanel.setPreferredSize(new Dimension(width, height));
+//        chartPanel.setBackground(Color.WHITE);
+        return chartPanel;
+    }
+
+    public  JPanel getChartPanel2(int width, int height)
+    {
+        ChartPanel chartPanel = new ChartPanel(createChart());
+        chartPanel.setBounds(0,0,width,height);
+//        chartPanel.setBackground(Color.WHITE);
         return chartPanel;
     }
 }
