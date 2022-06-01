@@ -274,6 +274,7 @@ public class ManageRegistrationView extends JPanel implements ActionListener
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneRegList.setBounds(0, 40, 680, 590); //320 40
         ScrollPaneRegList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+        ScrollPaneRegList.setBorder(null);
     }
 
     private void initLayeredPaneArea()
