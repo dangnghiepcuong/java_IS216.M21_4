@@ -1,7 +1,7 @@
 package View.OrgView;
 
 import Process.*;
-import View.CitizenView.ImageHelper;
+import Process.ImageHelper;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;

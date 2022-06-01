@@ -4,7 +4,7 @@ import Process.Certificate;
 import Process.DateLabelFormatter;
 import Process.DefaultValue;
 import Process.Organization;
-import View.CitizenView.ImageHelper;
+import Process.ImageHelper;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
