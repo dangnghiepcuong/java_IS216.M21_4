@@ -7,9 +7,7 @@ import com.lowagie.text.pdf.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.Scanner;
 
 public class ExportPDF extends Component {
@@ -26,6 +24,11 @@ public class ExportPDF extends Component {
     private static Font smallBold = new Font(Font.TIMES_ROMAN, 12,
             Font.BOLD);
 
+    public void openPDF()
+    {
+        document.open();
+    }
+
     public void closePDF()
     {
         document.close();
@@ -40,37 +43,39 @@ public class ExportPDF extends Component {
     }
 
     public PdfWriter getPdfwriter() throws FileNotFoundException, DocumentException {
-        return PdfWriter.getInstance(document, new FileOutputStream(Directory));
+        return PdfWriter.getInstance(document, new FileOutputStream(getDirectory()));
     }
 
     public void chooseDirectory()
     {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        int option = fileChooser.showOpenDialog(this);
-        if(option == JFileChooser.APPROVE_OPTION){
-            setDirectory(fileChooser.getSelectedFile().getPath());
+        JFileChooser savefile = new JFileChooser();
+        int sf = savefile.showSaveDialog(savefile);
+        setDirectory(savefile.getSelectedFile().getPath());
+        if (getDirectory().toLowerCase().contains(".pdf") == false)
+            setDirectory(getDirectory()+".pdf");
+
+        BufferedWriter writer = null;
+        if(sf == JFileChooser.APPROVE_OPTION)
+        {
+            Scanner ScanFile = null;
+            try {
+                ScanFile = new Scanner(new File(getDirectory()));
+            } catch (FileNotFoundException ex) {}
+
+            if (ScanFile != null)
+                if (dv.popupConfirmOption(null,
+                        "Tệp " + savefile.getSelectedFile().getName() + " đã tồn tại, xác nhận ghi đè?",
+                        "Xác nhận?") != 0)
+                    return;
+
+            try {
+                writer = new BufferedWriter(new FileWriter(getDirectory()));
+                writer.close();
+                dv.popupOption(null, "Tệp đã được lưu!", "Đã lưu tệp!", 0);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-    }
-
-    public void savePDF(String fileName) throws FileNotFoundException, DocumentException {
-        if (fileName.toLowerCase().contains(".pdf") == false)
-            fileName += ".pdf";
-        Directory += "/" + fileName;
-
-        Scanner ScanFile = null;
-        try {
-            ScanFile = new Scanner(new File(Directory));
-        } catch (FileNotFoundException ex) {
-            getPdfwriter();
-            return;
-        }
-
-        if (ScanFile != null)
-            if (dv.popupConfirmOption(null, "Tệp " + fileName + " đã tồn tại, xác nhận ghi đè?", "Xác nhận?") != 0)
-                return;
-
-        getPdfwriter();
     }
 
     private Font normalStyle = new Font(Font.TIMES_ROMAN, 13,Font.NORMAL, new Color(dv.BlackTextColor()));
@@ -84,10 +89,6 @@ public class ExportPDF extends Component {
         return titleStyle;
     }
 
-    public void openPDF()
-    {
-        document.open();
-    }
 
     /*    public void main(String[] args) {
         try {
@@ -113,31 +114,60 @@ public class ExportPDF extends Component {
         document.addCreator(creator);
     }
 
-    public void addParagraph(String text, Font font) throws DocumentException {
+    public void addParagraph(String text, Font font) throws DocumentException, FileNotFoundException {
+        //getPdfwriter();
+        //openPDF();
         document.add(new Paragraph(text, font));
+        //closePDF();
     }
 
-    public void addParagraph(Paragraph paragraph) throws DocumentException {
+    public void addParagraph(Paragraph paragraph) throws DocumentException, FileNotFoundException {
+        //getPdfwriter();
+        //openPDF();
         document.add(paragraph);
+        //closePDF();
     }
 
     public void addObject(JPanel panel) throws DocumentException, FileNotFoundException
     {
-        PdfWriter writer =  PdfWriter.getInstance(document, new FileOutputStream(Directory));
+        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(getDirectory()));
         openPDF();
-        document.add(new Chunk(""));
+        
         PdfContentByte contentByte = writer.getDirectContent();
+        document.add(new Chunk(""));
         PdfTemplate template = contentByte.createTemplate(panel.getWidth(), panel.getHeight());
         Graphics2D g2 = template.createGraphics(panel.getWidth(), panel.getHeight());
         panel.print(g2);
         g2.dispose();
-        contentByte.addTemplate(template, 0, 0);
-        closePDF();
+        contentByte.addTemplate(template,0,0);
+
+/*        PdfContentByte cb = writer.getDirectContent();
+        PdfTemplate tp = cb.createTemplate(panel.getWidth(), panel.getHeight());
+        Graphics2D g2 = tp.createGraphics(panel.getWidth(), panel.getHeight());
+//        g2.scale(0.8, 1.0);
+        panel.print(g2);
+        g2.dispose();
+        cb.addTemplate(tp, 0, 0);*/
+        //closePDF();
     }
 
-    public void addNewPage()
+    public void addEmptyLine(int number) throws DocumentException, FileNotFoundException
     {
+        //getPdfwriter();
+        //openPDF();
+        Paragraph paragraph = new Paragraph();
+        for (int i = 0; i < number; i++) {
+            paragraph.add(new Paragraph("*", getNormalStyle()));
+            document.add(paragraph);
+        }
+        //closePDF();
+    }
+
+    public void addNewPage() throws DocumentException, FileNotFoundException {
+        //getPdfwriter();
+        //openPDF();
         document.newPage();
+        //closePDF();
     }
 
 /*    private void addContent(Document document) throws DocumentException {
@@ -225,12 +255,5 @@ public class ExportPDF extends Component {
         subCatPart.add(list);
     }
 
-    public void addEmptyLine(int number) throws DocumentException
-    {
-        Paragraph paragraph = new Paragraph();
-        for (int i = 0; i < number; i++) {
-            paragraph.add(new Paragraph(" ", getNormalStyle()));
-            document.add(paragraph);
-        }
-    }
+
 }

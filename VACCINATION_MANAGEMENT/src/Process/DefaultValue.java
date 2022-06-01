@@ -193,6 +193,10 @@ public class DefaultValue
     {
         return 60;
     }
+
+    public int A4Width() { return 595; }
+
+    public int A4Height() { return 842; }
     
     public Border border()
     {
