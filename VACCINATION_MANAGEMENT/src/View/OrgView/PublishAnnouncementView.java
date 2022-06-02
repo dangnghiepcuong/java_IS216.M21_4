@@ -46,11 +46,12 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
     private JLabel PublishDateLabel;
     private JDatePickerImpl PublishDateField;
     private JLabel ContentLabel;
+    private JLabel ContentFileLabel = new JLabel();
     private File ContentFilePath;
     private Scanner ContentFile;
     private JButton UploadContentButton;
     private JLabel ImageLabel;
-    private JLabel ImageFileLabel;
+    private JLabel ImageFileLabel = new JLabel();
     private File ImageFilePath;
     private JLabel AttachedImage;
     private int ImageHeight = 0;
@@ -159,7 +160,7 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         ContentFilePath = chooser.getSelectedFile();
         try
         {
-            JLabel ContentFileLabel = new JLabel(ContentFilePath.getName());
+            ContentFileLabel.setText(ContentFilePath.getName());
             ContentFileLabel.setBounds(70, 80 + 8 * dv.LabelHeight() +dv.AlignTop_InfoView(),220,30);
             ContentFileLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
             ContentFileLabel.setForeground(new Color(dv.FieldLabelColor()));
@@ -229,7 +230,7 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
             AttachedImage.setHorizontalAlignment(JLabel.LEFT);
             ImageHeight = (int) (600.0 / TakenImage.getIconWidth() * TakenImage.getIconHeight());
 
-            ImageFileLabel = new JLabel(ImageFilePath.getName());
+            ImageFileLabel.setText(ImageFilePath.getName());
             ImageFileLabel.setBounds(70, 90 + 10 * dv.LabelHeight() +dv.AlignTop_InfoView(),220,30);
             ImageFileLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
             ImageFileLabel.setForeground(new Color(dv.FieldLabelColor()));
@@ -502,13 +503,12 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         if (e.getSource() == UploadContentButton)
         {
             UploadTextFile();
-            AnnInfoPanel.repaint();
+            AnnInfoPanel.repaint(0,0,dv.FrameWidth()-dv.FrameHeight(),dv.FrameHeight());
         }
 
         if (e.getSource() == ConfirmButton)
         {
-            this.removeAll();
-            this.add(AnnInfoPanel);
+
             String InputTitle = TitleField.getText();
             String InputAnnNumber = AnnNumberField.getText();
             String InputPublishDate = PublishDateField.getJFormattedTextField().getText();
@@ -529,6 +529,8 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
                 return;
             }
 
+            this.removeAll();
+            this.add(AnnInfoPanel);
             initAnnContentPanel();
             this.add(AnnContentPanel);
             this.repaint(0,0,dv.FrameWidth(),dv.FrameHeight());
@@ -538,6 +540,7 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         if (e.getSource() == UploadImageButton)
         {
             UploadImageFile();
+            AnnInfoPanel.repaint(0,0,dv.FrameWidth()-dv.FrameHeight(),dv.FrameHeight());
         }
 
         if (e.getSource() == RemoveImageButton)
@@ -546,6 +549,7 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
             ImageFilePath = null;
             AttachedImage = null;
             ImageHeight = 0;
+            ImageFileLabel.setText("");
         }
 
         if (e.getSource() == PublishButton)

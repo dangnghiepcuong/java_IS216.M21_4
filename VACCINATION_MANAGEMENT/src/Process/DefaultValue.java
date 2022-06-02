@@ -5,8 +5,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.time.LocalDateTime;
 
-public class DefaultValue
-{
+public class DefaultValue {
     private String DB_URL = "jdbc:oracle:thin:@localhost:1521:nghiepcuong";
     private String username = "test_project";
     private String password = "test_project";
@@ -63,10 +62,8 @@ public class DefaultValue
         this.password1 = password1;
     }
 
-    public int checkStringInputValue(String InputValue, String title, String Message)
-    {
-        if (InputValue.equals(""))
-        {
+    public int checkStringInputValue(String InputValue, String title, String Message) {
+        if (InputValue.equals("")) {
             JOptionPane OptionFrame = new JOptionPane();
 
             String responses[] = {"OK!"};
@@ -80,18 +77,14 @@ public class DefaultValue
         return -2;
     }
 
-    public int checkisNumberInputValue(String InputValue, String title, String Message)
-    {
+    public int checkisNumberInputValue(String InputValue, String title, String Message) {
         JOptionPane OptionFrame = new JOptionPane();
 
         String responses[] = {"OK!"};
 
-        try
-        {
+        try {
             int value = Integer.parseInt(InputValue);
-        }
-        catch (NumberFormatException ex)
-        {
+        } catch (NumberFormatException ex) {
             ImageIcon icon = new ImageIcon(getClass().getResource("/Resources/icon/Warning Icon.png"));
 
             return OptionFrame.showOptionDialog(null, Message, title,
@@ -101,8 +94,7 @@ public class DefaultValue
         return -2;
     }
 
-    public int popupConfirmOption(JFrame frame, String Message, String title)
-    {
+    public int popupConfirmOption(JFrame frame, String Message, String title) {
         JOptionPane OptionFrame = new JOptionPane();
 
         String responses[] = {"Có", "Không"};
@@ -114,14 +106,12 @@ public class DefaultValue
 
     }
 
-    public JOptionPane popupOption(JFrame frame, String Message, String title, int Option)
-    {
+    public JOptionPane popupOption(JFrame frame, String Message, String title, int Option) {
         JOptionPane OptionFrame = new JOptionPane();
 
 //        String responses[] = {"Có", "Không"};
 
-        switch (Option)
-        {
+        switch (Option) {
             case 0:
                 OptionFrame.showMessageDialog(frame, Message, title, JOptionPane.INFORMATION_MESSAGE,
                         new ImageIcon(getClass().getResource("/Resources/icon/Infomation Icon.png")));
@@ -139,6 +129,11 @@ public class DefaultValue
         }
 
         return OptionFrame;
+    }
+
+    public String popupInputOption(String message, String title)
+    {
+        return JOptionPane.showInputDialog(null,message,title,1);
     }
 
 
@@ -281,36 +276,9 @@ public class DefaultValue
         return toOracleDateFormat(LocalDateTime.now().toString().substring(0, 10));
     }
 
-    public String toApplicationDate(String date)
+    public String toTextDate(String date)
     {
-        String Month = date.substring(5,8);
-
-        if (Month.equals("JAN"))
-            Month = "01";
-        if (Month.equals("FEB"))
-            Month = "02";
-        if (Month.equals("MAR"))
-            Month = "03";
-        if (Month.equals("APR"))
-            Month = "04";
-        if (Month.equals("MAY"))
-            Month = "05";
-        if (Month.equals("JUN"))
-            Month = "06";
-        if (Month.equals("JUL"))
-            Month = "07";
-        if (Month.equals("AUG"))
-            Month = "08";
-        if (Month.equals("SEP"))
-            Month = "09";
-        if (Month.equals("OCT"))
-            Month = "10";
-        if (Month.equals("NOV"))
-            Month = "11";
-        if (Month.equals("DEC"))
-            Month = "12";
-
-        return date.substring(6,10) + "-" + Month + "-" + date.substring(0,2) ;
+        return "ngày " + date.substring(8,10) + " tháng " + date.substring(5,7) + " năm " + date.substring(0,4);
     }
 
     public String todayString()

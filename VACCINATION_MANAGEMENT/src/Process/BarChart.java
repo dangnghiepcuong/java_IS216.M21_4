@@ -58,11 +58,13 @@ public class BarChart
         this.dataset = dataset;
     }
 
-    private JFreeChart createChart() {
+    private JFreeChart createChart()
+    {
         JFreeChart barChart = ChartFactory.createBarChart(
                 ChartTitle, CategoryAxisLabel, ValueAxisLabel,
                 dataset, PlotOrientation.VERTICAL, false, false, false);
         barChart.setBorderVisible(false);
+
         return barChart;
     }
 
