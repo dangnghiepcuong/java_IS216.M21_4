@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Friday-May-27-2022   
+--  File created - Tuesday-May-31-2022   
 --------------------------------------------------------
 --------------------------------------------------------
 --  Constraints for Table ACCOUNT
@@ -41,7 +41,7 @@
 --------------------------------------------------------
 
   ALTER TABLE "ORGANIZATION" ADD CONSTRAINT "PK_ORG" PRIMARY KEY ("ID") USING INDEX  ENABLE;
-  ALTER TABLE "ORGANIZATION" ADD CONSTRAINT "CK_ORG_PROVINCE" CHECK (Province is not null) ENABLE;
+  ALTER TABLE "ORGANIZATION" ADD CONSTRAINT "CK_ORG_PROVINCE" CHECK ("PROVINCENAME" IS NOT NULL) ENABLE;
 --------------------------------------------------------
 --  Constraints for Table PARAMETER
 --------------------------------------------------------
@@ -61,8 +61,7 @@
 --  Constraints for Table REGION
 --------------------------------------------------------
 
-  ALTER TABLE "REGION" ADD CONSTRAINT "PK_REGION" PRIMARY KEY ("CODE") USING INDEX  ENABLE;
-  ALTER TABLE "REGION" ADD CONSTRAINT "UNI_REGION_NAME" UNIQUE ("NAME") USING INDEX  ENABLE;
+  ALTER TABLE "REGION" ADD CONSTRAINT "PK_REGION" PRIMARY KEY ("PROVINCECODE", "DISTRICTCODE", "TOWNCODE") USING INDEX  ENABLE;
 --------------------------------------------------------
 --  Constraints for Table REGISTER
 --------------------------------------------------------
@@ -105,7 +104,6 @@
 --------------------------------------------------------
 
   ALTER TABLE "ORGANIZATION" ADD CONSTRAINT "FK_ORG_ACC" FOREIGN KEY ("ID") REFERENCES "ACCOUNT" ("USERNAME") ENABLE;
-  ALTER TABLE "ORGANIZATION" ADD CONSTRAINT "FK_ORG_REGION" FOREIGN KEY ("PROVINCE") REFERENCES "REGION" ("CODE") ENABLE;
 --------------------------------------------------------
 --  Ref Constraints for Table PARAMETER
 --------------------------------------------------------
@@ -115,7 +113,6 @@
 --  Ref Constraints for Table PERSON
 --------------------------------------------------------
 
-  ALTER TABLE "PERSON" ADD CONSTRAINT "FK_PERSON_REGION" FOREIGN KEY ("PROVINCE") REFERENCES "REGION" ("CODE") ENABLE;
   ALTER TABLE "PERSON" ADD CONSTRAINT "FK_PERSON_GUAR" FOREIGN KEY ("GUARDIAN") REFERENCES "PERSON" ("ID") ENABLE;
   ALTER TABLE "PERSON" ADD CONSTRAINT "FK_PERSON_ACC" FOREIGN KEY ("PHONE") REFERENCES "ACCOUNT" ("USERNAME") ENABLE;
 --------------------------------------------------------

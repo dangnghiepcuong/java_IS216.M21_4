@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Friday-May-27-2022   
+--  File created - Tuesday-May-31-2022   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Trigger PERSON_VALUE
@@ -26,8 +26,9 @@ BEGIN
             raise_application_error(-20010, 'Email must not contains space and must contains "@" !');
         end if;
     end if;
-END;
+END PERSON_VALUE;
 
+ALTER TRIGGER "PERSON_VALUE" ENABLE;
 --------------------------------------------------------
 --  DDL for Trigger REG_VACCINATION_AGE_STATUS
 --------------------------------------------------------
@@ -69,6 +70,7 @@ begin
             NULL;    
 end REG_VACCINATION_AGE_STATUS;
 
+ALTER TRIGGER "REG_VACCINATION_AGE_STATUS" ENABLE;
 --------------------------------------------------------
 --  DDL for Trigger REG_VACCINATION_RULE
 --------------------------------------------------------
@@ -155,6 +157,7 @@ begin
         then NULL;
 end REG_VACCINATION_RULE;
 
+ALTER TRIGGER "REG_VACCINATION_RULE" ENABLE;
 --------------------------------------------------------
 --  DDL for Trigger REG_VACCINATION_TARGET
 --------------------------------------------------------
@@ -216,6 +219,7 @@ begin
             (-20007,'You have not fill out any medical form within 7 days yet!');
 end REG_VACCINATION_TARGET;
 
+ALTER TRIGGER "REG_VACCINATION_TARGET" ENABLE;
 --------------------------------------------------------
 --  DDL for Trigger SCHED_VALUE
 --------------------------------------------------------
@@ -234,5 +238,6 @@ BEGIN
     then
         raise_application_error(-20011,'Number of registion is limited!');
     end if;
-END;
+END SCHED_VALUE;
 
+ALTER TRIGGER "SCHED_VALUE" ENABLE;

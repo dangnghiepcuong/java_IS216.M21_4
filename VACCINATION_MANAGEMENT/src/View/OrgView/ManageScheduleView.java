@@ -1,6 +1,7 @@
 package View.OrgView;
 
 import Process.*;
+import Process.ImageHelper;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -560,6 +561,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         ScrollPaneSchedList = new JScrollPane(SchedListPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneSchedList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneSchedList.setBounds(0, 40, 680, 590); //320 40
+        ScrollPaneSchedList.setBorder(null);
     }
 
 
@@ -770,6 +772,33 @@ public class ManageScheduleView extends JPanel implements ActionListener
             RegPanel.add(UpdateStatusButton);
         }
 
+        if (Reg.getImage() != null)
+        {
+            ImageIcon CertImage = new ImageIcon(getClass().getResource("/Resources/icon/ImageIcon.png"));
+
+            JButton CertImageButton = new JButton();
+            ActionListener handleViewCertImage = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ImageIcon TakenImage = new ImageIcon(Reg.getImage());
+                    Image ResizedImg = ImageHelper.reSize(TakenImage.getImage(), 460, 720);
+
+                    ImageIcon icon = new ImageIcon(getClass().getResource("/Resources/icon/Infomation Icon.png"));
+                    JOptionPane CertImageViewPane = new JOptionPane();
+                    CertImageViewPane.showMessageDialog(null,
+                            null,"Ảnh giấy chứng nhận mũi tiêm - " + Reg.getCitizen().getFullName(),0,new ImageIcon(ResizedImg));
+                }
+            };
+
+            CertImageButton.setBounds(430,32*2+5,CertImage.getIconWidth(),CertImage.getIconHeight());
+            CertImageButton.setContentAreaFilled(false);
+//            CertImageButton.setBorder(null);
+            CertImageButton.setIcon(CertImage);
+            CertImageButton.addActionListener(handleViewCertImage);
+
+            RegPanel.add(CertImageButton);
+        }
+
         return RegPanel;
     }
 
@@ -838,9 +867,11 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
     private void initScrollPaneRegList()
     {
-        ScrollPaneRegList = new JScrollPane(RegListPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        ScrollPaneRegList = new JScrollPane(RegListPanel,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneRegList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneRegList.setBounds(0, 40, 680, 590); //320 40
+        ScrollPaneRegList.setBorder(null);
     }
 
 

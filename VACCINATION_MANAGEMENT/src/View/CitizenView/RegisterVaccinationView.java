@@ -4,18 +4,14 @@ import Process.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.sql.*;
 
 /**
  *
  * @author NghiepCuong
  */
-public class RegisterVaccinationView extends JPanel implements ActionListener
-{
+public class RegisterVaccinationView extends JPanel implements ActionListener, ItemListener {
     //Enities used to store the selected out data from database in this view
     private DefaultValue dv = new DefaultValue();
     private Person personalUser = new Person();
@@ -72,11 +68,27 @@ public class RegisterVaccinationView extends JPanel implements ActionListener
         ProvinceChoice.setForeground(new Color(dv.BlackTextColor()));
         ProvinceChoice.setBackground(Color.WHITE);
 
-        ProvinceChoice.add(dv.getProvinceName(personalUser.getProvince()));
-        ProvinceChoice.add("");
-        for (int i = 1; i <= 64; i++)
-            if (i != 20 && dv.getProvinceList()[i] != dv.getProvinceName(personalUser.getProvince()))
-                ProvinceChoice.add(dv.getProvinceList()[i]);
+        ProvinceChoice.add(personalUser.getProvince());
+        try {
+            Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+            String query = "select distinct ProvinceCode, ProvinceName from REGION order by ProvinceCode";
+            PreparedStatement st = connection.prepareStatement(query);
+            ResultSet rs = st.executeQuery();
+
+            ProvinceChoice.add("");
+            while (rs.next())
+            {
+                if (rs.getString("ProvinceName").equals(personalUser.getProvince()) == false)
+                    ProvinceChoice.add(rs.getString("ProvinceName"));
+            }
+        } catch (SQLException ex) {
+            dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+            ex.printStackTrace();
+            return;
+        }
+
+        ProvinceChoice.addItemListener(this);
     }
 
     private void initDistrictLabel()
@@ -96,14 +108,27 @@ public class RegisterVaccinationView extends JPanel implements ActionListener
         DistrictChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         DistrictChoice.setForeground(new Color(0x333333));
         DistrictChoice.setBackground(Color.WHITE);
+        DistrictChoice.addItemListener(this);
 
-        //set choice
-        DistrictChoice.add("");
-        DistrictChoice.add("Dầu Tiếng");
-        DistrictChoice.add("Thuận An");
-        DistrictChoice.add("Dĩ An");
-        DistrictChoice.add("Thủ Đức");
-        DistrictChoice.add("Thanh Xuân");
+        DistrictChoice.add(personalUser.getDistrict());
+        try {
+            Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+            String query = "select distinct DistrictCode, DistrictName from REGION " +
+                    "where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "' " +
+                    "order by DistrictCode";
+            PreparedStatement st = connection.prepareStatement(query);
+            ResultSet rs = st.executeQuery();
+
+            DistrictChoice.add("");
+            while (rs.next())
+                if (rs.getString("DistrictName").equals(personalUser.getDistrict()) == false)
+                    DistrictChoice.add(rs.getString("DistrictName"));
+        } catch (SQLException ex) {
+            dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+            ex.printStackTrace();
+            return;
+        }
     }
 
     private void initTownLabel()
@@ -123,13 +148,28 @@ public class RegisterVaccinationView extends JPanel implements ActionListener
         TownChoice.setForeground(new Color(0x333333));
         TownChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         TownChoice.setBackground(Color.WHITE);
+        TownChoice.addItemListener(this);
 
-        TownChoice.add("");
-        TownChoice.add("Dầu Tiếng");
-        TownChoice.add("Lái Thiêu");
-        TownChoice.add("Đông Hòa");
-        TownChoice.add("Linh Trung");
-        TownChoice.add("Trúc Bạch");
+        TownChoice.add(personalUser.getTown());
+        try {
+            Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+            String query = "select distinct TownCode, TownName from REGION " +
+                    "where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "' " +
+                    "and DistrictName = '" + DistrictChoice.getSelectedItem() + "' " +
+                    "order by TownCode";
+            PreparedStatement st = connection.prepareStatement(query);
+            ResultSet rs = st.executeQuery();
+
+            TownChoice.add("");
+            while (rs.next())
+                if (rs.getString("TownName").equals(personalUser.getTown()) == false)
+                    TownChoice.add(rs.getString("TownName"));
+        } catch (SQLException ex) {
+            dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+            ex.printStackTrace();
+            return;
+        }
     }
 
     private void initOrgFilterButton() 
@@ -231,7 +271,7 @@ public class RegisterVaccinationView extends JPanel implements ActionListener
         OrgName.setHorizontalAlignment(JLabel.LEFT);
         //OrgName.setBorder(dv.border());
 
-        JLabel OrgProvince = new JLabel("Tỉnh/TP: " + dv.getProvinceName(Org.getProvince()));
+        JLabel OrgProvince = new JLabel("Tỉnh/TP: " + Org.getProvince());
         OrgProvince.setFont(new Font(dv.fontName(), 0, 16));
         OrgProvince.setForeground(new Color(dv.BlackTextColor()));
         OrgProvince.setBounds(30,32,250,25);
@@ -287,28 +327,24 @@ public class RegisterVaccinationView extends JPanel implements ActionListener
         Organization Org;
         int i = 0;
 
-        //Select out the code of chosen province
-        String ProvinceCode = "";
-        ProvinceCode = dv.getProvinceCode(ProvinceChoice.getSelectedItem());
-
         //Select out the specified ORGs
-        String query = "select ORG.ID, Name, Province, District, Town, Street, COUNT(SCHED.ID)"
+        String query = "select ORG.ID, Name, ProvinceName, DistrictName, TownName, Street, COUNT(SCHED.ID)"
                 + " from ORGANIZATION ORG left outer join SCHEDULE SCHED on ORG.ID = SCHED.OrgID";
 
-        if (ProvinceChoice.getSelectedIndex() != 1)
-            query = query + " where Province = '" + ProvinceCode + "'";
+        if (ProvinceChoice.getSelectedItem().equals("") == false)
+            query = query + " where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "'";
         else
-            query = query + " where Province like '%'";
+            query = query + " where ProvinceName like '%'";
 
-        if (DistrictChoice.getSelectedIndex() > 0)
-            query = query + " and District = '" + DistrictChoice.getSelectedItem() + "'";
+        if (DistrictChoice.getSelectedItem().equals("") == false)
+            query = query + " and DistrictName = '" + DistrictChoice.getSelectedItem() + "'";
 
-        if (TownChoice.getSelectedIndex() > 0)
-            query = query + " and ORG.Town = '" + TownChoice.getSelectedItem() + "'";
+        if (TownChoice.getSelectedItem().equals("") == false)
+            query = query + " and TownName = '" + TownChoice.getSelectedItem() + "'";
 
         query += " and (OnDate > TO_DATE('" + dv.oracleSysdate() + "') or OnDate is null)";
-        query += " group by ORG.ID, Name, Province, District, Town, Street";
-        query += " order by ID, Province, District, Town";
+        query += " group by ORG.ID, Name, ProvinceName, DistrictName, TownName, Street";
+        query += " order by ID, ProvinceName, DistrictName, TownName";
 
         System.out.println(query);
 
@@ -323,9 +359,9 @@ public class RegisterVaccinationView extends JPanel implements ActionListener
                 Org = new Organization();
                 Org.setID(rs.getString("ID"));
                 Org.setName(rs.getString("Name"));
-                Org.setProvince(rs.getString("Province"));
-                Org.setDistrict(rs.getString("District"));
-                Org.setTown(rs.getString("Town"));
+                Org.setProvince(rs.getString("ProvinceName"));
+                Org.setDistrict(rs.getString("DistrictName"));
+                Org.setTown(rs.getString("TownName"));
                 Org.setStreet(rs.getString("Street"));
                 Org.setAvaiScheds(rs.getInt("COUNT(SCHED.ID)"));
                 OrgListPanel.add(initOrgPanel(Org));
@@ -345,6 +381,7 @@ public class RegisterVaccinationView extends JPanel implements ActionListener
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneOrgList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneOrgList.setBounds(0, 40, 680, 590); //320-40
+        ScrollPaneOrgList.setBorder(null);
     }
 
 
@@ -644,6 +681,7 @@ public class RegisterVaccinationView extends JPanel implements ActionListener
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneSchedList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         ScrollPaneSchedList.setBounds(0, 40, 680, 590);
+        ScrollPaneOrgList.setBorder(null);
     }
 
     private void initLayeredPaneArea()
@@ -671,8 +709,22 @@ public class RegisterVaccinationView extends JPanel implements ActionListener
         this.add(SchedFilterPanel);
         SchedFilterButton.setEnabled(false);
 
+        //init OrgListLabel
+        JLabel OrgListLabel = new JLabel("DANH SÁCH CÁC ĐƠN VỊ TIÊM CHỦNG ("
+                + ProvinceChoice.getSelectedItem() + "-" + DistrictChoice.getSelectedItem() + "-" + TownChoice.getSelectedItem() + ")");
+        OrgListLabel.setBounds(0, 0, 640, 40);
+        OrgListLabel.setFont(new Font(dv.fontName(), 1, 20));
+        OrgListLabel.setForeground(new Color(dv.FeatureButtonColor()));
+        OrgListLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        //init ScrollPaneOrgList
+        initOrgListPanel();
+        initScrollPaneOrgList();
+
         //init LayeredPane
         initLayeredPaneArea();
+        LayeredPaneArea.add(OrgListLabel, Integer.valueOf(0));
+        LayeredPaneArea.add(ScrollPaneOrgList, Integer.valueOf(0));
         this.add(LayeredPaneArea);
 
         this.repaint(0,0, dv.FrameWidth(), dv.FrameHeight());
@@ -712,7 +764,6 @@ public class RegisterVaccinationView extends JPanel implements ActionListener
             initScrollPaneOrgList();
 
             LayeredPaneArea.add(OrgListLabel, Integer.valueOf(0));
-
             LayeredPaneArea.add(ScrollPaneOrgList, Integer.valueOf(0));
 
             SchedListPanel = null;
@@ -738,4 +789,56 @@ public class RegisterVaccinationView extends JPanel implements ActionListener
         }
     }
 
+    @Override
+    public void itemStateChanged(ItemEvent e)
+    {
+        if (e.getSource() == ProvinceChoice)
+        {
+            try {
+                DistrictChoice.removeAll();
+                TownChoice.removeAll();
+
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                String query = "select distinct DistrictCode, DistrictName from REGION " +
+                        "where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "' " +
+                        "order by DistrictCode";
+                PreparedStatement st = connection.prepareStatement(query);
+                ResultSet rs = st.executeQuery();
+
+                DistrictChoice.add("");
+                TownChoice.add("");
+                while (rs.next())
+                    DistrictChoice.add(rs.getString("DistrictName"));
+            } catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+                ex.printStackTrace();
+                return;
+            }
+        }
+
+        if (e.getSource() == DistrictChoice)
+        {
+            try {
+                TownChoice.removeAll();
+
+                Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+                String query = "select distinct TownCode, TownName from REGION " +
+                        "where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "' " +
+                        "and DistrictName = '" + DistrictChoice.getSelectedItem() + "' " +
+                        "order by TownCode";
+                PreparedStatement st = connection.prepareStatement(query);
+                ResultSet rs = st.executeQuery();
+
+                TownChoice.add("");
+                while (rs.next())
+                    TownChoice.add(rs.getString("TownName"));
+            } catch (SQLException ex) {
+                dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+                ex.printStackTrace();
+                return;
+            }
+        }
+    }
 }

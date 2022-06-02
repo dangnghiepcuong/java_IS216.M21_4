@@ -1,9 +1,7 @@
 package View.OrgView;
 
 import Process.*;
-import View.CitizenView.RegisterVaccinationView;
 import View.LoginView;
-import com.sun.tools.javac.Main;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,7 +36,7 @@ public class MOHMainView extends JFrame implements ActionListener
     private OrgInformationView orgInformationView;
     private CreateOrgAccView createOrgAccView;
     private PublishAnnouncementView publishAnnouncementView;
-    private SearchCitizenView searchCitizenView;
+    private MOHSearchCitizenView searchCitizenView;
     private MOHStatisticView mohStatisticView;
 
     private void initBackButton()
@@ -93,7 +91,7 @@ public class MOHMainView extends JFrame implements ActionListener
         Name.setHorizontalAlignment(JLabel.CENTER);
 
         ImageIcon LocationImage = new ImageIcon(getClass().getResource("/Resources/icon/Location.png"));
-        JLabel Location = new JLabel(dv.getProvinceName(mohUser.getProvince()));
+        JLabel Location = new JLabel(mohUser.getProvince());
         Location.setFont(new Font(dv.fontName(),Font.BOLD, 20));
         Location.setIcon(LocationImage);
         Location.setBounds(0,400,360,30);
@@ -340,9 +338,9 @@ public class MOHMainView extends JFrame implements ActionListener
             rs.next();
             mohUser.setID(rs.getString("ID"));
             mohUser.setName(rs.getString("Name"));
-            mohUser.setProvince(rs.getString("Province"));
-            mohUser.setDistrict(rs.getString("District"));
-            mohUser.setTown(rs.getString("Town"));
+            mohUser.setProvince(rs.getString("ProvinceName"));
+            mohUser.setDistrict(rs.getString("DistrictName"));
+            mohUser.setTown(rs.getString("TownName"));
             mohUser.setStreet(rs.getString("Street"));
 
         } catch (SQLException ex) {
@@ -439,9 +437,9 @@ public class MOHMainView extends JFrame implements ActionListener
                 rs.next();
                 mohUser.setID(rs.getString("ID"));
                 mohUser.setName(rs.getString("Name"));
-                mohUser.setProvince(rs.getString("Province"));
-                mohUser.setDistrict(rs.getString("District"));
-                mohUser.setTown(rs.getString("Town"));
+                mohUser.setProvince(rs.getString("ProvinceName"));
+                mohUser.setDistrict(rs.getString("DistrictName"));
+                mohUser.setTown(rs.getString("TownName"));
                 mohUser.setStreet(rs.getString("Street"));
 
             } catch (SQLException ex) {
@@ -485,7 +483,7 @@ public class MOHMainView extends JFrame implements ActionListener
         {
             nullFeatureViews();
 
-            searchCitizenView = new SearchCitizenView();
+            searchCitizenView = new MOHSearchCitizenView();
             MainLayeredPane.removeAll();
             MainLayeredPane.add(searchCitizenView, Integer.valueOf(1));
 

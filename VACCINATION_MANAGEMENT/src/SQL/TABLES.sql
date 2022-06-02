@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Friday-May-27-2022   
+--  File created - Tuesday-May-31-2022   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Table ACCOUNT
@@ -30,7 +30,7 @@
 --  DDL for Table ORGANIZATION
 --------------------------------------------------------
 
-  CREATE TABLE "ORGANIZATION" ("ID" VARCHAR2(10), "NAME" VARCHAR2(100), "PROVINCE" VARCHAR2(2), "DISTRICT" VARCHAR2(50), "TOWN" VARCHAR2(50), "STREET" VARCHAR2(100), "NOTE" VARCHAR2(2000));
+  CREATE TABLE "ORGANIZATION" ("ID" VARCHAR2(10), "NAME" VARCHAR2(100), "PROVINCENAME" VARCHAR2(50), "DISTRICTNAME" VARCHAR2(50), "TOWNNAME" VARCHAR2(50), "STREET" VARCHAR2(100), "NOTE" VARCHAR2(2000));
 --------------------------------------------------------
 --  DDL for Table PARAMETER
 --------------------------------------------------------
@@ -40,12 +40,12 @@
 --  DDL for Table PERSON
 --------------------------------------------------------
 
-  CREATE TABLE "PERSON" ("ID" VARCHAR2(256), "LASTNAME" VARCHAR2(100), "FIRSTNAME" VARCHAR2(50), "BIRTHDAY" DATE, "GENDER" NUMBER(1,0), "HOMETOWN" VARCHAR2(50), "PROVINCE" VARCHAR2(2), "DISTRICT" VARCHAR2(50), "TOWN" VARCHAR2(50), "STREET" VARCHAR2(100), "PHONE" VARCHAR2(30), "EMAIL" VARCHAR2(254), "GUARDIAN" VARCHAR2(12), "NOTE" VARCHAR2(2000), "AVATAR" BLOB);
+  CREATE TABLE "PERSON" ("ID" VARCHAR2(256), "LASTNAME" VARCHAR2(100), "FIRSTNAME" VARCHAR2(50), "BIRTHDAY" DATE, "GENDER" NUMBER(1,0), "HOMETOWN" VARCHAR2(50), "PROVINCENAME" VARCHAR2(50), "DISTRICTNAME" VARCHAR2(50), "TOWNNAME" VARCHAR2(50), "STREET" VARCHAR2(100), "PHONE" VARCHAR2(30), "EMAIL" VARCHAR2(254), "GUARDIAN" VARCHAR2(12), "NOTE" VARCHAR2(2000), "AVATAR" BLOB);
 --------------------------------------------------------
 --  DDL for Table REGION
 --------------------------------------------------------
 
-  CREATE TABLE "REGION" ("CODE" VARCHAR2(2), "NAME" VARCHAR2(50), "NOTE" VARCHAR2(2000));
+  CREATE TABLE "REGION" ("PROVINCECODE" VARCHAR2(2), "PROVINCENAME" VARCHAR2(50), "NOTE" VARCHAR2(2000), "DISTRICTCODE" VARCHAR2(3), "DISTRICTNAME" VARCHAR2(50), "TOWNCODE" VARCHAR2(5), "TOWNNAME" VARCHAR2(50));
 --------------------------------------------------------
 --  DDL for Table REGISTER
 --------------------------------------------------------

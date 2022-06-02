@@ -5,8 +5,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.time.LocalDateTime;
 
-public class DefaultValue
-{
+public class DefaultValue {
     private String DB_URL = "jdbc:oracle:thin:@localhost:1521:nghiepcuong";
     private String username = "test_project";
     private String password = "test_project";
@@ -63,10 +62,8 @@ public class DefaultValue
         this.password1 = password1;
     }
 
-    public int checkStringInputValue(String InputValue, String title, String Message)
-    {
-        if (InputValue.equals(""))
-        {
+    public int checkStringInputValue(String InputValue, String title, String Message) {
+        if (InputValue.equals("")) {
             JOptionPane OptionFrame = new JOptionPane();
 
             String responses[] = {"OK!"};
@@ -80,18 +77,14 @@ public class DefaultValue
         return -2;
     }
 
-    public int checkisNumberInputValue(String InputValue, String title, String Message)
-    {
+    public int checkisNumberInputValue(String InputValue, String title, String Message) {
         JOptionPane OptionFrame = new JOptionPane();
 
         String responses[] = {"OK!"};
 
-        try
-        {
+        try {
             int value = Integer.parseInt(InputValue);
-        }
-        catch (NumberFormatException ex)
-        {
+        } catch (NumberFormatException ex) {
             ImageIcon icon = new ImageIcon(getClass().getResource("/Resources/icon/Warning Icon.png"));
 
             return OptionFrame.showOptionDialog(null, Message, title,
@@ -101,8 +94,7 @@ public class DefaultValue
         return -2;
     }
 
-    public int popupConfirmOption(JFrame frame, String Message, String title)
-    {
+    public int popupConfirmOption(JFrame frame, String Message, String title) {
         JOptionPane OptionFrame = new JOptionPane();
 
         String responses[] = {"Có", "Không"};
@@ -114,14 +106,12 @@ public class DefaultValue
 
     }
 
-    public JOptionPane popupOption(JFrame frame, String Message, String title, int Option)
-    {
+    public JOptionPane popupOption(JFrame frame, String Message, String title, int Option) {
         JOptionPane OptionFrame = new JOptionPane();
 
-        String responses[] = {"Có", "Không"};
+//        String responses[] = {"Có", "Không"};
 
-        switch (Option)
-        {
+        switch (Option) {
             case 0:
                 OptionFrame.showMessageDialog(frame, Message, title, JOptionPane.INFORMATION_MESSAGE,
                         new ImageIcon(getClass().getResource("/Resources/icon/Infomation Icon.png")));
@@ -139,6 +129,11 @@ public class DefaultValue
         }
 
         return OptionFrame;
+    }
+
+    public String popupInputOption(String message, String title)
+    {
+        return JOptionPane.showInputDialog(null,message,title,1);
     }
 
 
@@ -193,6 +188,10 @@ public class DefaultValue
     {
         return 60;
     }
+
+    public int A4Width() { return 595; }
+
+    public int A4Height() { return 842; }
     
     public Border border()
     {
@@ -234,105 +233,11 @@ public class DefaultValue
     public int RedPastel() { return 0xFF6961; };
 
 
-
-    public String[] getProvinceList()
-    {
-        String provinceList[] = new String[65];
-
-        for (int i = 1; i <= 64; i++)
-            provinceList[i] = new String();
-
-        provinceList[1] = "Hà Nội";
-        provinceList[2] = "Hồ Chí Minh";
-        provinceList[3] = "Hải Phòng";
-        provinceList[4] = "Đà Nẵng";
-        provinceList[5] = "Hà Giang";
-        provinceList[6] = "Cao Bằng";
-        provinceList[7] = "Lai Châu";
-        provinceList[8] = "Lào Cai";
-        provinceList[9] = "Tuyên Quang";
-        provinceList[10] = "Lạng Sơn";
-        provinceList[11] = "Bắc Kạn";
-        provinceList[12] = "Thái Nguyên";
-        provinceList[13] = "Yên Bái";
-        provinceList[14] = "Sơn La";
-        provinceList[15] = "Phú Thọ";
-        provinceList[16] = "Vĩnh Phúc";
-        provinceList[17] = "Quảng Ninh";
-        provinceList[18] = "Bắc Giang";
-        provinceList[19] = "Bắc Ninh";
-        provinceList[20] = "";
-        provinceList[21] = "Hải Dương";
-        provinceList[22] = "Hưng Yên";
-        provinceList[23] = "Hòa Bình";
-        provinceList[24] = "Hà Nam";
-        provinceList[25] = "Nam Định";
-        provinceList[26] = "Thái Bình";
-        provinceList[27] = "Ninh Bình";
-        provinceList[28] = "Thanh Hóa";
-        provinceList[29] = "Nghệ An";
-        provinceList[30] = "Hà Tĩnh";
-        provinceList[31] = "Quảng Bình";
-        provinceList[32] = "Quảng Trị";
-        provinceList[33] = "Thừa Thiên - Huế";
-        provinceList[34] = "Quảng Nam";
-        provinceList[35] = "Quảng Ngãi";
-        provinceList[36] = "Kon Tum";
-        provinceList[37] = "Bình Định";
-        provinceList[38] = "Giai Lai";
-        provinceList[39] = "Phú Yên";
-        provinceList[40] = "Đắk Lắk";
-        provinceList[41] = "Khánh Hòa";
-        provinceList[42] = "Lâm Đồng";
-        provinceList[43] = "Bình Phước";
-        provinceList[44] = "Bình Dương";
-        provinceList[45] = "Ninh Thuận";
-        provinceList[46] = "Tây Ninh";
-        provinceList[47] = "Bình Thuận";
-        provinceList[48] = "Đồng Nai";
-        provinceList[49] = "Long An";
-        provinceList[50] = "Đồng Tháp";
-        provinceList[51] = "An Giang";
-        provinceList[52] = "Bà Rịa - Vũng Tàu";
-        provinceList[53] = "Tiền Giang";
-        provinceList[54] = "Kiên Giang";
-        provinceList[55] = "Cần Thơ";
-        provinceList[56] = "Bến Tre";
-        provinceList[57] = "Vĩnh Long";
-        provinceList[58] = "Trà Vinh";
-        provinceList[59] = "Sóc Trăng";
-        provinceList[60] = "Bạc Liêu";
-        provinceList[61] = "Cà Mau";
-        provinceList[62] = "Điện Biên";
-        provinceList[63] = "Đắk Nông";
-        provinceList[64] = "Hậu Giang";
-
-        return provinceList;
-    }
-
     public DefaultValue()
     {
 
     }
 
-    public String getProvinceName(String Code)
-    {
-        int index = Integer.parseInt(Code);
-        return this.getProvinceList()[index];
-    }
-
-    public String getProvinceCode(String Name)
-    {
-        for (int i = 1; i < 10; i++)
-            if (this.getProvinceList()[i].equals(Name))
-                return "0"+i;
-
-        for (int i = 10; i <= 64; i++)
-            if (this.getProvinceList()[i].equals(Name))
-                return ""+i;
-
-        return "";
-    }
 
     public String toOracleDateFormat(String date)
     {
@@ -371,36 +276,9 @@ public class DefaultValue
         return toOracleDateFormat(LocalDateTime.now().toString().substring(0, 10));
     }
 
-    public String toApplicationDate(String date)
+    public String toTextDate(String date)
     {
-        String Month = date.substring(5,8);
-
-        if (Month.equals("JAN"))
-            Month = "01";
-        if (Month.equals("FEB"))
-            Month = "02";
-        if (Month.equals("MAR"))
-            Month = "03";
-        if (Month.equals("APR"))
-            Month = "04";
-        if (Month.equals("MAY"))
-            Month = "05";
-        if (Month.equals("JUN"))
-            Month = "06";
-        if (Month.equals("JUL"))
-            Month = "07";
-        if (Month.equals("AUG"))
-            Month = "08";
-        if (Month.equals("SEP"))
-            Month = "09";
-        if (Month.equals("OCT"))
-            Month = "10";
-        if (Month.equals("NOV"))
-            Month = "11";
-        if (Month.equals("DEC"))
-            Month = "12";
-
-        return date.substring(6,10) + "-" + Month + "-" + date.substring(0,2) ;
+        return "ngày " + date.substring(8,10) + " tháng " + date.substring(5,7) + " năm " + date.substring(0,4);
     }
 
     public String todayString()

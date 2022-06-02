@@ -118,7 +118,7 @@ public class ManageRegistrationView extends JPanel implements ActionListener
         OrgName.setHorizontalAlignment(JLabel.LEFT);
         //OrgName.setBorder(dv.border());
 
-        JLabel Address = new JLabel("Đ/c: " + dv.getProvinceName(Reg.getOrg().getProvince()) + ", "
+        JLabel Address = new JLabel("Đ/c: " + Reg.getOrg().getProvince() + ", "
                 + Reg.getOrg().getDistrict() + ", " + Reg.getOrg().getTown() + ", " + Reg.getOrg().getStreet());
         Address.setFont(new Font(dv.fontName(), 2, 16));
         Address.setForeground(new Color(dv.BlackTextColor()));
@@ -211,7 +211,7 @@ public class ManageRegistrationView extends JPanel implements ActionListener
 
         int i = 0;
 
-        String query = "select DoseType, Time, NO, Status, Image, SCHED.ID, OnDate, VaccineID, Serial, Name, Province, District, Town, Street" +
+        String query = "select DoseType, Time, NO, Status, Image, SCHED.ID, OnDate, VaccineID, Serial, Name, ProvinceName, DistrictName, TownName, Street" +
                 " from REGISTER REG, SCHEDULE SCHED, ORGANIZATION ORG" +
                 " where '" + personalUser.getID() + "' = REG.PersonalID" +
                 " and REG.SchedID = SCHED.ID" +
@@ -251,9 +251,9 @@ public class ManageRegistrationView extends JPanel implements ActionListener
                 Reg.getSched().setVaccineID(rs.getString("VaccineID"));
                 Reg.getSched().setSerial(rs.getString("Serial"));
                 Reg.getOrg().setName(rs.getString("Name"));
-                Reg.getOrg().setProvince(rs.getString("Province"));
-                Reg.getOrg().setDistrict(rs.getString("District"));
-                Reg.getOrg().setTown(rs.getString("Town"));
+                Reg.getOrg().setProvince(rs.getString("ProvinceName"));
+                Reg.getOrg().setDistrict(rs.getString("DistrictName"));
+                Reg.getOrg().setTown(rs.getString("TownName"));
                 Reg.getOrg().setStreet(rs.getString("Street"));
                 RegListPanel.add(initRegPanel(Reg));
                 i++;
@@ -274,6 +274,7 @@ public class ManageRegistrationView extends JPanel implements ActionListener
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneRegList.setBounds(0, 40, 680, 590); //320 40
         ScrollPaneRegList.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+        ScrollPaneRegList.setBorder(null);
     }
 
     private void initLayeredPaneArea()

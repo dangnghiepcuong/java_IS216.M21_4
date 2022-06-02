@@ -1,70 +1,6 @@
 --------------------------------------------------------
---  File created - Friday-May-27-2022   
+--  File created - Tuesday-May-31-2022   
 --------------------------------------------------------
---------------------------------------------------------
---  DDL for Procedure ACC_CREATE_ORG
---------------------------------------------------------
-set define off;
-
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "ACC_CREATE_ORG" 
-(par_Quantity number, par_Province varchar2)
-is
-    Last_Seq int;
-    temp_ID ORGANIZATION.ID%type;
-    temp_String varchar2(100);
-begin
-    --select out the last ID of the ORG in the par_Province
-    select ID into temp_ID
-    from ORGANIZATION
-    where Province = par_Province 
-    and TO_NUMBER(SUBSTR(ID,3,5)) = (select COUNT(ID) 
-                                    from ORGANIZATION
-                                    where Province = par_Province);
-
-    --The start ID is (the selected ID + 1)
-    Last_Seq := SUBSTR(temp_ID, -3, 3) + 1;
-
-    --Loop to create the continue ORGs with the serializable ID
-    for i in Last_Seq .. Last_Seq + par_Quantity - 1
-    loop
-        --Create account
-        temp_ID := TO_CHAR(par_Province)||ACC_CONVERT_SEQ_TO_STR(i);
-        ACC_INSERT_RECORD(temp_ID,  temp_ID, 1, 1, null);
-        --Create ORG
-        ORG_INSERT_RECORD(temp_ID, par_Province, null);
-    end loop;
-
-    commit;
-
---If there was no ORG in the par_Province, the start ID is 001
-EXCEPTION
-    when no_data_found
- 	then Last_Seq := 1;
-
-    --Loop to create the continue ORGs with the serializable ID
-    for i in Last_Seq .. Last_Seq + par_Quantity - 1
-    loop
-        --Create account
-        temp_ID := TO_CHAR(par_Province)||ACC_CONVERT_SEQ_TO_STR(i);
-        ACC_INSERT_RECORD(temp_ID, temp_ID, 1, 1, null);
-        --Create ORGs
-        ORG_INSERT_RECORD(temp_ID, par_Province, null);
-    end loop;
-
-end ACC_CREATE_ORG;
---------------------------------------------------------
---  DDL for Procedure ACC_DELETE_RECORD
---------------------------------------------------------
-set define off;
-
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "ACC_DELETE_RECORD" (par_Username varchar2)
-is
-begin
-    delete from PERSON where PERSON.Phone = par_Username;
-    delete from ACCOUNT where ACCOUNT.Username = par_Username;
-
-    commit;
-end ACC_DELETE_RECORD;
 --------------------------------------------------------
 --  DDL for Procedure ACC_INSERT_RECORD
 --------------------------------------------------------
@@ -82,6 +18,88 @@ begin
         then
             raise_application_error(-20012,'Username has been registered by another user!');
 end ACC_INSERT_RECORD;
+--------------------------------------------------------
+--  DDL for Procedure ORG_INSERT_RECORD
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "ORG_INSERT_RECORD" (par_ID ORGANIZATION.ID%type,                                            
+                                             par_ProvinceName ORGANIZATION.ProvinceName%type,                                            
+							   par_Note  ORGANIZATION.Note%type DEFAULT NULL)                                           
+as 
+    var_ProvinceCode REGION.ProvinceCode%type;
+begin
+    --insert new ORGANIZATION
+	insert into ORGANIZATION(ID, ProvinceName, DistrictName, TownName, Note) 
+	values (par_ID, par_ProvinceName, '', '', par_Note);
+end ORG_INSERT_RECORD;
+--------------------------------------------------------
+--  DDL for Procedure ACC_CREATE_ORG
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "ACC_CREATE_ORG" 
+(par_Quantity number, par_ProvinceName varchar2)
+is
+    Last_Seq int;
+    temp_ID ORGANIZATION.ID%type;
+    temp_String varchar2(100);
+    var_ProvinceCode REGION.ProvinceCode%type;
+begin
+    --select out the last ID of the ORG in the par_Province
+    select COUNT(ID) into Last_Seq
+    from ORGANIZATION
+    where ProvinceName = par_ProvinceName;
+                                    
+    --select out the code of Province
+    select distinct ProvinceCode into var_ProvinceCode
+    from REGION
+    where ProvinceName = par_ProvinceName;
+
+    --The start ID is (the selected ID + 1)
+    Last_Seq := Last_Seq + 1;
+
+    --Loop to create the continue ORGs with the serializable ID
+    for i in Last_Seq .. Last_Seq + par_Quantity - 1
+    loop
+        --Create account
+        temp_ID := TO_CHAR(var_ProvinceCode)||ACC_CONVERT_SEQ_TO_STR(i);
+        ACC_INSERT_RECORD(temp_ID,  temp_ID, 1, 1, null);
+        --Create ORG
+        ORG_INSERT_RECORD(temp_ID, par_ProvinceName, null);
+    end loop;
+
+    commit;
+
+--If there was no ORG in the par_Province, the start ID is 001
+EXCEPTION
+    when no_data_found
+ 	then Last_Seq := 1;
+
+    --Loop to create the continue ORGs with the serializable ID
+    for i in Last_Seq .. Last_Seq + par_Quantity - 1
+    loop
+        --Create account
+        temp_ID := TO_CHAR(var_ProvinceCode)||ACC_CONVERT_SEQ_TO_STR(i);
+        ACC_INSERT_RECORD(temp_ID, temp_ID, 1, 1, null);
+        --Create ORGs
+        ORG_INSERT_RECORD(temp_ID, par_ProvinceName, null);
+    end loop;
+
+end ACC_CREATE_ORG;
+--------------------------------------------------------
+--  DDL for Procedure ACC_DELETE_RECORD
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "ACC_DELETE_RECORD" (par_Username varchar2)
+is
+begin
+    delete from PERSON where PERSON.Phone = par_Username;
+    delete from ACCOUNT where ACCOUNT.Username = par_Username;
+
+    commit;
+end ACC_DELETE_RECORD;
 --------------------------------------------------------
 --  DDL for Procedure ACC_RESET_PASSWORD
 --------------------------------------------------------
@@ -245,28 +263,14 @@ begin
     commit;
 end INJ_INSERT_RECORD;
 --------------------------------------------------------
---  DDL for Procedure ORG_INSERT_RECORD
---------------------------------------------------------
-set define off;
-
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "ORG_INSERT_RECORD" (par_ID ORGANIZATION.ID%type,                                            
-                                             par_Province ORGANIZATION.Province%type,                                            
-							   par_Note  ORGANIZATION.Note%type DEFAULT NULL)                                           
-as 
-begin
-    --insert new ORGANIZATION
-	insert into ORGANIZATION(ID, Province, District, Town, Note) 
-	values (par_ID, par_Province, '', '', par_Note);
-end ORG_INSERT_RECORD;
---------------------------------------------------------
 --  DDL for Procedure ORG_UPDATE_RECORD
 --------------------------------------------------------
 set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "ORG_UPDATE_RECORD" (par_ID ORGANIZATION.ID%type,
                                                 par_Name ORGANIZATION.Name%type,
-                                                par_District ORGANIZATION.District%type,
-                                                par_Town ORGANIZATION.Town%type,
+                                                par_DistrictName ORGANIZATION.DistrictName%type,
+                                                par_TownName ORGANIZATION.TownName%type,
                                                 par_Street ORGANIZATION.Street%type,
                                                 par_Note ORGANIZATION.Note%type DEFAULT NULL)
 as
@@ -274,8 +278,8 @@ begin
     	--Update record ORGANIZATION
     	update ORGANIZATION
     	set Name = par_Name,
-        	District = par_District,
-        	Town = par_Town,
+        	DistrictName = par_DistrictName,
+        	TownName = par_TownName,
         	Street = par_Street,
         	Note = par_Note
     	where ID = par_ID;
@@ -313,9 +317,9 @@ set define off;
     par_Birthday PERSON.Birthday%type, 
     par_Gender PERSON.Gender%type,
     par_HomeTown PERSON.HomeTown%type, 
-    par_Province PERSON.Province%type,
-    par_District PERSON.District%type, 
-    par_Town PERSON.Town%type,
+    par_ProvinceName PERSON.ProvinceName%type,
+    par_DistrictName PERSON.DistrictName%type, 
+    par_TownName PERSON.TownName%type,
     par_Street PERSON.Street%type,
     par_Phone PERSON.Phone%type, 
     par_Email PERSON.Email%type DEFAULT NULL,
@@ -325,9 +329,9 @@ as
 begin
     --create new PERSON
     insert into PERSON(ID, LastName, FirstName, Birthday, Gender, HomeTown,
-    Province, District, Town, Street, Phone, Email, Guardian, Note) 
+    ProvinceName, DistrictName, TownName, Street, Phone, Email, Guardian, Note) 
     values (par_ID, par_LastName, par_FirstName, par_Birthday, par_Gender,
-    par_HomeTown, par_Province, par_District, par_Town, par_Street, par_Phone,
+    par_HomeTown, par_ProvinceName, par_DistrictName, par_TownName, par_Street, par_Phone,
     par_Email, par_Guardian, par_Note);
 
     CERT_INSERT_RECORD(par_ID);
@@ -346,8 +350,8 @@ set define off;
 par_OldID PERSON.ID%type, par_ID PERSON.ID%type, 
 par_LastName PERSON.LastName%type, par_FirstName PERSON.FirstName%type, 
 par_Birthday PERSON.Birthday%type, par_Gender PERSON.Gender%type,
-par_HomeTown PERSON.HomeTown%type, par_Province PERSON.Province%type,
-par_District PERSON.District%type, par_Town PERSON.Town%type,
+par_HomeTown PERSON.HomeTown%type, par_ProvinceName PERSON.ProvinceName%type,
+par_DistrictName PERSON.DistrictName%type, par_TownName PERSON.TownName%type,
 par_Street PERSON.Street%type, 
 par_Phone PERSON.Phone%type, par_OldPhone PERSON.Phone%type,
 par_Email PERSON.Email%type, par_Note PERSON.Note%type DEFAULT NULL) 
@@ -377,7 +381,7 @@ begin
     then
         --new certificate also created
         PERSON_INSERT_RECORD(par_ID, par_LastName, par_FirstName, par_Birthday, par_Gender
-        , par_HomeTown, par_Province, par_District, par_Town, par_Street, par_Phone, par_Email);
+        , par_HomeTown, par_ProvinceName, par_DistrictName, par_TownName, par_Street, par_Phone, par_Email);
         
         update INJECTION
         set PersonalID = par_ID
@@ -400,8 +404,8 @@ begin
         set Phone = par_Phone,
         LastName = par_LastName, FirstName = par_FirstName, 
         Birthday = par_Birthday, Gender = par_Gender, 
-        HomeTown = par_HomeTown, Province = par_Province, 
-        District = par_District, Town = par_town, Street = par_Street, 
+        HomeTown = par_HomeTown, ProvinceName = par_ProvinceName, 
+        DistrictName = par_DistrictName, TownName = par_TownName, Street = par_Street, 
         Email = par_Email, Note = par_Note
         where ID = par_OldID;
     end if;
@@ -533,6 +537,33 @@ begin
 
 end REG_INSERT_RECORD;
 --------------------------------------------------------
+--  DDL for Procedure SCHED_INC_REG
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "SCHED_INC_REG" 
+(par_SchedID SCHEDULE.ID%type, par_Time REGISTER.Time%type)
+as
+begin
+	if (par_Time = 0)
+	then
+		update SCHEDULE
+		set DayRegistered = DayRegistered + 1
+		where SCHEDULE.ID = par_SchedID;
+ 	elsif (par_Time = 1)
+	then
+		update SCHEDULE
+		set NoonRegistered = NoonRegistered + 1
+		where SCHEDULE.ID = par_SchedID;
+	elsif (par_Time = 2)
+	then
+		update SCHEDULE
+		set NightRegistered = NightRegistered + 1
+		where SCHEDULE.ID = par_SchedID;
+	end if;
+    --commit;
+end SCHED_INC_REG;
+--------------------------------------------------------
 --  DDL for Procedure REG_UPDATE_STATUS
 --------------------------------------------------------
 set define off;
@@ -600,6 +631,33 @@ EXCEPTION
     --There was no injection before, this the first injection
 end REG_UPDATE_STATUS;
 --------------------------------------------------------
+--  DDL for Procedure SCHED_DEC_REG
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "SCHED_DEC_REG" 
+(par_SchedID SCHEDULE.ID%type, par_Time REGISTER.Time%type)
+as
+begin
+	if (par_Time = 0)
+	then
+		update SCHEDULE
+		set DayRegistered = DayRegistered - 1
+		where SCHEDULE.ID = par_SchedID;
+ 	elsif (par_Time = 1)
+	then
+		update SCHEDULE
+		set NoonRegistered = NoonRegistered - 1
+		where SCHEDULE.ID = par_SchedID;
+	elsif (par_Time = 2)
+	then
+		update SCHEDULE
+		set NightRegistered = NightRegistered - 1
+		where SCHEDULE.ID = par_SchedID;
+	end if;
+    commit;
+end SCHED_DEC_REG;
+--------------------------------------------------------
 --  DDL for Procedure SCHED_CANCEL_SCHED
 --------------------------------------------------------
 set define off;
@@ -631,33 +689,6 @@ BEGIN
     commit;
 END SCHED_CANCEL_SCHED;
 --------------------------------------------------------
---  DDL for Procedure SCHED_DEC_REG
---------------------------------------------------------
-set define off;
-
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "SCHED_DEC_REG" 
-(par_SchedID SCHEDULE.ID%type, par_Time REGISTER.Time%type)
-as
-begin
-	if (par_Time = 0)
-	then
-		update SCHEDULE
-		set DayRegistered = DayRegistered - 1
-		where SCHEDULE.ID = par_SchedID;
- 	elsif (par_Time = 1)
-	then
-		update SCHEDULE
-		set NoonRegistered = NoonRegistered - 1
-		where SCHEDULE.ID = par_SchedID;
-	elsif (par_Time = 2)
-	then
-		update SCHEDULE
-		set NightRegistered = NightRegistered - 1
-		where SCHEDULE.ID = par_SchedID;
-	end if;
-    commit;
-end SCHED_DEC_REG;
---------------------------------------------------------
 --  DDL for Procedure SCHED_DELETE_RECORD
 --------------------------------------------------------
 set define off;
@@ -676,33 +707,6 @@ BEGIN
     commit;
     
 END SCHED_DELETE_RECORD;
---------------------------------------------------------
---  DDL for Procedure SCHED_INC_REG
---------------------------------------------------------
-set define off;
-
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "SCHED_INC_REG" 
-(par_SchedID SCHEDULE.ID%type, par_Time REGISTER.Time%type)
-as
-begin
-	if (par_Time = 0)
-	then
-		update SCHEDULE
-		set DayRegistered = DayRegistered + 1
-		where SCHEDULE.ID = par_SchedID;
- 	elsif (par_Time = 1)
-	then
-		update SCHEDULE
-		set NoonRegistered = NoonRegistered + 1
-		where SCHEDULE.ID = par_SchedID;
-	elsif (par_Time = 2)
-	then
-		update SCHEDULE
-		set NightRegistered = NightRegistered + 1
-		where SCHEDULE.ID = par_SchedID;
-	end if;
-    --commit;
-end SCHED_INC_REG;
 --------------------------------------------------------
 --  DDL for Procedure SCHED_INSERT_RECORD
 --------------------------------------------------------
