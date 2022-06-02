@@ -22,6 +22,8 @@ select COUNT(*) from region;
 
 select * from certificate;
 
+select * from announcement;
+
 select * from statistic;
 
 DELETE FROM HEALTH;

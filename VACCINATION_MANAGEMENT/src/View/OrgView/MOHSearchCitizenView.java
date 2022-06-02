@@ -1,6 +1,9 @@
 package View.OrgView;
 
-import Process.*;
+import Process.Certificate;
+import Process.DefaultValue;
+import Process.Injection;
+import Process.Person;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import javax.swing.JFrame;
 import java.sql.*;
 
 /**
@@ -469,6 +471,9 @@ public class MOHSearchCitizenView extends JPanel implements ActionListener, KeyL
             initScrollPaneInjList();
             initCertificatePanel();
             this.add(CertificatePanel);
+            InjectionListPanel.setPreferredSize(
+                    new Dimension(InjectionListPanel.getWidth(), InjectionListPanel.getHeight()));
+            InjectionListPanel.setBounds(0,0,InjectionListPanel.getWidth(), InjectionListPanel.getHeight());
             this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
     }

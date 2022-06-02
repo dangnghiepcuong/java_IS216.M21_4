@@ -9,6 +9,8 @@ public class PrintedPanel
     private JPanel printedPanel;
     private int width = 595;
     private int height = 842;
+    private int topAlign = cmToPixel(1);
+    private int leftAlign = cmToPixel(1);
 
     public static final int NORMAL = 0;
     public static final int TITLE = 1;
@@ -24,10 +26,32 @@ public class PrintedPanel
         printedPanel.setLayout(null);
     }
 
+    public PrintedPanel(int w, int h)
+    {
+        setWidth(w);
+        setHeight(h);
+        printedPanel = new JPanel();
+        printedPanel.setLayout(null);
+        printedPanel.setBounds(0,0,getWidth(),getHeight());
+    }
+
     public JPanel getPrintedPanel()
     {
         printedPanel.setBounds(0,0,getWidth(),getHeight());
-        printedPanel.setBackground(Color.WHITE);
+//        printedPanel.setBackground(Color.WHITE);
+        JPanel BackgroundColor = new JPanel();
+        BackgroundColor.setBounds(0,0,getWidth(),getHeight());
+        BackgroundColor.setBackground(Color.WHITE);
+
+        ImageIcon ImageIconPanel = new ImageIcon(ImageHelper.reSize(ImageHelper.createImage(BackgroundColor), getWidth(),getHeight()));
+
+        JLabel addedLabel = new JLabel();
+        addedLabel.setBounds(0,0, getWidth(),getHeight());
+        addedLabel.setIcon(ImageIconPanel);
+//        addedLabel.setBorder(dv.border());
+
+        printedPanel.add(addedLabel);
+
         return printedPanel;
     }
 
@@ -47,6 +71,22 @@ public class PrintedPanel
         this.height = height;
     }
 
+    public int getTopAlign() {
+        return topAlign;
+    }
+
+    public void setTopAlign(int topAlign) {
+        this.topAlign = cmToPixel(topAlign);
+    }
+
+    public int getLeftAlign() {
+        return leftAlign;
+    }
+
+    public void setLeftAlign(int leftAlign) {
+        this.leftAlign = cmToPixel(leftAlign);
+    }
+
     private int cmToPixel(float cm)
     {
         return (int) (cm*28.346456693);
@@ -60,15 +100,14 @@ public class PrintedPanel
         int w = cmToPixel(wf);
         int h = cmToPixel(hf);
         
-//        panel.setBackground(Color.WHITE);
         panel.setOpaque(false);
 
         ImageIcon ImageIconPanel = new ImageIcon(ImageHelper.reSize(ImageHelper.createImage(panel), w, h));
 
         JLabel addedLabel = new JLabel();
-        addedLabel.setBounds(x, y, w, h);
+        addedLabel.setBounds(x + leftAlign, y + topAlign, w, h);
         addedLabel.setIcon(ImageIconPanel);
-        addedLabel.setBorder(dv.border());
+//        addedLabel.setBorder(dv.border());
 
         printedPanel.add(addedLabel);
     }
@@ -94,8 +133,8 @@ public class PrintedPanel
         ImageIcon ImageIconLabel = new ImageIcon(ImageHelper.reSize(ImageHelper.createImage(label), w, h));
         JLabel addedLabel = new JLabel(ImageIconLabel);
 
-        addedLabel.setBounds(x, y, w, h);
-        addedLabel.setBorder(dv.border());
+        addedLabel.setBounds(x + leftAlign, y + topAlign, w, h);
+//        addedLabel.setBorder(dv.border());
 
         printedPanel.add(addedLabel);
     }
