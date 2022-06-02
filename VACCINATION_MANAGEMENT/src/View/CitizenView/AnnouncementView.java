@@ -23,9 +23,6 @@ import java.util.Scanner;
  * @author ASUS
  */
 
-
-
-
 public class AnnouncementView extends JPanel implements ActionListener {
     
     private JLayeredPane MainLayeredPane;
@@ -42,27 +39,24 @@ public class AnnouncementView extends JPanel implements ActionListener {
 //    private JButton NextButton;
 //    private JButton HomeButton;
 //    private JButton RefreshButton;
-//   
+
     private DefaultValue dv= new DefaultValue();
     private String annID;
     private Scanner ContentFile;
-    
-    public AnnouncementView()//Constructor
+
+    /*CONSTRUCTOR*/
+    public AnnouncementView()
     {
         this.setSize(1080, 720);
-        //this.setSize(1080, 720); --Main View
-        //set frame visible on screen
         this.setVisible(true);
-        //set frame background color
-        //this.setResizable(false);
         this.setBackground(new Color(dv.ViewBackgroundColor()));
-        //set layout
         this.setLayout(null);
         
         initMainLayeredPane();
         initMainPane();
         
         initSearchAnnouncement();
+
         //initScrollPaneAnn();
         initSearchButton();
         
@@ -75,8 +69,6 @@ public class AnnouncementView extends JPanel implements ActionListener {
         MainPane.add(SearchAnnouncement);
         //MainPane.add(ScrollPaneAnn);
         MainPane.add(SearchButton);
-        
-        
     }
     
     private void initMainLayeredPane() 
@@ -93,7 +85,6 @@ public class AnnouncementView extends JPanel implements ActionListener {
         MainPane.setBounds(0,0,1080,720);
         MainPane.setLayout(null);
         MainPane.setOpaque(true);
-        //this.setDefaultCloseOperation(JPanel.EXIT_ON_CLOSE);
     }
     
     
@@ -239,7 +230,6 @@ public class AnnouncementView extends JPanel implements ActionListener {
         }
        
         AnnListPanel.setPreferredSize(new Dimension(350, listAnn + i * 10));
-        
     }
     
     private void initAnnouncementNew()// View Announcement new

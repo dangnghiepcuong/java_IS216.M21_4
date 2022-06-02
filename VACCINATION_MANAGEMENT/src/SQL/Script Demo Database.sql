@@ -57,7 +57,7 @@ INSERT INTO PARAMETER(InjectionNO,VaccineID,DoseType,MinDistance,DiffDoses,NextD
 insert into ACCOUNT values ('MOH', '123', 0, 1, NULL);
 select * from account;
 
-insert into ORGANIZATION values ('MOH', 'Bộ Y tế', '01', 'Ba �?ình', 'Giảng Võ', '138A', NULL);
+insert into ORGANIZATION values ('MOH', 'Bộ Y tế', '01', 'Ba Đình', 'Giảng Võ', '138A', NULL);
 select * from organization;
 
 
@@ -71,7 +71,7 @@ exec VAC_INSERT_RECORD('Moderna', 'Moderna', 'mRNA', 'Hoa Ky');
 select * from vaccine;
 exec VAC_INSERT_RECORD('Astra', 'Astra Zeneca', 'Vector Virus', 'Vuong Quoc Anh');
 
-commit;
+
 
 
 /*3. Tạo ra các đơn vị tiêm chủng. --Kiểm tra hàm sinh ID tự động cho ORG */
@@ -80,9 +80,9 @@ exec ACC_CREATE_ORG( 2, '44');
 
 select * from organization;
 /*4. Cập nhật thông tin ORG*/
-exec ORG_UPDATE_RECORD('44001', 'BV �?a khoa Huyện Dầu Tiếng', 'Dầu Tiếng', 'Dầu Tiếng', 'ABC');
+exec ORG_UPDATE_RECORD('44001', 'BV Đa khoa Huyện Dầu Tiếng', 'Dầu Tiếng', 'Dầu Tiếng', 'ABC');
 
-/*5. Tạo tài khoản ngư�?i dùng */
+/*5. Tạo tài khoản người dùng */
 --Cuong
 exec ACC_INSERT_RECORD('0332743065', '123', 2, 1); 
 --Duyen
@@ -96,12 +96,12 @@ exec ACC_INSERT_RECORD('0339770526', '123', 2, 1);
 
 select * from account where Role = 2;
 
-/*6. Thiết lập thông tin ngư�?i dùng */
-exec PERSON_INSERT_RECORD('20520418', '�?ặng Nghiệp', 'Cư�?ng', '17-AUG-2002', 1, 'Bình Dương', '44', 'Dầu Tiếng', 'Dầu Tiếng', 'ABC123', '0332743065', 'dangnghiepcuong@gmail.com');
+/*6. Thiết lập thông tin người dùng */
+exec PERSON_INSERT_RECORD('20520418', 'Đặng Nghiệp', 'Cường', '17-AUG-2002', 1, 'Bình Dương', '44', 'Dầu Tiếng', 'Dầu Tiếng', 'ABC123', '0332743065', 'dangnghiepcuong@gmail.com');
 exec PERSON_INSERT_RECORD('20521252', 'Lê Hoàng', 'Duyên', '27-OCT-2002', 0, 'Quảng Trị', '48', 'Cẩm Mỹ', 'Sông Ray', 'ấp 8', '0395309824', '20521252@gm.uit.edu.vn');
 exec PERSON_INSERT_RECORD('20521890', 'Trương Nguyễn Quang', 'Thái', '14-FEB-2002', 1, 'Phú Yên', '39', 'Tuy An', 'An Hòa Hải', 'Tân Qui', '0347666292', '20521890@gm.uit.edu.vn');
-exec PERSON_INSERT_RECORD('20521720', 'Trương �?', 'Nhi', '23-JUN-2000', 0, 'Quảng Bình', '25', 'A', 'B', 'C', '0374540896', '20521720@gm.uit.edu.vn');
-exec PERSON_INSERT_RECORD('04180282', 'Nguyen Van', 'A', '26-MAR-2020', 0, 'Bình Dương', '02', 'Thủ �?ức', 'Linh Trung', 'khu phố 6', '0339770526'); 
+exec PERSON_INSERT_RECORD('20521720', 'Trương Ý', 'Nhi', '23-JUN-2000', 0, 'Quảng Bình', '25', 'A', 'B', 'C', '0374540896', '20521720@gm.uit.edu.vn');
+exec PERSON_INSERT_RECORD('04180282', 'Nguyen Van', 'A', '26-MAR-2020', 0, 'Bình Dương', '02', 'Thủ Đức', 'Linh Trung', 'khu phố 6', '0339770526'); 
 
 select * from person;
 /*7. Tạo lịch tiêm chủng ngày 28/4/2022 --Kiểm tra hàm sinh ID tự động cho SCHED của cùng một ORG tạo ra trong cùng một ngày */
@@ -116,13 +116,13 @@ select * from SCHEDULE where OnDate = '28-APR-2022';
 exec HEAL_INSERT_RECORD( HEAL_FORM_ID('20520418'), '20520418', '26-APR-2022', '0000'); 
 --Duyen /*Dính Covid*/
 exec HEAL_INSERT_RECORD( HEAL_FORM_ID('20521252'), '20521252', '26-APR-2022', '0010'); 
- --Nhi /*�?ối tượng trì hoãn/chống chỉ định*/
+ --Nhi /*Đối tượng trì hoãn/chống chỉ định*/
 exec HEAL_INSERT_RECORD( HEAL_FORM_ID('20521720'), '20521720', '26-APR-2022', '0001');
 --Quang Thai chua khai bao trong vong 7 ngay.
 exec HEAL_INSERT_RECORD( HEAL_FORM_ID('04180282'), '04180282', '26-APR-2022', '0000'); 
 
 select * from HEALTH;
-/*9. �?ăng ký tiêm chủng. --Kiểm tra Trigger: Dựa vào lần khai báo cuối đối tượng đang dính Covid, đối tượng trì hoãn/chống chỉ định không được tiêm, đối tượng chưa khái báo trong vòng 7 ngày và đối tượng chưa đủ tuổi tiêm chủng thì không được đăng ký tiêm chủng.*/
+/*9. Đăng ký tiêm chủng. --Kiểm tra Trigger: Dựa vào lần khai báo cuối đối tượng đang dính Covid, đối tượng trì hoãn/chống chỉ định không được tiêm, đối tượng chưa khái báo trong vòng 7 ngày và đối tượng chưa đủ tuổi tiêm chủng thì không được đăng ký tiêm chủng.*/
 
 exec REG_INSERT_RECORD('20520418', '44001280420221', 1);
 exec REG_INSERT_RECORD('20521252', '44001280420222', 0);
@@ -142,7 +142,7 @@ exec HEAL_INSERT_RECORD( HEAL_FORM_ID('20521720'), '20521720', '26-APR-2022', '0
 
 select * from HEALTH order by PersonalID;
 
-/*11. Thái, Nhi, Duyên thực hiện đăng ký tiêm chủng lại. --Kiểm tra hàm tăng số lượng ngư�?i đã đăng ký lịch tiêm và hàm sinh STT tự động. */
+/*11. Thái, Nhi, Duyên thực hiện đăng ký tiêm chủng lại. --Kiểm tra hàm tăng số lượng người đã đăng ký lịch tiêm và hàm sinh STT tự động. */
 
 exec REG_INSERT_RECORD('20521252', '44001280420222', 0);
 exec REG_INSERT_RECORD('20521720', '44001280420223', 1);
@@ -152,7 +152,7 @@ select * from REGISTER;
 
 select * from SCHEDULE;
 
-/*12. �?iểm danh tại buổi tiêm (update trạng thái đăng ký thành điểm danh).  */
+/*12. Điểm danh tại buổi tiêm (update trạng thái đăng ký thành điểm danh).  */
 
 exec REG_UPDATE_STATUS('20520418', '44001280420221', 1);
 exec REG_UPDATE_STATUS('20521252', '44001280420222', 1);
@@ -187,11 +187,11 @@ exec HEAL_INSERT_RECORD( HEAL_FORM_ID('20521252'), '20521252', '22-MAY-2022', '0
 --Nhi
 exec HEAL_INSERT_RECORD( HEAL_FORM_ID('20521720'), '20521720', '22-MAY-2022', '0000'); 
 
-/*16. �?ăng ký tiêm chủng mũi 2. 
+/*16. Đăng ký tiêm chủng mũi 2. 
 --Kiểm tra Trigger: Loại vaccine được phép tiêm trộn so với mũi trước đó.
 --Kiểm tra Trigger: Khoảng cách giữa 2 mũi Vaccine */
 
---Cư�?ng mũi 1 là Astra, mũi 2 cần đợi hai tháng sau, trigger không cho phép đăng ký
+--Cường mũi 1 là Astra, mũi 2 cần đợi hai tháng sau, trigger không cho phép đăng ký
 exec REG_INSERT_RECORD('20520418', '44001280520221', 1);
 
 --Duyên mũi 1 là Vero, mũi 2 đăng ký Astra, trigger sẽ kiểm tra và không cho phép
@@ -222,16 +222,16 @@ exec REG_UPDATE_STATUS('20521890', '44001280520223', 2);
 select * from INJECTION order by InjNO;
 
 /*19. Tạo lịch tiêm chủng đợt 3. */
---Lịch Moderna vào tháng 6 dành cho Cư�?ng tiêm mũi 2, Duyên tiêm mũi 3 (bổ sung).
+--Lịch Moderna vào tháng 6 dành cho Cường tiêm mũi 2, Duyên tiêm mũi 3 (bổ sung).
 exec SCHED_INSERT_RECORD('44001', '28-JUN-2022', 'Moderna', NULL, 100, 100, 100);
 
---Lịch Moderna vào tháng 8 dành cho Nhi và Thái nhưng mỗi buổi chỉ giới hạn 1 ngư�?i tiêm duy nhất!
+--Lịch Moderna vào tháng 8 dành cho Nhi và Thái nhưng mỗi buổi chỉ giới hạn 1 người tiêm duy nhất!
 exec SCHED_INSERT_RECORD('44001', '28-AUG-2022', 'Moderna', NULL, 1, 1, 1);
 
 select * from SCHEDULE where VaccineID = 'Moderna';
 
 /*20. Khai báo y tế. */
---Cư�?ng, Duyên khai báo ngày 27-06-2022
+--Cường, Duyên khai báo ngày 27-06-2022
 exec HEAL_INSERT_RECORD( HEAL_FORM_ID('20520418'), '20520418', '27-JUN-2022', '0000'); 
 exec HEAL_INSERT_RECORD( HEAL_FORM_ID('20521252'), '20521252', '27-JUN-2022', '0000'); 
 
@@ -239,23 +239,23 @@ exec HEAL_INSERT_RECORD( HEAL_FORM_ID('20521252'), '20521252', '27-JUN-2022', '0
 exec HEAL_INSERT_RECORD( HEAL_FORM_ID('20521890'), '20521890', '27-AUG-2022', '0000'); 
 exec HEAL_INSERT_RECORD( HEAL_FORM_ID('20521720'), '20521720', '27-AUG-2022', '0000'); 
 
-/*21. �?ăng ký tiêm chủng đợt 3.
+/*21. Đăng ký tiêm chủng đợt 3.
 --Kiểm tra Trigger: Loại vaccine được phép tiêm trộn so với mũi trước đó.
 --Kiểm tra Trigger: Khoảng cách giữa 2 mũi Vaccine
---Thủ tục kiểm tra: Giới hạn số lượng ngư�?i đăng ký vào một buổi. */
+--Thủ tục kiểm tra: Giới hạn số lượng người đăng ký vào một buổi. */
 
---Trigger kiểm tra Cư�?ng đã đủ 2 tháng sau mũi 1 Astra và được tiêm trộn mũi 2 là Moderna.
+--Trigger kiểm tra Cường đã đủ 2 tháng sau mũi 1 Astra và được tiêm trộn mũi 2 là Moderna.
 exec REG_INSERT_RECORD('20520418', '44001280620221', 1);
 
 --Trigger kiểm tra Duyên đã tiêm 2 mũi Vero, cần tiêm thêm mũi bổ sung là Vero hoặc Pfizer, Moderna.
 exec REG_INSERT_RECORD('20521252', '44001280620221', 0);
 
---Trigger kiểm tra Nhi, Thái đã 3 tháng sau khi hoàn thành li�?u cơ bản, cho phép tiêm mũi 3 (nhắc lại).
---Mỗi buổi chỉ được 1 ngư�?i đăng ký, Nhi và Thái đăng ký cùng một buổi chi�?u, Thái đăng ký sau nên không được.
+--Trigger kiểm tra Nhi, Thái đã 3 tháng sau khi hoàn thành liều cơ bản, cho phép tiêm mũi 3 (nhắc lại).
+--Mỗi buổi chỉ được 1 người đăng ký, Nhi và Thái đăng ký cùng một buổi chiều, Thái đăng ký sau nên không được.
 exec REG_INSERT_RECORD('20521720', '44001280820221', 1);
 exec REG_INSERT_RECORD('20521890', '44001280820221', 1);
 
---Thái đăng ký lại, ch�?n buổi sáng.
+--Thái đăng ký lại, chọn buổi sáng.
 exec REG_INSERT_RECORD('20521890', '44001280820221', 0);
 
 select * 
@@ -282,12 +282,12 @@ exec HEAL_INSERT_RECORD( HEAL_FORM_ID('20521252'), '20521252', '27-SEP-2022', '0
 exec HEAL_INSERT_RECORD( HEAL_FORM_ID('20521890'), '20521890', '27-SEP-2022', '0000'); 
 exec HEAL_INSERT_RECORD( HEAL_FORM_ID('20521720'), '20521720', '27-SEP-2022', '0000'); 
 
-/*25. �?ăng ký tiêm chủng đợt 4 */
+/*25. Đăng ký tiêm chủng đợt 4 */
 
---Trigger kiểm tra Cư�?ng đã đủ 3 tháng sau khi hoàn thành li�?u cơ bản (Astra, Moderna), mũi tiếp theo sẽ là vaccine mRNA (Pfizer)
+--Trigger kiểm tra Cường đã đủ 3 tháng sau khi hoàn thành liều cơ bản (Astra, Moderna), mũi tiếp theo sẽ là vaccine mRNA (Pfizer)
 exec REG_INSERT_RECORD('20520418', '44001280920221', 1);
 
---Trigger kiểm tra Duyên đã đủ 3 tháng sau khi hoàn thành li�?u cơ bản (Vero, Vero, Moderna), mũi tiếp theo sẽ là vaccine mRNA (Pfizer)
+--Trigger kiểm tra Duyên đã đủ 3 tháng sau khi hoàn thành liều cơ bản (Vero, Vero, Moderna), mũi tiếp theo sẽ là vaccine mRNA (Pfizer)
 exec REG_INSERT_RECORD('20521252', '44001280920221', 0);
 
 --Trigger kiểm tra Nhi, Thái đã tiêm mũi nhắc lại, không thể đăng ký thêm nữa.
