@@ -47,9 +47,8 @@ values ('MOH', '123', 0, 1, null);
 insert into ORGANIZATION (ID, Name, ProvinceName, DistrictName, TownName, Street, Note)
 values ('01000', 'B? Y t?', 'Hà N?i', 'Ba ?ình', 'Kim Mã', '138A ???ng Gi?ng Võ', null);
 
-select ID into temp_ID
-    from ORGANIZATION
-    where ProvinceName = 'Hà N?i' 
-    and TO_NUMBER(SUBSTR(ID,3,5)) = (select COUNT(ID) 
-                                    from ORGANIZATION
-                                    where ProvinceName = 'Hà N?i');
+select VAC.ID, Name, Technology, Country, COUNT(SCHED.ID) 
+from VACCINE VAC, SCHEDULE SCHED
+where VAC.ID = SCHED.VaccineID
+and DayRegistered + NoonRegistered + NightRegistered > 0
+group by VAC.ID, Name, Technology, Country;

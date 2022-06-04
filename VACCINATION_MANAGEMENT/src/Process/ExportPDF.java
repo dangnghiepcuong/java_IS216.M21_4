@@ -1,19 +1,22 @@
 package Process;
 
 import com.lowagie.text.Font;
-import com.lowagie.text.List;
+import com.lowagie.text.Rectangle;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.print.PageFormat;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.*;
 import java.util.Scanner;
 
 public class ExportPDF extends Component {
     private DefaultValue dv = new DefaultValue();
     private String Directory;
-    private Document document = new Document();
+    private Document document = new Document(PageSize.A4);
 
     private static Font catFont = new Font(Font.TIMES_ROMAN, 18,
             Font.BOLD);
@@ -23,6 +26,65 @@ public class ExportPDF extends Component {
             Font.BOLD);
     private static Font smallBold = new Font(Font.TIMES_ROMAN, 12,
             Font.BOLD);
+
+    public static final int A0 = 0;
+    public static final int A1 = 1;
+    public static final int A2 = 2;
+    public static final int A3 = 3;
+    public static final int A4 = 4;
+    public static final int A5 = 5;
+    public static final int A6 = 6;
+    public static final int A7 = 7;
+    public static final int A8 = 8;
+    public static final int LETTER = 11;
+
+    public ExportPDF() {
+        document.setPageSize(new Rectangle(595,1684));
+    }
+
+    public ExportPDF(int size) {
+        document.resetHeader();
+        HeaderFooter header = new HeaderFooter(new Phrase("header"), false);
+        header.setAlignment(Element.ALIGN_LEFT);
+        header.setBorder(Rectangle.NO_BORDER);
+        document.setHeader(header);
+        switch (size)
+        {
+            case 0:
+                document = new Document(PageSize.A0);
+                break;
+            case 1:
+                document = new Document(PageSize.A1);
+                break;
+            case 2:
+                document = new Document(PageSize.A2);
+                break;
+            case 3:
+                document = new Document(PageSize.A3);
+                break;
+            case 4:
+                document = new Document(PageSize.A4);
+                break;
+            case 5:
+                document = new Document(PageSize.A5);
+                break;
+            case 6:
+                document = new Document(PageSize.A6);
+                break;
+            case 7:
+                document = new Document(PageSize.A7);
+                break;
+            case 8:
+                document = new Document(PageSize.A8);
+                break;
+            case 11:
+                document = new Document(PageSize.LETTER);
+                break;
+            default:
+                document = new Document(PageSize.A4);
+                break;
+        }
+    }
 
     public void openPDF()
     {
@@ -78,6 +140,11 @@ public class ExportPDF extends Component {
         }
     }
 
+    public void selectFile()
+    {
+
+    }
+
     private Font normalStyle = new Font(Font.TIMES_ROMAN, 13,Font.NORMAL, new Color(dv.BlackTextColor()));
     private Font titleStyle = new Font(Font.TIMES_ROMAN, 18,Font.NORMAL, new Color(dv.FeatureButtonColor()));
 
@@ -90,22 +157,6 @@ public class ExportPDF extends Component {
     }
 
 
-    /*    public void main(String[] args) {
-        try {
-            Document doc = new Document();
-            Document document = new Document();
-            PdfWriter.getInstance(document, new FileOutputStream(FilePath));
-            addMetaData(document);
-            addTitlePage(document);
-            addContent(document);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
-
-    // iText allows to add metadata to the PDF which can be viewed in your Adobe
-    // Reader
-    // under File -> Properties
     public void addMetaData(String title, String subject, String keywords, String author, String creator) {
         document.addTitle(title);
         document.addSubject(subject);
@@ -115,145 +166,78 @@ public class ExportPDF extends Component {
     }
 
     public void addParagraph(String text, Font font) throws DocumentException, FileNotFoundException {
-        //getPdfwriter();
-        //openPDF();
         document.add(new Paragraph(text, font));
-        //closePDF();
     }
 
     public void addParagraph(Paragraph paragraph) throws DocumentException, FileNotFoundException {
-        //getPdfwriter();
-        //openPDF();
         document.add(paragraph);
-        //closePDF();
     }
 
-    public void addObject(JPanel panel) throws DocumentException, FileNotFoundException
-    {
+    public void addPage(PagePanel panel, int pageIndex) throws DocumentException, FileNotFoundException, PrinterException {
+        PrinterJob printJob = PrinterJob.getPrinterJob();
+        PageFormat pf = printJob.defaultPage();
+
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(getDirectory()));
         openPDF();
-        
+
         PdfContentByte contentByte = writer.getDirectContent();
         document.add(new Chunk(""));
         PdfTemplate template = contentByte.createTemplate(panel.getWidth(), panel.getHeight());
-        Graphics2D g2 = template.createGraphics(panel.getWidth(), panel.getHeight());
-        panel.print(g2);
+        Graphics2D g2 = template.createGraphicsShapes(panel.getWidth(), panel.getHeight());
+        panel.print(g2, pf, pageIndex);
         g2.dispose();
         contentByte.addTemplate(template,0,0);
 
-/*        PdfContentByte cb = writer.getDirectContent();
-        PdfTemplate tp = cb.createTemplate(panel.getWidth(), panel.getHeight());
-        Graphics2D g2 = tp.createGraphics(panel.getWidth(), panel.getHeight());
-//        g2.scale(0.8, 1.0);
+        /*PdfTemplate tp;
+        Graphics2D g2;
+        // Assuming that the number of pages would be 3, You can calculate this same way it is calculated
+        // in print (Graphics g, PageFormat pageFormat, int pageIndex) method
+        tp = contentByte.createTemplate(panel.getWidth(), panel.getHeight());
+        g2 = tp.createGraphicsShapes(panel.getWidth(), panel.getHeight());
+        panel.print(g2, pf, page);
+        g2.dispose();
+        contentByte.addTemplate(tp, 0, 0);*/
+    }
+
+    public PdfWriter getPdfwriter2() throws FileNotFoundException, DocumentException {
+        return PdfWriter.getInstance(document, new FileOutputStream("C:\\Users\\operator\\Desktop\\123.pdf"));
+    }
+
+    public void addPage(JPanel panel, int pageIndex) throws DocumentException, IOException {
+
+        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(getDirectory()));
+//        PdfReader reader = new PdfReader("C:\\Users\\operator\\Desktop\\123.pdf");
+//        PdfImportedPage page = writer.getImportedPage(reader, pageIndex);
+        openPDF();
+
+        PdfContentByte contentByte = writer.getDirectContent();
+        document.add(new Chunk(""));
+        PdfTemplate template = contentByte.createTemplate(panel.getWidth(), panel.getHeight());
+        Graphics2D g2 = template.createGraphicsShapes(panel.getWidth(), panel.getHeight());
         panel.print(g2);
         g2.dispose();
-        cb.addTemplate(tp, 0, 0);*/
-        //closePDF();
+        int temp = (pageIndex-1)*panel.getHeight();
+        contentByte.addTemplate(template,0,-(pageIndex-1)*panel.getHeight());
+
+        /*PdfContentByte contentByte = writer.getDirectContent();
+        document.add(new Chunk(""));
+        Graphics2D g2 = page.createGraphicsShapes(panel.getWidth(), panel.getHeight());
+        panel.print(g2);
+        g2.dispose();
+        contentByte.addTemplate(page,1, 0, 0, 1,0,0);*/
     }
 
     public void addEmptyLine(int number) throws DocumentException, FileNotFoundException
     {
-        //getPdfwriter();
-        //openPDF();
         Paragraph paragraph = new Paragraph();
         for (int i = 0; i < number; i++) {
             paragraph.add(new Paragraph("*", getNormalStyle()));
             document.add(paragraph);
         }
-        //closePDF();
     }
 
     public void addNewPage() throws DocumentException, FileNotFoundException {
-        //getPdfwriter();
-        //openPDF();
         document.newPage();
-        //closePDF();
+        document.add(new Chunk(""));
     }
-
-/*    private void addContent(Document document) throws DocumentException {
-        Anchor anchor = new Anchor("First Chapter", catFont);
-        anchor.setName("First Chapter");
-
-        // Second parameter is the number of the chapter
-        Chapter catPart = new Chapter(new Paragraph(anchor), 1);
-
-        Paragraph subPara = new Paragraph("Subcategory 1", subFont);
-        Section subCatPart = catPart.addSection(subPara);
-        subCatPart.add(new Paragraph("Hello"));
-
-        subPara = new Paragraph("Subcategory 2", subFont);
-        subCatPart = catPart.addSection(subPara);
-        subCatPart.add(new Paragraph("Paragraph 1"));
-        subCatPart.add(new Paragraph("Paragraph 2"));
-        subCatPart.add(new Paragraph("Paragraph 3"));
-
-        // add a list
-        createList(subCatPart);
-        Paragraph paragraph = new Paragraph();
-        addEmptyLine(paragraph, 5);
-        subCatPart.add(paragraph);
-
-        // add a table
-        createTable(subCatPart);
-
-        // now add all this to the document
-        document.add(catPart);
-
-        // Next section
-        anchor = new Anchor("Second Chapter", catFont);
-        anchor.setName("Second Chapter");
-
-        // Second parameter is the number of the chapter
-        catPart = new Chapter(new Paragraph(anchor), 1);
-
-        subPara = new Paragraph("Subcategory", subFont);
-        subCatPart = catPart.addSection(subPara);
-        subCatPart.add(new Paragraph("This is a very important message"));
-
-        // now add all this to the document
-        document.add(catPart);
-    }*/
-
-    private void createTable(Section subCatPart)
-            throws BadElementException {
-        PdfPTable table = new PdfPTable(3);
-
-        // t.setBorderColor(BaseColor.GRAY);
-        // t.setPadding(4);
-        // t.setSpacing(4);
-        // t.setBorderWidth(1);
-
-        PdfPCell c1 = new PdfPCell(new Phrase("Table Header 1"));
-        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(c1);
-
-        c1 = new PdfPCell(new Phrase("Table Header 2"));
-        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(c1);
-
-        c1 = new PdfPCell(new Phrase("Table Header 3"));
-        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(c1);
-        table.setHeaderRows(1);
-
-        table.addCell("1.0");
-        table.addCell("1.1");
-        table.addCell("1.2");
-        table.addCell("2.1");
-        table.addCell("2.2");
-        table.addCell("2.3");
-
-        subCatPart.add(table);
-
-    }
-
-    private void createList(Section subCatPart) {
-        List list = new List(true, false, 10);
-        list.add(new ListItem("First point"));
-        list.add(new ListItem("Second point"));
-        list.add(new ListItem("Third point"));
-        subCatPart.add(list);
-    }
-
-
 }

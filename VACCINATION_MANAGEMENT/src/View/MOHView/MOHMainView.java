@@ -1,7 +1,8 @@
-package View.OrgView;
+package View.MOHView;
 
 import Process.*;
 import View.LoginView;
+import View.OrgView.OrgInformationView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,8 +37,8 @@ public class MOHMainView extends JFrame implements ActionListener
     private OrgInformationView orgInformationView;
     private CreateOrgAccView createOrgAccView;
     private PublishAnnouncementView publishAnnouncementView;
-    private MOHSearchCitizenView searchCitizenView;
-    private MOHStatisticView mohStatisticView;
+    private SearchCitizenView searchCitizenView;
+    private MOHStatisticView MOHStatisticView;
 
     private void initBackButton()
     {
@@ -373,7 +374,7 @@ public class MOHMainView extends JFrame implements ActionListener
         createOrgAccView = null;
         publishAnnouncementView = null;
         searchCitizenView = null;
-        mohStatisticView = null;
+        MOHStatisticView = null;
     }
 
     /*ACTION PERFORMED*/
@@ -483,7 +484,7 @@ public class MOHMainView extends JFrame implements ActionListener
         {
             nullFeatureViews();
 
-            searchCitizenView = new MOHSearchCitizenView();
+            searchCitizenView = new SearchCitizenView(mohUser);
             MainLayeredPane.removeAll();
             MainLayeredPane.add(searchCitizenView, Integer.valueOf(1));
 
@@ -496,9 +497,9 @@ public class MOHMainView extends JFrame implements ActionListener
         {
             nullFeatureViews();
 
-            mohStatisticView = new MOHStatisticView(mohUser);
+            MOHStatisticView = new MOHStatisticView(mohUser);
             MainLayeredPane.removeAll();
-            MainLayeredPane.add(mohStatisticView, Integer.valueOf(0));
+            MainLayeredPane.add(MOHStatisticView, Integer.valueOf(0));
 
             initBackButton();
             MainLayeredPane.add(BackButton, Integer.valueOf(1));
