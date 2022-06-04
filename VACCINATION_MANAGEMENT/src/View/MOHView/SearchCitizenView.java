@@ -1,9 +1,6 @@
-package View.OrgView;
+package View.MOHView;
 
-import Process.Certificate;
-import Process.DefaultValue;
-import Process.Injection;
-import Process.Person;
+import Process.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +14,7 @@ import java.sql.*;
  *
  * @author ASUS
  */
-public class MOHSearchCitizenView extends JPanel implements ActionListener, KeyListener {
+public class SearchCitizenView extends JPanel implements ActionListener, KeyListener {
 
     /*Search Result*/
     private JScrollPane ScrollPaneInjList;
@@ -40,6 +37,7 @@ public class MOHSearchCitizenView extends JPanel implements ActionListener, KeyL
 
     /*Object Class*/
     private DefaultValue dv = new DefaultValue();
+    private Organization orgUser = new Organization();
     private Person personalUser = new Person();
     private Certificate cert = new Certificate();
 
@@ -394,8 +392,9 @@ public class MOHSearchCitizenView extends JPanel implements ActionListener, KeyL
 
     /*CONSTRUCTOR*/
 
-    public MOHSearchCitizenView()
+    public SearchCitizenView(Organization org)
     {
+        orgUser = org;
         initComponents();
     }
 
@@ -421,13 +420,28 @@ public class MOHSearchCitizenView extends JPanel implements ActionListener, KeyL
             if (dv.checkStringInputValue(InputPersonalID, "Cảnh báo!", "Nhập CMND/CCCD!") != -2)
                 return;
 
-            String query = "select LastName, FirstName, Birthday, Gender, Phone, ID" +
+            String query = "";
+            if (orgUser.getID().equals("MOH"))
+                query = "select LastName, FirstName, Birthday, Gender, Phone, ID" +
                     " from PERSON" +
                     " where (LastName || ' ' || FirstName) = '" + InputFullName + "'" +
                     " and extract(year from Birthday) = '" + InputBirthday + "'" +
                     " and Gender = " + InputGender +
                     " and ID = '" + InputPersonalID + "'" +
                     " and Phone = '" + InputPhone + "'";
+            else
+                query = "select LastName, FirstName, Birthday, Gender, Phone, ID" +
+                        " from PERSON" +
+                        " where " +
+                        "exists (select PersonalID from REGISTER REG, SCHEDULE SCHED " +
+                        "       where SCHED.ID = REG.SchedID" +
+                        "       and OrgID = '" + orgUser.getID() + "'" +
+                        "       and PersonalID = PERSON.ID)" +
+                        " and (LastName || ' ' || FirstName) = '" + InputFullName + "'" +
+                        " and extract(year from Birthday) = '" + InputBirthday + "'" +
+                        " and Gender = " + InputGender +
+                        " and ID = '" + InputPersonalID + "'" +
+                        " and Phone = '" + InputPhone + "'";
 
             Connection connection = null;
             try {
@@ -503,13 +517,28 @@ public class MOHSearchCitizenView extends JPanel implements ActionListener, KeyL
             if (dv.checkStringInputValue(InputPersonalID, "Cảnh báo!", "Nhập CMND/CCCD!") != -2)
                 return;
 
-            String query = "select LastName, FirstName, Birthday, Gender, Phone, ID" +
-                    " from PERSON" +
-                    " where (LastName || ' ' || FirstName) = '" + InputFullName + "'" +
-                    " and extract(year from Birthday) = '" + InputBirthday + "'" +
-                    " and Gender = " + InputGender +
-                    " and ID = '" + InputPersonalID + "'" +
-                    " and Phone = '" + InputPhone + "'";
+            String query = "";
+            if (orgUser.getID().equals("MOH"))
+                query = "select LastName, FirstName, Birthday, Gender, Phone, ID" +
+                        " from PERSON" +
+                        " where (LastName || ' ' || FirstName) = '" + InputFullName + "'" +
+                        " and extract(year from Birthday) = '" + InputBirthday + "'" +
+                        " and Gender = " + InputGender +
+                        " and ID = '" + InputPersonalID + "'" +
+                        " and Phone = '" + InputPhone + "'";
+            else
+                query = "select LastName, FirstName, Birthday, Gender, Phone, ID" +
+                        " from PERSON" +
+                        " where " +
+                        "exists (select PersonalID from REGISTER REG, SCHEDULE SCHED " +
+                        "       where SCHED.ID = REG.SchedID" +
+                        "       and OrgID = '" + orgUser.getID() + "'" +
+                        "       and PersonalID = PERSON.ID)" +
+                        " and (LastName || ' ' || FirstName) = '" + InputFullName + "'" +
+                        " and extract(year from Birthday) = '" + InputBirthday + "'" +
+                        " and Gender = " + InputGender +
+                        " and ID = '" + InputPersonalID + "'" +
+                        " and Phone = '" + InputPhone + "'";
 
             Connection connection = null;
             try {

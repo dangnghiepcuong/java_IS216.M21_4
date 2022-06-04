@@ -50,14 +50,6 @@ public class BarChart
         ValueAxisLabel = valueAxisLabel;
     }
 
-    public DefaultCategoryDataset getDataset() {
-        return dataset;
-    }
-
-    public void setDataset(DefaultCategoryDataset dataset) {
-        this.dataset = dataset;
-    }
-
     private JFreeChart createChart()
     {
         JFreeChart barChart = ChartFactory.createBarChart(

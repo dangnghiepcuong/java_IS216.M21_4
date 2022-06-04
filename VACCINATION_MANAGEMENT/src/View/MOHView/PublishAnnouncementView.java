@@ -1,4 +1,4 @@
-package View.OrgView;
+package View.MOHView;
 
 import Process.Certificate;
 import Process.DateLabelFormatter;
@@ -31,7 +31,7 @@ import java.util.Scanner;
 public class PublishAnnouncementView extends JPanel implements ActionListener, KeyListener {
 
     /*Announcement Content*/
-    private JPanel AnnContentPanel;
+    private JPanel AnnPanel;
     private JPanel AnnContent;
     private JTextArea AnnTextArea;
     private JScrollPane ScrollPaneContent;
@@ -54,11 +54,10 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
     private JLabel ImageFileLabel = new JLabel();
     private File ImageFilePath;
     private JLabel AttachedImage;
-    private int ImageHeight = 0;
     private JButton UploadImageButton;
     private  JButton RemoveImageButton;
 
-    private JButton ConfirmButton;
+    private JButton PreviewButton;
     private  JButton PublishButton;
 
     /*Object Class*/
@@ -206,13 +205,13 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
                                       if(f.isDirectory())
                                           return true;
                                       else
-                                          return f.getName().toLowerCase().endsWith(".jpg");
+                                          return f.getName().toLowerCase().endsWith(".png");
                                   }
 
                                   @Override
                                   public String getDescription()
                                   {
-                                      return "Image File (*.jpg)";
+                                      return "Image File (*.png)";
                                   }
                               }
         );
@@ -228,7 +227,6 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
             AttachedImage = new JLabel(new ImageIcon(ResizedImg));
             AttachedImage.setPreferredSize(new Dimension( 600, (int) (600.0 / TakenImage.getIconWidth() * TakenImage.getIconHeight())));
             AttachedImage.setHorizontalAlignment(JLabel.LEFT);
-            ImageHeight = (int) (600.0 / TakenImage.getIconWidth() * TakenImage.getIconHeight());
 
             ImageFileLabel.setText(ImageFilePath.getName());
             ImageFileLabel.setBounds(70, 90 + 10 * dv.LabelHeight() +dv.AlignTop_InfoView(),220,30);
@@ -279,17 +277,17 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         RemoveImageButton.setEnabled(false);
     }
 
-    private void initConfirmButton()
+    private void initPreviewButton()
     {
-        ImageIcon ConfirmButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Confirm Button.png"));
-        ConfirmButton = new JButton();
-        ConfirmButton.setBounds((360-ConfirmButtonIcon.getIconWidth())/2, 150  + 11 * dv.LabelHeight() +dv.AlignTop_InfoView(), ConfirmButtonIcon.getIconWidth(), ConfirmButtonIcon.getIconHeight());
-        ConfirmButton.setBorder(null);
-        ConfirmButton.setContentAreaFilled(false);
-        ConfirmButton.setIcon(ConfirmButtonIcon);
+        ImageIcon PreviewButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Preview Button.png"));
+        PreviewButton = new JButton();
+        PreviewButton.setBounds((360-PreviewButtonIcon.getIconWidth())/2, 150  + 11 * dv.LabelHeight() +dv.AlignTop_InfoView(), PreviewButtonIcon.getIconWidth(), PreviewButtonIcon.getIconHeight());
+        PreviewButton.setBorder(null);
+        PreviewButton.setContentAreaFilled(false);
+        PreviewButton.setIcon(PreviewButtonIcon);
 
-        ConfirmButton.addActionListener(this);
-        ConfirmButton.addKeyListener(this);
+        PreviewButton.addActionListener(this);
+        PreviewButton.addKeyListener(this);
     }
 
     private void initPublishButton()
@@ -359,8 +357,8 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         initRemoveImageButton();
         AnnInfoPanel.add(RemoveImageButton);
 
-        initConfirmButton();
-        AnnInfoPanel.add(ConfirmButton);
+        initPreviewButton();
+        AnnInfoPanel.add(PreviewButton);
 
         initPublishButton();
         AnnInfoPanel.add(PublishButton);
@@ -378,7 +376,7 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
     * */
 
 
-    public void initAnnContentPanel() {
+    public void initAnnPanel() {
         JTextArea Title = new JTextArea(TitleField.getText());
         Title.setBounds(0, 0, 630, 80);
         Title.setFont(new Font(dv.fontName(), Font.BOLD, 26));
@@ -407,7 +405,7 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         AnnContent = new JPanel();
         BoxLayout boxLayout = new BoxLayout(AnnContent, BoxLayout.Y_AXIS);
         AnnContent.setLayout(boxLayout);
-        AnnContent.setBounds(0,0,610,1);
+        AnnContent.setBounds(0,0,610,0);
 
         AnnTextArea = new JTextArea("");
         AnnTextArea.setBounds(0,0,300,1);
@@ -420,24 +418,20 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         AnnTextArea.setEditable(false);
         AnnTextArea.setBorder(null);
 
-        try {
-            ContentFile = new Scanner(new File(ContentFilePath.getPath()));
-        } catch (FileNotFoundException ex) {
-//            dv.popupOption(null,"Không tìm thấy file nội dung!", "Lỗi!", 2);
-            ex.printStackTrace();
-//            return;
-        } catch (Exception ex){
-//            dv.popupOption(null,"Không tìm thấy file nội dung!", "Lỗi!", 2);
-            ex.printStackTrace();
-//            return;
-        }
+        if (ContentFilePath != null)
+            try {
+                ContentFile = new Scanner(new File(ContentFilePath.getPath()));
+            } catch (FileNotFoundException ex) {
+                dv.popupOption(null,"Không tìm thấy file nội dung!", "Lỗi!", 2);
+                ex.printStackTrace();
+                return;
+            }
 
         if (ContentFile != null)
         {
-            int line=0;
+            AnnContent.setBounds(0,0,610,1);
             while (ContentFile.hasNextLine()) {
                 AnnTextArea.append(ContentFile.nextLine() + '\n');
-                line++;
             }
         }
 
@@ -462,18 +456,18 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         Publisher.setForeground(Color.BLACK);
         Publisher.setHorizontalAlignment(JLabel.RIGHT);
 
-        AnnContentPanel = new JPanel();
-        AnnContentPanel.setBounds(360, 0, 720, 720);
-        AnnContentPanel.setLayout(null);
-        AnnContentPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+        AnnPanel = new JPanel();
+        AnnPanel.setBounds(360, 0, 720, 720);
+        AnnPanel.setLayout(null);
+        AnnPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
 
-        AnnContentPanel.add(ScrollPaneTitle);
-        AnnContentPanel.add(AnnNumber);
-        AnnContentPanel.add(Date);
-        AnnContentPanel.add(ScrollPaneContent);
-        AnnContentPanel.add(Publisher);
+        AnnPanel.add(ScrollPaneTitle);
+        AnnPanel.add(AnnNumber);
+        AnnPanel.add(Date);
+        AnnPanel.add(ScrollPaneContent);
+        AnnPanel.add(Publisher);
 
-        AnnContentPanel.repaint(360, 0, 720, 720);
+        AnnPanel.repaint(360, 0, 720, 720);
     }
 
     private void initComponents()
@@ -506,9 +500,8 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
             AnnInfoPanel.repaint(0,0,dv.FrameWidth()-dv.FrameHeight(),dv.FrameHeight());
         }
 
-        if (e.getSource() == ConfirmButton)
+        if (e.getSource() == PreviewButton)
         {
-
             String InputTitle = TitleField.getText();
             String InputAnnNumber = AnnNumberField.getText();
             String InputPublishDate = PublishDateField.getJFormattedTextField().getText();
@@ -531,8 +524,8 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
 
             this.removeAll();
             this.add(AnnInfoPanel);
-            initAnnContentPanel();
-            this.add(AnnContentPanel);
+            initAnnPanel();
+            this.add(AnnPanel);
             this.repaint(0,0,dv.FrameWidth(),dv.FrameHeight());
             PublishButton.setEnabled(true);
         }
@@ -548,7 +541,6 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
             RemoveImageButton.setEnabled(false);
             ImageFilePath = null;
             AttachedImage = null;
-            ImageHeight = 0;
             ImageFileLabel.setText("");
         }
 

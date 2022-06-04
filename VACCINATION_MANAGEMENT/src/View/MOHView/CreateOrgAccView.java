@@ -1,4 +1,4 @@
-package View.OrgView;
+package View.MOHView;
 
 import Process.DefaultValue;
 import Process.Organization;

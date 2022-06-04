@@ -3,7 +3,7 @@ package View;
 import Process.*;
 import View.CitizenView.CitizenMainView;
 import View.CitizenView.RegisterAccView;
-import View.OrgView.MOHMainView;
+import View.MOHView.MOHMainView;
 import View.OrgView.ORGMainView;
 
 import javax.swing.*;

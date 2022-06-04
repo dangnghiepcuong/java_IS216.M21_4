@@ -1,8 +1,9 @@
 package View.OrgView;
 
-import Process.*;
-import View.CitizenView.RegisterVaccinationView;
+import Process.DefaultValue;
+import Process.Organization;
 import View.LoginView;
+import View.MOHView.SearchCitizenView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,14 +30,13 @@ public class ORGMainView extends JFrame implements ActionListener
     private JButton SearchButton;
     private JButton StatisticButton;
 
-
-
     private Organization orgUser = new Organization();
 
     private LoginView loginView;
     private OrgInformationView orgInformationView;
-    private RegisterVaccinationView registerVaccinationView;
     private ManageScheduleView manageScheduleView;
+    private SearchCitizenView searchCitizenView;
+    private ORGStatisticView orgStatisticView;
 
     private JButton LogoutButton;
     private JButton BackButton;
@@ -371,15 +371,22 @@ public class ORGMainView extends JFrame implements ActionListener
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
     }
 
+    private void nullFeatureViews()
+    {
+        orgInformationView = null;
+        manageScheduleView = null;
+//        publishAnnouncementView = null;
+        searchCitizenView = null;
+//        orgStatisticView = null;
+    }
+
     /*ACTION PERFORMED*/
     @Override
     public void actionPerformed(ActionEvent e)
     {
         if(e.getSource() == BackButton)
         {
-            registerVaccinationView = null;
-            manageScheduleView = null;
-
+            nullFeatureViews();
             MainLayeredPane.removeAll();
             MainLayeredPane.add(MainPanel, Integer.valueOf(1));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
@@ -410,7 +417,6 @@ public class ORGMainView extends JFrame implements ActionListener
             orgInformationView = new OrgInformationView(orgUser);
             MainLayeredPane.removeAll();
             MainLayeredPane.add(orgInformationView, Integer.valueOf(0));
-
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
 
             //init BackButton
@@ -452,30 +458,41 @@ public class ORGMainView extends JFrame implements ActionListener
             MainLayeredPane.add(MainPanel);
         }
 
-        /*if (e.getSource() == SearchButton)
+        if (e.getSource() == SearchButton)
         {
-            this.setTitle("Tìm kiếm");
-            searchOrgView = new SearchOrgView();
+            searchCitizenView = new SearchCitizenView(orgUser);
             MainLayeredPane.removeAll();
-            MainLayeredPane.add(searchOrgView, Integer.valueOf(1));
+            MainLayeredPane.add(searchCitizenView, Integer.valueOf(1));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
 
             //init BackButton
             initBackButton();
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
-        }*/
+        }
 
         if (e.getSource() == ManageSchedButton)
         {
             manageScheduleView = new ManageScheduleView(orgUser);
             MainLayeredPane.removeAll();
             MainLayeredPane.add(manageScheduleView, Integer.valueOf(0));
-
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
 
             //init BackButton
             initBackButton();
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
+        }
+
+        if (e.getSource() == StatisticButton)
+        {
+            nullFeatureViews();
+
+            orgStatisticView = new ORGStatisticView(orgUser);
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(orgStatisticView, Integer.valueOf(0));
+
+            initBackButton();
+            MainLayeredPane.add(BackButton, Integer.valueOf(1));
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
     }
 
