@@ -13,12 +13,14 @@ public class PrintedPanel
     private int leftAlign = cmToPixel(1);
 
     public static final int NORMAL = 0;
-    public static final int TITLE = 1;
-    public static final int NOTE = 2;
+    public static final int BOLD = 1;
+    public static final int ITALIC = 2;
+    public static final int BOLD_ITALIC = 3;
 
-    private Font normalFont = new Font("Times New Roman", 0, 16);
-    private Font titleFont = new Font("Times New Roman", 1, 16);
-    private Font noteFont = new Font("Times New Roman", 2, 13);
+    private Font normalFont = new Font("Times New Roman", Font.PLAIN, 13);
+    private Font boldFont = new Font("Times New Roman", Font.BOLD, 13);
+    private Font italic = new Font("Times New Roman", Font.ITALIC, 13);
+    private Font bold_italicFont = new Font("Times New Roman", 3, 13);
 
     public PrintedPanel()
     {
@@ -123,12 +125,23 @@ public class PrintedPanel
         label.setOpaque(true);
         label.setBackground(Color.WHITE);
 
-        if (style == 0)
-            label.setFont(normalFont);
-        if (style == 1)
-            label.setFont(titleFont);
-        if (style == 2)
-            label.setFont(noteFont);
+        switch (style)
+        {
+            case 0:
+                label.setFont(normalFont);
+                break;
+            case 1:
+                label.setFont(boldFont);
+                break;
+            case 2:
+                label.setFont(italic);
+                break;
+            case 3:
+                label.setFont(bold_italicFont);
+                break;
+            default:
+                break;
+        }
 
         ImageIcon ImageIconLabel = new ImageIcon(ImageHelper.reSize(ImageHelper.createImage(label), w, h));
         JLabel addedLabel = new JLabel(ImageIconLabel);

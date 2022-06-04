@@ -253,7 +253,7 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             AffectedPanel.setPreferredSize(new Dimension(580, 350));
             AffectedPanel.setLayout(new FlowLayout());
 
-            AffectedLabel = new JLabel("THỐNG KÊ SỐ CA NHIỄM COVID-19 TRONG VÒNG " + Days + " NGÀY QUA");
+            AffectedLabel = new JLabel("THỐNG KÊ SỐ NGƯỜI TỪNG NHIỄM COVID-19 TRONG " + Days + " NGÀY QUA");
             AffectedLabel.setFont(new Font(dv.fontName(), 1, 18));
             AffectedLabel.setForeground(new Color(dv.FeatureButtonColor()));
             AffectedLabel.setBounds(30, 10+  1, 580, 25);
