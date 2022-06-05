@@ -16,7 +16,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.Scanner;
 
 /**
  *
@@ -24,148 +23,90 @@ import java.util.Scanner;
  */
 
 public class AnnouncementView extends JPanel implements ActionListener {
-    
-    private JLayeredPane MainLayeredPane;
-    private JScrollPane AnnouncementNew;
-    private JTextField SearchAnnouncement;
-    private JScrollPane ScrollPaneAnn;
-    private JPanel MainPane;
-    private JPanel AnnListPanel;
-    private JLayeredPane LayeredPaneArea; 
-    
-    private JLabel TittleAnnNew;
-    
-    private JButton SearchButton;
-//    private JButton NextButton;
-//    private JButton HomeButton;
-//    private JButton RefreshButton;
 
+    private JLabel AnnListLabel;
+    private JScrollPane ScrollPanePreAnnList;
+    private JPanel PreviewPanel;
+    private JPanel PreAnnListPanel;
+    private JPanel AnnViewPanel;
+    
     private DefaultValue dv= new DefaultValue();
-    private String annID;
-    private Scanner ContentFile;
 
-    /*CONSTRUCTOR*/
-    public AnnouncementView()
+    private void initAnnListLabel()
     {
-        this.setSize(1080, 720);
-        this.setVisible(true);
-        this.setBackground(new Color(dv.ViewBackgroundColor()));
-        this.setLayout(null);
-        
-        initMainLayeredPane();
-        initMainPane();
-        
-        initSearchAnnouncement();
+        AnnListLabel = new JLabel("CÁC THÔNG BÁO");
+        AnnListLabel.setBounds((PreviewPanel.getWidth()-360)/2, dv.AlignTop_InfoView()+20, 360, 20);
+        AnnListLabel.setFont(new Font(dv.fontName(), 1, 20));
+        AnnListLabel.setForeground(new Color(dv.FeatureButtonColor()));
+        AnnListLabel.setHorizontalAlignment(JLabel.CENTER);
+    }
 
-        //initScrollPaneAnn();
-        initSearchButton();
-        
-        initAnnListPanel();
-        initAnnouncementNew();
-        
-        this.add(MainLayeredPane);
-        MainLayeredPane.add(MainPane,Integer.valueOf(0));
-        MainPane.add(AnnouncementNew);
-        MainPane.add(SearchAnnouncement);
-        //MainPane.add(ScrollPaneAnn);
-        MainPane.add(SearchButton);
-    }
-    
-    private void initMainLayeredPane() 
+    private void initPreviewPanel()
     {
-        MainLayeredPane=new JLayeredPane();
-        MainLayeredPane.setBounds(0,0,1080,720);
-        MainLayeredPane.setLayout(null);
-        MainLayeredPane.setOpaque(true);
+        PreviewPanel=new JPanel();
+        PreviewPanel.setBounds(0,0,360,720);
+        PreviewPanel.setLayout(null);
+        PreviewPanel.setOpaque(false);
+        PreviewPanel.setBorder(dv.border());
+
+        initAnnListLabel();
+        initPreAnnListPanel();
+        initScrollPanePreAnnList();
+
+        PreviewPanel.add(AnnListLabel);
+        PreviewPanel.add(ScrollPanePreAnnList);
     }
-    
-    private void initMainPane()
-    {
-        MainPane=new JPanel();
-        MainPane.setBounds(0,0,1080,720);
-        MainPane.setLayout(null);
-        MainPane.setOpaque(true);
-    }
-    
-    
-    private void initSearchButton()
-    {
-        SearchButton=new JButton();
-        ImageIcon SearchButtonIcon=new ImageIcon(getClass().getResource("/Resources/icon/Search Filter Button.png"));
-        SearchButton.setIcon(SearchButtonIcon);
-        SearchButton.setBounds(70, 110,SearchButtonIcon.getIconWidth() , SearchButtonIcon.getIconHeight());
-      
-        SearchButton.setContentAreaFilled(false);
-        SearchButton.setBorder(null);
-        SearchButton.addActionListener(this);
-    }
-    
-    private void initTittleAnnNew()
-    {
-        TittleAnnNew = new JLabel("GIỚI THIỆU");
-        TittleAnnNew.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-        TittleAnnNew.setForeground(new Color(0x666666));
-    }
-    
-    private void initSearchAnnouncement()//View Search Announcement
-    {
-        SearchAnnouncement = new JTextField();
-        SearchAnnouncement.setBounds(20,60,250 ,40);
-        SearchAnnouncement.setLayout(null);
-        SearchAnnouncement.setOpaque(true);
-        //SearchAnnouncement.setBackground(Color.blue);
-        SearchAnnouncement.setBorder(BorderFactory.createLineBorder(Color.black));
-    }
-    
-    private JPanel initFormPanel(Annoucement ann)
+
+    private JPanel initSmallAnnViewPanel(Annoucement ann)
     {
         JPanel FormPanel = new JPanel();
         FormPanel.setLayout(null);
         FormPanel.setBackground(Color.WHITE);
-        
-        JLabel TitelLabel=new JLabel(ann.getTitle()+" (ID: "+ann.getID()+")");
-        TitelLabel.setFont(new Font(dv.fontName(), 1, 16));
-        TitelLabel.setForeground(new Color(dv.BlackTextColor()));
-        TitelLabel.setBounds(10, 1, 600, 25);
-        TitelLabel.setHorizontalAlignment(JLabel.LEFT);
-        
+
+        JTextArea TitleLabel=new JTextArea(ann.getTitle());
+        TitleLabel.setFont(new Font(dv.fontName(), 1, 16));
+        TitleLabel.setForeground(new Color(dv.BlackTextColor()));
+        TitleLabel.setBounds(10, 5, 310, 50);
+        TitleLabel.setLineWrap(true);
+        TitleLabel.setWrapStyleWord(true);
+        TitleLabel.setEditable(false);
+//        TitleLabel.setBorder(dv.border());
         
         JLabel ORGLabel=new JLabel("Đơn vị: " + ann.getOrg().getName() + " (ID: "+ ann.getOrgID()+")");
-        ORGLabel.setFont(new Font(dv.fontName(), 1, 16));
+        ORGLabel.setFont(new Font(dv.fontName(), 2, 13));
         ORGLabel.setForeground(new Color(dv.BlackTextColor()));
-        ORGLabel.setBounds(10, 26, 600, 25);
+        ORGLabel.setBounds(10, 50, 310, 25);
         ORGLabel.setHorizontalAlignment(JLabel.LEFT);
+//        ORGLabel.setBorder(dv.border());
         
         JLabel PublishDateLabel = new JLabel("Ngày đăng: " + ann.getPublishDate());
-        PublishDateLabel.setPreferredSize(new Dimension(200, 30));
-        PublishDateLabel.setFont(new Font(dv.fontName(), 0, 16));
+        PublishDateLabel.setPreferredSize(new Dimension(350, 25));
+        PublishDateLabel.setFont(new Font(dv.fontName(), 0, 13));
         PublishDateLabel.setForeground(new Color(dv.BlackTextColor()));
-        PublishDateLabel.setBounds(10, 51, 600, 25);
+        PublishDateLabel.setBounds(10, 75, 310, 25);
         PublishDateLabel.setHorizontalAlignment(JLabel.LEFT);
+//        PublishDateLabel.setBorder(dv.border());
 
-        FormPanel.add(TitelLabel);
+        if (ann.getImage() != null)
+        {
+            ImageIcon imgicon = new ImageIcon(getClass().getResource("/Resources/icon/ImageIcon.png"));
+            JLabel imgLabel = new JLabel(imgicon);
+            imgLabel.setBounds(320-(imgicon.getIconWidth()+5),55,imgicon.getIconWidth(),imgicon.getIconHeight());
+            FormPanel.add(imgLabel);
+        }
+
+        FormPanel.add(TitleLabel);
         FormPanel.add(ORGLabel);
         FormPanel.add(PublishDateLabel);
-        
-        FormPanel.setPreferredSize(new Dimension(350, 100));
-        
-        MouseListener handleMouseAction = new MouseListener()
+        FormPanel.setPreferredSize(new Dimension(330, 100));
+
+        MouseListener handleViewAnn = new MouseListener()
         {
             @Override
             public void mouseClicked(MouseEvent e)
             {
-                annID=ann.getID();
-                initScrollPaneAnn();                 
-                
-                
-                JPanel ContentPanelAnn= new JPanel();
-                
-                ContentPanelAnn.setBounds(875, 630, 200, 80);
-                ContentPanelAnn.add(PublishDateLabel);               
-                MainPane.add(ContentPanelAnn);
-                System.out.print("vkajdbvlskjdfbv");
+                initAnnViewPanel(ann);
             }
-
             @Override
             public void mousePressed(MouseEvent e) {}
             @Override
@@ -175,33 +116,33 @@ public class AnnouncementView extends JPanel implements ActionListener {
             @Override
             public void mouseExited(MouseEvent e) {}
         };
-        
-        FormPanel.addMouseListener(handleMouseAction);
+        TitleLabel.addMouseListener(handleViewAnn);
+        FormPanel.addMouseListener(handleViewAnn);
+
         return FormPanel;
     }
     
-    private void initAnnListPanel()
+    private void initPreAnnListPanel()
     {
-        AnnListPanel= new JPanel();
-        AnnListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
-        AnnListPanel.setLayout(new FlowLayout());
+        PreAnnListPanel= new JPanel();
+        PreAnnListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+        PreAnnListPanel.setLayout(new FlowLayout());
         
         Annoucement ann;
-        int listAnn = 0;
+        int nAnn = 0;
         int i = 0;
         
-        String query= "Select Announcement.ID, ORGID, Name, Title, PublishDate "
-                    + "From Announcement join Organization on Announcement.OrgID= Organization.ID "
-                    + "Order by PublishDate DESC";
-        
+        String query= "select *" +
+                    " from Announcement join Organization on Announcement.OrgID= Organization.ID" +
+                    " where (sysdate - PublishDate) <= 28" +
+                    " and PublishDate <= sysdate" +
+                    " order by PublishDate desc";
+        System.out.println(query);
         Connection connection=null;
         
         try
         {
-            connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());           
-            
-            
-            
+            connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
             PreparedStatement st = connection.prepareStatement(query);
             ResultSet rs = st.executeQuery(query);
             
@@ -210,123 +151,140 @@ public class AnnouncementView extends JPanel implements ActionListener {
                 ann=new Annoucement();                
                 ann.setID(rs.getString("ID"));
                 ann.setOrgID(rs.getString("OrgID"));
-                System.out.print("a");
                 ann.getOrg().setName(rs.getString("Name"));
-                System.out.print("b");
                 ann.setTitle(rs.getString("Title"));         
                 ann.setPublishDate(LocalDate.parse(rs.getString("PublishDate").substring(0, 10)));
-                AnnListPanel.add(initFormPanel(ann));
-                listAnn += 100;
+                ann.setImage(rs.getBytes("Image"));
+                PreAnnListPanel.add(initSmallAnnViewPanel(ann));
                 i++;
             }
-           
         }
         catch(SQLException ex)
         {
             dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
             ex.printStackTrace();
-        
             return;
         }
-       
-        AnnListPanel.setPreferredSize(new Dimension(350, listAnn + i * 10));
+
+        nAnn = i;
+
+        PreAnnListPanel.setPreferredSize(new Dimension(340, nAnn*100 + nAnn*5));
     }
     
-    private void initAnnouncementNew()// View Announcement new
+    private void initScrollPanePreAnnList()// View Announcement new
     {
-        AnnouncementNew =  new JScrollPane(AnnListPanel,
+        ScrollPanePreAnnList =  new JScrollPane(PreAnnListPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-      
-        AnnouncementNew.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
-        AnnouncementNew.setBounds(20,170,250 ,500);
+        ScrollPanePreAnnList.setBounds(0,100,360 ,582);
     }
-    
-    private void initScrollPaneAnn()// view detailed announcement
-    {
-        
-        String query= "Select Announcement.ID, ORGID, Name, Title, PublishDate, Content, Image "
-                    + "From Announcement join Organization on Announcement.OrgID= Organization.ID "
-                    + "Where Announcement.ID="+ annID;
-        
-        Connection connection=null;
-        JPanel AnnPanel=new JPanel();
-        Annoucement Ann=new Annoucement();   
-        try
-        {
-            connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());           
-            
-            PreparedStatement st = connection.prepareStatement(query);
-            ResultSet rs = st.executeQuery(query);
-            
-            while(rs.next())
-            {           
-                Ann.setID(rs.getString("ID"));
-                Ann.setOrgID(rs.getString("OrgID"));
-                Ann.getOrg().setName(rs.getString("Name"));
-                System.out.print(Ann.getOrg().getName());
-                Ann.setTitle(rs.getString("Title"));         
-                Ann.setPublishDate(LocalDate.parse(rs.getString("PublishDate").substring(0, 10)));
-                Ann.setContent(rs.getString("Content"));
-                Ann.setImage(rs.getBytes("Image"));
-                System.out.print(Ann.getContent());
-            }
-           
-        }
-        catch(SQLException ex)
-        {
-            dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
-            ex.printStackTrace();
-        
-            return;
-        }
 
-        JTextArea ContentLabel = new JTextArea(Ann.getContent());
-        ContentLabel.setBounds(0,0, 700, 1);
-        ContentLabel.setFont(new Font(dv.fontName(), Font.PLAIN, 20));
-        ContentLabel.setForeground(new Color(dv.BlackTextColor()));
-        ContentLabel.setBackground(Color.WHITE);
-        ContentLabel.setAutoscrolls(true);
-        ContentLabel.setWrapStyleWord(true);
-        ContentLabel.setLineWrap(true);
-        ContentLabel.setEditable(false);
-        
-        JPanel ContentPanel = new JPanel();
-        
-        ContentPanel.setBounds(0,0, 700, 1);
-        BoxLayout boxLayout = new BoxLayout(ContentPanel, BoxLayout.Y_AXIS);
-        ContentPanel.setLayout(boxLayout);
-        ContentPanel.add(ContentLabel);
-        
-        if(Ann.getImage() != null)
-       {
-           ImageIcon TakenImage = new ImageIcon(Ann.getImage());
-           Image ResizedImg = ImageHelper.reSize(TakenImage.getImage(),
-                    700, 400);
-           JLabel ImagePlace = new JLabel(new ImageIcon(ResizedImg));
-           ImagePlace.setPreferredSize(new Dimension( 700, 400));
-           ImagePlace.setHorizontalAlignment(JLabel.LEFT);
-           JPanel ImagePanel = new JPanel();
-           ImagePanel.add(ImagePlace);
-           ContentPanel.add(ImagePanel);   
-       }
-                
-        ScrollPaneAnn = new JScrollPane(ContentPanel,
+    public void initAnnViewPanel(Annoucement ann)
+    {
+        JTextArea Title = new JTextArea(ann.getTitle());
+        Title.setBounds(0, 0, 630, 80);
+        Title.setFont(new Font(dv.fontName(), Font.BOLD, 26));
+        Title.setForeground(new Color(dv.FeatureButtonColor()));
+        Title.setBackground(Color.WHITE);
+        Title.setWrapStyleWord(true);
+        Title.setLineWrap(true);
+        Title.setEditable(false);
+        Title.setAutoscrolls(true);
+
+        JScrollPane ScrollPaneTitle = new JScrollPane(Title,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        ScrollPaneAnn.setBounds(300,55,750 ,550);
-        ScrollPaneAnn.setBorder(null);
+        ScrollPaneTitle.setBounds(40, 40, 630, 80);
+        ScrollPaneTitle.setBorder(null);
 
-        MainPane.add(ScrollPaneAnn);
+        JLabel AnnNumber = new JLabel("Thông báo số: " + ann.getID());
+        AnnNumber.setBounds(80, 125, 640, 25);
+        AnnNumber.setFont(new Font(dv.fontName(), Font.ITALIC, 18));
+        AnnNumber.setForeground(Color.BLACK);
+
+        JLabel Date = new JLabel(dv.toTextDate(String.valueOf(ann.getPublishDate())));
+        Date.setBounds(80, 145 + 2, 640, 30);
+        Date.setFont(new Font(dv.fontName(), Font.ITALIC, 18));
+        Date.setForeground(Color.BLACK);
+
+        JTextArea AnnTextArea = new JTextArea(ann.getContent());
+        AnnTextArea.setBounds(0,0,610,1);
+        AnnTextArea.setFont(new Font(dv.fontName(), Font.PLAIN, 18));
+        AnnTextArea.setForeground(new Color(dv.BlackTextColor()));
+        AnnTextArea.setBackground(Color.WHITE);
+        AnnTextArea.setAutoscrolls(true);
+        AnnTextArea.setWrapStyleWord(true);
+        AnnTextArea.setLineWrap(true);
+        AnnTextArea.setEditable(false);
+        AnnTextArea.setBorder(null);
+
+        JPanel AnnContent = new JPanel();
+        BoxLayout boxLayout = new BoxLayout(AnnContent, BoxLayout.Y_AXIS);
+        AnnContent.setLayout(boxLayout);
+        AnnContent.setBounds(0,0,610,0);
+        AnnContent.setBackground(Color.WHITE);
+        AnnContent.setOpaque(true);
+        AnnContent.add(AnnTextArea);
+        if (ann.getImage() != null)
+        {
+            ImageIcon img = new ImageIcon(ann.getImage());
+
+            JLabel AttachedImage = new JLabel(
+                    new ImageIcon(
+                            ImageHelper.reSize(
+                                    img.getImage(),600,600*img.getIconHeight()/img.getIconWidth()
+                            )
+                    )
+            );
+            JPanel ImagePanel = new JPanel();
+            ImagePanel.add(AttachedImage);
+            AnnContent.add(ImagePanel);
+        }
+        AnnContent.repaint(0,0,610,0);
+
+        JScrollPane ScrollPaneContent = new JScrollPane(AnnContent,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        ScrollPaneContent.setLayout(new ScrollPaneLayout());
+        ScrollPaneContent.setBounds(40, 180, 630, 450);
+        ScrollPaneContent.setBackground(Color.WHITE);
+        ScrollPaneContent.setBorder(null);
+
+        JLabel Publisher = new JLabel("Đơn vị: " + ann.getOrg().getName());
+        Publisher.setBounds(80, 640, 560, 30);
+        Publisher.setFont(new Font(dv.fontName(), Font.ITALIC, 18));
+        Publisher.setForeground(Color.BLACK);
+        Publisher.setHorizontalAlignment(JLabel.RIGHT);
+
+        AnnViewPanel = new JPanel();
+        AnnViewPanel.setBounds(360, 0, 720, 720);
+        AnnViewPanel.setLayout(null);
+        AnnViewPanel.setBackground(Color.WHITE);
+
+        AnnViewPanel.removeAll();
+        AnnViewPanel.add(ScrollPaneTitle);
+        AnnViewPanel.add(AnnNumber);
+        AnnViewPanel.add(Date);
+        AnnViewPanel.add(ScrollPaneContent);
+        AnnViewPanel.add(Publisher);
+        AnnViewPanel.repaint(360, 0, 720, 720);
+
+        this.removeAll();
+        this.add(PreviewPanel);
+        this.add(AnnViewPanel);
+        this.repaint(0,0, 1080, 720);
     }
-    
-    private void initLayeredPaneArea() // Panel chứa scroll DS tờ khai
+
+    /*CONSTRUCTOR*/
+    public AnnouncementView()
     {
-        LayeredPaneArea = new JLayeredPane();
-        LayeredPaneArea.setLayout(null);
-        LayeredPaneArea.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
-        LayeredPaneArea.setBounds(320, 40, 680, 630);
+        this.setBounds(0,0,1080, 720);
+        this.setVisible(true);
+        this.setBackground(new Color(dv.ViewBackgroundColor()));
+        this.setLayout(null);
+
+        initPreviewPanel();
+        this.add(PreviewPanel);
+
+        this.repaint(0,0, 1080, 720);
     }
-    
-    
 
     @Override
     public void actionPerformed(ActionEvent e) {

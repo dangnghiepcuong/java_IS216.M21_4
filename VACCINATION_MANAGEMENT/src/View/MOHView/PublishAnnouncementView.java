@@ -31,7 +31,7 @@ import java.util.Scanner;
 public class PublishAnnouncementView extends JPanel implements ActionListener, KeyListener {
 
     /*Announcement Content*/
-    private JPanel AnnPanel;
+    private JPanel AnnViewPanel;
     private JPanel AnnContent;
     private JTextArea AnnTextArea;
     private JScrollPane ScrollPaneContent;
@@ -223,10 +223,8 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         {
             ImageIcon TakenImage = new ImageIcon(ImageFilePath.getPath());
             Image ResizedImg = ImageHelper.reSize(TakenImage.getImage(),
-                    600, (int) (600.0 / TakenImage.getIconWidth() * TakenImage.getIconHeight()));
+                    600, (600/TakenImage.getIconWidth() * TakenImage.getIconHeight()));
             AttachedImage = new JLabel(new ImageIcon(ResizedImg));
-            AttachedImage.setPreferredSize(new Dimension( 600, (int) (600.0 / TakenImage.getIconWidth() * TakenImage.getIconHeight())));
-            AttachedImage.setHorizontalAlignment(JLabel.LEFT);
 
             ImageFileLabel.setText(ImageFilePath.getName());
             ImageFileLabel.setBounds(70, 90 + 10 * dv.LabelHeight() +dv.AlignTop_InfoView(),220,30);
@@ -376,7 +374,7 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
     * */
 
 
-    public void initAnnPanel() {
+    public void initAnnViewPanel() {
         JTextArea Title = new JTextArea(TitleField.getText());
         Title.setBounds(0, 0, 630, 80);
         Title.setFont(new Font(dv.fontName(), Font.BOLD, 26));
@@ -402,13 +400,8 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         Date.setFont(new Font(dv.fontName(), Font.ITALIC, 18));
         Date.setForeground(Color.BLACK);
 
-        AnnContent = new JPanel();
-        BoxLayout boxLayout = new BoxLayout(AnnContent, BoxLayout.Y_AXIS);
-        AnnContent.setLayout(boxLayout);
-        AnnContent.setBounds(0,0,610,0);
-
         AnnTextArea = new JTextArea("");
-        AnnTextArea.setBounds(0,0,300,1);
+        AnnTextArea.setBounds(0,0,0,0);
         AnnTextArea.setFont(new Font(dv.fontName(), Font.PLAIN, 18));
         AnnTextArea.setForeground(new Color(dv.BlackTextColor()));
         AnnTextArea.setBackground(Color.WHITE);
@@ -427,9 +420,15 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
                 return;
             }
 
+        AnnContent = new JPanel();
+        BoxLayout boxLayout = new BoxLayout(AnnContent, BoxLayout.Y_AXIS);
+        AnnContent.setLayout(boxLayout);
+        AnnContent.setBackground(Color.WHITE);
+        AnnContent.setBounds(0,0,610,0);
+
         if (ContentFile != null)
         {
-            AnnContent.setBounds(0,0,610,1);
+            AnnTextArea.setBounds(0,0,610,1);
             while (ContentFile.hasNextLine()) {
                 AnnTextArea.append(ContentFile.nextLine() + '\n');
             }
@@ -456,18 +455,18 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         Publisher.setForeground(Color.BLACK);
         Publisher.setHorizontalAlignment(JLabel.RIGHT);
 
-        AnnPanel = new JPanel();
-        AnnPanel.setBounds(360, 0, 720, 720);
-        AnnPanel.setLayout(null);
-        AnnPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+        AnnViewPanel = new JPanel();
+        AnnViewPanel.setBounds(360, 0, 720, 720);
+        AnnViewPanel.setLayout(null);
+        AnnViewPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
 
-        AnnPanel.add(ScrollPaneTitle);
-        AnnPanel.add(AnnNumber);
-        AnnPanel.add(Date);
-        AnnPanel.add(ScrollPaneContent);
-        AnnPanel.add(Publisher);
+        AnnViewPanel.add(ScrollPaneTitle);
+        AnnViewPanel.add(AnnNumber);
+        AnnViewPanel.add(Date);
+        AnnViewPanel.add(ScrollPaneContent);
+        AnnViewPanel.add(Publisher);
 
-        AnnPanel.repaint(360, 0, 720, 720);
+        AnnViewPanel.repaint(360, 0, 720, 720);
     }
 
     private void initComponents()
@@ -524,8 +523,8 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
 
             this.removeAll();
             this.add(AnnInfoPanel);
-            initAnnPanel();
-            this.add(AnnPanel);
+            initAnnViewPanel();
+            this.add(AnnViewPanel);
             this.repaint(0,0,dv.FrameWidth(),dv.FrameHeight());
             PublishButton.setEnabled(true);
         }
@@ -553,7 +552,6 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
 
             String InputTitle = TitleField.getText();
             String InputAnnNumber = AnnNumberField.getText();
-            String InputContent = AnnTextArea.getText();
             String InputPublishDate = dv.toOracleDateFormat(PublishDateField.getJFormattedTextField().getText());
 
             String plsql = "{call ANN_INSERT_RECORD(?, ?, ?, ?, ?, ?)}";
