@@ -52,3 +52,9 @@ from VACCINE VAC, SCHEDULE SCHED
 where VAC.ID = SCHED.VaccineID
 and DayRegistered + NoonRegistered + NightRegistered > 0
 group by VAC.ID, Name, Technology, Country;
+
+select * from Announcement join Organization 
+on Announcement.OrgID = Organization.ID 
+where (sysdate - PublishDate) <= 28 
+and PublishDate <= sysdate 
+order by PublishDate desc;

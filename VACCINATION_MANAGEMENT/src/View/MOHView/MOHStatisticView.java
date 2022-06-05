@@ -163,7 +163,7 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
         StatisticListPanel = new JPanel();
         StatisticListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         StatisticListPanel.setLayout(new FlowLayout());
-        StatisticListPanel.setPreferredSize(new Dimension(660,1250));
+        StatisticListPanel.setPreferredSize(new Dimension(660,1420));
 
         String query = "select * from STATISTIC";
 
