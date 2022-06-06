@@ -7,6 +7,7 @@ package View.CitizenView;
 import Process.Annoucement;
 import Process.DefaultValue;
 import Process.ImageHelper;
+import Process.Person;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,6 +30,8 @@ public class AnnouncementView extends JPanel implements ActionListener {
     private JPanel PreviewPanel;
     private JPanel PreAnnListPanel;
     private JPanel AnnViewPanel;
+
+    private Person personalUser;
     
     private DefaultValue dv= new DefaultValue();
 
@@ -72,7 +75,7 @@ public class AnnouncementView extends JPanel implements ActionListener {
         TitleLabel.setEditable(false);
 //        TitleLabel.setBorder(dv.border());
         
-        JLabel ORGLabel=new JLabel("Đơn vị: " + ann.getOrg().getName() + " (ID: "+ ann.getOrgID()+")");
+        JLabel ORGLabel=new JLabel("Đơn vị: " + ann.getOrg().getName());
         ORGLabel.setFont(new Font(dv.fontName(), 2, 13));
         ORGLabel.setForeground(new Color(dv.BlackTextColor()));
         ORGLabel.setBounds(10, 50, 310, 25);
@@ -133,8 +136,13 @@ public class AnnouncementView extends JPanel implements ActionListener {
         int i = 0;
         
         String query= "select *" +
-                    " from Announcement join Organization on Announcement.OrgID= Organization.ID" +
-                    " where (sysdate - PublishDate) <= 28" +
+                    " from ANNOUNCEMENT ANN, ORGANIZATION ORG" +
+                    " where ANN.OrgID = ORG.ID" +
+                    " and ORG.ID = 'MOH'" +
+                    " or (ProvinceName = '"+ personalUser.getProvince() +"'" +
+                    " and DistrictName = '"+ personalUser.getDistrict() +"'" +
+                    " and TownName = '"+ personalUser.getTown() +"')" +
+                    " and (sysdate - PublishDate) <= 28" +
                     " and PublishDate <= sysdate" +
                     " order by PublishDate desc";
         System.out.println(query);
@@ -148,13 +156,14 @@ public class AnnouncementView extends JPanel implements ActionListener {
             
             while(rs.next())
             {
-                ann=new Annoucement();                
+                ann = new Annoucement();
                 ann.setID(rs.getString("ID"));
                 ann.setOrgID(rs.getString("OrgID"));
                 ann.getOrg().setName(rs.getString("Name"));
                 ann.setTitle(rs.getString("Title"));         
                 ann.setPublishDate(LocalDate.parse(rs.getString("PublishDate").substring(0, 10)));
                 ann.setImage(rs.getBytes("Image"));
+                ann.setContent(rs.getString("Content"));
                 PreAnnListPanel.add(initSmallAnnViewPanel(ann));
                 i++;
             }
@@ -235,6 +244,7 @@ public class AnnouncementView extends JPanel implements ActionListener {
                     )
             );
             JPanel ImagePanel = new JPanel();
+            ImagePanel.setBackground(Color.WHITE);
             ImagePanel.add(AttachedImage);
             AnnContent.add(ImagePanel);
         }
@@ -273,8 +283,10 @@ public class AnnouncementView extends JPanel implements ActionListener {
     }
 
     /*CONSTRUCTOR*/
-    public AnnouncementView()
+    public AnnouncementView(Person person)
     {
+        personalUser = person;
+
         this.setBounds(0,0,1080, 720);
         this.setVisible(true);
         this.setBackground(new Color(dv.ViewBackgroundColor()));
