@@ -268,7 +268,7 @@ public class ViewPostView extends JPanel implements ActionListener {
             JLabel AttachedImage = new JLabel(
                     new ImageIcon(
                             ImageHelper.reSize(
-                                    img.getImage(),600,600*img.getIconHeight()/img.getIconWidth()
+                                    img.getImage(),600,(int)600.0*img.getIconHeight()/img.getIconWidth()
                             )
                     )
             );
