@@ -454,6 +454,17 @@ public class CitizenMainView extends JFrame implements ActionListener
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
     }
 
+    private void nullFeatureView()
+    {
+        userInformationView = null;
+        registerVaccinationView = null;
+        announcementView = null;
+        fillFormView = null;
+        manageRegistrationView = null;
+        updateInjectionView = null;
+        certificateView = null;
+    }
+
     /*ACTION PERFORMED*/
     @Override
     public void actionPerformed(ActionEvent e)
@@ -480,12 +491,8 @@ public class CitizenMainView extends JFrame implements ActionListener
 
         if(e.getSource() == BackButton)
         {
-            userInformationView = null;
-            registerVaccinationView = null;
-            fillFormView = null;
-            manageRegistrationView = null;
-            updateInjectionView = null;
-            certificateView = null;
+            nullFeatureView();
+
             MainLayeredPane.removeAll();
             MainLayeredPane.add(MainPanel, Integer.valueOf(0));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
@@ -535,6 +542,8 @@ public class CitizenMainView extends JFrame implements ActionListener
 
         if (e.getSource() == InfoSettingFButton)
         {
+            nullFeatureView();
+
             userInformationView = new UserInformationView(personalUser);
             initBackInfoButton();
             MainLayeredPane.removeAll();
@@ -544,6 +553,8 @@ public class CitizenMainView extends JFrame implements ActionListener
 
         if (e.getSource() == RegisterVaccinationFButton)
         {
+            nullFeatureView();
+
             registerVaccinationView = new RegisterVaccinationView(personalUser);
             MainLayeredPane.removeAll();
             MainLayeredPane.add(registerVaccinationView, Integer.valueOf(1));
@@ -552,6 +563,8 @@ public class CitizenMainView extends JFrame implements ActionListener
 
         if (e.getSource() == FillFormFButton)
         {
+            nullFeatureView();
+
             fillFormView = new FillFormView(personalUser);
             MainLayeredPane.removeAll();
             MainLayeredPane.add(fillFormView, Integer.valueOf(0));
@@ -560,6 +573,8 @@ public class CitizenMainView extends JFrame implements ActionListener
 
         if(e.getSource() == ManageRegistrationFButton)
         {
+            nullFeatureView();
+
             manageRegistrationView = new ManageRegistrationView(personalUser);
             initVaccinationRegButton();
             MainLayeredPane.removeAll();
@@ -570,6 +585,8 @@ public class CitizenMainView extends JFrame implements ActionListener
 
         if (e.getSource() == VaccinationRegButton)
         {
+            nullFeatureView();
+
             registerVaccinationView = new RegisterVaccinationView(personalUser);
             MainLayeredPane.removeAll();
             MainLayeredPane.add(registerVaccinationView, Integer.valueOf(1));
@@ -578,6 +595,8 @@ public class CitizenMainView extends JFrame implements ActionListener
 
         if (e.getSource() == UpdateInjectionFButton)
         {
+            nullFeatureView();
+
             try {
                 updateInjectionView = new UpdateInjectionView(personalUser);
             } catch (IOException ex) {
@@ -590,6 +609,8 @@ public class CitizenMainView extends JFrame implements ActionListener
 
         if (e.getSource() == CertificateFButton)
         {
+            nullFeatureView();
+
             certificateView = new CertificateView(personalUser);
             MainLayeredPane.removeAll();
             MainLayeredPane.add(certificateView, Integer.valueOf(0));
@@ -598,6 +619,8 @@ public class CitizenMainView extends JFrame implements ActionListener
         
         if(e.getSource()==NotificationFButton)
         {
+            nullFeatureView();
+
             announcementView=new AnnouncementView(personalUser);
             MainLayeredPane.removeAll();
             MainLayeredPane.add(announcementView, Integer.valueOf(0));

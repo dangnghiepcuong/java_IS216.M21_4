@@ -1,6 +1,7 @@
 package View.MOHView;
 
-import Process.*;
+import Process.DefaultValue;
+import Process.Organization;
 import View.LoginView;
 import View.OrgView.OrgInformationView;
 
@@ -26,10 +27,12 @@ public class MOHMainView extends JFrame implements ActionListener
     private JButton PublishAnnButton;
     private JButton SearchButton;
     private JButton StatisticButton;
+    private JButton ViewPostButton;
 
     private JButton BackButton;
     private JButton BackInfoButton;
     private JButton LogoutButton;
+    private JButton PublishNewPostButton;
 
     private Organization mohUser = new Organization();
 
@@ -39,6 +42,7 @@ public class MOHMainView extends JFrame implements ActionListener
     private PublishAnnouncementView publishAnnouncementView;
     private SearchCitizenView searchCitizenView;
     private MOHStatisticView MOHStatisticView;
+    private ViewPostView viewPostView;
 
     private void initBackButton()
     {
@@ -64,6 +68,17 @@ public class MOHMainView extends JFrame implements ActionListener
         BackInfoButton.setContentAreaFilled(false);
 
         BackInfoButton.addActionListener(this);
+    }
+
+    private void initPublishNewPostButton()
+    {
+        ImageIcon PublishNewPostIcon = new ImageIcon(getClass().getResource("/Resources/icon/Write Post Button.png"));
+        PublishNewPostButton = new JButton();
+        PublishNewPostButton.setBounds((360-PublishNewPostIcon.getIconWidth())/2, 600, PublishNewPostIcon.getIconWidth(), PublishNewPostIcon.getIconHeight());
+        PublishNewPostButton.setBorder(null);
+        PublishNewPostButton.setContentAreaFilled(false);
+        PublishNewPostButton.setIcon(PublishNewPostIcon);
+        PublishNewPostButton.addActionListener(this);
     }
 
     private void initInfoLayeredPane()
@@ -118,19 +133,11 @@ public class MOHMainView extends JFrame implements ActionListener
         FeatureLayeredPane.setBackground(new Color(dv.ViewBackgroundColor()));
 
         initInfoSettingButton();
-        FeatureLayeredPane.add(InfoSettingButton);
-
         initCreateOrgAccButton();
-        FeatureLayeredPane.add(CreateOrgAccButton);
-
         initPublishAnnButton();
-        FeatureLayeredPane.add(PublishAnnButton);
-
         initSearchButton();
-        FeatureLayeredPane.add(SearchButton);
-
         initStatisticButton();
-        FeatureLayeredPane.add(StatisticButton);
+        initViewPostButton();
     }
 
     private void initInfoBackground()
@@ -169,6 +176,7 @@ public class MOHMainView extends JFrame implements ActionListener
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
+        FeatureLayeredPane.add(InfoSettingButton);
         FeatureLayeredPane.add(ButtonLabel);
         FeatureLayeredPane.add(ButtonLabel2);
     }
@@ -197,6 +205,8 @@ public class MOHMainView extends JFrame implements ActionListener
         ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel2_1.setBorder(dv.border());
+
+        FeatureLayeredPane.add(CreateOrgAccButton);
         FeatureLayeredPane.add(ButtonLabel);
         FeatureLayeredPane.add(ButtonLabel2);
     }
@@ -226,6 +236,7 @@ public class MOHMainView extends JFrame implements ActionListener
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
+        FeatureLayeredPane.add(PublishAnnButton);
         FeatureLayeredPane.add(ButtonLabel);
         FeatureLayeredPane.add(ButtonLabel2);
     }
@@ -255,6 +266,7 @@ public class MOHMainView extends JFrame implements ActionListener
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
+        FeatureLayeredPane.add(SearchButton);
         FeatureLayeredPane.add(ButtonLabel);
         FeatureLayeredPane.add(ButtonLabel2);
     }
@@ -284,6 +296,37 @@ public class MOHMainView extends JFrame implements ActionListener
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
+        FeatureLayeredPane.add(StatisticButton);
+        FeatureLayeredPane.add(ButtonLabel);
+        FeatureLayeredPane.add(ButtonLabel2);
+    }
+
+    private void initViewPostButton()
+    {
+        ViewPostButton = new JButton();
+        ViewPostButton.setBounds(240*2+30, 240 , 133, 133);
+        ViewPostButton.setBorder(null);
+        ViewPostButton.setContentAreaFilled(false);
+        ViewPostButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/View Post Feature Button.png")));
+        ViewPostButton.addActionListener(this);
+
+        JLabel ButtonLabel = new JLabel();
+        ButtonLabel.setBounds(240*2 -30, 240+130, 240, 30);
+        ButtonLabel.setText("Quản lý");
+        ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel.setForeground(new Color(dv.FieldLabelColor()));
+        ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        JLabel ButtonLabel2 = new JLabel();
+        ButtonLabel2.setBounds(240*2 -30, 240+130 +25, 240, 30);
+        ButtonLabel2.setText("bài viết");
+        ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
+        ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        FeatureLayeredPane.add(ViewPostButton);
         FeatureLayeredPane.add(ButtonLabel);
         FeatureLayeredPane.add(ButtonLabel2);
     }
@@ -364,6 +407,7 @@ public class MOHMainView extends JFrame implements ActionListener
         MainLayeredPane.add(MainPanel, Integer.valueOf(0));
 
         this.add(MainLayeredPane);
+        initBackButton();
 
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
     }
@@ -375,6 +419,7 @@ public class MOHMainView extends JFrame implements ActionListener
         publishAnnouncementView = null;
         searchCitizenView = null;
         MOHStatisticView = null;
+        viewPostView = null;
     }
 
     /*ACTION PERFORMED*/
@@ -416,12 +461,9 @@ public class MOHMainView extends JFrame implements ActionListener
             MainLayeredPane.removeAll();
             MainLayeredPane.add(orgInformationView, Integer.valueOf(0));
 
-            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
-
-            //init BackButton
             initBackInfoButton();
             MainLayeredPane.add(BackInfoButton, Integer.valueOf(5));
-
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
 
         if(e.getSource() == BackInfoButton)
@@ -465,7 +507,8 @@ public class MOHMainView extends JFrame implements ActionListener
             createOrgAccView = new CreateOrgAccView();
             MainLayeredPane.removeAll();
             MainLayeredPane.add(createOrgAccView, Integer.valueOf(0));
-            MainLayeredPane.add(BackButton, Integer.valueOf(1));
+
+            MainLayeredPane.add(BackButton, Integer.valueOf(5));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
 
@@ -476,7 +519,8 @@ public class MOHMainView extends JFrame implements ActionListener
             publishAnnouncementView = new PublishAnnouncementView(mohUser);
             MainLayeredPane.removeAll();
             MainLayeredPane.add(publishAnnouncementView, Integer.valueOf(0));
-            MainLayeredPane.add(BackButton, Integer.valueOf(1));
+
+            MainLayeredPane.add(BackButton, Integer.valueOf(5));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
 
@@ -488,7 +532,6 @@ public class MOHMainView extends JFrame implements ActionListener
             MainLayeredPane.removeAll();
             MainLayeredPane.add(searchCitizenView, Integer.valueOf(1));
 
-            initBackButton();
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
@@ -501,8 +544,34 @@ public class MOHMainView extends JFrame implements ActionListener
             MainLayeredPane.removeAll();
             MainLayeredPane.add(MOHStatisticView, Integer.valueOf(0));
 
-            initBackButton();
-            MainLayeredPane.add(BackButton, Integer.valueOf(1));
+            MainLayeredPane.add(BackButton, Integer.valueOf(5));
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+        }
+
+        if (e.getSource() == ViewPostButton)
+        {
+            nullFeatureViews();
+
+            viewPostView = new ViewPostView(mohUser);
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(viewPostView, Integer.valueOf(0));
+
+            initPublishNewPostButton();
+            MainLayeredPane.add(PublishNewPostButton, Integer.valueOf(1));
+
+            MainLayeredPane.add(BackButton, Integer.valueOf(5));
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+        }
+
+        if (e.getSource() == PublishNewPostButton)
+        {
+            nullFeatureViews();
+
+            publishAnnouncementView = new PublishAnnouncementView(mohUser);
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(publishAnnouncementView, Integer.valueOf(0));
+
+            MainLayeredPane.add(BackButton, Integer.valueOf(5));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
     }
