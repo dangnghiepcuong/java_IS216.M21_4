@@ -75,14 +75,14 @@ public class AnnouncementView extends JPanel implements ActionListener {
         TitleLabel.setEditable(false);
 //        TitleLabel.setBorder(dv.border());
         
-        JLabel ORGLabel=new JLabel("Đơn vị: " + ann.getOrg().getName());
+        JLabel ORGLabel=new JLabel(ann.getOrg().getName());
         ORGLabel.setFont(new Font(dv.fontName(), 2, 13));
         ORGLabel.setForeground(new Color(dv.BlackTextColor()));
         ORGLabel.setBounds(10, 50, 310, 25);
         ORGLabel.setHorizontalAlignment(JLabel.LEFT);
 //        ORGLabel.setBorder(dv.border());
         
-        JLabel PublishDateLabel = new JLabel("Ngày đăng: " + ann.getPublishDate());
+        JLabel PublishDateLabel = new JLabel(String.valueOf(ann.getPublishDate()));
         PublishDateLabel.setPreferredSize(new Dimension(350, 25));
         PublishDateLabel.setFont(new Font(dv.fontName(), 0, 13));
         PublishDateLabel.setForeground(new Color(dv.BlackTextColor()));
@@ -224,7 +224,7 @@ public class AnnouncementView extends JPanel implements ActionListener {
         AnnTextArea.setLineWrap(true);
         AnnTextArea.setEditable(false);
         AnnTextArea.setBorder(null);
-
+        
         JPanel AnnContent = new JPanel();
         BoxLayout boxLayout = new BoxLayout(AnnContent, BoxLayout.Y_AXIS);
         AnnContent.setLayout(boxLayout);
