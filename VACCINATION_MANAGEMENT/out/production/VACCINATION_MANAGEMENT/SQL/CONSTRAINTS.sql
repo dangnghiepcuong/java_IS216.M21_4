@@ -13,7 +13,7 @@
 --  Constraints for Table ANNOUNCEMENT
 --------------------------------------------------------
 
-  ALTER TABLE "ANNOUNCEMENT" ADD CONSTRAINT "PK_ANN" PRIMARY KEY ("ID", "ORGID") USING INDEX  ENABLE;
+  ALTER TABLE "ANNOUNCEMENT" ADD CONSTRAINT "PK_ANN" PRIMARY KEY ("ID") USING INDEX  ENABLE;
 --------------------------------------------------------
 --  Constraints for Table CERTIFICATE
 --------------------------------------------------------

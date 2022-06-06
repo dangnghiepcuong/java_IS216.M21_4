@@ -2,12 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package View.CitizenView;
+package View.MOHView;
 
 import Process.Annoucement;
 import Process.DefaultValue;
 import Process.ImageHelper;
-import Process.Person;
+import Process.Organization;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +23,7 @@ import java.time.LocalDate;
  * @author ASUS
  */
 
-public class AnnouncementView extends JPanel implements ActionListener {
+public class ViewPostView extends JPanel implements ActionListener {
 
     private JLabel AnnListLabel;
     private JScrollPane ScrollPanePreAnnList;
@@ -31,8 +31,8 @@ public class AnnouncementView extends JPanel implements ActionListener {
     private JPanel PreAnnListPanel;
     private JPanel AnnViewPanel;
 
-    private Person personalUser;
-    
+    private Organization orgUser;
+
     private DefaultValue dv= new DefaultValue();
 
     private void initAnnListLabel()
@@ -42,22 +42,6 @@ public class AnnouncementView extends JPanel implements ActionListener {
         AnnListLabel.setFont(new Font(dv.fontName(), 1, 20));
         AnnListLabel.setForeground(new Color(dv.FeatureButtonColor()));
         AnnListLabel.setHorizontalAlignment(JLabel.CENTER);
-    }
-
-    private void initPreviewPanel()
-    {
-        PreviewPanel=new JPanel();
-        PreviewPanel.setBounds(0,0,360,720);
-        PreviewPanel.setLayout(null);
-        PreviewPanel.setOpaque(false);
-        PreviewPanel.setBorder(dv.border());
-
-        initAnnListLabel();
-        initPreAnnListPanel();
-        initScrollPanePreAnnList();
-
-        PreviewPanel.add(AnnListLabel);
-        PreviewPanel.add(ScrollPanePreAnnList);
     }
 
     private JPanel initSmallAnnViewPanel(Annoucement ann)
@@ -74,14 +58,14 @@ public class AnnouncementView extends JPanel implements ActionListener {
         TitleLabel.setWrapStyleWord(true);
         TitleLabel.setEditable(false);
 //        TitleLabel.setBorder(dv.border());
-        
+
         JLabel ORGLabel=new JLabel(ann.getOrg().getName());
         ORGLabel.setFont(new Font(dv.fontName(), 2, 13));
         ORGLabel.setForeground(new Color(dv.BlackTextColor()));
         ORGLabel.setBounds(10, 50, 310, 25);
         ORGLabel.setHorizontalAlignment(JLabel.LEFT);
 //        ORGLabel.setBorder(dv.border());
-        
+
         JLabel PublishDateLabel = new JLabel(String.valueOf(ann.getPublishDate()));
         PublishDateLabel.setPreferredSize(new Dimension(350, 25));
         PublishDateLabel.setFont(new Font(dv.fontName(), 0, 13));
@@ -98,6 +82,36 @@ public class AnnouncementView extends JPanel implements ActionListener {
             FormPanel.add(imgLabel);
         }
 
+        ActionListener handleDeletePost = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (dv.popupConfirmOption(null,"Xác nhận xóa văn bản/thông báo này?","Xác nhận?") != 0)
+                    return;
+
+                String query = "delete from ANNOUNCEMENT" +
+                                " where ID = '" + ann.getID() + "'" +
+                                " and OrgID = '" + orgUser.getID() +"'";
+                try {
+                    Connection connection = DriverManager.getConnection(dv.getDB_URL(),dv.getUsername(),dv.getPassword());
+                    PreparedStatement st = connection.prepareStatement(query);
+                    st.execute();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+
+                ReInitView();
+
+                dv.popupOption(null,"Xóa văn bản/thông báo thành công!", "Thông báo!",0);
+            }
+        };
+        ImageIcon DeleteSymbol = new ImageIcon(getClass().getResource("/Resources/icon/Delete Symbol.png"));
+        JButton DeletePostButton = new JButton(DeleteSymbol);
+        DeletePostButton.setBounds(320-(DeleteSymbol.getIconWidth()+5),5,DeleteSymbol.getIconWidth(),DeleteSymbol.getIconHeight());
+        DeletePostButton.setContentAreaFilled(false);
+        DeletePostButton.setBorder(null);
+        DeletePostButton.addActionListener(handleDeletePost);
+
+        FormPanel.add(DeletePostButton);
         FormPanel.add(TitleLabel);
         FormPanel.add(ORGLabel);
         FormPanel.add(PublishDateLabel);
@@ -124,42 +138,40 @@ public class AnnouncementView extends JPanel implements ActionListener {
 
         return FormPanel;
     }
-    
+
     private void initPreAnnListPanel()
     {
         PreAnnListPanel= new JPanel();
         PreAnnListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         PreAnnListPanel.setLayout(new FlowLayout());
-        
+
         Annoucement ann;
         int nAnn = 0;
         int i = 0;
-        
+
         String query= "select *" +
-                    " from ANNOUNCEMENT ANN join ORGANIZATION ORG on ANN.OrgID = ORG.ID" +
-                    " where ORG.ID = 'MOH'" +
-                    " or (ProvinceName = '"+ personalUser.getProvince() +"'" +
-                    " and DistrictName = '"+ personalUser.getDistrict() +"'" +
-                    " and TownName = '"+ personalUser.getTown() +"')" +
-                    " and (sysdate - PublishDate) <= 28" +
-                    " and PublishDate <= sysdate" +
+                    " from ANNOUNCEMENT ANN, ORGANIZATION ORG" +
+                    " where ANN.OrgID = ORG.ID" +
+                    " and ORG.ID = '"+ orgUser.getID() +"'" +
+//                    " and (sysdate - PublishDate) <= 90" +
+//                    " and PublishDate <= sysdate" +
                     " order by PublishDate desc";
         System.out.println(query);
         Connection connection=null;
-        
+
         try
         {
             connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
             PreparedStatement st = connection.prepareStatement(query);
             ResultSet rs = st.executeQuery(query);
-            
+
             while(rs.next())
             {
                 ann = new Annoucement();
                 ann.setID(rs.getString("ID"));
                 ann.setOrgID(rs.getString("OrgID"));
                 ann.getOrg().setName(rs.getString("Name"));
-                ann.setTitle(rs.getString("Title"));         
+                ann.setTitle(rs.getString("Title"));
                 ann.setPublishDate(LocalDate.parse(rs.getString("PublishDate").substring(0, 10)));
                 ann.setImage(rs.getBytes("Image"));
                 ann.setContent(rs.getString("Content"));
@@ -178,12 +190,28 @@ public class AnnouncementView extends JPanel implements ActionListener {
 
         PreAnnListPanel.setPreferredSize(new Dimension(340, nAnn*100 + nAnn*5));
     }
-    
+
     private void initScrollPanePreAnnList()// View Announcement new
     {
         ScrollPanePreAnnList =  new JScrollPane(PreAnnListPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        ScrollPanePreAnnList.setBounds(0,100,360 ,582);
+        ScrollPanePreAnnList.setBounds(0,100,360 ,480);
+    }
+
+    private void initPreviewPanel()
+    {
+        PreviewPanel=new JPanel();
+        PreviewPanel.setBounds(0,0,360,720);
+        PreviewPanel.setLayout(null);
+        PreviewPanel.setOpaque(false);
+        PreviewPanel.setBorder(dv.border());
+
+        initAnnListLabel();
+        initPreAnnListPanel();
+        initScrollPanePreAnnList();
+
+        PreviewPanel.add(AnnListLabel);
+        PreviewPanel.add(ScrollPanePreAnnList);
     }
 
     public void initAnnViewPanel(Annoucement ann)
@@ -283,10 +311,20 @@ public class AnnouncementView extends JPanel implements ActionListener {
         this.repaint(0,0, 1080, 720);
     }
 
-    /*CONSTRUCTOR*/
-    public AnnouncementView(Person person)
+    private void ReInitView()
     {
-        personalUser = person;
+        this.removeAll();
+
+        initPreviewPanel();
+        this.add(PreviewPanel);
+
+        this.repaint(0,0,1080, 720);
+    }
+
+    /*CONSTRUCTOR*/
+    public ViewPostView(Organization org)
+    {
+        orgUser = org;
 
         this.setBounds(0,0,1080, 720);
         this.setVisible(true);
