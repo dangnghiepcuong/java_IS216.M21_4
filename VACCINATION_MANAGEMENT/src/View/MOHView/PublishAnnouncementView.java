@@ -223,7 +223,7 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         {
             ImageIcon TakenImage = new ImageIcon(ImageFilePath.getPath());
             Image ResizedImg = ImageHelper.reSize(TakenImage.getImage(),
-                    600, (600/TakenImage.getIconWidth() * TakenImage.getIconHeight()));
+                    600,(int) (600.0/TakenImage.getIconWidth() * TakenImage.getIconHeight()));
             AttachedImage = new JLabel(new ImageIcon(ResizedImg));
 
             ImageFileLabel.setText(ImageFilePath.getName());
