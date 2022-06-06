@@ -379,7 +379,7 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         Title.setBounds(0, 0, 630, 80);
         Title.setFont(new Font(dv.fontName(), Font.BOLD, 26));
         Title.setForeground(new Color(dv.FeatureButtonColor()));
-        Title.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+        Title.setBackground(Color.WHITE);
         Title.setWrapStyleWord(true);
         Title.setLineWrap(true);
         Title.setEditable(false);
@@ -438,6 +438,7 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         if (AttachedImage != null)
         {
             JPanel ImagePanel = new JPanel();
+            ImagePanel.setBackground(Color.WHITE);
             ImagePanel.add(AttachedImage);
             AnnContent.add(ImagePanel);
         }
@@ -458,15 +459,19 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         AnnViewPanel = new JPanel();
         AnnViewPanel.setBounds(360, 0, 720, 720);
         AnnViewPanel.setLayout(null);
-        AnnViewPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
+        AnnViewPanel.setBackground(Color.WHITE);
 
         AnnViewPanel.add(ScrollPaneTitle);
         AnnViewPanel.add(AnnNumber);
         AnnViewPanel.add(Date);
         AnnViewPanel.add(ScrollPaneContent);
         AnnViewPanel.add(Publisher);
-
         AnnViewPanel.repaint(360, 0, 720, 720);
+
+        this.removeAll();
+        this.add(AnnInfoPanel);
+        this.add(AnnViewPanel);
+        this.repaint(0,0,dv.FrameWidth(),dv.FrameHeight());
     }
 
     private void initComponents()
@@ -521,11 +526,7 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
                 return;
             }
 
-            this.removeAll();
-            this.add(AnnInfoPanel);
             initAnnViewPanel();
-            this.add(AnnViewPanel);
-            this.repaint(0,0,dv.FrameWidth(),dv.FrameHeight());
             PublishButton.setEnabled(true);
         }
 

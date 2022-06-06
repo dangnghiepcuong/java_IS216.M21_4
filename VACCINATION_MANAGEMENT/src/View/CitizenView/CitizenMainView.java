@@ -598,7 +598,7 @@ public class CitizenMainView extends JFrame implements ActionListener
         
         if(e.getSource()==NotificationFButton)
         {
-            announcementView=new AnnouncementView();
+            announcementView=new AnnouncementView(personalUser);
             MainLayeredPane.removeAll();
             MainLayeredPane.add(announcementView, Integer.valueOf(0));
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
