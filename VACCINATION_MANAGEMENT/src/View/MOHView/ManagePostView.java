@@ -53,11 +53,16 @@ public class ManagePostView extends JPanel {
         JTextArea TitleLabel=new JTextArea(ann.getTitle());
         TitleLabel.setFont(new Font(dv.fontName(), 1, 16));
         TitleLabel.setForeground(new Color(dv.BlackTextColor()));
-        TitleLabel.setBounds(10, 5, 310, 50);
+        TitleLabel.setBounds(0,0,280,50);
         TitleLabel.setLineWrap(true);
         TitleLabel.setWrapStyleWord(true);
         TitleLabel.setEditable(false);
-//        TitleLabel.setBorder(dv.border());
+        TitleLabel.setAutoscrolls(true);
+
+        JScrollPane ScrollTitleLabel = new JScrollPane(TitleLabel,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        ScrollTitleLabel.setBounds(10, 5, 280, 50);
+        ScrollTitleLabel.setBorder(null);
 
         JLabel ORGLabel=new JLabel(ann.getOrg().getName());
         ORGLabel.setFont(new Font(dv.fontName(), 2, 13));
@@ -112,7 +117,7 @@ public class ManagePostView extends JPanel {
         DeletePostButton.addActionListener(handleDeletePost);
 
         FormPanel.add(DeletePostButton);
-        FormPanel.add(TitleLabel);
+        FormPanel.add(ScrollTitleLabel);
         FormPanel.add(ORGLabel);
         FormPanel.add(PublishDateLabel);
         FormPanel.setPreferredSize(new Dimension(330, 100));

@@ -155,7 +155,7 @@ public class AnnouncementView extends JPanel {
             {
                 ann = new Annoucement();
                 ann.setID(rs.getString("ID"));
-                ann.setOrgID(rs.getString("OrgID"));
+                ann.getOrg().setID(rs.getString("OrgID"));
                 ann.getOrg().setName(rs.getString("Name"));
                 ann.setTitle(rs.getString("Title"));         
                 ann.setPublishDate(LocalDate.parse(rs.getString("PublishDate").substring(0, 10)));
