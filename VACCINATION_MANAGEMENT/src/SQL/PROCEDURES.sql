@@ -662,25 +662,6 @@ begin
     commit;
 end SCHED_DEC_REG;
 --------------------------------------------------------
---  DDL for Procedure SCHED_DELETE_RECORD
---------------------------------------------------------
-set define off;
-
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "SCHED_DELETE_RECORD" 
-(PAR_SCHEDID VARCHAR2) AS
-BEGIN
-    --delete all registions of the deleting schedule
-    delete from REGISTER REG
-    where REG.SchedID = par_SchedID;
-    
-    --delete the specified schedule
-    delete from SCHEDULE SCHED
-    where SCHED.ID = par_SchedID;
-    
-    commit;
-    
-END SCHED_DELETE_RECORD;
---------------------------------------------------------
 --  DDL for Procedure SCHED_INC_REG
 --------------------------------------------------------
 set define off;
