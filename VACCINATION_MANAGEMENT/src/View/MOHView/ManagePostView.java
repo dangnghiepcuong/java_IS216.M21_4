@@ -23,7 +23,7 @@ import java.time.LocalDate;
  * @author ASUS
  */
 
-public class ViewPostView extends JPanel implements ActionListener {
+public class ManagePostView extends JPanel {
 
     private JLabel AnnListLabel;
     private JScrollPane ScrollPanePreAnnList;
@@ -169,7 +169,7 @@ public class ViewPostView extends JPanel implements ActionListener {
             {
                 ann = new Annoucement();
                 ann.setID(rs.getString("ID"));
-                ann.setOrgID(rs.getString("OrgID"));
+                ann.getOrg().setID(rs.getString("OrgID"));
                 ann.getOrg().setName(rs.getString("Name"));
                 ann.setTitle(rs.getString("Title"));
                 ann.setPublishDate(LocalDate.parse(rs.getString("PublishDate").substring(0, 10)));
@@ -322,7 +322,7 @@ public class ViewPostView extends JPanel implements ActionListener {
     }
 
     /*CONSTRUCTOR*/
-    public ViewPostView(Organization org)
+    public ManagePostView(Organization org)
     {
         orgUser = org;
 
@@ -335,10 +335,5 @@ public class ViewPostView extends JPanel implements ActionListener {
         this.add(PreviewPanel);
 
         this.repaint(0,0, 1080, 720);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

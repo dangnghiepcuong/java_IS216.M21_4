@@ -184,6 +184,13 @@ public class LoginView extends JFrame implements ActionListener, MouseListener, 
         initFrameComponents();
     }
 
+    /*CONSTRUCTOR*/
+    public static void main(String args[])
+    {
+        LoginView loginView = new LoginView();
+    }
+
+    /*ACTION PERFORMED*/
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -258,13 +265,6 @@ public class LoginView extends JFrame implements ActionListener, MouseListener, 
         }
     }
 
-    /*CONSTRUCTOR*/
-    public static void main(String args[])
-    {
-        LoginView loginView = new LoginView();
-    }
-
-    /*ACTION PERFORMED*/
     @Override
     public void mouseClicked(MouseEvent e)
     {

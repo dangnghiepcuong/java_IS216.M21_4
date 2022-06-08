@@ -48,7 +48,6 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
     private JDatePickerImpl BirthdayField;
     private JPanel AccInfoPanel;
     private JPanel PersonalInfoPanel;
-    private Person personalUser;
 
     private JButton BackButton;
 
@@ -277,6 +276,7 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
         LastNameLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         LastNameLabel.setForeground(new Color(0x666666));
     }
+
     private void initLastNameTextField()
     {
         LastNameTextField = new JTextField();

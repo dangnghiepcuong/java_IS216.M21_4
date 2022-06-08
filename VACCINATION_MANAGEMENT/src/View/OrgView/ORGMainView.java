@@ -5,7 +5,7 @@ import Process.Organization;
 import View.LoginView;
 import View.MOHView.PublishAnnouncementView;
 import View.MOHView.SearchCitizenView;
-import View.MOHView.ViewPostView;
+import View.MOHView.ManagePostView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,7 +41,7 @@ public class ORGMainView extends JFrame implements ActionListener
     private PublishAnnouncementView publishAnnouncementView;
     private SearchCitizenView searchCitizenView;
     private ORGStatisticView orgStatisticView;
-    private ViewPostView viewPostView;
+    private ManagePostView managePostView;
 
     private JButton LogoutButton;
     private JButton BackButton;
@@ -229,7 +229,7 @@ public class ORGMainView extends JFrame implements ActionListener
 
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(240*2 -15, 160, 240-20, 30);
-        ButtonLabel.setText("Gửi thông báo");
+        ButtonLabel.setText("Gửi văn bản");
         ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -237,7 +237,7 @@ public class ORGMainView extends JFrame implements ActionListener
 
         JLabel ButtonLabel2 = new JLabel();
         ButtonLabel2.setBounds(240*2 -15, 160 +25, 240-20, 30);
-        ButtonLabel2.setText("địa phương");
+        ButtonLabel2.setText("thông báo");
         ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
@@ -327,7 +327,7 @@ public class ORGMainView extends JFrame implements ActionListener
 
         JLabel ButtonLabel2 = new JLabel();
         ButtonLabel2.setBounds(240*2 -30, 240+130 +25, 240, 30);
-        ButtonLabel2.setText("bài viết");
+        ButtonLabel2.setText("văn bản");
         ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
@@ -423,7 +423,7 @@ public class ORGMainView extends JFrame implements ActionListener
         publishAnnouncementView = null;
         searchCitizenView = null;
         orgStatisticView = null;
-        viewPostView = null;
+        managePostView = null;
     }
 
     /*ACTION PERFORMED*/
@@ -553,9 +553,9 @@ public class ORGMainView extends JFrame implements ActionListener
         {
             nullFeatureViews();
 
-            viewPostView = new ViewPostView(orgUser);
+            managePostView = new ManagePostView(orgUser);
             MainLayeredPane.removeAll();
-            MainLayeredPane.add(viewPostView, Integer.valueOf(0));
+            MainLayeredPane.add(managePostView, Integer.valueOf(0));
 
             initPublishNewPostButton();
             MainLayeredPane.add(PublishNewPostButton, Integer.valueOf(1));

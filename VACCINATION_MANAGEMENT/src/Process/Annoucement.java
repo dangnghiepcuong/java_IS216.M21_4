@@ -8,7 +8,7 @@ import java.time.LocalDate;
  */
 public class Annoucement {
     private String ID;
-    private String OrgID;
+//    private String OrgID;
     private String Title;
     private String Content;
     private LocalDate PublishDate;
@@ -21,7 +21,7 @@ public class Annoucement {
 
     public Annoucement(String ID, String OrgID, String Title, String Content, LocalDate PublishDate, byte[] Image, String Note, Organization Org) {
         this.ID = ID;
-        this.OrgID = OrgID;
+//        this.OrgID = OrgID;
         this.Title = Title;
         this.Content = Content;
         this.PublishDate = PublishDate;
@@ -40,13 +40,13 @@ public class Annoucement {
         this.ID = ID;
     }
 
-    public String getOrgID() {
+    /*public String getOrgID() {
         return OrgID;
     }
 
     public void setOrgID(String OrgID) {
         this.OrgID = OrgID;
-    }
+    }*/
 
     public String getTitle() {
         return Title;

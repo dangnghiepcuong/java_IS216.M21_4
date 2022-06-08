@@ -42,7 +42,7 @@ public class MOHMainView extends JFrame implements ActionListener
     private PublishAnnouncementView publishAnnouncementView;
     private SearchCitizenView searchCitizenView;
     private MOHStatisticView MOHStatisticView;
-    private ViewPostView viewPostView;
+    private ManagePostView managePostView;
 
     private void initBackButton()
     {
@@ -222,7 +222,7 @@ public class MOHMainView extends JFrame implements ActionListener
 
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(240*2 -15, 160, 240-20, 30);
-        ButtonLabel.setText("Gửi thông tin");
+        ButtonLabel.setText("Ban hành");
         ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -230,7 +230,7 @@ public class MOHMainView extends JFrame implements ActionListener
 
         JLabel ButtonLabel2 = new JLabel();
         ButtonLabel2.setBounds(240*2 -15, 160 +25, 240-20, 30);
-        ButtonLabel2.setText("- thông báo");
+        ButtonLabel2.setText("thông tin");
         ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
@@ -320,7 +320,7 @@ public class MOHMainView extends JFrame implements ActionListener
 
         JLabel ButtonLabel2 = new JLabel();
         ButtonLabel2.setBounds(240*2 -30, 240+130 +25, 240, 30);
-        ButtonLabel2.setText("bài viết");
+        ButtonLabel2.setText("văn bản");
         ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
@@ -419,7 +419,7 @@ public class MOHMainView extends JFrame implements ActionListener
         publishAnnouncementView = null;
         searchCitizenView = null;
         MOHStatisticView = null;
-        viewPostView = null;
+        managePostView = null;
     }
 
     /*ACTION PERFORMED*/
@@ -552,9 +552,9 @@ public class MOHMainView extends JFrame implements ActionListener
         {
             nullFeatureViews();
 
-            viewPostView = new ViewPostView(mohUser);
+            managePostView = new ManagePostView(mohUser);
             MainLayeredPane.removeAll();
-            MainLayeredPane.add(viewPostView, Integer.valueOf(0));
+            MainLayeredPane.add(managePostView, Integer.valueOf(0));
 
             initPublishNewPostButton();
             MainLayeredPane.add(PublishNewPostButton, Integer.valueOf(1));
