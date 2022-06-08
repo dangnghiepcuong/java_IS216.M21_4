@@ -546,6 +546,12 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
         statisticPaper.setPrintedBackground();
     }
 
+    private void initPrintedPages()
+    {
+        initPrintedPage1();
+        initPrintedPage2();
+    }
+
     /*ACTION PERFORMED*/
     @Override
     public void actionPerformed(ActionEvent e)
@@ -638,8 +644,7 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
                 connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
                 CallableStatement cst = connection.prepareCall(plsql);
 
-                initPrintedPage1();
-                initPrintedPage2();
+                initPrintedPages();
                 JPanel ExportImgPanel = statisticPaper.getPrintedPanel();
                 ExportImgPanel.setBounds(0, 0, 595, 842*2);
                 ExportImgPanel.setOpaque(false);
@@ -689,8 +694,7 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
                 pdfFile.addMetaData("MOHStatistic", "", "Vaccination Statistic", "MOH", "MOH");
                 pdfFile.getPdfwriter();
                 pdfFile.openPDF();
-                initPrintedPage1();
-                initPrintedPage2();
+                initPrintedPages();
                 pdfFile.addPage(statisticPaper.getPrintedPanel(),1);
                 pdfFile.closePDF();
 

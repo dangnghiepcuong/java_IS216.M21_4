@@ -1,6 +1,9 @@
 package View.CitizenView;
 
-import Process.*;
+import Process.DateLabelFormatter;
+import Process.DefaultValue;
+import Process.Health;
+import Process.Person;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -9,8 +12,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.Properties;
@@ -37,14 +38,6 @@ public class FillFormView extends JPanel implements ActionListener{
     private JPanel CreateFormPanel;
 
     private JLayeredPane LayeredPaneArea;
-
-    public Person getPersonalUser() {
-        return personalUser;
-    }
-
-    public void setPersonalUser(Person personalUser) {
-        this.personalUser = personalUser;
-    }
 
     /*
      *   INITIALIZE THE FILTER OF FILLED FORMS OF THE CITIZEN

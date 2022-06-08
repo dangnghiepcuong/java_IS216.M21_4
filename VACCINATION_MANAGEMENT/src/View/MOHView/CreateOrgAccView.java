@@ -28,7 +28,6 @@ public class CreateOrgAccView extends JPanel implements ActionListener
     /*Org List Panel*/
     private JScrollPane ScrollPaneOrgList;
     private JPanel OrgListPanel;
-    private JPanel OrgPanel[] = new JPanel[10000];
 
     /*Create Org Acc Button*/
     private JButton AddNewOrgAccButton;

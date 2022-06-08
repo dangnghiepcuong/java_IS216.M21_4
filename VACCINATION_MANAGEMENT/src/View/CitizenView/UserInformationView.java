@@ -1,16 +1,18 @@
 package View.CitizenView;
 
 
-import Process.*;
-import org.jdatepicker.impl.*;
+import Process.Account;
+import Process.DateLabelFormatter;
+import Process.DefaultValue;
+import Process.Person;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Properties;
 
 /**
@@ -301,6 +303,7 @@ public class UserInformationView extends JPanel implements ActionListener, KeyLi
         LastNameLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         LastNameLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
+
     private void initLastNameTextField()
     {
         LastNameTextField = new JTextField(personalUser.getLastName());
@@ -318,6 +321,7 @@ public class UserInformationView extends JPanel implements ActionListener, KeyLi
         FirstNameLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         FirstNameLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
+
     private void initFirstNameTextField()
     {
         FirstNameTextField = new JTextField(personalUser.getFirstName());
@@ -548,6 +552,7 @@ public class UserInformationView extends JPanel implements ActionListener, KeyLi
         EmailTextField.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         EmailTextField.setForeground(new Color(dv.BlackTextColor()));
     }
+
     private void initComponents()
     {
         this.setBounds(0, 0, dv.FrameWidth(), dv.FrameHeight());

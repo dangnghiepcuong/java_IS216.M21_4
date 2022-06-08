@@ -27,14 +27,6 @@ public class ManageRegistrationView extends JPanel implements ActionListener
 
     private JLayeredPane LayeredPaneArea;
 
-    public Person getPersonalUser() {
-        return personalUser;
-    }
-
-    public void setPersonalUser(Person personalUser) {
-        this.personalUser = personalUser;
-    }
-
     /*
     *   INITIALIZE THE REGISTRATION FILTER PANEL
     *   - LABEL

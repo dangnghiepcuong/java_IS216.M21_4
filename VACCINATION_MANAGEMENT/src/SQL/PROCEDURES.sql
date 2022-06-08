@@ -1,38 +1,6 @@
 --------------------------------------------------------
---  File created - Tuesday-May-31-2022   
+--  File created - Tuesday-June-07-2022   
 --------------------------------------------------------
---------------------------------------------------------
---  DDL for Procedure ACC_INSERT_RECORD
---------------------------------------------------------
-set define off;
-
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "ACC_INSERT_RECORD" 
-(par_Username varchar2, par_Password varchar2, par_Role number, par_Status number, par_Note varchar2 DEFAULT NULL)
-is   
-begin 
-     insert into ACCOUNT(Username, Password, Role, status, Note) values 
-     (par_Username, par_Password, par_Role, par_Status, par_Note);    
-
-     EXCEPTION
-        when DUP_VAL_ON_INDEX
-        then
-            raise_application_error(-20012,'Username has been registered by another user!');
-end ACC_INSERT_RECORD;
---------------------------------------------------------
---  DDL for Procedure ORG_INSERT_RECORD
---------------------------------------------------------
-set define off;
-
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "ORG_INSERT_RECORD" (par_ID ORGANIZATION.ID%type,                                            
-                                             par_ProvinceName ORGANIZATION.ProvinceName%type,                                            
-							   par_Note  ORGANIZATION.Note%type DEFAULT NULL)                                           
-as 
-    var_ProvinceCode REGION.ProvinceCode%type;
-begin
-    --insert new ORGANIZATION
-	insert into ORGANIZATION(ID, ProvinceName, DistrictName, TownName, Note) 
-	values (par_ID, par_ProvinceName, '', '', par_Note);
-end ORG_INSERT_RECORD;
 --------------------------------------------------------
 --  DDL for Procedure ACC_CREATE_ORG
 --------------------------------------------------------
@@ -101,6 +69,23 @@ begin
     commit;
 end ACC_DELETE_RECORD;
 --------------------------------------------------------
+--  DDL for Procedure ACC_INSERT_RECORD
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "ACC_INSERT_RECORD" 
+(par_Username varchar2, par_Password varchar2, par_Role number, par_Status number, par_Note varchar2 DEFAULT NULL)
+is   
+begin 
+     insert into ACCOUNT(Username, Password, Role, status, Note) values 
+     (par_Username, par_Password, par_Role, par_Status, par_Note);    
+
+     EXCEPTION
+        when DUP_VAL_ON_INDEX
+        then
+            raise_application_error(-20012,'Username has been registered by another user!');
+end ACC_INSERT_RECORD;
+--------------------------------------------------------
 --  DDL for Procedure ACC_RESET_PASSWORD
 --------------------------------------------------------
 set define off;
@@ -149,8 +134,8 @@ set define off;
 par_ID ANNOUNCEMENT.ID%type,
 par_OrgID ORGANIZATION.ID%type, 
 par_Title ANNOUNCEMENT.Title%type,
-par_Content ANNOUNCEMENT.Content%type,
 par_PublishDate ANNOUNCEMENT.PublishDate%type,
+par_Content ANNOUNCEMENT.Content%type DEFAULT NULL,
 par_Image ANNOUNCEMENT.Image%type DEFAULT NULL,
 par_Note ANNOUNCEMENT.Note%type DEFAULT NULL
 )
@@ -262,6 +247,21 @@ begin
 
     commit;
 end INJ_INSERT_RECORD;
+--------------------------------------------------------
+--  DDL for Procedure ORG_INSERT_RECORD
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "ORG_INSERT_RECORD" (par_ID ORGANIZATION.ID%type,                                            
+                                             par_ProvinceName ORGANIZATION.ProvinceName%type,                                            
+							   par_Note  ORGANIZATION.Note%type DEFAULT NULL)                                           
+as 
+    var_ProvinceCode REGION.ProvinceCode%type;
+begin
+    --insert new ORGANIZATION
+	insert into ORGANIZATION(ID, ProvinceName, DistrictName, TownName, Note) 
+	values (par_ID, par_ProvinceName, '', '', par_Note);
+end ORG_INSERT_RECORD;
 --------------------------------------------------------
 --  DDL for Procedure ORG_UPDATE_RECORD
 --------------------------------------------------------
@@ -537,33 +537,6 @@ begin
 
 end REG_INSERT_RECORD;
 --------------------------------------------------------
---  DDL for Procedure SCHED_INC_REG
---------------------------------------------------------
-set define off;
-
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "SCHED_INC_REG" 
-(par_SchedID SCHEDULE.ID%type, par_Time REGISTER.Time%type)
-as
-begin
-	if (par_Time = 0)
-	then
-		update SCHEDULE
-		set DayRegistered = DayRegistered + 1
-		where SCHEDULE.ID = par_SchedID;
- 	elsif (par_Time = 1)
-	then
-		update SCHEDULE
-		set NoonRegistered = NoonRegistered + 1
-		where SCHEDULE.ID = par_SchedID;
-	elsif (par_Time = 2)
-	then
-		update SCHEDULE
-		set NightRegistered = NightRegistered + 1
-		where SCHEDULE.ID = par_SchedID;
-	end if;
-    --commit;
-end SCHED_INC_REG;
---------------------------------------------------------
 --  DDL for Procedure REG_UPDATE_STATUS
 --------------------------------------------------------
 set define off;
@@ -631,33 +604,6 @@ EXCEPTION
     --There was no injection before, this the first injection
 end REG_UPDATE_STATUS;
 --------------------------------------------------------
---  DDL for Procedure SCHED_DEC_REG
---------------------------------------------------------
-set define off;
-
-  CREATE OR REPLACE EDITIONABLE PROCEDURE "SCHED_DEC_REG" 
-(par_SchedID SCHEDULE.ID%type, par_Time REGISTER.Time%type)
-as
-begin
-	if (par_Time = 0)
-	then
-		update SCHEDULE
-		set DayRegistered = DayRegistered - 1
-		where SCHEDULE.ID = par_SchedID;
- 	elsif (par_Time = 1)
-	then
-		update SCHEDULE
-		set NoonRegistered = NoonRegistered - 1
-		where SCHEDULE.ID = par_SchedID;
-	elsif (par_Time = 2)
-	then
-		update SCHEDULE
-		set NightRegistered = NightRegistered - 1
-		where SCHEDULE.ID = par_SchedID;
-	end if;
-    commit;
-end SCHED_DEC_REG;
---------------------------------------------------------
 --  DDL for Procedure SCHED_CANCEL_SCHED
 --------------------------------------------------------
 set define off;
@@ -689,6 +635,33 @@ BEGIN
     commit;
 END SCHED_CANCEL_SCHED;
 --------------------------------------------------------
+--  DDL for Procedure SCHED_DEC_REG
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "SCHED_DEC_REG" 
+(par_SchedID SCHEDULE.ID%type, par_Time REGISTER.Time%type)
+as
+begin
+	if (par_Time = 0)
+	then
+		update SCHEDULE
+		set DayRegistered = DayRegistered - 1
+		where SCHEDULE.ID = par_SchedID;
+ 	elsif (par_Time = 1)
+	then
+		update SCHEDULE
+		set NoonRegistered = NoonRegistered - 1
+		where SCHEDULE.ID = par_SchedID;
+	elsif (par_Time = 2)
+	then
+		update SCHEDULE
+		set NightRegistered = NightRegistered - 1
+		where SCHEDULE.ID = par_SchedID;
+	end if;
+    commit;
+end SCHED_DEC_REG;
+--------------------------------------------------------
 --  DDL for Procedure SCHED_DELETE_RECORD
 --------------------------------------------------------
 set define off;
@@ -707,6 +680,33 @@ BEGIN
     commit;
     
 END SCHED_DELETE_RECORD;
+--------------------------------------------------------
+--  DDL for Procedure SCHED_INC_REG
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "SCHED_INC_REG" 
+(par_SchedID SCHEDULE.ID%type, par_Time REGISTER.Time%type)
+as
+begin
+	if (par_Time = 0)
+	then
+		update SCHEDULE
+		set DayRegistered = DayRegistered + 1
+		where SCHEDULE.ID = par_SchedID;
+ 	elsif (par_Time = 1)
+	then
+		update SCHEDULE
+		set NoonRegistered = NoonRegistered + 1
+		where SCHEDULE.ID = par_SchedID;
+	elsif (par_Time = 2)
+	then
+		update SCHEDULE
+		set NightRegistered = NightRegistered + 1
+		where SCHEDULE.ID = par_SchedID;
+	end if;
+    --commit;
+end SCHED_INC_REG;
 --------------------------------------------------------
 --  DDL for Procedure SCHED_INSERT_RECORD
 --------------------------------------------------------
@@ -792,12 +792,18 @@ BEGIN
         fetch c_Person into c_Person_row;
         exit when c_Person%notfound;        
         
-        select COUNT(ID) into var_Check
+        /*select COUNT(ID) into var_Check
         from HEALTH
         where PersonalID = c_Person_row.ID
         and ID = (select MAX(ID)
                     from HEALTH
                     where PersonalID = c_Person_row.ID)
+        and substr(Healths, 3, 1) = '1'
+        and SYSDATE - FilledDate <= par_Days;*/
+        
+        select COUNT(distinct PersonalID) into var_Check
+        from HEALTH
+        where PersonalID = c_Person_row.ID
         and substr(Healths, 3, 1) = '1'
         and SYSDATE - FilledDate <= par_Days;
         
@@ -836,12 +842,18 @@ BEGIN
         fetch c_Person into c_Person_row;
         exit when c_Person%notfound;        
         
-        select COUNT(ID) into var_Check
+        /*select COUNT(ID) into var_Check
         from HEALTH
         where PersonalID = c_Person_row.ID
         and ID = (select MAX(ID)
                     from HEALTH
                     where PersonalID = c_Person_row.ID)
+        and substr(Healths, 3, 1) = '1'
+        and SYSDATE - FilledDate <= par_Days;*/
+        
+        select COUNT(distinct PersonalID) into var_Check
+        from HEALTH
+        where PersonalID = c_Person_row.ID
         and substr(Healths, 3, 1) = '1'
         and SYSDATE - FilledDate <= par_Days;
         
@@ -880,12 +892,18 @@ BEGIN
         fetch c_Person into c_Person_row;
         exit when c_Person%notfound;        
         
-        select COUNT(ID) into var_Check
+        /*select COUNT(ID) into var_Check
         from HEALTH
         where PersonalID = c_Person_row.ID
         and ID = (select MAX(ID)
                     from HEALTH
                     where PersonalID = c_Person_row.ID)
+        and substr(Healths, 3, 1) = '1'
+        and SYSDATE - FilledDate <= par_Days;*/
+        
+        select COUNT(distinct PersonalID) into var_Check
+        from HEALTH
+        where PersonalID = c_Person_row.ID
         and substr(Healths, 3, 1) = '1'
         and SYSDATE - FilledDate <= par_Days;
         
@@ -925,12 +943,18 @@ BEGIN
         fetch c_Person into c_Person_row;
         exit when c_Person%notfound;        
         
-        select COUNT(ID) into var_Check
+        /*select COUNT(ID) into var_Check
         from HEALTH
         where PersonalID = c_Person_row.ID
         and ID = (select MAX(ID)
                     from HEALTH
                     where PersonalID = c_Person_row.ID)
+        and substr(Healths, 3, 1) = '1'
+        and SYSDATE - FilledDate <= par_Days;*/
+        
+        select COUNT(distinct PersonalID) into var_Check
+        from HEALTH
+        where PersonalID = c_Person_row.ID
         and substr(Healths, 3, 1) = '1'
         and SYSDATE - FilledDate <= par_Days;
         
@@ -1078,6 +1102,40 @@ BEGIN
     
     commit;
 END STAT_BOOSTERDOSE;
+--------------------------------------------------------
+--  DDL for Procedure STAT_DOSES
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "STAT_DOSES" 
+AS
+    var_Result number;
+BEGIN
+    var_Result := 0;
+    
+    select COUNT(InjNO) into var_Result
+    from INJECTION
+    group by DoseType;
+    
+    select COUNT(InjNO) into var_Result
+    from INJECTION
+    where DoseType = 'basic';
+    
+    update STATISTIC
+    set Data = var_Result, LastUpdate = SYSDATE
+    where Title = 'STAT_BASICDOSE';
+    
+    select COUNT(DoseType) into var_Result
+    from INJECTION
+    where DoseType = 'booster';
+    
+    update STATISTIC
+    set Data = var_Result, LastUpdate = SYSDATE
+    where Title = 'STAT_BOOSTERDOSE'; 
+    
+    commit;
+  NULL;
+END STAT_DOSES;
 --------------------------------------------------------
 --  DDL for Procedure STAT_REPEATDOSE
 --------------------------------------------------------

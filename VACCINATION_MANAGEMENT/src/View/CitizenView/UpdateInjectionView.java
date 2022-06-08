@@ -1,9 +1,13 @@
 package View.CitizenView;
 
 
-import Process.*;
+import Process.DefaultValue;
+import Process.ImageHelper;
+import Process.Person;
+import Process.Register;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,7 +17,6 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.filechooser.FileFilter;
 
 /**
  *
@@ -38,15 +41,6 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
 
     private File file;
     private FileInputStream input=null;
-
-    
-   private void initMainLayeredPane()
-   {
-       MainLayeredPane=new JLayeredPane();
-       MainLayeredPane.setBounds(0,0,1080,720);
-       MainLayeredPane.setLayout(null);
-       MainLayeredPane.setOpaque(true);
-   }
    
    private void initMainPanel()
    {
@@ -67,7 +61,8 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
        if(Reg.getImage() != null)
        {
            ImageIcon TakenImage = new ImageIcon(Reg.getImage());
-           Image ResizedImg = ImageHelper.reSize(TakenImage.getImage(), 380, dv.FrameHeight() - 200);
+           Image ResizedImg = ImageHelper.reSize(TakenImage.getImage(),
+                   380, dv.FrameHeight() - 200);
            JLabel ImagePlace = new JLabel(new ImageIcon(ResizedImg));
            ImagePlace.setBounds(0, 0, 380, dv.FrameHeight() - 200);
            ImagePlace.setHorizontalAlignment(JLabel.LEFT);
@@ -345,13 +340,9 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
                                        "where PersonalID= '" + personalUser.getID() + "'" +
                                         " and SchedID = '"+ Reg.getSched().getID() +"'";
                     PreparedStatement st = connection.prepareStatement(query);
-
                     input = new FileInputStream(file);
-
                     st.setBinaryStream(1,input);
-
                     st.executeUpdate();
-                    st.close();
                 }
                 catch (SQLException ex) {
                     dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);

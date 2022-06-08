@@ -11,8 +11,6 @@ import Process.Person;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.*;
@@ -23,7 +21,7 @@ import java.time.LocalDate;
  * @author ASUS
  */
 
-public class AnnouncementView extends JPanel implements ActionListener {
+public class AnnouncementView extends JPanel {
 
     private JLabel AnnListLabel;
     private JScrollPane ScrollPanePreAnnList;
@@ -297,10 +295,5 @@ public class AnnouncementView extends JPanel implements ActionListener {
         this.add(PreviewPanel);
 
         this.repaint(0,0, 1080, 720);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

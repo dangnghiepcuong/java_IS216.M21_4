@@ -1,10 +1,9 @@
 package View.MOHView;
 
-import Process.Certificate;
 import Process.DateLabelFormatter;
 import Process.DefaultValue;
-import Process.Organization;
 import Process.ImageHelper;
+import Process.Organization;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -63,7 +62,6 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
     /*Object Class*/
     private DefaultValue dv = new DefaultValue();
     private Organization orgUser = new Organization();
-    private Certificate cert = new Certificate();
 
     private void initOrgNameLabel()
     {
