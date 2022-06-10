@@ -58,6 +58,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         ProvinceComboBox.setBounds(0, 40, dv.FieldWidth(), dv.FieldHeight());
         ProvinceComboBox.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         ProvinceComboBox.setForeground(new Color(dv.BlackTextColor()));
+        ProvinceComboBox.setBackground(Color.WHITE);
 
         try {
             Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
@@ -292,6 +293,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         ProvinceComboBox.setPreferredSize(new Dimension(200, 30));
         ProvinceComboBox.setFont(new Font(dv.fontName(), 0, 16));
         ProvinceComboBox.setForeground(new Color(dv.BlackTextColor()));
+        ProvinceComboBox.setBackground(Color.WHITE);
 
         try {
             Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());

@@ -275,6 +275,7 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
         ProvinceComboBox.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         ProvinceComboBox.setForeground(new Color(dv.FieldLabelColor()));
         ProvinceComboBox.setEnabled(false);
+        ProvinceComboBox.setBackground(Color.WHITE);
 
         ProvinceComboBox.addItem(orgUser.getProvince());
     }
@@ -294,6 +295,7 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
         DistrictComboBox.setBounds(50, 100 + 3*dv.LabelHeight()+2*dv.FieldHeight()+40+20+20, 170, 30);
         DistrictComboBox.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         DistrictComboBox.setForeground(new Color(dv.FieldLabelColor()));
+        DistrictComboBox.setBackground(Color.WHITE);
 
         DistrictComboBox.addItem(orgUser.getDistrict());
 
@@ -336,6 +338,7 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
         TownComboBox.setBounds(50, 110 + 4*dv.LabelHeight()+3*dv.FieldHeight()+40+20+30, 170, 30);
         TownComboBox.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         TownComboBox.setForeground(new Color(dv.FieldLabelColor()));
+        TownComboBox.setBackground(Color.WHITE);
 
         TownComboBox.addItem(orgUser.getTown());
         try {

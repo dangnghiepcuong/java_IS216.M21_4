@@ -127,6 +127,7 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
         GenderComboBox.setBounds(70, 80 + 9*dv.LabelHeight() +dv.AlignTop_InfoView(), 80, 28);
         GenderComboBox.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         GenderComboBox.setForeground(new Color(dv.FieldLabelColor()));
+        GenderComboBox.setBackground(Color.WHITE);
         GenderComboBox.addKeyListener(this);
 
         GenderComboBox.addItem("");

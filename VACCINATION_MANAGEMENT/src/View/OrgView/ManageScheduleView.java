@@ -83,6 +83,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         SchedFilterComboBox.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
         SchedFilterComboBox.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         SchedFilterComboBox.setForeground(new Color(dv.BlackTextColor()));
+        SchedFilterComboBox.setBackground(Color.WHITE);
 
         SchedFilterComboBox.addItem("Tất cả");
         SchedFilterComboBox.addItem("Đã lên lịch");
@@ -590,6 +591,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         RegFilterComboBox.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
         RegFilterComboBox.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
         RegFilterComboBox.setForeground(new Color(dv.BlackTextColor()));
+        RegFilterComboBox.setBackground(Color.WHITE);
 
         RegFilterComboBox.addItem("Tất cả");
         RegFilterComboBox.addItem("Đã đăng ký");
@@ -683,6 +685,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
             StatusComboBox.setBounds(500, 32+2, 120, 30);
             StatusComboBox.setFont(new Font(dv.fontName(), 0, 16));
             StatusComboBox.setForeground(new Color(dv.BlackTextColor()));
+            StatusComboBox.setBackground(Color.WHITE);
 
             if (Reg.getStatus() == 0)
             {
@@ -971,6 +974,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         VaccineComboBox.setPreferredSize(new Dimension(200, 30));
         VaccineComboBox.setFont(new Font(dv.fontName(), 0, 16));
         VaccineComboBox.setForeground(new Color(dv.BlackTextColor()));
+        VaccineComboBox.setBackground(Color.WHITE);
 
         nVacc = i;
 
