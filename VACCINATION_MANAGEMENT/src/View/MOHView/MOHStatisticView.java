@@ -179,6 +179,8 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             Stat.setData(rs.getInt("Data"));
             if (rs.getString("LastUpdate") != null)
                 Stat.setLastUpdate(LocalDate.parse(rs.getString("LastUpdate").substring(0, 10)));
+            else
+                return;
 
             StatisticDateLabel= new JLabel(String.valueOf(Stat.getLastUpdate()));
             StatisticDateLabel.setFont(new Font(dv.fontName(), 2, 16));
