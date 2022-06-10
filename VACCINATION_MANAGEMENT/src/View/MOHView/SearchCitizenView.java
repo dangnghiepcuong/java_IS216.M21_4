@@ -32,7 +32,7 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
     private JLabel BirthdayLabel;
     private JTextField BirthdayField;
     private JLabel GenderLabel;
-    private Choice GenderChoice;
+    private JComboBox GenderComboBox;
     private  JButton SearchButton;
 
     /*Object Class*/
@@ -121,18 +121,18 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
         GenderLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
 
-    private void initGenderChoice()
+    private void initGenderComboBox()
     {
-        GenderChoice = new Choice();
-        GenderChoice.setBounds(70, 80 + 9*dv.LabelHeight() +dv.AlignTop_InfoView(), 80, 28);
-        GenderChoice.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-        GenderChoice.setForeground(new Color(dv.FieldLabelColor()));
-        GenderChoice.addKeyListener(this);
+        GenderComboBox = new JComboBox();
+        GenderComboBox.setBounds(70, 80 + 9*dv.LabelHeight() +dv.AlignTop_InfoView(), 80, 28);
+        GenderComboBox.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        GenderComboBox.setForeground(new Color(dv.FieldLabelColor()));
+        GenderComboBox.addKeyListener(this);
 
-        GenderChoice.add("");
-        GenderChoice.add("Nữ");
-        GenderChoice.add("Nam");
-        GenderChoice.add("Khác");
+        GenderComboBox.addItem("");
+        GenderComboBox.addItem("Nữ");
+        GenderComboBox.addItem("Nam");
+        GenderComboBox.addItem("Khác");
     }
 
     private void initSearchButton()
@@ -180,8 +180,8 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
         initGenderLabel();
         PersonalInfoPanel.add(GenderLabel);
 
-        initGenderChoice();
-        PersonalInfoPanel.add(GenderChoice);
+        initGenderComboBox();
+        PersonalInfoPanel.add(GenderComboBox);
 
         initPhoneNumberLabel();
         PersonalInfoPanel.add(PhoneNumberLabel);
@@ -405,7 +405,7 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
         {
             String InputFullName = FullNameField.getText();
             String InputBirthday = BirthdayField.getText();
-            int InputGender = GenderChoice.getSelectedIndex()-1;
+            int InputGender = GenderComboBox.getSelectedIndex()-1;
             String InputPhone = PhoneNumberField.getText();
             String InputPersonalID = PersonalIDField.getText();
 
@@ -413,7 +413,7 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
                 return;
             if (dv.checkisNumberInputValue(InputBirthday, "Cảnh báo!", "Nhập ngày sinh là số!") != -2)
                 return;
-            if (dv.checkStringInputValue(GenderChoice.getSelectedItem(), "Cảnh báo!", "Chọn giới tính!") != -2)
+            if (dv.checkStringInputValue(String.valueOf(GenderComboBox.getSelectedItem()), "Cảnh báo!", "Chọn giới tính!") != -2)
                 return;
             if (dv.checkStringInputValue(InputPhone, "Cảnh báo!", "Nhập số điện thoại!") != -2)
                 return;
@@ -502,7 +502,7 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
         {
             String InputFullName = FullNameField.getText();
             String InputBirthday = BirthdayField.getText();
-            int InputGender = GenderChoice.getSelectedIndex()-1;
+            int InputGender = GenderComboBox.getSelectedIndex()-1;
             String InputPhone = PhoneNumberField.getText();
             String InputPersonalID = PersonalIDField.getText();
 
@@ -510,7 +510,7 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
                 return;
             if (dv.checkisNumberInputValue(InputBirthday, "Cảnh báo!", "Nhập ngày sinh là số!") != -2)
                 return;
-            if (dv.checkStringInputValue(GenderChoice.getSelectedItem(), "Cảnh báo!", "Chọn giới tính!") != -2)
+            if (dv.checkStringInputValue(String.valueOf(GenderComboBox.getSelectedItem()), "Cảnh báo!", "Chọn giới tính!") != -2)
                 return;
             if (dv.checkStringInputValue(InputPhone, "Cảnh báo!", "Nhập số điện thoại!") != -2)
                 return;

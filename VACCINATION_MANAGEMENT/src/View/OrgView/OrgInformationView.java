@@ -33,9 +33,9 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
     private JPasswordField RepeatNewPasswordField;
     private JTextField StreetTextField;
     private JButton UpdateAccButton;
-    private Choice ProvinceChoice;
-    private Choice DistrictChoice;
-    private Choice TownChoice;
+    private JComboBox ProvinceComboBox;
+    private JComboBox DistrictComboBox;
+    private JComboBox TownComboBox;
     private JPanel AccInfoPanel;
     private JPanel OrgInfoPanel;
 
@@ -122,20 +122,20 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
         initProvinceLabel();
         OrgInfoPanel.add(ProvinceLabel);
 
-        initProvinceChoice();
-        OrgInfoPanel.add(ProvinceChoice);
+        initProvinceComboBox();
+        OrgInfoPanel.add(ProvinceComboBox);
 
         initDistrictLabel();
         OrgInfoPanel.add(DistrictLabel);
 
-        initDistrictChoice();
-        OrgInfoPanel.add(DistrictChoice);
+        initDistrictComboBox();
+        OrgInfoPanel.add(DistrictComboBox);
 
         initTownLabel();
         OrgInfoPanel.add(TownLabel);
 
-        initTownChoice();
-        OrgInfoPanel.add(TownChoice);
+        initTownComboBox();
+        OrgInfoPanel.add(TownComboBox);
 
         initStreetLabel();
         OrgInfoPanel.add(StreetLabel);
@@ -268,15 +268,15 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
         ProvinceLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
 
-    private void initProvinceChoice()
+    private void initProvinceComboBox()
     {
-        ProvinceChoice = new Choice();
-        ProvinceChoice.setBounds(50, 90 + 2*dv.LabelHeight()+dv.FieldHeight()+40+20+10, 170, 30);
-        ProvinceChoice.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-        ProvinceChoice.setForeground(new Color(dv.FieldLabelColor()));
-        ProvinceChoice.setEnabled(false);
+        ProvinceComboBox = new JComboBox();
+        ProvinceComboBox.setBounds(50, 90 + 2*dv.LabelHeight()+dv.FieldHeight()+40+20+10, 170, 30);
+        ProvinceComboBox.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        ProvinceComboBox.setForeground(new Color(dv.FieldLabelColor()));
+        ProvinceComboBox.setEnabled(false);
 
-        ProvinceChoice.add(orgUser.getProvince());
+        ProvinceComboBox.addItem(orgUser.getProvince());
     }
 
     private void initDistrictLabel()
@@ -288,14 +288,14 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
         DistrictLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
 
-    private void initDistrictChoice()
+    private void initDistrictComboBox()
     {
-        DistrictChoice = new Choice();
-        DistrictChoice.setBounds(50, 100 + 3*dv.LabelHeight()+2*dv.FieldHeight()+40+20+20, 170, 30);
-        DistrictChoice.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-        DistrictChoice.setForeground(new Color(dv.FieldLabelColor()));
+        DistrictComboBox = new JComboBox();
+        DistrictComboBox.setBounds(50, 100 + 3*dv.LabelHeight()+2*dv.FieldHeight()+40+20+20, 170, 30);
+        DistrictComboBox.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        DistrictComboBox.setForeground(new Color(dv.FieldLabelColor()));
 
-        DistrictChoice.add(orgUser.getDistrict());
+        DistrictComboBox.addItem(orgUser.getDistrict());
 
         try {
             Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
@@ -306,11 +306,11 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
             PreparedStatement st = connection.prepareStatement(query);
             ResultSet rs = st.executeQuery();
 
-            DistrictChoice.add("");
+            DistrictComboBox.addItem("");
             while (rs.next())
             {
                 if (rs.getString("DistrictName").equals(orgUser.getDistrict()) == false)
-                    DistrictChoice.add(rs.getString("DistrictName"));
+                    DistrictComboBox.addItem(rs.getString("DistrictName"));
             }
         } catch (SQLException ex) {
             dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
@@ -318,7 +318,7 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
             return;
         }
 
-        DistrictChoice.addItemListener(this);
+        DistrictComboBox.addItemListener(this);
     }
 
     private void initTownLabel()
@@ -330,14 +330,14 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
         TownLabel.setForeground(new Color(dv.FieldLabelColor()));
     }
 
-    private void initTownChoice()
+    private void initTownComboBox()
     {
-        TownChoice = new Choice();
-        TownChoice.setBounds(50, 110 + 4*dv.LabelHeight()+3*dv.FieldHeight()+40+20+30, 170, 30);
-        TownChoice.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-        TownChoice.setForeground(new Color(dv.FieldLabelColor()));
+        TownComboBox = new JComboBox();
+        TownComboBox.setBounds(50, 110 + 4*dv.LabelHeight()+3*dv.FieldHeight()+40+20+30, 170, 30);
+        TownComboBox.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        TownComboBox.setForeground(new Color(dv.FieldLabelColor()));
 
-        TownChoice.add(orgUser.getTown());
+        TownComboBox.addItem(orgUser.getTown());
         try {
             Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
@@ -347,11 +347,11 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
             PreparedStatement st = connection.prepareStatement(query);
             ResultSet rs = st.executeQuery();
 
-            DistrictChoice.add("");
+            DistrictComboBox.addItem("");
             while (rs.next())
             {
                 if (rs.getString("TownName").equals(orgUser.getTown()) == false)
-                    DistrictChoice.add(rs.getString("TownName"));
+                    DistrictComboBox.addItem(rs.getString("TownName"));
             }
         } catch (SQLException ex) {
             dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
@@ -416,8 +416,8 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
             String InputID = IDTextField.getText();
             String InputPassword = String.valueOf(PasswordField.getPassword());
             String InputName = NameTextField.getText();
-            String InputDistrict = DistrictChoice.getSelectedItem();
-            String InputTown = TownChoice.getSelectedItem();
+            String InputDistrict = String.valueOf(DistrictComboBox.getSelectedItem());
+            String InputTown = String.valueOf(TownComboBox.getSelectedItem());
             String InputStreet = StreetTextField.getText();
             String InputNewPassword = String.valueOf(NewPasswordField.getPassword());
             String InputRepeatNewPassword = String.valueOf(RepeatNewPasswordField.getPassword());
@@ -509,8 +509,8 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
             String InputID = IDTextField.getText();
             String InputPassword = String.valueOf(PasswordField.getPassword());
             String InputName = NameTextField.getText();
-            String InputDistrict = DistrictChoice.getSelectedItem();
-            String InputTown = TownChoice.getSelectedItem();
+            String InputDistrict = String.valueOf(DistrictComboBox.getSelectedItem());
+            String InputTown = String.valueOf(TownComboBox.getSelectedItem());
             String InputStreet = StreetTextField.getText();
             String InputNewPassword = String.valueOf(NewPasswordField.getPassword());
             String InputRepeatNewPassword = String.valueOf(RepeatNewPasswordField.getPassword());
@@ -597,23 +597,23 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
 
     @Override
     public void itemStateChanged(ItemEvent e) {
-        if (e.getSource() == DistrictChoice)
+        if (e.getSource() == DistrictComboBox)
         {
             try {
-                TownChoice.removeAll();
+                TownComboBox.removeAllItems();
 
                 Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
                 String query = "select distinct TownCode, TownName from REGION " +
-                        "where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "' " +
-                        "and DistrictName = '" + DistrictChoice.getSelectedItem() + "' " +
+                        "where ProvinceName = '" + ProvinceComboBox.getSelectedItem() + "' " +
+                        "and DistrictName = '" + DistrictComboBox.getSelectedItem() + "' " +
                         "order by TownCode";
                 PreparedStatement st = connection.prepareStatement(query);
                 ResultSet rs = st.executeQuery();
 
-                TownChoice.add("");
+                TownComboBox.addItem("");
                 while (rs.next())
-                    TownChoice.add(rs.getString("TownName"));
+                    TownComboBox.addItem(rs.getString("TownName"));
             } catch (SQLException ex) {
                 dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
                 ex.printStackTrace();
