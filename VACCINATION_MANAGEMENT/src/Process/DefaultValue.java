@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 
 public class DefaultValue {
     private String DB_URL = "jdbc:oracle:thin:@localhost:1521:nghiepcuong";
-    private String username = "test_project";
-    private String password = "test_project";
+    private String username = "vaccination_management_database";
+    private String password = "covid19";
 
     private String DB_URL1 = "jdbc:oracle:thin:@localhost:1521:orcl";
     private String username1 = "vaccination";

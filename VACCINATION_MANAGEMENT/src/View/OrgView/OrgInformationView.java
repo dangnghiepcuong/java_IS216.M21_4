@@ -1,10 +1,11 @@
 package View.OrgView;
 
 
-import Process.*;
+import Process.Account;
+import Process.DefaultValue;
+import Process.Organization;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
@@ -337,6 +338,26 @@ public class OrgInformationView extends JPanel implements ActionListener, KeyLis
         TownChoice.setForeground(new Color(dv.FieldLabelColor()));
 
         TownChoice.add(orgUser.getTown());
+        try {
+            Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+            String query = "select distinct TownCode, TownName from REGION " +
+                    "where ProvinceName = '" + orgUser.getProvince() + "' " +
+                    "order by TownCode";
+            PreparedStatement st = connection.prepareStatement(query);
+            ResultSet rs = st.executeQuery();
+
+            DistrictChoice.add("");
+            while (rs.next())
+            {
+                if (rs.getString("TownName").equals(orgUser.getTown()) == false)
+                    DistrictChoice.add(rs.getString("TownName"));
+            }
+        } catch (SQLException ex) {
+            dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+            ex.printStackTrace();
+            return;
+        }
     }
 
     private void initStreetLabel()

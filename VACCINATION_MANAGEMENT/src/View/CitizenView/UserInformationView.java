@@ -484,14 +484,6 @@ public class UserInformationView extends JPanel implements ActionListener, KeyLi
         DistrictChoice.setForeground(new Color(dv.FieldLabelColor()));
 
         DistrictChoice.add(personalUser.getDistrict());
-
-        DistrictChoice.add("");
-        DistrictChoice.add("Dầu Tiếng");
-        DistrictChoice.add("Thuận An");
-        DistrictChoice.add("Thủ Đức");
-        DistrictChoice.add("Biên Hòa");
-        DistrictChoice.add("Cẩm Mỹ");
-        DistrictChoice.add("Thủ Dầu Một");
     }
 
     private void initTownLabel()
@@ -510,13 +502,6 @@ public class UserInformationView extends JPanel implements ActionListener, KeyLi
         TownChoice.setForeground(new Color(dv.FieldLabelColor()));
 
         TownChoice.add(personalUser.getTown());
-
-        TownChoice.add("");
-        TownChoice.add("Dầu Tiếng");
-        TownChoice.add("Lái Thiêu");
-        TownChoice.add("Linh Trung");
-        TownChoice.add("Tân Hòa");
-        TownChoice.add("Sông Ray");
     }
 
     private void initStreetLabel()
@@ -847,8 +832,7 @@ public class UserInformationView extends JPanel implements ActionListener, KeyLi
 
                 DistrictChoice.add("");
                 while (rs.next())
-                    if (rs.getString("DistrictName").equals(personalUser.getDistrict()) == false)
-                        DistrictChoice.add(rs.getString("DistrictName"));
+                    DistrictChoice.add(rs.getString("DistrictName"));
             } catch (SQLException ex) {
                 dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
                 ex.printStackTrace();
@@ -874,8 +858,7 @@ public class UserInformationView extends JPanel implements ActionListener, KeyLi
 
                 TownChoice.add("");
                 while (rs.next())
-                    if (rs.getString("TownName").equals(personalUser.getTown()) == false)
-                        TownChoice.add(rs.getString("TownName"));
+                    TownChoice.add(rs.getString("TownName"));
             } catch (SQLException ex) {
                 dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
                 ex.printStackTrace();
