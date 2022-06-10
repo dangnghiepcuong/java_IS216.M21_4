@@ -40,11 +40,11 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
     private JTextField StreetTextField;
     private JTextField EmailTextField;
     private JButton RegisterAccButton;
-    private JComboBox GenderChoice;
-    private Choice HomeTownChoice;
-    private Choice ProvinceChoice;
-    private Choice DistrictChoice;
-    private Choice TownChoice;
+    private JComboBox GenderComboBox;
+    private JComboBox HomeTownComboBox;
+    private JComboBox ProvinceComboBox;
+    private JComboBox DistrictComboBox;
+    private JComboBox TownComboBox;
     private JDatePickerImpl BirthdayField;
     private JPanel AccInfoPanel;
     private JPanel PersonalInfoPanel;
@@ -152,14 +152,14 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
         initGenderLabel();
         PersonalInfoPanel.add(GenderLabel);
 
-        initGenderChoice();
-        PersonalInfoPanel.add(GenderChoice);
+        initGenderComboBox();
+        PersonalInfoPanel.add(GenderComboBox);
 
         initHomeTownLabel();
         PersonalInfoPanel.add(HomeTownLabel);
 
-        initHomeTownChoice();
-        PersonalInfoPanel.add(HomeTownChoice);
+        initHomeTownComboBox();
+        PersonalInfoPanel.add(HomeTownComboBox);
 
         initAddressLabel();
         PersonalInfoPanel.add(AddressLabel);
@@ -167,20 +167,20 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
         initProvinceLabel();
         PersonalInfoPanel.add(ProvinceLabel);
 
-        initProvinceChoice();
-        PersonalInfoPanel.add(ProvinceChoice);
+        initProvinceComboBox();
+        PersonalInfoPanel.add(ProvinceComboBox);
 
         initDistrictLabel();
         PersonalInfoPanel.add(DistrictLabel);
 
-        initDistrictChoice();
-        PersonalInfoPanel.add(DistrictChoice);
+        initDistrictComboBox();
+        PersonalInfoPanel.add(DistrictComboBox);
 
         initTownLabel();
         PersonalInfoPanel.add(TownLabel);
 
-        initTownChoice();
-        PersonalInfoPanel.add(TownChoice);
+        initTownComboBox();
+        PersonalInfoPanel.add(TownComboBox);
 
         initStreetLabel();
         PersonalInfoPanel.add(StreetLabel);
@@ -359,18 +359,18 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
         GenderLabel.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         GenderLabel.setForeground(new Color(0x666666));
     }
-    private void initGenderChoice()
+    private void initGenderComboBox()
     {
-        GenderChoice = new JComboBox();
-        GenderChoice.setBounds(50 + 25 + 220, 60 + 3*dv.LabelHeight()+2*dv.FieldHeight() + dv.AlignTop_InfoView(), 80, 30);
-        GenderChoice.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-        GenderChoice.setForeground(new Color(0x666666));
-        GenderChoice.setBackground(Color.WHITE);
+        GenderComboBox = new JComboBox();
+        GenderComboBox.setBounds(50 + 25 + 220, 60 + 3*dv.LabelHeight()+2*dv.FieldHeight() + dv.AlignTop_InfoView(), 80, 30);
+        GenderComboBox.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        GenderComboBox.setForeground(new Color(0x666666));
+        GenderComboBox.setBackground(Color.WHITE);
 
-        GenderChoice.addItem("");
-        GenderChoice.addItem("Nữ");
-        GenderChoice.addItem("Nam");
-        GenderChoice.addItem("Khác");
+        GenderComboBox.addItem("");
+        GenderComboBox.addItem("Nữ");
+        GenderComboBox.addItem("Nam");
+        GenderComboBox.addItem("Khác");
     }
 
     private void initHomeTownLabel()
@@ -382,15 +382,15 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
         HomeTownLabel.setForeground(new Color(0x666666));
     }
 
-    private void initHomeTownChoice()
+    private void initHomeTownComboBox()
     {
-        HomeTownChoice = new Choice();
-        HomeTownChoice.setBounds(50, 70 + 4*dv.LabelHeight()+3*dv.FieldHeight() + dv.AlignTop_InfoView(), 170, 30);
-        HomeTownChoice.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-        HomeTownChoice.setForeground(new Color(0x666666));
-        HomeTownChoice.setBackground(Color.WHITE);
+        HomeTownComboBox = new JComboBox();
+        HomeTownComboBox.setBounds(50, 70 + 4*dv.LabelHeight()+3*dv.FieldHeight() + dv.AlignTop_InfoView(), 170, 30);
+        HomeTownComboBox.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        HomeTownComboBox.setForeground(new Color(0x666666));
+        HomeTownComboBox.setBackground(Color.WHITE);
 
-        HomeTownChoice.addItemListener(this);
+        HomeTownComboBox.addItemListener(this);
     }
 
     private void initAddressLabel()
@@ -411,13 +411,13 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
         ProvinceLabel.setForeground(new Color(0x666666));
     }
 
-    private void initProvinceChoice()
+    private void initProvinceComboBox()
     {
-        ProvinceChoice = new Choice();
-        ProvinceChoice.setBounds(50, 90 + 6*dv.LabelHeight()+4*dv.FieldHeight() + dv.AlignTop_InfoView(), 170, 30);
-        ProvinceChoice.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-        ProvinceChoice.setForeground(new Color(0x666666));
-        ProvinceChoice.setBackground(Color.WHITE);
+        ProvinceComboBox = new JComboBox();
+        ProvinceComboBox.setBounds(50, 90 + 6*dv.LabelHeight()+4*dv.FieldHeight() + dv.AlignTop_InfoView(), 170, 30);
+        ProvinceComboBox.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        ProvinceComboBox.setForeground(new Color(0x666666));
+        ProvinceComboBox.setBackground(Color.WHITE);
 
         try {
             Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
@@ -426,12 +426,12 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
             PreparedStatement st = connection.prepareStatement(query);
             ResultSet rs = st.executeQuery();
 
-            HomeTownChoice.add("");
-            ProvinceChoice.add("");
+            HomeTownComboBox.addItem("");
+            ProvinceComboBox.addItem("");
             while (rs.next())
             {
-                HomeTownChoice.add(rs.getString("ProvinceName"));
-                ProvinceChoice.add(rs.getString("ProvinceName"));
+                HomeTownComboBox.addItem(rs.getString("ProvinceName"));
+                ProvinceComboBox.addItem(rs.getString("ProvinceName"));
             }
         } catch (SQLException ex) {
             dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
@@ -439,7 +439,7 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
             return;
         }
 
-        ProvinceChoice.addItemListener(this);
+        ProvinceComboBox.addItemListener(this);
     }
 
     private void initDistrictLabel()
@@ -451,14 +451,14 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
         DistrictLabel.setForeground(new Color(0x666666));
     }
 
-    private void initDistrictChoice()
+    private void initDistrictComboBox()
     {
-        DistrictChoice = new Choice();
-        DistrictChoice.setBounds(50+25+170, 90 + 6*dv.LabelHeight()+4*dv.FieldHeight() + dv.AlignTop_InfoView(), 170, 30);
-        DistrictChoice.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-        DistrictChoice.setForeground(new Color(0x666666));
-        DistrictChoice.setBackground(Color.WHITE);
-        DistrictChoice.addItemListener(this);
+        DistrictComboBox = new JComboBox();
+        DistrictComboBox.setBounds(50+25+170, 90 + 6*dv.LabelHeight()+4*dv.FieldHeight() + dv.AlignTop_InfoView(), 170, 30);
+        DistrictComboBox.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        DistrictComboBox.setForeground(new Color(0x666666));
+        DistrictComboBox.setBackground(Color.WHITE);
+        DistrictComboBox.addItemListener(this);
     }
 
     private void initTownLabel()
@@ -470,13 +470,13 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
         TownLabel.setForeground(new Color(0x666666));
     }
 
-    private void initTownChoice()
+    private void initTownComboBox()
     {
-        TownChoice = new Choice();
-        TownChoice.setBounds(50+50+2*170, 90 + 6*dv.LabelHeight()+4*dv.FieldHeight() + dv.AlignTop_InfoView(), 170, 30);
-        TownChoice.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
-        TownChoice.setForeground(new Color(0x666666));
-        TownChoice.setBackground(Color.WHITE);
+        TownComboBox = new JComboBox();
+        TownComboBox.setBounds(50+50+2*170, 90 + 6*dv.LabelHeight()+4*dv.FieldHeight() + dv.AlignTop_InfoView(), 170, 30);
+        TownComboBox.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
+        TownComboBox.setForeground(new Color(0x666666));
+        TownComboBox.setBackground(Color.WHITE);
     }
 
     private void initStreetLabel()
@@ -558,7 +558,7 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
         if (e.getSource() == RegisterAccButton)
         {
             JFormattedTextField textField = BirthdayField.getJFormattedTextField();
-            
+
             String InputUsername = UsernameTextField.getText();
             String InputPassword = String.valueOf(PasswordField.getPassword());
             String InputRepeatPassword = String.valueOf(RepeatPasswordField.getPassword());
@@ -566,11 +566,11 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
             String InputLastName = LastNameTextField.getText();
             String InputFirstName = FirstNameTextField.getText();
             String InputBirthday = textField.getText();
-            int InputGender = GenderChoice.getSelectedIndex();
-            String InputHomeTown = HomeTownChoice.getSelectedItem();
-            String InputProvince = ProvinceChoice.getSelectedItem();
-            String InputDistrict = DistrictChoice.getSelectedItem();
-            String InputTown = TownChoice.getSelectedItem();
+            int InputGender = GenderComboBox.getSelectedIndex();
+            String InputHomeTown = String.valueOf(HomeTownComboBox.getSelectedItem());
+            String InputProvince = String.valueOf(ProvinceComboBox.getSelectedItem());
+            String InputDistrict = String.valueOf(DistrictComboBox.getSelectedItem());
+            String InputTown = String.valueOf(TownComboBox.getSelectedItem());
             String InputStreet = StreetTextField.getText();
             String InputEmail = EmailTextField.getText();
 
@@ -672,11 +672,11 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
             String InputLastName = LastNameTextField.getText();
             String InputFirstName = FirstNameTextField.getText();
             String InputBirthday = textField.getText();
-            int InputGender = GenderChoice.getSelectedIndex();
-            String InputHomeTown = HomeTownChoice.getSelectedItem();
-            String InputProvince = ProvinceChoice.getSelectedItem();
-            String InputDistrict = DistrictChoice.getSelectedItem();
-            String InputTown = TownChoice.getSelectedItem();
+            int InputGender = GenderComboBox.getSelectedIndex();
+            String InputHomeTown = String.valueOf(HomeTownComboBox.getSelectedItem());
+            String InputProvince = String.valueOf(ProvinceComboBox.getSelectedItem());
+            String InputDistrict = String.valueOf(DistrictComboBox.getSelectedItem());
+            String InputTown = String.valueOf(TownComboBox.getSelectedItem());
             String InputStreet = StreetTextField.getText();
             String InputEmail = EmailTextField.getText();
 
@@ -769,49 +769,49 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
     @Override
     public void itemStateChanged(ItemEvent e)
     {
-        if (e.getSource() == ProvinceChoice)
+        if (e.getSource() == ProvinceComboBox)
         {
             try {
-                DistrictChoice.removeAll();
-                TownChoice.removeAll();
+                DistrictComboBox.removeAllItems();
+                TownComboBox.removeAllItems();
 
                 Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
                 String query = "select distinct DistrictCode, DistrictName from REGION " +
-                        "where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "' " +
+                        "where ProvinceName = '" + ProvinceComboBox.getSelectedItem() + "' " +
                         "order by DistrictCode";
                 PreparedStatement st = connection.prepareStatement(query);
                 ResultSet rs = st.executeQuery();
 
-                DistrictChoice.add("");
+                DistrictComboBox.addItem("");
                 while (rs.next())
-                    DistrictChoice.add(rs.getString("DistrictName"));
+                    DistrictComboBox.addItem(rs.getString("DistrictName"));
             } catch (SQLException ex) {
                 dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
                 ex.printStackTrace();
                 return;
             }
 
-            DistrictChoice.addItemListener(this);
+            DistrictComboBox.addItemListener(this);
         }
 
-        if (e.getSource() == DistrictChoice)
+        if (e.getSource() == DistrictComboBox)
         {
             try {
-                TownChoice.removeAll();
+                TownComboBox.removeAllItems();
 
                 Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
                 String query = "select distinct TownCode, TownName from REGION " +
-                        "where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "' " +
-                        "and DistrictName = '" + DistrictChoice.getSelectedItem() + "' " +
+                        "where ProvinceName = '" + ProvinceComboBox.getSelectedItem() + "' " +
+                        "and DistrictName = '" + DistrictComboBox.getSelectedItem() + "' " +
                         "order by TownCode";
                 PreparedStatement st = connection.prepareStatement(query);
                 ResultSet rs = st.executeQuery();
 
-                TownChoice.add("");
+                TownComboBox.addItem("");
                 while (rs.next())
-                    TownChoice.add(rs.getString("TownName"));
+                    TownComboBox.addItem(rs.getString("TownName"));
             } catch (SQLException ex) {
                 dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
                 ex.printStackTrace();
