@@ -22,7 +22,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
     /*Province Filter Panel*/
     private JPanel ProvinceFilterPanel;
     private JLabel ProvinceFilterLabel;
-    private Choice ProvinceChoice;
+    private JComboBox ProvinceComboBox;
     private JButton ProvinceFilterButton;
 
     /*Org List Panel*/
@@ -39,7 +39,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
     *   INITIALIZE THE ORGANIZATION LIST FILTER PANEL
     *   - PANEL:
     *       + LABELS
-    *       + CHOICES
+    *       + ComboBoxS
     *       + BUTTON: SELECT
     * */
     private void initProvinceFilterLabel()
@@ -52,12 +52,13 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         ProvinceFilterLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
     }
 
-    private void initProvinceChoice()
+    private void initProvinceComboBox()
     {
-        ProvinceChoice = new Choice();
-        ProvinceChoice.setBounds(0, 40, dv.FieldWidth(), dv.FieldHeight());
-        ProvinceChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
-        ProvinceChoice.setForeground(new Color(dv.BlackTextColor()));
+        ProvinceComboBox = new JComboBox();
+        ProvinceComboBox.setBounds(0, 40, dv.FieldWidth(), dv.FieldHeight());
+        ProvinceComboBox.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
+        ProvinceComboBox.setForeground(new Color(dv.BlackTextColor()));
+        ProvinceComboBox.setBackground(Color.WHITE);
 
         try {
             Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
@@ -66,10 +67,10 @@ public class CreateOrgAccView extends JPanel implements ActionListener
             PreparedStatement st = connection.prepareStatement(query);
             ResultSet rs = st.executeQuery();
 
-            ProvinceChoice.add("");
+            ProvinceComboBox.addItem("");
             while (rs.next())
             {
-                ProvinceChoice.add(rs.getString("ProvinceName"));
+                ProvinceComboBox.addItem(rs.getString("ProvinceName"));
             }
         } catch (SQLException ex) {
             dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
@@ -94,7 +95,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
     private void initProvinceFilterPanel()
     {
         initProvinceFilterLabel();
-        initProvinceChoice();
+        initProvinceComboBox();
         initProvinceFilterButton();
 
         ProvinceFilterPanel = new JPanel();
@@ -103,7 +104,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         ProvinceFilterPanel.setBackground(new Color(dv.ViewBackgroundColor()));
 
         ProvinceFilterPanel.add(ProvinceFilterLabel);
-        ProvinceFilterPanel.add(ProvinceChoice);
+        ProvinceFilterPanel.add(ProvinceComboBox);
         ProvinceFilterPanel.add(ProvinceFilterButton);
     }
 
@@ -194,8 +195,8 @@ public class CreateOrgAccView extends JPanel implements ActionListener
                 + " from ORGANIZATION ORG left outer join SCHEDULE SCHED on ORG.ID = SCHED.OrgID"
                 + " where ORG.ID != 'MOH'";
 
-        if (ProvinceChoice.getSelectedIndex() != 0)
-            query = query + " and ProvinceName = '" + ProvinceChoice.getSelectedItem() + "'";
+        if (ProvinceComboBox.getSelectedIndex() != 0)
+            query = query + " and ProvinceName = '" + ProvinceComboBox.getSelectedItem() + "'";
         else
             return;
 
@@ -261,7 +262,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
     *   INITIALIZE THE CREATE ORGANIZATION PANEL
     *   - PANEL:
     *       + LABELS
-    *       + CHOICES
+    *       + ComboBoxS
     *       + BUTTON: CONFIRM CREATION
     * */
     private void initAddNewOrgAccButton()
@@ -288,10 +289,11 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         ProvinceLabel.setFont(new Font(dv.fontName(), 0 ,16));
         ProvinceLabel.setForeground(new Color(dv.BlackTextColor()));
 
-        Choice ProvinceChoice = new Choice();
-        ProvinceChoice.setPreferredSize(new Dimension(200, 30));
-        ProvinceChoice.setFont(new Font(dv.fontName(), 0, 16));
-        ProvinceChoice.setForeground(new Color(dv.BlackTextColor()));
+        JComboBox ProvinceComboBox = new JComboBox();
+        ProvinceComboBox.setPreferredSize(new Dimension(200, 30));
+        ProvinceComboBox.setFont(new Font(dv.fontName(), 0, 16));
+        ProvinceComboBox.setForeground(new Color(dv.BlackTextColor()));
+        ProvinceComboBox.setBackground(Color.WHITE);
 
         try {
             Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
@@ -300,10 +302,10 @@ public class CreateOrgAccView extends JPanel implements ActionListener
             PreparedStatement st = connection.prepareStatement(query);
             ResultSet rs = st.executeQuery();
 
-            ProvinceChoice.add("");
+            ProvinceComboBox.addItem("");
             while (rs.next())
             {
-                ProvinceChoice.add(rs.getString("ProvinceName"));
+                ProvinceComboBox.addItem(rs.getString("ProvinceName"));
             }
         } catch (SQLException ex) {
             dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
@@ -326,7 +328,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                String InputProvince = ProvinceChoice.getSelectedItem();
+                String InputProvince = String.valueOf(ProvinceComboBox.getSelectedItem());
                 String InputQuantity = QuantityTextField.getText();
 
                 if (dv.checkisNumberInputValue(InputQuantity,
@@ -334,7 +336,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
                     return;
 
                 int answer = dv.popupConfirmOption(null,"Xác nhận tạo" + InputQuantity
-                        + " tài khoản đơn vị cho tỉnh/thành phố " + ProvinceChoice.getSelectedItem() + "?", "Xác nhận!");
+                        + " tài khoản đơn vị cho tỉnh/thành phố " + ProvinceComboBox.getSelectedItem() + "?", "Xác nhận!");
 
                 if (answer == JOptionPane.YES_OPTION)
                 {
@@ -370,7 +372,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER)
                 {
-                    String InputProvince = ProvinceChoice.getSelectedItem();
+                    String InputProvince = String.valueOf(ProvinceComboBox.getSelectedItem());
                     String InputQuantity = QuantityTextField.getText();
 
                     if (dv.checkisNumberInputValue(InputQuantity,
@@ -378,7 +380,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
                         return;
 
                     int answer = dv.popupConfirmOption(null,"Xác nhận tạo lịch " + InputQuantity
-                            + " tài khoản đơn vị cho tỉnh/thành phố " + ProvinceChoice.getSelectedItem() + "?", "Xác nhận!");
+                            + " tài khoản đơn vị cho tỉnh/thành phố " + ProvinceComboBox.getSelectedItem() + "?", "Xác nhận!");
 
                     if (answer == JOptionPane.YES_OPTION)
                     {
@@ -437,7 +439,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
 
         c.insets = new Insets(0,0,10,0);
         c.gridy = 2;
-        CreateOrgAccPanel.add(ProvinceChoice,c);
+        CreateOrgAccPanel.add(ProvinceComboBox,c);
 
         c.insets = new Insets(0, 0, 0, 0);
         c.gridy = 3;
@@ -512,7 +514,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
             LayeredPaneArea.removeAll();
             LayeredPaneArea.repaint(320, 40, 680, 630);
 
-            JLabel OrgListLabel = new JLabel("DANH SÁCH ĐƠN VỊ (" + ProvinceChoice.getSelectedItem() + ")");
+            JLabel OrgListLabel = new JLabel("DANH SÁCH ĐƠN VỊ (" + ProvinceComboBox.getSelectedItem() + ")");
             OrgListLabel.setBounds(0,0,640,40);
             OrgListLabel.setFont(new Font(dv.fontName(), 1, 20));
             OrgListLabel.setForeground(new Color(dv.FeatureButtonColor()));
