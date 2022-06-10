@@ -40,7 +40,7 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
     private JTextField StreetTextField;
     private JTextField EmailTextField;
     private JButton RegisterAccButton;
-    private Choice GenderChoice;
+    private JComboBox GenderChoice;
     private Choice HomeTownChoice;
     private Choice ProvinceChoice;
     private Choice DistrictChoice;
@@ -361,16 +361,16 @@ public class RegisterAccView extends JFrame implements ActionListener, KeyListen
     }
     private void initGenderChoice()
     {
-        GenderChoice = new Choice();
+        GenderChoice = new JComboBox();
         GenderChoice.setBounds(50 + 25 + 220, 60 + 3*dv.LabelHeight()+2*dv.FieldHeight() + dv.AlignTop_InfoView(), 80, 30);
         GenderChoice.setFont(new Font(dv.fontName(), 0, dv.LabelFontSize()));
         GenderChoice.setForeground(new Color(0x666666));
         GenderChoice.setBackground(Color.WHITE);
 
-        GenderChoice.add("");
-        GenderChoice.add("Nữ");
-        GenderChoice.add("Nam");
-        GenderChoice.add("Khác");
+        GenderChoice.addItem("");
+        GenderChoice.addItem("Nữ");
+        GenderChoice.addItem("Nam");
+        GenderChoice.addItem("Khác");
     }
 
     private void initHomeTownLabel()

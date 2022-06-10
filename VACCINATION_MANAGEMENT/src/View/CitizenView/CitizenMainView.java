@@ -398,7 +398,7 @@ public class CitizenMainView extends JFrame implements ActionListener
 
     public CitizenMainView(String Username)
     {
-        this.setTitle("Quản lý tiêm chủng vaccine Covid-19: Công dân");
+        this.setTitle("Công dân - " + Username);
         this.setBounds(260, 90, dv.FrameWidth(), dv.FrameHeight());
         this.setResizable(false);
         this.setVisible(true);

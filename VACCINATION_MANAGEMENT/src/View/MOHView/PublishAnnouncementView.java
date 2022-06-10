@@ -398,39 +398,36 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         Date.setFont(new Font(dv.fontName(), Font.ITALIC, 18));
         Date.setForeground(Color.BLACK);
 
-        AnnTextArea = new JTextArea("");
-        AnnTextArea.setBounds(0,0,0,0);
-        AnnTextArea.setFont(new Font(dv.fontName(), Font.PLAIN, 18));
-        AnnTextArea.setForeground(new Color(dv.BlackTextColor()));
-        AnnTextArea.setBackground(Color.WHITE);
-        AnnTextArea.setAutoscrolls(true);
-        AnnTextArea.setWrapStyleWord(true);
-        AnnTextArea.setLineWrap(true);
-        AnnTextArea.setEditable(false);
-        AnnTextArea.setBorder(null);
-
         if (ContentFilePath != null)
             try {
                 ContentFile = new Scanner(new File(ContentFilePath.getPath()));
             } catch (FileNotFoundException ex) {
                 dv.popupOption(null,"Không tìm thấy file nội dung!", "Lỗi!", 2);
                 ex.printStackTrace();
-                return;
             }
+
+        AnnTextArea = new JTextArea("");
+        AnnTextArea.setBounds(0,0,0,0);
+        AnnTextArea.setFont(new Font(dv.fontName(), Font.PLAIN, 18));
+        AnnTextArea.setForeground(new Color(dv.BlackTextColor()));
+        AnnTextArea.setBackground(Color.WHITE);
+        AnnTextArea.setAutoscrolls(false);
+        AnnTextArea.setWrapStyleWord(true);
+        AnnTextArea.setLineWrap(true);
+        AnnTextArea.setEditable(false);
+        AnnTextArea.setBorder(null);
+
+        if (ContentFile != null)
+        {
+            while (ContentFile.hasNextLine())
+                AnnTextArea.append( ContentFile.nextLine() + '\n');
+        }
 
         AnnContent = new JPanel();
         BoxLayout boxLayout = new BoxLayout(AnnContent, BoxLayout.Y_AXIS);
         AnnContent.setLayout(boxLayout);
         AnnContent.setBackground(Color.WHITE);
         AnnContent.setBounds(0,0,610,0);
-
-        if (ContentFile != null)
-        {
-            AnnTextArea.setBounds(0,0,610,1);
-            while (ContentFile.hasNextLine()) {
-                AnnTextArea.append(ContentFile.nextLine() + '\n');
-            }
-        }
 
         AnnContent.add(AnnTextArea);
         if (AttachedImage != null)
@@ -466,9 +463,9 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         AnnViewPanel.add(Publisher);
         AnnViewPanel.repaint(360, 0, 720, 720);
 
-        this.removeAll();
         this.add(AnnInfoPanel);
         this.add(AnnViewPanel);
+//        AnnViewPanel.repaint(360, 0, 720, 720);
         this.repaint(0,0,dv.FrameWidth(),dv.FrameHeight());
     }
 
@@ -504,6 +501,7 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
 
         if (e.getSource() == PreviewButton)
         {
+
             String InputTitle = TitleField.getText();
             String InputAnnNumber = AnnNumberField.getText();
             String InputPublishDate = PublishDateField.getJFormattedTextField().getText();
@@ -524,6 +522,7 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
                 return;
             }
 
+            this.removeAll();
             initAnnViewPanel();
             PublishButton.setEnabled(true);
         }
