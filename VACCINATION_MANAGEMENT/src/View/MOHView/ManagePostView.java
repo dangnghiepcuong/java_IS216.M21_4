@@ -105,7 +105,6 @@ public class ManagePostView extends JPanel {
                 }
 
                 ReInitView();
-
                 dv.popupOption(null,"Xóa văn bản/thông báo thành công!", "Thông báo!",0);
             }
         };
@@ -192,8 +191,11 @@ public class ManagePostView extends JPanel {
         }
 
         nAnn = i;
+        if (nAnn == 0)
+            nAnn = 1;
 
         PreAnnListPanel.setPreferredSize(new Dimension(340, nAnn*100 + nAnn*5));
+        PreAnnListPanel.setBounds(0,0,340,nAnn*100 + nAnn*5);
     }
 
     private void initScrollPanePreAnnList()// View Announcement new
@@ -217,6 +219,8 @@ public class ManagePostView extends JPanel {
 
         PreviewPanel.add(AnnListLabel);
         PreviewPanel.add(ScrollPanePreAnnList);
+
+        PreviewPanel.repaint(0,0,360,720);
     }
 
     public void initAnnViewPanel(Annoucement ann)
@@ -235,6 +239,7 @@ public class ManagePostView extends JPanel {
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneTitle.setBounds(40, 40, 630, 80);
         ScrollPaneTitle.setBorder(null);
+        ScrollPaneTitle.setBackground(Color.WHITE);
 
         JLabel AnnNumber = new JLabel("Thông báo số: " + ann.getID());
         AnnNumber.setBounds(80, 125, 640, 25);
@@ -246,7 +251,8 @@ public class ManagePostView extends JPanel {
         Date.setFont(new Font(dv.fontName(), Font.ITALIC, 18));
         Date.setForeground(Color.BLACK);
 
-        JTextArea AnnTextArea = new JTextArea(ann.getContent());
+        JTextArea AnnTextArea = new JTextArea();
+        AnnTextArea.setText(ann.getContent());
         if (ann.getContent() == null)
             AnnTextArea.setText("(Không có nội dung!)");
         AnnTextArea.setBounds(0,0,610,1);
@@ -265,6 +271,7 @@ public class ManagePostView extends JPanel {
         AnnContent.setBounds(0,0,610,0);
         AnnContent.setBackground(Color.WHITE);
         AnnContent.setOpaque(true);
+
         AnnContent.add(AnnTextArea);
         if (ann.getImage() != null)
         {
@@ -302,13 +309,13 @@ public class ManagePostView extends JPanel {
         AnnViewPanel.setLayout(null);
         AnnViewPanel.setBackground(Color.WHITE);
 
-        AnnViewPanel.removeAll();
+//        AnnViewPanel.removeAll();
         AnnViewPanel.add(ScrollPaneTitle);
         AnnViewPanel.add(AnnNumber);
         AnnViewPanel.add(Date);
         AnnViewPanel.add(ScrollPaneContent);
         AnnViewPanel.add(Publisher);
-        AnnViewPanel.repaint(360, 0, 720, 720);
+//        AnnViewPanel.repaint(360, 0, 720, 720);
 
         this.removeAll();
         this.add(PreviewPanel);

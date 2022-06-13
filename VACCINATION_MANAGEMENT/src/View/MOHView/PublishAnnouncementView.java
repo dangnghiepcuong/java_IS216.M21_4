@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.nio.charset.StandardCharsets;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -31,9 +32,6 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
 
     /*Announcement Content*/
     private JPanel AnnViewPanel;
-    private JPanel AnnContent;
-    private JTextArea AnnTextArea;
-    private JScrollPane ScrollPaneContent;
 
     /*Announcement Info*/
     private JPanel AnnInfoPanel;
@@ -387,6 +385,7 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneTitle.setBounds(40, 40, 630, 80);
         ScrollPaneTitle.setBorder(null);
+        ScrollPaneTitle.setBackground(Color.WHITE);
 
         JLabel AnnNumber = new JLabel("Thông báo số: " + AnnNumberField.getText());
         AnnNumber.setBounds(80, 125, 640, 25);
@@ -402,12 +401,23 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
             try {
                 ContentFile = new Scanner(new File(ContentFilePath.getPath()));
             } catch (FileNotFoundException ex) {
-                dv.popupOption(null,"Không tìm thấy file nội dung!", "Lỗi!", 2);
+                dv.popupOption(null, "Không tìm thấy file nội dung!", "Lỗi!", 2);
                 ex.printStackTrace();
             }
 
-        AnnTextArea = new JTextArea("");
-        AnnTextArea.setBounds(0,0,0,0);
+        String tempContent = "";
+        if (ContentFile != null)
+            while (ContentFile.hasNextLine())
+                tempContent += ContentFile.nextLine() + '\n';
+        else
+            tempContent = "(Không có nội dung)";
+
+        byte[] bytesString = tempContent.getBytes();
+        String encodeString = new String(bytesString, StandardCharsets.UTF_8);
+
+        JTextArea AnnTextArea = new JTextArea();
+        AnnTextArea.setText(tempContent);
+        AnnTextArea.setBounds(0, 0, 1, 1);
         AnnTextArea.setFont(new Font(dv.fontName(), Font.PLAIN, 18));
         AnnTextArea.setForeground(new Color(dv.BlackTextColor()));
         AnnTextArea.setBackground(Color.WHITE);
@@ -415,30 +425,23 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         AnnTextArea.setWrapStyleWord(true);
         AnnTextArea.setLineWrap(true);
         AnnTextArea.setEditable(false);
-        AnnTextArea.setBorder(null);
+//        AnnTextArea.setBorder(dv.border());
 
-        if (ContentFile != null)
-        {
-            while (ContentFile.hasNextLine())
-                AnnTextArea.append( ContentFile.nextLine() + '\n');
-        }
-
-        AnnContent = new JPanel();
+        JPanel AnnContent = new JPanel();
         BoxLayout boxLayout = new BoxLayout(AnnContent, BoxLayout.Y_AXIS);
         AnnContent.setLayout(boxLayout);
         AnnContent.setBackground(Color.WHITE);
-        AnnContent.setBounds(0,0,610,0);
+        AnnContent.setBounds(0, 0, 610, 1);
 
         AnnContent.add(AnnTextArea);
-        if (AttachedImage != null)
-        {
+        if (AttachedImage != null) {
             JPanel ImagePanel = new JPanel();
             ImagePanel.setBackground(Color.WHITE);
             ImagePanel.add(AttachedImage);
             AnnContent.add(ImagePanel);
         }
 
-        ScrollPaneContent = new JScrollPane(AnnContent,
+        JScrollPane ScrollPaneContent = new JScrollPane(AnnContent,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         ScrollPaneContent.setLayout(new ScrollPaneLayout());
         ScrollPaneContent.setBounds(40, 180, 630, 450);
@@ -446,10 +449,11 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         ScrollPaneContent.setBorder(null);
 
         JLabel Publisher = new JLabel("Đơn vị: " + orgUser.getName());
-        Publisher.setBounds(80, 640, 560, 30);
+        Publisher.setBounds(40, 640, 630, 30);
         Publisher.setFont(new Font(dv.fontName(), Font.ITALIC, 18));
         Publisher.setForeground(Color.BLACK);
         Publisher.setHorizontalAlignment(JLabel.RIGHT);
+//        Publisher.setBorder(dv.border());
 
         AnnViewPanel = new JPanel();
         AnnViewPanel.setBounds(360, 0, 720, 720);
@@ -461,12 +465,11 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
         AnnViewPanel.add(Date);
         AnnViewPanel.add(ScrollPaneContent);
         AnnViewPanel.add(Publisher);
-        AnnViewPanel.repaint(360, 0, 720, 720);
 
+        this.removeAll();
         this.add(AnnInfoPanel);
         this.add(AnnViewPanel);
-//        AnnViewPanel.repaint(360, 0, 720, 720);
-        this.repaint(0,0,dv.FrameWidth(),dv.FrameHeight());
+        this.repaint(0, 0, dv.FrameWidth(), dv.FrameHeight());
     }
 
     private void initComponents()
@@ -483,7 +486,6 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
     }
 
     /*CONSTRUCTOR*/
-
     public PublishAnnouncementView(Organization org)
     {
         orgUser = org;
@@ -501,7 +503,6 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
 
         if (e.getSource() == PreviewButton)
         {
-
             String InputTitle = TitleField.getText();
             String InputAnnNumber = AnnNumberField.getText();
             String InputPublishDate = PublishDateField.getJFormattedTextField().getText();
@@ -522,8 +523,8 @@ public class PublishAnnouncementView extends JPanel implements ActionListener, K
                 return;
             }
 
-            this.removeAll();
-            initAnnViewPanel();
+                initAnnViewPanel();
+
             PublishButton.setEnabled(true);
         }
 

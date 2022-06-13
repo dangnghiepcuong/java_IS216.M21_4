@@ -200,6 +200,7 @@ public class AnnouncementView extends JPanel {
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPaneTitle.setBounds(40, 40, 630, 80);
         ScrollPaneTitle.setBorder(null);
+        ScrollPaneTitle.setBackground(Color.WHITE);
 
         JLabel AnnNumber = new JLabel("Thông báo số: " + ann.getID());
         AnnNumber.setBounds(80, 125, 640, 25);
@@ -211,9 +212,10 @@ public class AnnouncementView extends JPanel {
         Date.setFont(new Font(dv.fontName(), Font.ITALIC, 18));
         Date.setForeground(Color.BLACK);
 
-        JTextArea AnnTextArea = new JTextArea(ann.getContent());
+        JTextArea AnnTextArea = new JTextArea();
+        AnnTextArea.setText(ann.getContent());
         if (ann.getContent() == null)
-            AnnTextArea.setText("(Không có nội dung!)");
+            AnnTextArea.setText("(Không có nội dung)");
         AnnTextArea.setBounds(0,0,610,1);
         AnnTextArea.setFont(new Font(dv.fontName(), Font.PLAIN, 18));
         AnnTextArea.setForeground(new Color(dv.BlackTextColor()));
@@ -227,7 +229,7 @@ public class AnnouncementView extends JPanel {
         JPanel AnnContent = new JPanel();
         BoxLayout boxLayout = new BoxLayout(AnnContent, BoxLayout.Y_AXIS);
         AnnContent.setLayout(boxLayout);
-        AnnContent.setBounds(0,0,610,0);
+        AnnContent.setBounds(0,0,610,1);
         AnnContent.setBackground(Color.WHITE);
         AnnContent.setOpaque(true);
         AnnContent.add(AnnTextArea);
@@ -257,7 +259,7 @@ public class AnnouncementView extends JPanel {
         ScrollPaneContent.setBorder(null);
 
         JLabel Publisher = new JLabel("Đơn vị: " + ann.getOrg().getName());
-        Publisher.setBounds(80, 640, 560, 30);
+        Publisher.setBounds(40, 640, 630, 30);
         Publisher.setFont(new Font(dv.fontName(), Font.ITALIC, 18));
         Publisher.setForeground(Color.BLACK);
         Publisher.setHorizontalAlignment(JLabel.RIGHT);

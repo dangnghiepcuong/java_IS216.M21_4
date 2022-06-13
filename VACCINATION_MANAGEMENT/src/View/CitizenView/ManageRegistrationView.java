@@ -18,7 +18,7 @@ public class ManageRegistrationView extends JPanel implements ActionListener
     private Person personalUser;
 
     private JLabel RegFilterLabel;
-    private Choice RegFilterChoice;
+    private JComboBox RegFilterComboBox;
     private JButton FilterButton;
     private JPanel RegFilterPanel;
 
@@ -44,19 +44,19 @@ public class ManageRegistrationView extends JPanel implements ActionListener
         RegFilterLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
     }
 
-    private void initRegFilterChoice()
+    private void initRegFilterComboBox()
     {
-        RegFilterChoice = new Choice();
-        RegFilterChoice.setBounds(0, 40, dv.FieldWidth(), dv.FieldHeight());
-        RegFilterChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
-        RegFilterChoice.setForeground(new Color(dv.BlackTextColor()));
-        RegFilterChoice.setBackground(Color.WHITE);
+        RegFilterComboBox = new JComboBox();
+        RegFilterComboBox.setBounds(0, 40, dv.FieldWidth(), dv.FieldHeight());
+        RegFilterComboBox.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
+        RegFilterComboBox.setForeground(new Color(dv.BlackTextColor()));
+        RegFilterComboBox.setBackground(Color.WHITE);
 
-        RegFilterChoice.add("Tất cả");
-        RegFilterChoice.add("Đã đăng ký");
-        RegFilterChoice.add("Đã điểm danh");
-        RegFilterChoice.add("Đã tiêm");
-        RegFilterChoice.add("Đã hủy");
+        RegFilterComboBox.addItem("Tất cả");
+        RegFilterComboBox.addItem("Đã đăng ký");
+        RegFilterComboBox.addItem("Đã điểm danh");
+        RegFilterComboBox.addItem("Đã tiêm");
+        RegFilterComboBox.addItem("Đã hủy");
     }
 
     private void initFilterButton()
@@ -75,7 +75,7 @@ public class ManageRegistrationView extends JPanel implements ActionListener
     private void initRegFilterPanel()
     {
         initRegFilterLabel();
-        initRegFilterChoice();
+        initRegFilterComboBox();
         initFilterButton();
 
         RegFilterPanel = new JPanel();
@@ -84,7 +84,7 @@ public class ManageRegistrationView extends JPanel implements ActionListener
         RegFilterPanel.setBackground(new Color(dv.ViewBackgroundColor()));
 
         RegFilterPanel.add(RegFilterLabel);
-        RegFilterPanel.add(RegFilterChoice);
+        RegFilterPanel.add(RegFilterComboBox);
         RegFilterPanel.add(FilterButton);
     }
 
@@ -209,13 +209,13 @@ public class ManageRegistrationView extends JPanel implements ActionListener
                 " and REG.SchedID = SCHED.ID" +
                 " and SCHED.OrgID = ORG.ID";
 
-        if (StatusFilter == 1) //select choice: Da dang ky
+        if (StatusFilter == 1) //select ComboBox: Da dang ky
             query += " and Status = 0";
-        if (StatusFilter == 2) //select choice: Da diem danh
+        if (StatusFilter == 2) //select ComboBox: Da diem danh
             query += " and Status = 1";
-        if (StatusFilter == 3) //select choice: Da tiem
+        if (StatusFilter == 3) //select ComboBox: Da tiem
             query += " and Status = 2";
-        if (StatusFilter == 4) //select choice: Da huy
+        if (StatusFilter == 4) //select ComboBox: Da huy
             query += " and Status = 3";
 
         query += " order by OnDate desc, Status";
@@ -324,7 +324,7 @@ public class ManageRegistrationView extends JPanel implements ActionListener
         {
             LayeredPaneArea.removeAll();
 
-            initRegListPanel(RegFilterChoice.getSelectedIndex());
+            initRegListPanel(RegFilterComboBox.getSelectedIndex());
             initScrollPaneRegList();
 
             LayeredPaneArea.add(ScrollPaneRegList);

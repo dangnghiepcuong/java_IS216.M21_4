@@ -265,15 +265,15 @@ public class LoginView extends JFrame implements ActionListener, MouseListener, 
             {
                 switch (acc.getRole()) {
                     case 0:
-//                        this.dispose();
+                        this.dispose();
                         MOHMainView mohMainView = new MOHMainView(acc.getUsername());
                         break;
                     case 1:
-//                        this.dispose();
+                        this.dispose();
                         ORGMainView orgMainView = new ORGMainView(acc.getUsername());
                         break;
                     case 2:
-//                        this.dispose();
+                        this.dispose();
                         CitizenMainView citizenMainView = new CitizenMainView(acc.getUsername());
                         break;
                     default:
@@ -368,15 +368,15 @@ public class LoginView extends JFrame implements ActionListener, MouseListener, 
             {
                 switch (acc.getRole()) {
                     case 0:
-//                        this.dispose();
+                        this.dispose();
                         MOHMainView mohMainView = new MOHMainView(acc.getUsername());
                         break;
                     case 1:
-//                        this.dispose();
+                        this.dispose();
                         ORGMainView orgMainView = new ORGMainView(acc.getUsername());
                         break;
                     case 2:
-//                        this.dispose();
+                        this.dispose();
                         CitizenMainView citizenMainView = new CitizenMainView(acc.getUsername());
                         break;
                     default:

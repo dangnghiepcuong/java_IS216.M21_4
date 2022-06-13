@@ -1942,3 +1942,5 @@ BEGIN
     end if;
 END SCHED_VALUE;
 /
+
+commit;
