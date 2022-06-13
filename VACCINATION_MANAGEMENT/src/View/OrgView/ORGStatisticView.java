@@ -25,6 +25,7 @@ public class ORGStatisticView extends JPanel implements ActionListener, KeyListe
     private DefaultValue dv = new DefaultValue();
     private Account acc = new Account();
     private Organization mohUser = new Organization();
+    private Vaccine vaccine[] = new Vaccine[10];
 
     /*Confirm Statistic*/
     private JPanel ConfirmStatisticPanel;
@@ -163,14 +164,9 @@ public class ORGStatisticView extends JPanel implements ActionListener, KeyListe
         StatisticListPanel = new JPanel();
         StatisticListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
         StatisticListPanel.setLayout(new FlowLayout());
-        StatisticListPanel.setPreferredSize(new Dimension(660,1250));
+        StatisticListPanel.setPreferredSize(new Dimension(660,1420));
 
-        String query = "select VAC.ID, Name, Technology, Country, COUNT(SCHED.ID) \n" +
-                "from VACCINE VAC, SCHEDULE SCHED\n" +
-                "where VAC.ID = SCHED.VaccineID\n" +
-                "and DayRegistered + NoonRegistered + NightRegistered > 0\n" +
-                "group by VAC.ID, Name, Technology, Country;";
-
+        String query = "select * from STATISTIC";
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
@@ -183,6 +179,8 @@ public class ORGStatisticView extends JPanel implements ActionListener, KeyListe
             Stat.setData(rs.getInt("Data"));
             if (rs.getString("LastUpdate") != null)
                 Stat.setLastUpdate(LocalDate.parse(rs.getString("LastUpdate").substring(0, 10)));
+            else
+                return;
 
             StatisticDateLabel= new JLabel(String.valueOf(Stat.getLastUpdate()));
             StatisticDateLabel.setFont(new Font(dv.fontName(), 2, 16));
@@ -325,6 +323,26 @@ public class ORGStatisticView extends JPanel implements ActionListener, KeyListe
             ex.printStackTrace();
             return;
         }
+
+        query = "select * from VACCINE";
+        try {
+            connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+            PreparedStatement st = connection.prepareStatement(query);
+            ResultSet rs = st.executeQuery(query);
+            int i = 0;
+            while (rs.next())
+            {
+                vaccine[i] = new Vaccine();
+                vaccine[i].setID(rs.getString("ID"));
+                vaccine[i].setName(rs.getString("Name"));
+                vaccine[i].setTechnology(rs.getString("Technology"));
+                vaccine[i].setCountry(rs.getString("Country"));
+                vaccine[i].setNote(rs.getString("Note"));
+                i++;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initScrollPaneStatisticList() {
@@ -413,10 +431,10 @@ public class ORGStatisticView extends JPanel implements ActionListener, KeyListe
         statisticPaper.addLabel(new JLabel(new ImageIcon(getClass().getResource("/Resources/icon/MOH-logo.png"))),
                 0, 1, 0, 2.5F, 2.5F);
         statisticPaper.addLabel(new JLabel("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM"),
-                PrintedPanel.NORMAL, 7, 0, 11.5F, 0.8F);
+                PrintedPanel.NORMAL, 8, 0, 11.5F, 0.8F);
         statisticPaper.addLabel(new JLabel("Độc lập - Tự do - Hạnh phúc"),
-                0, 9.5F, 1, 6.5F, 0.6F);
-        statisticPaper.addLabel(PlaceTimeLabel, 0, 8.5F,2,8,0.6F);
+                0, 10F, 1, 6.5F, 0.6F);
+        statisticPaper.addLabel(PlaceTimeLabel, 0, 9F,2,8,0.6F);
 
         PlaceTimeLabel.setOpaque(false);
         PlaceTimeLabel.setFont(new Font(dv.fontName(), 2, 16));
@@ -461,6 +479,11 @@ public class ORGStatisticView extends JPanel implements ActionListener, KeyListe
 //        statisticPaper.setPrintedBackground();
     }
 
+    private float pageHeight()
+    {
+        return 27;
+    }
+
     private void initPrintedPage2()
     {
         statisticPaper2 = new PrintedPanel();
@@ -469,8 +492,8 @@ public class ORGStatisticView extends JPanel implements ActionListener, KeyListe
         chartPanel.setBounds(0,0,560,320);
         chartPanel.setLayout(new FlowLayout());
         chartPanel.add(VaccinationTargetBarChart.getChartPanel2(560,320));
-        statisticPaper.addLabel(TargetLabel, 1, 1, 1 +30,17, 0.8F);
-        statisticPaper.addPanel(chartPanel,1,2 +30,17,9);
+        statisticPaper.addLabel(TargetLabel, 1, 1, 1 +pageHeight(),17, 0.8F);
+        statisticPaper.addPanel(chartPanel,1,2 +pageHeight(),17,9);
 
         TargetLabel.setFont(new Font(dv.fontName(), 1, 18));
         TargetLabel.setForeground(new Color(dv.FeatureButtonColor()));
@@ -481,8 +504,8 @@ public class ORGStatisticView extends JPanel implements ActionListener, KeyListe
         chartPanel.setBounds(0,0,560,320);
         chartPanel.setLayout(new FlowLayout());
         chartPanel.add(AffectedTargetBarChart.getChartPanel2(560,320));
-        statisticPaper.addLabel(AffectedLabel, 1, 1, 12 +30,17, 0.8F);
-        statisticPaper.addPanel(chartPanel,1,13 +30,17,9);
+        statisticPaper.addLabel(AffectedLabel, 1, 1, 12 +pageHeight(),17, 0.8F);
+        statisticPaper.addPanel(chartPanel,1,13 +pageHeight(),17,9);
 
         AffectedLabel.setFont(new Font(dv.fontName(), 1, 18));
         AffectedLabel.setForeground(new Color(dv.FeatureButtonColor()));
@@ -491,9 +514,44 @@ public class ORGStatisticView extends JPanel implements ActionListener, KeyListe
 
         JLabel Signature = new JLabel(mohUser.getName());
         Signature.setHorizontalAlignment(JLabel.RIGHT);
-        statisticPaper.addLabel(Signature, 3, 0,27 +30,18,0.8F);
+        statisticPaper.addLabel(Signature, 3, 0,27 +29.7F,18,0.8F);
+
+        JLabel VaccineListLabel = new JLabel("DANH SÁCH CÁC VACCINE ĐƯỢC SỬ DỤNG TRONG TIÊM CHỦNG");
+
+        JLabel Astra = new JLabel("1. "+ vaccine[0].getName() +
+                " (CTY SX: "+ vaccine[0].getNote() +" - QG: "+ vaccine[0].getCountry() +
+                " - CNSX: "+ vaccine[0].getTechnology() +")");
+
+        JLabel Sputnik = new JLabel("2. "+ vaccine[1].getName() +
+                " (CTY SX: "+ vaccine[1].getNote() +" - QG: "+ vaccine[1].getCountry() +
+                " - CNSX: "+ vaccine[1].getTechnology() +")");
+
+        JLabel Vero = new JLabel("3. "+ vaccine[2].getName() +
+                " (CTY SX: "+ vaccine[2].getNote() +" - QG: "+ vaccine[2].getCountry() +
+                " - CNSX: "+ vaccine[2].getTechnology() +")");
+
+        JLabel Corminaty = new JLabel("4. "+ vaccine[3].getName() +
+                " (CTY SX: "+ vaccine[3].getNote() +" - QG: "+ vaccine[3].getCountry() +
+                " - CNSX: "+ vaccine[3].getTechnology() +")");
+
+        JLabel Moderna = new JLabel("5. "+ vaccine[4].getName() +
+                " (CTY SX: "+ vaccine[4].getNote() +" - QG: "+ vaccine[4].getCountry() +
+                " - CNSX: "+ vaccine[4].getTechnology() +")");
+
+        statisticPaper.addLabel(VaccineListLabel, 1, 1.5F, 23 +pageHeight(), 18, 0.8F);
+        statisticPaper.addLabel(Astra, 0, 1.5F, 24 +pageHeight(), 18, 0.7F);
+        statisticPaper.addLabel(Sputnik, 0, 1.5F, 24.7F +pageHeight(), 18, 0.7F);
+        statisticPaper.addLabel(Vero, 0, 1.5F, 25.4F +pageHeight(), 18, 0.7F);
+        statisticPaper.addLabel(Corminaty, 0, 1.5F, 26.1F +pageHeight(), 18, 0.7F);
+        statisticPaper.addLabel(Moderna, 0, 1.5F, 26.8F +pageHeight(), 18, 0.7F);
 
         statisticPaper.setPrintedBackground();
+    }
+
+    private void initPrintedPages()
+    {
+        initPrintedPage1();
+        initPrintedPage2();
     }
 
     /*ACTION PERFORMED*/
@@ -588,8 +646,7 @@ public class ORGStatisticView extends JPanel implements ActionListener, KeyListe
                 connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
                 CallableStatement cst = connection.prepareCall(plsql);
 
-                initPrintedPage1();
-                initPrintedPage2();
+                initPrintedPages();
                 JPanel ExportImgPanel = statisticPaper.getPrintedPanel();
                 ExportImgPanel.setBounds(0, 0, 595, 842*2);
                 ExportImgPanel.setOpaque(false);
@@ -639,39 +696,20 @@ public class ORGStatisticView extends JPanel implements ActionListener, KeyListe
                 pdfFile.addMetaData("MOHStatistic", "", "Vaccination Statistic", "MOH", "MOH");
                 pdfFile.getPdfwriter();
                 pdfFile.openPDF();
-                initPrintedPage1();
-                initPrintedPage2();
+                initPrintedPages();
                 pdfFile.addPage(statisticPaper.getPrintedPanel(),1);
                 pdfFile.closePDF();
 
-                StatisticListPanel.removeAll();
+                /*StatisticListPanel.removeAll();
                 StatisticListPanel.setLayout(null);
                 StatisticListPanel.setBounds(0,0,dv.A4Width(), dv.A4Height());
                 StatisticListPanel.add(statisticPaper.getPrintedPanel());
-                this.repaint(0,0,dv.FrameWidth(),dv.FrameHeight());
+                this.repaint(0,0,dv.FrameWidth(),dv.FrameHeight());*/
             } catch (DocumentException | IOException ex) {
                 ex.printStackTrace();
                 dv.popupOption(null,"Không thể lưu. Tệp đang được mở bởi một chương trình khác!", "Lỗi!", 2);
                 return;
             }
-
-            /*try {
-                //start writting, painting
-                pdfFile.getPdfwriter2();
-                pdfFile.openPDF();
-                pdfFile.addNewPage();
-                initPrintedPage1();
-                pdfFile.addPage(statisticPaper.getPrintedPanel(),2);
-                pdfFile.addNewPage();
-                initPrintedPage2();
-                pdfFile.addPage(statisticPaper2.getPrintedPanel(),3);
-                pdfFile.addNewPage();
-                pdfFile.closePDF();
-            } catch (DocumentException | IOException ex) {
-                ex.printStackTrace();
-                dv.popupOption(null,"Không thể lưu. Tệp đang được mở bởi một chương trình khác!", "Lỗi!", 2);
-                return;
-            }*/
         }
 
     }

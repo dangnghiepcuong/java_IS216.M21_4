@@ -21,15 +21,15 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
     private JLabel ProvinceLabel;
     private JLabel DistrictLabel;
     private JLabel TownLabel;
-    private Choice DistrictChoice;
-    private Choice TownChoice;
-    private Choice ProvinceChoice;
+    private JComboBox ProvinceComboBox = new JComboBox();
+    private JComboBox DistrictComboBox = new JComboBox();
+    private JComboBox TownComboBox = new JComboBox();
     private JButton OrgFilterButton;
 
     //Schedule Filter Components
     private JPanel SchedFilterPanel;
     private JLabel SchedFilterLabel;
-    private Choice SchedFilterChoice;
+    private JComboBox SchedFilterComboBox;
     private JButton SchedFilterButton;
 
     private Organization SelectedOrg;
@@ -47,7 +47,7 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
     *   INITIALIZE A FILTER OF ORGANIZATION
     *   - PANEL:
     *       + LABELS
-    *       + CHOICES
+    *       + ComboBoxS
     *       + BUTTON: SELECT
     */
     private void initProvinceLabel()
@@ -60,15 +60,15 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
         ProvinceLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
     }
 
-    private void initProvinceChoice()
+    private void initProvinceComboBox()
     {
-        ProvinceChoice = new Choice();
-        ProvinceChoice.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
-        ProvinceChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
-        ProvinceChoice.setForeground(new Color(dv.BlackTextColor()));
-        ProvinceChoice.setBackground(Color.WHITE);
+        ProvinceComboBox = new JComboBox();
+        ProvinceComboBox.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
+        ProvinceComboBox.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
+        ProvinceComboBox.setForeground(new Color(dv.BlackTextColor()));
+        ProvinceComboBox.setBackground(Color.WHITE);
 
-        ProvinceChoice.add(personalUser.getProvince());
+        ProvinceComboBox.addItem(personalUser.getProvince());
         try {
             Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
@@ -76,11 +76,11 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
             PreparedStatement st = connection.prepareStatement(query);
             ResultSet rs = st.executeQuery();
 
-            ProvinceChoice.add("");
+            ProvinceComboBox.addItem("");
             while (rs.next())
             {
                 if (rs.getString("ProvinceName").equals(personalUser.getProvince()) == false)
-                    ProvinceChoice.add(rs.getString("ProvinceName"));
+                    ProvinceComboBox.addItem(rs.getString("ProvinceName"));
             }
         } catch (SQLException ex) {
             dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
@@ -88,7 +88,7 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
             return;
         }
 
-        ProvinceChoice.addItemListener(this);
+        ProvinceComboBox.addItemListener(this);
     }
 
     private void initDistrictLabel()
@@ -101,29 +101,29 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
         DistrictLabel.setSize(dv.LabelWidth(), dv.LabelHeight());
     }
 
-    private void initDistrictChoice()
+    private void initDistrictComboBox()
     {
-        DistrictChoice = new Choice();
-        DistrictChoice.setBounds(0, 100, dv.FieldWidth(), dv.FieldHeight());
-        DistrictChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
-        DistrictChoice.setForeground(new Color(0x333333));
-        DistrictChoice.setBackground(Color.WHITE);
-        DistrictChoice.addItemListener(this);
+        DistrictComboBox = new JComboBox();
+        DistrictComboBox.setBounds(0, 100, dv.FieldWidth(), dv.FieldHeight());
+        DistrictComboBox.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
+        DistrictComboBox.setForeground(new Color(0x333333));
+        DistrictComboBox.setBackground(Color.WHITE);
+        DistrictComboBox.addItemListener(this);
 
-        DistrictChoice.add(personalUser.getDistrict());
+        DistrictComboBox.addItem(personalUser.getDistrict());
         try {
             Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
             String query = "select distinct DistrictCode, DistrictName from REGION " +
-                    "where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "' " +
+                    "where ProvinceName = '" + ProvinceComboBox.getSelectedItem() + "' " +
                     "order by DistrictCode";
             PreparedStatement st = connection.prepareStatement(query);
             ResultSet rs = st.executeQuery();
 
-            DistrictChoice.add("");
+            DistrictComboBox.addItem("");
             while (rs.next())
                 if (rs.getString("DistrictName").equals(personalUser.getDistrict()) == false)
-                    DistrictChoice.add(rs.getString("DistrictName"));
+                    DistrictComboBox.addItem(rs.getString("DistrictName"));
         } catch (SQLException ex) {
             dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
             ex.printStackTrace();
@@ -141,30 +141,30 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
         TownLabel.setText("Xã/phường/thị trấn");
     }
 
-    private void initTownChoice()
+    private void initTownComboBox()
     {
-        TownChoice = new Choice();
-        TownChoice.setBounds(0, 170, dv.FieldWidth(), dv.FieldHeight());
-        TownChoice.setForeground(new Color(0x333333));
-        TownChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
-        TownChoice.setBackground(Color.WHITE);
-        TownChoice.addItemListener(this);
+        TownComboBox = new JComboBox();
+        TownComboBox.setBounds(0, 170, dv.FieldWidth(), dv.FieldHeight());
+        TownComboBox.setForeground(new Color(0x333333));
+        TownComboBox.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
+        TownComboBox.setBackground(Color.WHITE);
+        TownComboBox.addItemListener(this);
 
-        TownChoice.add(personalUser.getTown());
+        TownComboBox.addItem(personalUser.getTown());
         try {
             Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
             String query = "select distinct TownCode, TownName from REGION " +
-                    "where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "' " +
-                    "and DistrictName = '" + DistrictChoice.getSelectedItem() + "' " +
+                    "where ProvinceName = '" + ProvinceComboBox.getSelectedItem() + "' " +
+                    "and DistrictName = '" + DistrictComboBox.getSelectedItem() + "' " +
                     "order by TownCode";
             PreparedStatement st = connection.prepareStatement(query);
             ResultSet rs = st.executeQuery();
 
-            TownChoice.add("");
+            TownComboBox.addItem("");
             while (rs.next())
                 if (rs.getString("TownName").equals(personalUser.getTown()) == false)
-                    TownChoice.add(rs.getString("TownName"));
+                    TownComboBox.addItem(rs.getString("TownName"));
         } catch (SQLException ex) {
             dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
             ex.printStackTrace();
@@ -188,11 +188,11 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
     private void initOrgFilterPanel()
     {
         initProvinceLabel();
-        initProvinceChoice();
+        initProvinceComboBox();
         initDistrictLabel();
-        initDistrictChoice();
+        initDistrictComboBox();
         initTownLabel();
-        initTownChoice();
+        initTownComboBox();
         initOrgFilterButton();
 
         OrgFilterPanel = new JPanel();
@@ -201,11 +201,11 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
         OrgFilterPanel.setBackground(new Color(dv.ViewBackgroundColor()));
 
         OrgFilterPanel.add(ProvinceLabel);
-        OrgFilterPanel.add(ProvinceChoice);
+        OrgFilterPanel.add(ProvinceComboBox);
         OrgFilterPanel.add(DistrictLabel);
-        OrgFilterPanel.add(DistrictChoice);
+        OrgFilterPanel.add(DistrictComboBox);
         OrgFilterPanel.add(TownLabel);
-        OrgFilterPanel.add(TownChoice);
+        OrgFilterPanel.add(TownComboBox);
         OrgFilterPanel.add(OrgFilterButton);
     }
 
@@ -331,16 +331,16 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
         String query = "select ORG.ID, Name, ProvinceName, DistrictName, TownName, Street, COUNT(SCHED.ID)"
                 + " from ORGANIZATION ORG left outer join SCHEDULE SCHED on ORG.ID = SCHED.OrgID";
 
-        if (ProvinceChoice.getSelectedItem().equals("") == false)
-            query = query + " where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "'";
+        if (ProvinceComboBox.getSelectedItem().equals("") == false)
+            query = query + " where ProvinceName = '" + ProvinceComboBox.getSelectedItem() + "'";
         else
             query = query + " where ProvinceName like '%'";
 
-        if (DistrictChoice.getSelectedItem().equals("") == false)
-            query = query + " and DistrictName = '" + DistrictChoice.getSelectedItem() + "'";
+        if (DistrictComboBox.getSelectedItem().equals("") == false)
+            query = query + " and DistrictName = '" + DistrictComboBox.getSelectedItem() + "'";
 
-        if (TownChoice.getSelectedItem().equals("") == false)
-            query = query + " and TownName = '" + TownChoice.getSelectedItem() + "'";
+        if (TownComboBox.getSelectedItem().equals("") == false)
+            query = query + " and TownName = '" + TownComboBox.getSelectedItem() + "'";
 
         query += " and (OnDate > TO_DATE('" + dv.oracleSysdate() + "') or OnDate is null)";
         query += " group by ORG.ID, Name, ProvinceName, DistrictName, TownName, Street";
@@ -390,7 +390,7 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
      *   INITIALIZE REGISTER FILTER PANEL
      *   - PANEL:
      *       + LABEL
-     *       + CHOICE
+     *       + ComboBox
      *       + BUTTON: SELECT
      */
     private void initSchedFilterLabel()
@@ -403,19 +403,20 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
         SchedFilterLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
     }
 
-    private void initSchedFilterChoice()
+    private void initSchedFilterComboBox()
     {
-        SchedFilterChoice = new Choice();
-        SchedFilterChoice.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
-        SchedFilterChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
-        SchedFilterChoice.setForeground(new Color(dv.BlackTextColor()));
+        SchedFilterComboBox = new JComboBox();
+        SchedFilterComboBox.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
+        SchedFilterComboBox.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
+        SchedFilterComboBox.setForeground(new Color(dv.BlackTextColor()));
+        SchedFilterComboBox.setBackground(Color.WHITE);
 
-        SchedFilterChoice.add("Tất cả");
-        SchedFilterChoice.add("Astra Zeneca");
-        SchedFilterChoice.add("Vero Cell (Sinopharm)");
-        SchedFilterChoice.add("Sputnik V");
-        SchedFilterChoice.add("Corminaty (Pfizer)");
-        SchedFilterChoice.add("Moderna");
+        SchedFilterComboBox.addItem("Tất cả");
+        SchedFilterComboBox.addItem("Astra Zeneca");
+        SchedFilterComboBox.addItem("Vero Cell (Sinopharm)");
+        SchedFilterComboBox.addItem("Sputnik V");
+        SchedFilterComboBox.addItem("Corminaty (Pfizer)");
+        SchedFilterComboBox.addItem("Moderna");
     }
 
     private void initSchedFilterButton()
@@ -434,7 +435,7 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
     private void initSchedFilterPanel()
     {
         initSchedFilterLabel();
-        initSchedFilterChoice();
+        initSchedFilterComboBox();
         initSchedFilterButton();
 
         SchedFilterPanel = new JPanel();
@@ -443,7 +444,7 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
         SchedFilterPanel.setBackground(new Color(dv.ViewBackgroundColor()));
 
         SchedFilterPanel.add(SchedFilterLabel);
-        SchedFilterPanel.add(SchedFilterChoice);
+        SchedFilterPanel.add(SchedFilterComboBox);
         SchedFilterPanel.add(SchedFilterButton);
     }
 
@@ -507,13 +508,13 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
         NightTime.setBounds(250,(32+25+2)+25+2,150,25);
         NightTime.setHorizontalAlignment(JLabel.LEFT);
 
-        Choice TimeChoice = new Choice();
-        TimeChoice.setBounds(470, 32, 80, 30);
-        TimeChoice.setFont(new Font(dv.fontName(), 0, 16));
-        TimeChoice.setForeground(new Color(dv.BlackTextColor()));
-        TimeChoice.add("Sáng");
-        TimeChoice.add("Trưa");
-        TimeChoice.add("Tối");
+        JComboBox TimeComboBox = new JComboBox();
+        TimeComboBox.setBounds(470, 32, 80, 30);
+        TimeComboBox.setFont(new Font(dv.fontName(), 0, 16));
+        TimeComboBox.setForeground(new Color(dv.BlackTextColor()));
+        TimeComboBox.addItem("Sáng");
+        TimeComboBox.addItem("Trưa");
+        TimeComboBox.addItem("Tối");
 
         /*
             HANDLE REGISTER A VACCINATION SCHEDULE ACTION
@@ -573,7 +574,7 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
                         CallableStatement cst2 = connection.prepareCall(plsql2);
                         cst2.setString("par_PersonalID", personalUser.getID());
                         cst2.setString("par_SchedID", Sched.getID());
-                        cst2.setInt("par_Time", TimeChoice.getSelectedIndex());
+                        cst2.setInt("par_Time", TimeComboBox.getSelectedIndex());
                         cst2.setString("par_DoseType", par_DoseType);
 
                         cst2.execute();
@@ -608,7 +609,7 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
         SchedPanel.add(DayTime);
         SchedPanel.add(NoonTime);
         SchedPanel.add(NightTime);
-        SchedPanel.add(TimeChoice);
+        SchedPanel.add(TimeComboBox);
         SchedPanel.add(SchedRegisterButton);
 
         return SchedPanel;
@@ -633,7 +634,7 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
                 " where OrgID = '" + Org.getID() + "'" +
                 " and OnDate > TO_DATE('" + dv.oracleSysdate() + "')";
         if (SelectedVaccine != -1)
-            query += " and VaccineID = '" + dv.getVaccineID(SchedFilterChoice.getSelectedIndex()-1) + "'";
+            query += " and VaccineID = '" + dv.getVaccineID(SchedFilterComboBox.getSelectedIndex()-1) + "'";
         query += " order by OnDate";
 
         System.out.println(query);
@@ -711,7 +712,7 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
 
         //init OrgListLabel
         JLabel OrgListLabel = new JLabel("DANH SÁCH CÁC ĐƠN VỊ TIÊM CHỦNG ("
-                + ProvinceChoice.getSelectedItem() + "-" + DistrictChoice.getSelectedItem() + "-" + TownChoice.getSelectedItem() + ")");
+                + ProvinceComboBox.getSelectedItem() + "-" + DistrictComboBox.getSelectedItem() + "-" + TownComboBox.getSelectedItem() + ")");
         OrgListLabel.setBounds(0, 0, 640, 40);
         OrgListLabel.setFont(new Font(dv.fontName(), 1, 20));
         OrgListLabel.setForeground(new Color(dv.FeatureButtonColor()));
@@ -754,7 +755,7 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
             LayeredPaneArea.removeAll();
 
             JLabel OrgListLabel = new JLabel("DANH SÁCH CÁC ĐƠN VỊ TIÊM CHỦNG ("
-                    + ProvinceChoice.getSelectedItem() + "-" + DistrictChoice.getSelectedItem() + "-" + TownChoice.getSelectedItem() + ")");
+                    + ProvinceComboBox.getSelectedItem() + "-" + DistrictComboBox.getSelectedItem() + "-" + TownComboBox.getSelectedItem() + ")");
             OrgListLabel.setBounds(0, 0, 640, 40);
             OrgListLabel.setFont(new Font(dv.fontName(), 1, 20));
             OrgListLabel.setForeground(new Color(dv.FeatureButtonColor()));
@@ -779,7 +780,7 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
             SchedListLabel.setForeground(new Color(dv.FeatureButtonColor()));
             SchedListLabel.setHorizontalAlignment(JLabel.CENTER);
 
-            initSchedListPanel(SelectedOrg, SchedFilterChoice.getSelectedIndex()-1);
+            initSchedListPanel(SelectedOrg, SchedFilterComboBox.getSelectedIndex()-1);
             initScrollPaneSchedList();
 
             LayeredPaneArea.removeAll();
@@ -792,24 +793,24 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
     @Override
     public void itemStateChanged(ItemEvent e)
     {
-        if (e.getSource() == ProvinceChoice)
+        if (e.getSource() == ProvinceComboBox)
         {
             try {
-                DistrictChoice.removeAll();
-                TownChoice.removeAll();
+                DistrictComboBox.removeAllItems();
+                TownComboBox.removeAllItems();
 
                 Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
                 String query = "select distinct DistrictCode, DistrictName from REGION " +
-                        "where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "' " +
+                        "where ProvinceName = '" + ProvinceComboBox.getSelectedItem() + "' " +
                         "order by DistrictCode";
                 PreparedStatement st = connection.prepareStatement(query);
                 ResultSet rs = st.executeQuery();
 
-                DistrictChoice.add("");
-                TownChoice.add("");
+                DistrictComboBox.addItem("");
+                TownComboBox.addItem("");
                 while (rs.next())
-                    DistrictChoice.add(rs.getString("DistrictName"));
+                    DistrictComboBox.addItem(rs.getString("DistrictName"));
             } catch (SQLException ex) {
                 dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
                 ex.printStackTrace();
@@ -817,23 +818,23 @@ public class RegisterVaccinationView extends JPanel implements ActionListener, I
             }
         }
 
-        if (e.getSource() == DistrictChoice)
+        if (e.getSource() == DistrictComboBox)
         {
             try {
-                TownChoice.removeAll();
+                TownComboBox.removeAllItems();
 
                 Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
                 String query = "select distinct TownCode, TownName from REGION " +
-                        "where ProvinceName = '" + ProvinceChoice.getSelectedItem() + "' " +
-                        "and DistrictName = '" + DistrictChoice.getSelectedItem() + "' " +
+                        "where ProvinceName = '" + ProvinceComboBox.getSelectedItem() + "' " +
+                        "and DistrictName = '" + DistrictComboBox.getSelectedItem() + "' " +
                         "order by TownCode";
                 PreparedStatement st = connection.prepareStatement(query);
                 ResultSet rs = st.executeQuery();
 
-                TownChoice.add("");
+                TownComboBox.addItem("");
                 while (rs.next())
-                    TownChoice.add(rs.getString("TownName"));
+                    TownComboBox.addItem(rs.getString("TownName"));
             } catch (SQLException ex) {
                 dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
                 ex.printStackTrace();

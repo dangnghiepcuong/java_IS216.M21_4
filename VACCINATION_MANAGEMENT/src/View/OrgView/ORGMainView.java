@@ -286,6 +286,7 @@ public class ORGMainView extends JFrame implements ActionListener
         StatisticButton.setContentAreaFilled(false);
         StatisticButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Statistic Feature Button.png")));
         StatisticButton.addActionListener(this);
+        StatisticButton.setEnabled(false);
 
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(240 -10, 240+130, 240, 30);

@@ -308,8 +308,12 @@ public class SearchCitizenView extends JPanel implements ActionListener, KeyList
        }
 
        nInj = i;
+       nInj = 120*nInj + nInj*10;
+       if (nInj < 500)
+           nInj = 500;
 
-       InjectionListPanel.setPreferredSize(new Dimension(580, 120*nInj + nInj*10));
+       InjectionListPanel.setPreferredSize(new Dimension(580, nInj));
+//       InjectionListPanel.setBounds(0,0,580,nInj);
    }
 
 

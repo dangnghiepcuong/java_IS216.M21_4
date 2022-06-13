@@ -6,7 +6,7 @@ import java.awt.*;
 import java.time.LocalDateTime;
 
 public class DefaultValue {
-    private String DB_URL = "jdbc:oracle:thin:@localhost:1521:nghiepcuong";
+    private String DB_URL = "jdbc:oracle:thin:@localhost:1521:orcl";
     private String username = "vaccination_management_database";
     private String password = "covid19";
 
@@ -111,6 +111,10 @@ public class DefaultValue {
 
 //        String responses[] = {"Có", "Không"};
 
+        String translateMess = Message;
+        if (Option == 2 && title.length() >= 5)
+            translateMess = translateError(Integer.parseInt(title.substring(title.length()-5,title.length())), Message);
+
         switch (Option) {
             case 0:
                 OptionFrame.showMessageDialog(frame, Message, title, JOptionPane.INFORMATION_MESSAGE,
@@ -121,7 +125,7 @@ public class DefaultValue {
                         new ImageIcon(getClass().getResource("/Resources/icon/Warning Icon.png")));
                 break;
             case 2:
-                OptionFrame.showMessageDialog(frame, Message, title, JOptionPane.ERROR_MESSAGE,
+                OptionFrame.showMessageDialog(frame, translateMess, title, JOptionPane.ERROR_MESSAGE,
                         new ImageIcon(getClass().getResource("/Resources/icon/Error Icon.png")));
                 break;
             default:
@@ -129,6 +133,30 @@ public class DefaultValue {
         }
 
         return OptionFrame;
+    }
+
+    public String translateError(int ErrorCode, String Message)
+    {
+        if (ErrorCode == 20000) return "Độ tuổi của bạn nhỏ hơn quy định tiêm chủng!";
+        if (ErrorCode == 20001) return "Bạn phải hoàn thành lượt đăng ký tiêm chủng hiện có trước khi thực hiện đăng ký lịch tiêm chủng mới!";
+        if (ErrorCode == 20002) return "Bạn đã hoàn thành tất cả các liều tiêm chủng!";
+        if (ErrorCode == 20003) return "Không thể đăng ký lịch tiêm này vì không phù hợp với khoảng cách thời gian tiêm chủng được quy định!";
+        if (ErrorCode == 20004) return "Không thể đăng ký lịch tiêm này vì không phù hợp với loại vaccine tiêm chủng được quy định!";
+        if (ErrorCode == 20005) return "Bạn phải thực hiện khai báo y tế trong vòng 7 ngày trước khi lịch tiêm diễn ra!";
+        if (ErrorCode == 20006) return "Bạn đã bị nhiễm Covid-19 trong khoảng thời gian gần đây, xin chờ đến khi bạn hồi phục hoàn toàn!";
+        if (ErrorCode == 20007) return "Bạn chưa thực hiện khai báo y tế trong 7 ngày gần đây!";
+        if (ErrorCode == 20008) return "Tên không được bỏ trống!";
+        if (ErrorCode == 20009) return "Ngày sinh không được là ngày trong tương lai!";
+        if (ErrorCode == 20010) return "Số lượt đăng ký không thể là số âm!";
+        if (ErrorCode == 20011) return "Số lượt đăng ký đã đạt giới hạn!";
+        if (ErrorCode == 20012) return "Tên tài khoản/SĐT đã được sử dụng bởi một người dùng khác!";
+        if (ErrorCode == 20013) return "Sai mật khẩu!";
+        if (ErrorCode == 20014) return "Tên tài khoản/SĐT không tồn tại!";
+        if (ErrorCode == 20015) return "CCCD hoặc SĐT đã được sử dụng bởi một người dùng khác!";
+        if (ErrorCode == 20016) return "Mã vaccine hoặc tên vaccine đã được sử dụng để đăng ký thông tin!";
+        if (ErrorCode == 20020) return "Không thể cập nhật, số lượt đăng ký đã vượt giới hạn!";
+        if (ErrorCode == 20021) return "Đã tồn tại một lịch tiêm cùng ngày và cùng loại vaccine!";
+        return Message;
     }
 
     public String popupInputOption(String message, String title)
