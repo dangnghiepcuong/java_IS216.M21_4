@@ -1945,17 +1945,18 @@ BEGIN
         'Number of registion is limited!');
     end if;
     
-    --check if a similar schedule is already existed
+    /*--check if a similar schedule is already existed
     select ID into var_SchedID
     from SCHEDULE
     where OnDate = :new.OnDate
-    and VaccineID = :new.VaccineID;
-    
+    and VaccineID = :new.VaccineID
+    and OrgID = :new.OrgID;
+
     if (var_SchedID is not null)
     then
         raise_application_error(-20021,
         'A schedule with the same date and vaccine is already existed!');
-    end if;
+    end if;*/
 END SCHED_VALUE;
 /
 

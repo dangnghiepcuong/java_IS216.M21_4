@@ -1926,19 +1926,36 @@ end REG_VACCINATION_TARGET;
 --  DDL for Trigger SCHED_VALUE
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE TRIGGER "SCHED_VALUE" 
+CREATE OR REPLACE TRIGGER "SCHED_VALUE" 
 BEFORE INSERT OR UPDATE ON SCHEDULE
 FOR EACH ROW
+DECLARE
+    var_SchedID SCHEDULE.ID%type;
 BEGIN
     if (:new.LimitDay < 0 or :new.LimitNoon < 0 or :new.LimitNight < 0)
     then
-        raise_application_error(-20010,'Number of registion can not be negative!');
+        raise_application_error(-20010,
+        'Number of registion can not be negative!');
     end if;
 
     if (:new.DayRegistered > :new.LimitDay or :new.NoonRegistered > :new.LimitNoon
     or :new.NightRegistered > :new.LimitNight)
     then
-        raise_application_error(-20011,'Number of registion is limited!');
+        raise_application_error(-20011,
+        'Number of registion is limited!');
+    end if;
+    
+    --check if a similar schedule is already existed
+    select ID into var_SchedID
+    from SCHEDULE
+    where OnDate = :new.OnDate
+    and VaccineID = :new.VaccineID
+    and OrgID = :new.OrgID;
+
+    if (var_SchedID is not null)
+    then
+        raise_application_error(-20021,
+        'A schedule with the same date and vaccine is already existed!');
     end if;
 END SCHED_VALUE;
 /
