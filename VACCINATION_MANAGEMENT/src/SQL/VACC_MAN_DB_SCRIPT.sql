@@ -1058,7 +1058,7 @@ begin
     --If the schedule is full, then raise error
     if (set_NO = 0) 
     then
-        raise_application_error(-20010,'The registion is limited!');
+        raise_application_error(-20011,'Number of registion is limited!');
     end if;
 
 	--Check the type of registing dose
