@@ -360,12 +360,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                     dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
                                     ex.printStackTrace();
                                     return;
-                                } finally {
-                                    try {
-                                        conn.close();
-                                    } catch (SQLException ex) {
-                                        ex.printStackTrace();
-                                    }
                                 }
 
                                 Sched.setLimitDay(Integer.parseInt(InputLimitDay));
@@ -379,8 +373,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
                                 dv.popupOption(null, "Cập nhật thành công!", "Thông báo!", 0);
                             }
-
-
                         };
 
                         JButton UpdateSchedButton = new JButton();
