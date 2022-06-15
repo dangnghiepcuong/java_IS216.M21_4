@@ -308,6 +308,14 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         LimitNightTextField.setFont(new Font(dv.fontName(), 0, 16));
                         LimitNightTextField.setForeground(new Color(dv.BlackTextColor()));
 
+                        JButton ConfirmUpdateButton = new JButton();
+                        ImageIcon ConfirmUpdateButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Confirm Button.png"));
+                        ConfirmUpdateButton.setForeground(new Color(dv.BlackTextColor()));
+                        ConfirmUpdateButton.setPreferredSize(new Dimension(ConfirmUpdateButtonIcon.getIconWidth(), ConfirmUpdateButtonIcon.getIconHeight()));
+                        ConfirmUpdateButton.setContentAreaFilled(false);
+                        ConfirmUpdateButton.setBorder(null);
+                        ConfirmUpdateButton.setIcon(ConfirmUpdateButtonIcon);
+                        ConfirmUpdateButton.setEnabled(true);
                         ActionListener handleConfirmButton = new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
@@ -339,6 +347,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                 if (dv.popupConfirmOption(null, "Xác nhận cập nhật lịch tiêm?", "Xác nhận?") != 0)
                                     return;
 
+                                ConfirmUpdateButton.setEnabled(false);
                                 String plsql = "{call SCHED_UPDATE_RECORD(?, ?, ?, ?)}";
                                 try {
                                     CallableStatement cst = conn.prepareCall(plsql);
@@ -360,12 +369,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                     dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
                                     ex.printStackTrace();
                                     return;
-                                } finally {
-                                    try {
-                                        conn.close();
-                                    } catch (SQLException ex) {
-                                        ex.printStackTrace();
-                                    }
                                 }
 
                                 Sched.setLimitDay(Integer.parseInt(InputLimitDay));
@@ -376,21 +379,11 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                         + "          Buổi tối: " + Sched.getNightRegistered() + "/" + Sched.getLimitNight());
 
                                 UpdateSchedPanel.repaint(0, 0, 680, 630);
-
                                 dv.popupOption(null, "Cập nhật thành công!", "Thông báo!", 0);
                             }
-
-
                         };
+                        ConfirmUpdateButton.addActionListener(handleConfirmButton);
 
-                        JButton UpdateSchedButton = new JButton();
-                        ImageIcon UpdateSchedButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Confirm Button.png"));
-                        UpdateSchedButton.setForeground(new Color(dv.BlackTextColor()));
-                        UpdateSchedButton.setPreferredSize(new Dimension(UpdateSchedButtonIcon.getIconWidth(), UpdateSchedButtonIcon.getIconHeight()));
-                        UpdateSchedButton.setContentAreaFilled(false);
-                        UpdateSchedButton.setBorder(null);
-                        UpdateSchedButton.setIcon(UpdateSchedButtonIcon);
-                        UpdateSchedButton.addActionListener(handleConfirmButton);
 
                         GridBagConstraints c = new GridBagConstraints();
                         c.gridx = 0;
@@ -436,7 +429,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         UpdateSchedPanel.add(LimitNightTextField, c);
 
                         c.gridy++;
-                        UpdateSchedPanel.add(UpdateSchedButton, c);
+                        UpdateSchedPanel.add(ConfirmUpdateButton, c);
 
                         LayeredPaneArea.add(UpdateSchedPanel, Integer.valueOf(0));
 

@@ -95,7 +95,7 @@
 --  Constraints for Table HEALTH
 --------------------------------------------------------
 
-  ALTER TABLE "HEALTH" ADD CONSTRAINT "PK_HEAL" PRIMARY KEY ("PERSONALID", "ID") USING INDEX  ENABLE;
+  ALTER TABLE "HEALTH" ADD CONSTRAINT "PK_HEAL" PRIMARY KEY ("PERSONALID", "ID", "FILLEDDATE") USING INDEX  ENABLE;
   ALTER TABLE "HEALTH" ADD CONSTRAINT "CK_HEAL_FILLEDDATE" CHECK ("FILLEDDATE" IS NOT NULL) ENABLE;
 --------------------------------------------------------
 --  Constraints for Table INJECTION
@@ -1945,7 +1945,7 @@ BEGIN
         'Number of registion is limited!');
     end if;
     
-    --check if a similar schedule is already existed
+    /*--check if a similar schedule is already existed
     select ID into var_SchedID
     from SCHEDULE
     where OnDate = :new.OnDate
@@ -1956,7 +1956,7 @@ BEGIN
     then
         raise_application_error(-20021,
         'A schedule with the same date and vaccine is already existed!');
-    end if;
+    end if;*/
 END SCHED_VALUE;
 /
 
