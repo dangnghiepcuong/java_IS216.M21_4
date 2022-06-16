@@ -257,7 +257,7 @@ public class ManageRegistrationView extends JPanel implements ActionListener
 
         int nRegs = i;
 
-        RegListPanel.setPreferredSize(new Dimension(660, 120*nRegs +nRegs*10));
+        RegListPanel.setPreferredSize(new Dimension(660, 120*nRegs +nRegs*5));
     }
 
     private void initScrollPaneRegList()

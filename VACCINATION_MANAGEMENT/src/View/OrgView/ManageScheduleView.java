@@ -877,7 +877,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
         nReg = i;
 
-        RegListPanel.setPreferredSize(new Dimension(660, 150*nReg+nReg*10));
+        RegListPanel.setPreferredSize(new Dimension(660, 120*nReg+nReg*5));
     }
 
     private void initScrollPaneRegList()
