@@ -594,6 +594,12 @@ public class MOHStatisticView extends JPanel implements ActionListener, KeyListe
             if (dv.checkisNumberInputValue(InputWithinDays, "Lỗi!", "Số ngày thống kê phải là số!") != -2)
                 return;
 
+            if (Integer.valueOf(InputWithinDays) <= 0)
+            {
+                dv.popupOption(null, "Số ngày thống kê phải là số dương!","Lỗi!",2);
+                return;
+            }
+
             String plsql = "{call STAT_STATISTIC_ALL(?)}";
 
             try {

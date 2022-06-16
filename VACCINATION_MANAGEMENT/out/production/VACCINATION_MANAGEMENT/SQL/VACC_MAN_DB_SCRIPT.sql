@@ -534,6 +534,13 @@ is
     temp_String varchar2(100);
     var_ProvinceCode REGION.ProvinceCode%type;
 begin
+    --check quantity
+    if (par_Quantity <= 0)
+    then
+    begin
+        raise_application_error(-20021,'Quantity must be a positive number!');
+    end if;
+
     --select out the last ID of the ORG in the par_Province
     select COUNT(ID) into Last_Seq
     from ORGANIZATION
@@ -1058,7 +1065,7 @@ begin
     --If the schedule is full, then raise error
     if (set_NO = 0) 
     then
-        raise_application_error(-20010,'The registion is limited!');
+        raise_application_error(-20011,'Number of registion is limited!');
     end if;
 
 	--Check the type of registing dose

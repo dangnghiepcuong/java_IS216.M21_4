@@ -155,7 +155,7 @@ public class DefaultValue {
         if (ErrorCode == 20015) return "CCCD hoặc SĐT đã được sử dụng bởi một người dùng khác!";
         if (ErrorCode == 20016) return "Mã vaccine hoặc tên vaccine đã được sử dụng để đăng ký thông tin!";
         if (ErrorCode == 20020) return "Không thể cập nhật, số lượt đăng ký đã vượt giới hạn!";
-        if (ErrorCode == 20021) return "Đã tồn tại một lịch tiêm cùng ngày và cùng loại vaccine!";
+        if (ErrorCode == 20021) return "Số lượng tài khoản phải là số dương!";
         return Message;
     }
 
