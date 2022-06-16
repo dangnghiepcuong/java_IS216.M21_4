@@ -80,8 +80,8 @@ Trong đó:
 a)	Yêu cầu lưu trữ
 
 Hệ thống cần lưu trữ các thông tin về các loại vaccine, thông tin các đơn vị tổ chức tiêm chủng, thông tin công dân, thông tin lịch tiêm chủng, lịch đăng ký tiêm chủng, thông tin về các mũi tiêm của công dân.
-.•	Thông tin đăng nhập: số điện thoại, mật khẩu, quyền truy cập.
-.•	Thông tin vaccine: tên vaccine, mã vaccine, công nghệ sản xuất, nước sản xuất.
+•	Thông tin đăng nhập: số điện thoại, mật khẩu, quyền truy cập.
+•	Thông tin vaccine: tên vaccine, mã vaccine, công nghệ sản xuất, nước sản xuất.
 •	Thông tin các đơn vị tổ chức tiêm chủng: tên đơn vị, mã đơn vị, tỉnh/thành đơn vị trực thuộc, quận/huyện đơn vị trực thuộc, xã/phường/thị trấn đơn vị trực thuộc.
 •	Thông tin công dân: CMND/CCCD, họ và tên đệm, tên, ngày sinh, giới tính, quê quán, tỉnh/thành thường trú/tạm trú, quận/huyện thường trú/tạm trú, xã/phường/thị trấn thường trú/tạm trú, số điện thoại, email, ghi chú, người giám hộ.
 •	Thông tin lịch tiêm chủng: mã lịch tiêm, mã đơn vị tiêm, mã vaccine, ngày tiêm, số lượng giới hạn người đăng ký buổi sáng, số lượng giới hạn người đăng ký buổi chiều, số lượng người đăng ký buổi sáng, số lượng người đăng ký buổi chiều.
