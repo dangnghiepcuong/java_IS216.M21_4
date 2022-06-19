@@ -1745,11 +1745,11 @@ END PERSON_VALUE;
 --  DDL for Trigger REG_VACCINATION_AGE_STATUS
 --------------------------------------------------------
 
-  CREATE OR REPLACE EDITIONABLE TRIGGER "REG_VACCINATION_AGE_STATUS" 
+create or replace TRIGGER "REG_VACCINATION_AGE_STATUS" 
 before insert on REGISTER
 for each row
 declare
-    LastReg number(1);
+    var_LastStatus number(1);
     var_BirthDay PERSON.BirthDay%type;
 begin
     --select out the day of birth to calc age
@@ -1764,22 +1764,22 @@ begin
         'Your age is lower than the regulation!');
     end if;
 
-    --select out the last registion
-    select Status into LastReg
+    --select out if there is a registration has not been completed
+    select Status into var_LastStatus
     from REGISTER REG
     where REG.PersonalID = :new.PersonalID
     and Status = 0 or Status = 1;
 
-    if (LastReg < 2)
+    if (var_LastStatus < 2)
     then
         raise_application_error(-20001,
         'You must complete your previous registion before register a new one!');
     end if;
-
-    EXCEPTION
-        when no_data_found
-        then
-            NULL;    
+    
+EXCEPTION
+    when no_data_found
+    then
+        NULL;
 end REG_VACCINATION_AGE_STATUS;
 /
 --------------------------------------------------------
