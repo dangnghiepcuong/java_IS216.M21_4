@@ -1,8 +1,11 @@
 package View.OrgView;
 
-import Process.*;
-import View.CitizenView.RegisterVaccinationView;
+import Process.DefaultValue;
+import Process.Organization;
 import View.LoginView;
+import View.MOHView.PublishAnnouncementView;
+import View.MOHView.SearchCitizenView;
+import View.MOHView.ManagePostView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,22 +28,25 @@ public class ORGMainView extends JFrame implements ActionListener
     private JLayeredPane FeatureLayeredPane;
     private JButton InfoSettingButton;
     private JButton ManageSchedButton;
-    private JButton PublishPostButton;
+    private JButton PublishAnnButton;
     private JButton SearchButton;
     private JButton StatisticButton;
-
-
+    private JButton ViewPostButton;
 
     private Organization orgUser = new Organization();
 
     private LoginView loginView;
     private OrgInformationView orgInformationView;
-    private RegisterVaccinationView registerVaccinationView;
     private ManageScheduleView manageScheduleView;
+    private PublishAnnouncementView publishAnnouncementView;
+    private SearchCitizenView searchCitizenView;
+    private ORGStatisticView orgStatisticView;
+    private ManagePostView managePostView;
 
     private JButton LogoutButton;
     private JButton BackButton;
     private JButton BackInfoButton;
+    private JButton PublishNewPostButton;
 
     private void initBackButton()
     {
@@ -66,6 +72,17 @@ public class ORGMainView extends JFrame implements ActionListener
         BackInfoButton.setContentAreaFilled(false);
 
         BackInfoButton.addActionListener(this);
+    }
+
+    private void initPublishNewPostButton()
+    {
+        ImageIcon PublishNewPostIcon = new ImageIcon(getClass().getResource("/Resources/icon/Write Post Button.png"));
+        PublishNewPostButton = new JButton();
+        PublishNewPostButton.setBounds((360-PublishNewPostIcon.getIconWidth())/2, 600, PublishNewPostIcon.getIconWidth(), PublishNewPostIcon.getIconHeight());
+        PublishNewPostButton.setBorder(null);
+        PublishNewPostButton.setContentAreaFilled(false);
+        PublishNewPostButton.setIcon(PublishNewPostIcon);
+        PublishNewPostButton.addActionListener(this);
     }
 
     private void initInfoLayeredPane()
@@ -124,19 +141,11 @@ public class ORGMainView extends JFrame implements ActionListener
         FeatureLayeredPane.setBackground(new Color(dv.ViewBackgroundColor()));
 
         initInfoSettingButton();
-        FeatureLayeredPane.add(InfoSettingButton);
-
         initManageSchedButton();
-        FeatureLayeredPane.add(ManageSchedButton);
-
-        initPublishPostButton();
-        FeatureLayeredPane.add(PublishPostButton);
-
+        initPublishAnnButton();
         initSearchButton();
-        FeatureLayeredPane.add(SearchButton);
-
         initStatisticButton();
-        FeatureLayeredPane.add(StatisticButton);
+        initViewPostButton();
     }
 
     private void initInfoBackground()
@@ -175,6 +184,7 @@ public class ORGMainView extends JFrame implements ActionListener
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
+        FeatureLayeredPane.add(InfoSettingButton);
         FeatureLayeredPane.add(ButtonLabel);
         FeatureLayeredPane.add(ButtonLabel2);
     }
@@ -203,22 +213,23 @@ public class ORGMainView extends JFrame implements ActionListener
         ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel2_1.setBorder(dv.border());
+        FeatureLayeredPane.add(ManageSchedButton);
         FeatureLayeredPane.add(ButtonLabel);
         FeatureLayeredPane.add(ButtonLabel2);
     }
 
-    private void initPublishPostButton()
+    private void initPublishAnnButton()
     {
-        PublishPostButton = new JButton();
-        PublishPostButton.setBounds(240*2+30, 30, 133,133);
-        PublishPostButton.setBorder(null);
-        PublishPostButton.setContentAreaFilled(false);
-        PublishPostButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Send Notification Feature Button.png")));
-        PublishPostButton.addActionListener(this);
+        PublishAnnButton = new JButton();
+        PublishAnnButton.setBounds(240*2+30, 30, 133,133);
+        PublishAnnButton.setBorder(null);
+        PublishAnnButton.setContentAreaFilled(false);
+        PublishAnnButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Send Notification Feature Button.png")));
+        PublishAnnButton.addActionListener(this);
 
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(240*2 -15, 160, 240-20, 30);
-        ButtonLabel.setText("Gửi thông báo");
+        ButtonLabel.setText("Gửi văn bản");
         ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -226,12 +237,13 @@ public class ORGMainView extends JFrame implements ActionListener
 
         JLabel ButtonLabel2 = new JLabel();
         ButtonLabel2.setBounds(240*2 -15, 160 +25, 240-20, 30);
-        ButtonLabel2.setText("địa phương");
+        ButtonLabel2.setText("thông báo");
         ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
         ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
+        FeatureLayeredPane.add(PublishAnnButton);
         FeatureLayeredPane.add(ButtonLabel);
         FeatureLayeredPane.add(ButtonLabel2);
     }
@@ -261,6 +273,7 @@ public class ORGMainView extends JFrame implements ActionListener
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
+        FeatureLayeredPane.add(SearchButton);
         FeatureLayeredPane.add(ButtonLabel);
         FeatureLayeredPane.add(ButtonLabel2);
     }
@@ -273,6 +286,7 @@ public class ORGMainView extends JFrame implements ActionListener
         StatisticButton.setContentAreaFilled(false);
         StatisticButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/Statistic Feature Button.png")));
         StatisticButton.addActionListener(this);
+        StatisticButton.setEnabled(false);
 
         JLabel ButtonLabel = new JLabel();
         ButtonLabel.setBounds(240 -10, 240+130, 240, 30);
@@ -290,6 +304,37 @@ public class ORGMainView extends JFrame implements ActionListener
         ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
         //ButtonLabel.setBorder(dv.border());
 
+        FeatureLayeredPane.add(StatisticButton);
+        FeatureLayeredPane.add(ButtonLabel);
+        FeatureLayeredPane.add(ButtonLabel2);
+    }
+
+    private void initViewPostButton()
+    {
+        ViewPostButton = new JButton();
+        ViewPostButton.setBounds(240*2+30, 240 , 133, 133);
+        ViewPostButton.setBorder(null);
+        ViewPostButton.setContentAreaFilled(false);
+        ViewPostButton.setIcon(new ImageIcon(getClass().getResource("/Resources/icon/View Post Feature Button.png")));
+        ViewPostButton.addActionListener(this);
+
+        JLabel ButtonLabel = new JLabel();
+        ButtonLabel.setBounds(240*2 -30, 240+130, 240, 30);
+        ButtonLabel.setText("Quản lý");
+        ButtonLabel.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel.setForeground(new Color(dv.FieldLabelColor()));
+        ButtonLabel.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        JLabel ButtonLabel2 = new JLabel();
+        ButtonLabel2.setBounds(240*2 -30, 240+130 +25, 240, 30);
+        ButtonLabel2.setText("văn bản");
+        ButtonLabel2.setFont(new Font(dv.fontName(), 1, 20));
+        ButtonLabel2.setForeground(new Color(dv.FieldLabelColor()));
+        ButtonLabel2.setHorizontalAlignment(JLabel.CENTER);
+        //ButtonLabel.setBorder(dv.border());
+
+        FeatureLayeredPane.add(ViewPostButton);
         FeatureLayeredPane.add(ButtonLabel);
         FeatureLayeredPane.add(ButtonLabel2);
     }
@@ -323,7 +368,7 @@ public class ORGMainView extends JFrame implements ActionListener
 
     public ORGMainView(String Username)
     {
-        this.setTitle("Quản lý tiêm chủng vaccine Covid-19: Đơn vị tiêm chủng");
+        this.setTitle("Đơn vị tiêm chủng - " + Username);
         this.setBounds(260, 90, dv.FrameWidth(), dv.FrameHeight());
         this.setResizable(false);
         this.setVisible(true);
@@ -367,8 +412,19 @@ public class ORGMainView extends JFrame implements ActionListener
         MainLayeredPane.add(MainPanel, Integer.valueOf(0));
 
         this.add(MainLayeredPane);
+        initBackButton();
 
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+    }
+
+    private void nullFeatureViews()
+    {
+        orgInformationView = null;
+        manageScheduleView = null;
+        publishAnnouncementView = null;
+        searchCitizenView = null;
+        orgStatisticView = null;
+        managePostView = null;
     }
 
     /*ACTION PERFORMED*/
@@ -377,9 +433,10 @@ public class ORGMainView extends JFrame implements ActionListener
     {
         if(e.getSource() == BackButton)
         {
-            registerVaccinationView = null;
-            manageScheduleView = null;
+            if (manageScheduleView != null)
+                manageScheduleView.closeConnection();
 
+            nullFeatureViews();
             MainLayeredPane.removeAll();
             MainLayeredPane.add(MainPanel, Integer.valueOf(1));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
@@ -411,11 +468,10 @@ public class ORGMainView extends JFrame implements ActionListener
             MainLayeredPane.removeAll();
             MainLayeredPane.add(orgInformationView, Integer.valueOf(0));
 
-            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
-
-            //init BackButton
             initBackInfoButton();
             MainLayeredPane.add(BackInfoButton, Integer.valueOf(5));
+
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
 
         if(e.getSource() == BackInfoButton)
@@ -452,30 +508,76 @@ public class ORGMainView extends JFrame implements ActionListener
             MainLayeredPane.add(MainPanel);
         }
 
-        /*if (e.getSource() == SearchButton)
-        {
-            this.setTitle("Tìm kiếm");
-            searchOrgView = new SearchOrgView();
-            MainLayeredPane.removeAll();
-            MainLayeredPane.add(searchOrgView, Integer.valueOf(1));
-            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
-
-            //init BackButton
-            initBackButton();
-            MainLayeredPane.add(BackButton, Integer.valueOf(5));
-        }*/
-
         if (e.getSource() == ManageSchedButton)
         {
-            manageScheduleView = new ManageScheduleView(orgUser);
+            manageScheduleView = new ManageScheduleView(orgUser, BackButton);
             MainLayeredPane.removeAll();
             MainLayeredPane.add(manageScheduleView, Integer.valueOf(0));
 
+            MainLayeredPane.add(BackButton, Integer.valueOf(5));
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+        }
+
+        if (e.getSource() == PublishAnnButton)
+        {
+            nullFeatureViews();
+
+            publishAnnouncementView = new PublishAnnouncementView(orgUser);
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(publishAnnouncementView, Integer.valueOf(0));
+
+            MainLayeredPane.add(BackButton, Integer.valueOf(5));
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+        }
+
+        if (e.getSource() == SearchButton)
+        {
+            searchCitizenView = new SearchCitizenView(orgUser);
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(searchCitizenView, Integer.valueOf(1));
             MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
 
-            //init BackButton
-            initBackButton();
             MainLayeredPane.add(BackButton, Integer.valueOf(5));
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+        }
+
+        if (e.getSource() == StatisticButton)
+        {
+            nullFeatureViews();
+
+            orgStatisticView = new ORGStatisticView(orgUser);
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(orgStatisticView, Integer.valueOf(0));
+
+            MainLayeredPane.add(BackButton, Integer.valueOf(5));
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+        }
+
+        if (e.getSource() == ViewPostButton)
+        {
+            nullFeatureViews();
+
+            managePostView = new ManagePostView(orgUser);
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(managePostView, Integer.valueOf(0));
+
+            initPublishNewPostButton();
+            MainLayeredPane.add(PublishNewPostButton, Integer.valueOf(1));
+
+            MainLayeredPane.add(BackButton, Integer.valueOf(5));
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+        }
+
+        if (e.getSource() == PublishNewPostButton)
+        {
+            nullFeatureViews();
+
+            publishAnnouncementView = new PublishAnnouncementView(orgUser);
+            MainLayeredPane.removeAll();
+            MainLayeredPane.add(publishAnnouncementView, Integer.valueOf(0));
+
+            MainLayeredPane.add(BackButton, Integer.valueOf(5));
+            MainLayeredPane.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
         }
     }
 

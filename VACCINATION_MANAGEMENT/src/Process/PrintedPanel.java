@@ -8,7 +8,7 @@ public class PrintedPanel
     private DefaultValue dv = new DefaultValue();
     private JPanel printedPanel;
     private int width = 595;
-    private int height = 842;
+    private int height = 842*2;
     private int topAlign = cmToPixel(1);
     private int leftAlign = cmToPixel(1);
 
@@ -34,26 +34,28 @@ public class PrintedPanel
         setHeight(h);
         printedPanel = new JPanel();
         printedPanel.setLayout(null);
-        printedPanel.setBounds(0,0,getWidth(),getHeight());
+    }
+
+    public void setPrintedBackground()
+    {
+        JPanel BackgroundColor = new JPanel();
+        BackgroundColor.setBounds(0,0,getWidth(),getHeight());
+        BackgroundColor.setBackground(Color.WHITE);
+        ImageIcon ImageIconPanel = new ImageIcon(ImageHelper.reSize(ImageHelper.createImage(BackgroundColor), getWidth(),getHeight()));
+        JLabel addedLabel = new JLabel();
+        addedLabel.setBounds(0,0, getWidth(),getHeight());
+        addedLabel.setIcon(ImageIconPanel);
+        printedPanel.add(addedLabel);
+        addedLabel = new JLabel();
+        addedLabel.setBounds(0,0, getWidth(),getHeight());
+        addedLabel.setIcon(ImageIconPanel);
+        printedPanel.add(addedLabel);
     }
 
     public JPanel getPrintedPanel()
     {
         printedPanel.setBounds(0,0,getWidth(),getHeight());
-//        printedPanel.setBackground(Color.WHITE);
-        JPanel BackgroundColor = new JPanel();
-        BackgroundColor.setBounds(0,0,getWidth(),getHeight());
-        BackgroundColor.setBackground(Color.WHITE);
-
-        ImageIcon ImageIconPanel = new ImageIcon(ImageHelper.reSize(ImageHelper.createImage(BackgroundColor), getWidth(),getHeight()));
-
-        JLabel addedLabel = new JLabel();
-        addedLabel.setBounds(0,0, getWidth(),getHeight());
-        addedLabel.setIcon(ImageIconPanel);
-//        addedLabel.setBorder(dv.border());
-
-        printedPanel.add(addedLabel);
-
+//        setPrintedBackground();
         return printedPanel;
     }
 

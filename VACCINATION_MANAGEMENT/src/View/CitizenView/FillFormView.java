@@ -1,6 +1,9 @@
 package View.CitizenView;
 
-import Process.*;
+import Process.DateLabelFormatter;
+import Process.DefaultValue;
+import Process.Health;
+import Process.Person;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -9,8 +12,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.Properties;
@@ -26,7 +27,7 @@ public class FillFormView extends JPanel implements ActionListener{
     /*Form List*/
     private JPanel FormFilterPanel;
     private JLabel FormFilterLabel;
-    private Choice FormFilterChoice;
+    private JComboBox FormFilterComboBox;
     private JButton FormFilterButton;
 
     private JScrollPane ScrollPaneFormList;
@@ -38,19 +39,11 @@ public class FillFormView extends JPanel implements ActionListener{
 
     private JLayeredPane LayeredPaneArea;
 
-    public Person getPersonalUser() {
-        return personalUser;
-    }
-
-    public void setPersonalUser(Person personalUser) {
-        this.personalUser = personalUser;
-    }
-
     /*
      *   INITIALIZE THE FILTER OF FILLED FORMS OF THE CITIZEN
      *   - PANEL:
      *       + LABEL
-     *       + CHOICE
+     *       + ComboBox
      *       + BUTTON: SELECT
      * */
     private void initFormFilterLabel() {
@@ -62,15 +55,16 @@ public class FillFormView extends JPanel implements ActionListener{
         FormFilterLabel.setSize(dv.FieldWidth(), dv.FieldHeight());
     }
 
-    private void initFormFilterChoice() {
-        FormFilterChoice = new Choice();
-        FormFilterChoice.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
-        FormFilterChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
-        FormFilterChoice.setForeground(new Color(dv.BlackTextColor()));
+    private void initFormFilterComboBox() {
+        FormFilterComboBox = new JComboBox();
+        FormFilterComboBox.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
+        FormFilterComboBox.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
+        FormFilterComboBox.setForeground(new Color(dv.BlackTextColor()));
+        FormFilterComboBox.setBackground(Color.WHITE);
 
-        FormFilterChoice.add("7 ngày");
-        FormFilterChoice.add("14 ngày");
-        FormFilterChoice.add("28 ngày");
+        FormFilterComboBox.addItem("7 ngày");
+        FormFilterComboBox.addItem("14 ngày");
+        FormFilterComboBox.addItem("28 ngày");
     }
 
     private void initFormFilterButton() {
@@ -87,7 +81,7 @@ public class FillFormView extends JPanel implements ActionListener{
 
     private void initFormFilterPanel() {
         initFormFilterLabel();
-        initFormFilterChoice();
+        initFormFilterComboBox();
         initFormFilterButton();
 
         FormFilterPanel = new JPanel();
@@ -96,7 +90,7 @@ public class FillFormView extends JPanel implements ActionListener{
         FormFilterPanel.setBackground(new Color(dv.ViewBackgroundColor()));
 
         FormFilterPanel.add(FormFilterLabel);
-        FormFilterPanel.add(FormFilterChoice);
+        FormFilterPanel.add(FormFilterComboBox);
         FormFilterPanel.add(FormFilterButton);
     }
 
@@ -143,11 +137,11 @@ public class FillFormView extends JPanel implements ActionListener{
             FirstAns.setBounds(30, 50, 600, 25);
             FirstAns.setHorizontalAlignment(JLabel.LEFT);
             if (Heal.getHealths().substring(0, 1).equals("1")) {
-                FirstAns.setText("<html>1. Có một trong các dấu hiệu sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi trong vòng 14 ngày qua");
+                FirstAns.setText("<html>Có một trong các dấu hiệu sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi trong vòng 14 ngày qua");
                 FirstAns.setFont(new Font(dv.fontName(), 0, 13));
                 FirstAns.setForeground(new Color(dv.BlackTextColor()));
             } else {
-                FirstAns.setText("<html>Không có dấu hiệu sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi trong vòng 14 ngày qua");
+                FirstAns.setText("<html>1. Không có dấu hiệu sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi trong vòng 14 ngày qua");
                 FirstAns.setFont(new Font(dv.fontName(), 0, 13));
                 FirstAns.setForeground(new Color(dv.GreenPastel()));
             }
@@ -156,7 +150,7 @@ public class FillFormView extends JPanel implements ActionListener{
             SecondAns.setBounds(30, 75, 600, 25);
             SecondAns.setHorizontalAlignment(JLabel.LEFT);
             if (Heal.getHealths().substring(1, 2).equals("1")) {
-                SecondAns.setText("<html>2. Có tiếp xúc với Người bệnh hoặc nghi ngờ, mắc bệnh COVID-19 trong vòng 14 ngày qua");
+                SecondAns.setText("<html>Có tiếp xúc với Người bệnh hoặc nghi ngờ, mắc bệnh COVID-19 trong vòng 14 ngày qua");
                 SecondAns.setFont(new Font(dv.fontName(), 0, 13));
                 SecondAns.setForeground(new Color(dv.BlackTextColor()));
             } else {
@@ -169,11 +163,11 @@ public class FillFormView extends JPanel implements ActionListener{
             ThirdAns.setBounds(30, 100, 600, 25);
             ThirdAns.setHorizontalAlignment(JLabel.LEFT);
             if (Heal.getHealths().substring(2, 3).equals("1")) {
-                ThirdAns.setText("<html>3. Là đối tượng đang dương tính với Covid-19");
+                ThirdAns.setText("<html>Là đối tượng đang dương tính với Covid-19");
                 ThirdAns.setFont(new Font(dv.fontName(), 1, 13));
                 ThirdAns.setForeground(new Color(dv.RedPastel()));
             } else {
-                ThirdAns.setText("<html>4. Không là đối tượng đang dương tính với Covid-19");
+                ThirdAns.setText("<html>Không là đối tượng đang dương tính với Covid-19");
                 ThirdAns.setFont(new Font(dv.fontName(), 0, 13));
                 ThirdAns.setForeground(new Color(dv.GreenPastel()));
             }
@@ -258,7 +252,7 @@ public class FillFormView extends JPanel implements ActionListener{
      *   - BUTTON: FILL FORM
      *   - PANEL:
      *       + LABELS
-     *       + CHOICES
+     *       + ComboBoxS
      *       + BUTTON: CONFIRM
      * */
     private void initFillFormButton() {
@@ -300,12 +294,13 @@ public class FillFormView extends JPanel implements ActionListener{
         FirstQuesLabel.setFont(new Font(dv.fontName(), 0, 16));
         FirstQuesLabel.setForeground(new Color(dv.BlackTextColor()));
 
-        Choice FirstQuesChoice = new Choice();
-        FirstQuesChoice.setPreferredSize(new Dimension(80, 30));
-        FirstQuesChoice.setFont(new Font(dv.fontName(), 0, 16));
-        FirstQuesChoice.setForeground(new Color(dv.BlackTextColor()));
-        FirstQuesChoice.add("Không");
-        FirstQuesChoice.add("Có");
+        JComboBox FirstQuesComboBox = new JComboBox();
+        FirstQuesComboBox.setPreferredSize(new Dimension(80, 30));
+        FirstQuesComboBox.setFont(new Font(dv.fontName(), 0, 16));
+        FirstQuesComboBox.setForeground(new Color(dv.BlackTextColor()));
+        FirstQuesComboBox.setBackground(Color.WHITE);
+        FirstQuesComboBox.addItem("Không");
+        FirstQuesComboBox.addItem("Có");
 
         JLabel SecondQuesLabel = new JLabel("<html>Trong vòng 14 ngày qua, Anh/Chị có tiếp xúc với Người bệnh hoặc nghi ngờ," +
                 " mắc bệnh COVID-19 không?");
@@ -313,24 +308,26 @@ public class FillFormView extends JPanel implements ActionListener{
         SecondQuesLabel.setFont(new Font(dv.fontName(), 0, 16));
         SecondQuesLabel.setForeground(new Color(dv.BlackTextColor()));
 
-        Choice SecondQuesChoice = new Choice();
-        SecondQuesChoice.setPreferredSize(new Dimension(80, 30));
-        SecondQuesChoice.setFont(new Font(dv.fontName(), 0, 16));
-        SecondQuesChoice.setForeground(new Color(dv.BlackTextColor()));
-        SecondQuesChoice.add("Không");
-        SecondQuesChoice.add("Có");
+        JComboBox SecondQuesComboBox = new JComboBox();
+        SecondQuesComboBox.setPreferredSize(new Dimension(80, 30));
+        SecondQuesComboBox.setFont(new Font(dv.fontName(), 0, 16));
+        SecondQuesComboBox.setForeground(new Color(dv.BlackTextColor()));
+        SecondQuesComboBox.setBackground(Color.WHITE);
+        SecondQuesComboBox.addItem("Không");
+        SecondQuesComboBox.addItem("Có");
 
         JLabel ThirdQuesLabel = new JLabel("<html>Anh/Chị có đang dương tính với Covid-19 không?");
         ThirdQuesLabel.setPreferredSize(new Dimension(600, 50));
         ThirdQuesLabel.setFont(new Font(dv.fontName(), 0, 16));
         ThirdQuesLabel.setForeground(new Color(dv.BlackTextColor()));
 
-        Choice ThirdQuesChoice = new Choice();
-        ThirdQuesChoice.setPreferredSize(new Dimension(80, 30));
-        ThirdQuesChoice.setFont(new Font(dv.fontName(), 0, 16));
-        ThirdQuesChoice.setForeground(new Color(dv.BlackTextColor()));
-        ThirdQuesChoice.add("Không");
-        ThirdQuesChoice.add("Có");
+        JComboBox ThirdQuesComboBox = new JComboBox();
+        ThirdQuesComboBox.setPreferredSize(new Dimension(80, 30));
+        ThirdQuesComboBox.setFont(new Font(dv.fontName(), 0, 16));
+        ThirdQuesComboBox.setForeground(new Color(dv.BlackTextColor()));
+        ThirdQuesComboBox.setBackground(Color.WHITE);
+        ThirdQuesComboBox.addItem("Không");
+        ThirdQuesComboBox.addItem("Có");
 
         JLabel FourthQuesLabel = new JLabel("<html>Anh/Chị có đang là đối tượng trì hoãn tiêm chủng vaccine Covid-19 hoặc " +
                 "đang là đối tượng chống chỉ định với tiêm chủng Covid-19 không?");
@@ -338,12 +335,13 @@ public class FillFormView extends JPanel implements ActionListener{
         FourthQuesLabel.setFont(new Font(dv.fontName(), 0, 16));
         FourthQuesLabel.setForeground(new Color(dv.BlackTextColor()));
 
-        Choice FourthQuesChoice = new Choice();
-        FourthQuesChoice.setPreferredSize(new Dimension(80, 30));
-        FourthQuesChoice.setFont(new Font(dv.fontName(), 0, 16));
-        FourthQuesChoice.setForeground(new Color(dv.BlackTextColor()));
-        FourthQuesChoice.add("Không");
-        FourthQuesChoice.add("Có");
+        JComboBox FourthQuesComboBox = new JComboBox();
+        FourthQuesComboBox.setPreferredSize(new Dimension(80, 30));
+        FourthQuesComboBox.setFont(new Font(dv.fontName(), 0, 16));
+        FourthQuesComboBox.setForeground(new Color(dv.BlackTextColor()));
+        FourthQuesComboBox.setBackground(Color.WHITE);
+        FourthQuesComboBox.addItem("Không");
+        FourthQuesComboBox.addItem("Có");
 
 
         ActionListener handleCreateHeal = new ActionListener() {
@@ -352,16 +350,16 @@ public class FillFormView extends JPanel implements ActionListener{
                 LocalDate FilledDate = LocalDate.parse(FilledDateField.getJFormattedTextField().getText());
                 LocalDate sysdate = LocalDate.parse(dv.todayString());
 
-                /*if (FilledDate.isAfter(sysdate))
+                if (FilledDate.isAfter(sysdate))
                 {
                     dv.popupOption(null,"Không thể khai báo y tế cho tương lai", "Lỗi!", 2);
                     return;
-                }*/
+                }
 
-                String InputFirstQues = String.valueOf(FirstQuesChoice.getSelectedIndex());
-                String InputSecondQues = String.valueOf(SecondQuesChoice.getSelectedIndex());
-                String InputThirdQues = String.valueOf(ThirdQuesChoice.getSelectedIndex());
-                String InputFourthQues = String.valueOf(FourthQuesChoice.getSelectedIndex());
+                String InputFirstQues = String.valueOf(FirstQuesComboBox.getSelectedIndex());
+                String InputSecondQues = String.valueOf(SecondQuesComboBox.getSelectedIndex());
+                String InputThirdQues = String.valueOf(ThirdQuesComboBox.getSelectedIndex());
+                String InputFourthQues = String.valueOf(FourthQuesComboBox.getSelectedIndex());
 
                 int answer = dv.popupConfirmOption(null, "Xác nhận khai báo?", "Xác nhận!");
 
@@ -427,7 +425,7 @@ public class FillFormView extends JPanel implements ActionListener{
         c.anchor = GridBagConstraints.CENTER;
         c.insets = new Insets(0, 0, 15, 0);
         c.gridy = 4;
-        CreateFormPanel.add(FirstQuesChoice, c);
+        CreateFormPanel.add(FirstQuesComboBox, c);
 
         c.anchor = GridBagConstraints.LINE_START;
         c.insets = new Insets(0, 0, 0, 0);
@@ -437,7 +435,7 @@ public class FillFormView extends JPanel implements ActionListener{
         c.anchor = GridBagConstraints.CENTER;
         c.insets = new Insets(0, 0, 15, 0);
         c.gridy = 6;
-        CreateFormPanel.add(SecondQuesChoice, c);
+        CreateFormPanel.add(SecondQuesComboBox, c);
 
         c.anchor = GridBagConstraints.LINE_START;
         c.insets = new Insets(0, 0, 0, 0);
@@ -447,7 +445,7 @@ public class FillFormView extends JPanel implements ActionListener{
         c.anchor = GridBagConstraints.CENTER;
         c.insets = new Insets(0, 0, 15, 0);
         c.gridy = 8;
-        CreateFormPanel.add(ThirdQuesChoice, c);
+        CreateFormPanel.add(ThirdQuesComboBox, c);
 
         c.anchor = GridBagConstraints.LINE_START;
         c.insets = new Insets(0, 0, 0, 0);
@@ -457,7 +455,7 @@ public class FillFormView extends JPanel implements ActionListener{
         c.anchor = GridBagConstraints.CENTER;
         c.insets = new Insets(0, 0, 30, 0);
         c.gridy = 10;
-        CreateFormPanel.add(FourthQuesChoice, c);
+        CreateFormPanel.add(FourthQuesComboBox, c);
 
         c.anchor = GridBagConstraints.CENTER;
         c.insets = new Insets(0, 0, 0, 0);
@@ -526,7 +524,7 @@ public class FillFormView extends JPanel implements ActionListener{
             HealListLabel.setForeground(new Color(dv.FeatureButtonColor()));
             HealListLabel.setHorizontalAlignment(JLabel.CENTER);
 
-            initFormListPanel((FormFilterChoice.getSelectedIndex() + 1) * 7);
+            initFormListPanel((FormFilterComboBox.getSelectedIndex() + 1) * 7);
             initScrollPaneFormList();
 
             LayeredPaneArea.add(HealListLabel, Integer.valueOf(0));

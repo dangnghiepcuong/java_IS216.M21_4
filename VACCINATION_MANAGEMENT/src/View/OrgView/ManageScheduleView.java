@@ -22,12 +22,15 @@ public class ManageScheduleView extends JPanel implements ActionListener
 {
     private DefaultValue dv = new DefaultValue();
     private Organization orgUser = new Organization();
+//    private
 
     /*Schedule List*/
     private JPanel SchedFilterPanel;
     private JLabel SchedFilterLabel;
-    private Choice SchedFilterChoice;
+    private JComboBox SchedFilterComboBox;
     private JButton SchedFilterButton;
+    private JButton BackButton;
+    private Connection conn = null;
 
     private JScrollPane ScrollPaneSchedList;
     private JPanel SchedListPanel;
@@ -35,7 +38,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
     /*Registration List*/
     private JPanel RegFilterPanel;
     private JLabel RegFilterLabel;
-    private Choice RegFilterChoice;
+    private JComboBox RegFilterComboBox;
     private JButton RegFilterButton;
     private Schedule SelectedSched;
 
@@ -64,7 +67,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
     /*
     *   INITIALIZE THE SCHEDULE FILTER PANEL:
     *   + LABEL
-    *   + CHOICE
+    *   + ComboBox
     *   + BUTTON: SELECT
     */
     private void initSchedFilterLabel()
@@ -77,16 +80,17 @@ public class ManageScheduleView extends JPanel implements ActionListener
         SchedFilterLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
     }
 
-    private void initSchedFilterChoice()
+    private void initSchedFilterComboBox()
     {
-        SchedFilterChoice = new Choice();
-        SchedFilterChoice.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
-        SchedFilterChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
-        SchedFilterChoice.setForeground(new Color(dv.BlackTextColor()));
+        SchedFilterComboBox = new JComboBox();
+        SchedFilterComboBox.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
+        SchedFilterComboBox.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
+        SchedFilterComboBox.setForeground(new Color(dv.BlackTextColor()));
+        SchedFilterComboBox.setBackground(Color.WHITE);
 
-        SchedFilterChoice.add("Tất cả");
-        SchedFilterChoice.add("Đã lên lịch");
-        SchedFilterChoice.add("Đã thực hiện");
+        SchedFilterComboBox.addItem("Tất cả");
+        SchedFilterComboBox.addItem("Đã lên lịch");
+        SchedFilterComboBox.addItem("Đã thực hiện");
     }
 
     private void initSchedFilterButton()
@@ -105,7 +109,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
     private void initSchedFilterPanel()
     {
         initSchedFilterLabel();
-        initSchedFilterChoice();
+        initSchedFilterComboBox();
         initSchedFilterButton();
 
         SchedFilterPanel = new JPanel();
@@ -114,7 +118,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         SchedFilterPanel.setBackground(new Color(dv.ViewBackgroundColor()));
 
         SchedFilterPanel.add(SchedFilterLabel);
-        SchedFilterPanel.add(SchedFilterChoice);
+        SchedFilterPanel.add(SchedFilterComboBox);
         SchedFilterPanel.add(SchedFilterButton);
     }
 
@@ -128,8 +132,23 @@ public class ManageScheduleView extends JPanel implements ActionListener
     *               + LABELS
     *               + BUTTONS: WATCH LIST OF REGISTRATION
     */
+    private void initBackButton()
+    {
+        BackButton = new JButton();
+        ImageIcon BackButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Back Button_2.png"));
+        BackButton.setIcon(BackButtonIcon);
+
+        BackButton.setBounds(10, 10, BackButtonIcon.getIconWidth(), BackButtonIcon.getIconHeight());
+        BackButton.setBorder(null);
+        BackButton.setContentAreaFilled(false);
+
+        BackButton.addActionListener(this);
+    }
+
     private JPanel initSchedPanel(Schedule Sched)
     {
+        initBackButton();
+
         JPanel SchedPanel = new JPanel();
         SchedPanel.setLayout(null);
         SchedPanel.setPreferredSize(new Dimension(640,120));
@@ -210,17 +229,17 @@ public class ManageScheduleView extends JPanel implements ActionListener
                 public void actionPerformed(ActionEvent e)
                 {
                     if (e.getSource() == UpdateSchedButton) {
+                        BackButton.setEnabled(false);
                         //Take newest registered value
                         // and lock selecting row until a commit or rollback (prevent update selecting row)
                         String query = "select DayRegistered, NoonRegistered, NightRegistered" +
                                 " from SCHEDULE where ID = '" + Sched.getID() + "' for update";
 
-                        Connection connection = null;
                         try {
                             //create new connection
-                            connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-                            connection.setAutoCommit(false);
-                            PreparedStatement st = connection.prepareStatement(query);
+                            conn = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+                            conn.setAutoCommit(false);
+                            PreparedStatement st = conn.prepareStatement(query);
                             ResultSet rs = st.executeQuery(query);
 
                             //update newest registered value on GUI
@@ -231,18 +250,17 @@ public class ManageScheduleView extends JPanel implements ActionListener
                             Time.setText("Buổi sáng: " + Sched.getDayRegistered() + "/" + Sched.getLimitDay()
                                     + "          Buổi trưa: " + Sched.getNoonRegistered() + "/" + Sched.getLimitNoon()
                                     + "          Buổi tối: " + Sched.getNightRegistered() + "/" + Sched.getLimitNight());
-
                         } catch (SQLException ex) {
                             dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
                             ex.printStackTrace();
                             return;
-                        } finally {
+                        } /*finally {
                             try {
                                 connection.close();
                             } catch (SQLException ex) {
                                 ex.printStackTrace();
                             }
-                        }
+                        }*/
 
                         LayeredPaneArea.removeAll();
                         SchedListPanel = null;
@@ -290,6 +308,14 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         LimitNightTextField.setFont(new Font(dv.fontName(), 0, 16));
                         LimitNightTextField.setForeground(new Color(dv.BlackTextColor()));
 
+                        JButton ConfirmUpdateButton = new JButton();
+                        ImageIcon ConfirmUpdateButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Confirm Button.png"));
+                        ConfirmUpdateButton.setForeground(new Color(dv.BlackTextColor()));
+                        ConfirmUpdateButton.setPreferredSize(new Dimension(ConfirmUpdateButtonIcon.getIconWidth(), ConfirmUpdateButtonIcon.getIconHeight()));
+                        ConfirmUpdateButton.setContentAreaFilled(false);
+                        ConfirmUpdateButton.setBorder(null);
+                        ConfirmUpdateButton.setIcon(ConfirmUpdateButtonIcon);
+                        ConfirmUpdateButton.setEnabled(true);
                         ActionListener handleConfirmButton = new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
@@ -321,11 +347,10 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                 if (dv.popupConfirmOption(null, "Xác nhận cập nhật lịch tiêm?", "Xác nhận?") != 0)
                                     return;
 
+                                ConfirmUpdateButton.setEnabled(false);
                                 String plsql = "{call SCHED_UPDATE_RECORD(?, ?, ?, ?)}";
-                                Connection connection = null;
                                 try {
-                                    connection = DriverManager.getConnection(dv.getDB_URL(),dv.getUsername(),dv.getPassword());
-                                    CallableStatement cst = connection.prepareCall(plsql);
+                                    CallableStatement cst = conn.prepareCall(plsql);
 
                                     cst.setString("par_ID", Sched.getID());
                                     cst.setInt("par_LimitDay", Integer.parseInt(InputLimitDay));
@@ -335,7 +360,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                     cst.execute(); //commited in stored proc
                                 } catch (SQLException ex) {
                                     try {
-                                        connection.rollback();
+                                        conn.rollback();
                                     } catch (SQLException ex1) {
                                         dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
                                         ex1.printStackTrace();
@@ -344,12 +369,6 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                     dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
                                     ex.printStackTrace();
                                     return;
-                                } finally {
-                                    try {
-                                        connection.close();
-                                    } catch (SQLException ex) {
-                                        ex.printStackTrace();
-                                    }
                                 }
 
                                 Sched.setLimitDay(Integer.parseInt(InputLimitDay));
@@ -360,19 +379,11 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                         + "          Buổi tối: " + Sched.getNightRegistered() + "/" + Sched.getLimitNight());
 
                                 UpdateSchedPanel.repaint(0, 0, 680, 630);
-
                                 dv.popupOption(null, "Cập nhật thành công!", "Thông báo!", 0);
                             }
                         };
+                        ConfirmUpdateButton.addActionListener(handleConfirmButton);
 
-                        JButton UpdateSchedButton = new JButton();
-                        ImageIcon UpdateSchedButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Confirm Button.png"));
-                        UpdateSchedButton.setForeground(new Color(dv.BlackTextColor()));
-                        UpdateSchedButton.setPreferredSize(new Dimension(UpdateSchedButtonIcon.getIconWidth(), UpdateSchedButtonIcon.getIconHeight()));
-                        UpdateSchedButton.setContentAreaFilled(false);
-                        UpdateSchedButton.setBorder(null);
-                        UpdateSchedButton.setIcon(UpdateSchedButtonIcon);
-                        UpdateSchedButton.addActionListener(handleConfirmButton);
 
                         GridBagConstraints c = new GridBagConstraints();
                         c.gridx = 0;
@@ -418,7 +429,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         UpdateSchedPanel.add(LimitNightTextField, c);
 
                         c.gridy++;
-                        UpdateSchedPanel.add(UpdateSchedButton, c);
+                        UpdateSchedPanel.add(ConfirmUpdateButton, c);
 
                         LayeredPaneArea.add(UpdateSchedPanel, Integer.valueOf(0));
 
@@ -466,6 +477,8 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                 + "          Buổi trưa: " + Sched.getNoonRegistered() + "/" + Sched.getLimitNoon()
                                 + "          Buổi tối: " + Sched.getNightRegistered() + "/" + Sched.getLimitNight());
                         SchedPanel.repaint(0,0,640,120);
+
+                        BackButton.setEnabled(true);
                     }
                 }
             };
@@ -504,9 +517,9 @@ public class ManageScheduleView extends JPanel implements ActionListener
                 " from SCHEDULE SCHED" +
                 " where SCHED.OrgID = '" + orgUser.getID() + "'";
 
-        if (OnDateFilter == 1) //select choice: Da len lich
+        if (OnDateFilter == 1) //select ComboBox: Da len lich
             query += " and OnDate >= SYSDATE";
-        if (OnDateFilter == 2) //select choice: Da thuc hien
+        if (OnDateFilter == 2) //select ComboBox: Da thuc hien
             query += " and OnDate < SYSDATE";
 
         query += " order by OnDate desc";
@@ -570,7 +583,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
     *   INITIALIZE REGISTER FILTER PANEL
     *   - PANEL:
     *       + LABEL
-    *       + CHOICE
+    *       + ComboBox
     *       + BUTTON: SELECT
     */
 
@@ -584,18 +597,19 @@ public class ManageScheduleView extends JPanel implements ActionListener
         RegFilterLabel.setSize(dv.FieldWidth(),dv.FieldHeight());
     }
 
-    private void initRegFilterChoice()
+    private void initRegFilterComboBox()
     {
-        RegFilterChoice = new Choice();
-        RegFilterChoice.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
-        RegFilterChoice.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
-        RegFilterChoice.setForeground(new Color(dv.BlackTextColor()));
+        RegFilterComboBox = new JComboBox();
+        RegFilterComboBox.setBounds(0, 30, dv.FieldWidth(), dv.FieldHeight());
+        RegFilterComboBox.setFont(new Font(dv.fontName(), Font.PLAIN, dv.LabelFontSize()));
+        RegFilterComboBox.setForeground(new Color(dv.BlackTextColor()));
+        RegFilterComboBox.setBackground(Color.WHITE);
 
-        RegFilterChoice.add("Tất cả");
-        RegFilterChoice.add("Đã đăng ký");
-        RegFilterChoice.add("Đã điểm danh");
-        RegFilterChoice.add("Đã tiêm");
-        RegFilterChoice.add("Đã hủy");
+        RegFilterComboBox.addItem("Tất cả");
+        RegFilterComboBox.addItem("Đã đăng ký");
+        RegFilterComboBox.addItem("Đã điểm danh");
+        RegFilterComboBox.addItem("Đã tiêm");
+        RegFilterComboBox.addItem("Đã hủy");
     }
 
     private void initRegFilterButton()
@@ -614,7 +628,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
     private void initRegFilterPanel()
     {
         initRegFilterLabel();
-        initRegFilterChoice();
+        initRegFilterComboBox();
         initRegFilterButton();
 
         RegFilterPanel = new JPanel();
@@ -623,7 +637,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         RegFilterPanel.setBackground(new Color(dv.ViewBackgroundColor()));
 
         RegFilterPanel.add(RegFilterLabel);
-        RegFilterPanel.add(RegFilterChoice);
+        RegFilterPanel.add(RegFilterComboBox);
         RegFilterPanel.add(RegFilterButton);
     }
 
@@ -632,7 +646,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
     *       - SCROLLPANE:
     *           + PANEL: LIST OF REGISTRATIONS
     *               - PANELS: REGISTRATIONS
-    *                   + CHOICE: STATUS OF REGISTRATION
+    *                   + ComboBox: STATUS OF REGISTRATION
     *                   + BUTTON: UPDATE STATUS
     * */
 
@@ -679,21 +693,22 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
         if (Reg.getStatus() < 2)
         {
-            Choice StatusChoice = new Choice();
-            StatusChoice.setBounds(500, 32+2, 120, 30);
-            StatusChoice.setFont(new Font(dv.fontName(), 0, 16));
-            StatusChoice.setForeground(new Color(dv.BlackTextColor()));
+            JComboBox StatusComboBox = new JComboBox();
+            StatusComboBox.setBounds(500, 32+2, 120, 30);
+            StatusComboBox.setFont(new Font(dv.fontName(), 0, 16));
+            StatusComboBox.setForeground(new Color(dv.BlackTextColor()));
+            StatusComboBox.setBackground(Color.WHITE);
 
             if (Reg.getStatus() == 0)
             {
-                StatusChoice.add("Điểm danh");
-                StatusChoice.add("Đã hủy");
+                StatusComboBox.addItem("Điểm danh");
+                StatusComboBox.addItem("Đã hủy");
             }
 
             if (Reg.getStatus() == 1)
             {
-                StatusChoice.add("Đã tiêm");
-                StatusChoice.add("Đã hủy");
+                StatusComboBox.addItem("Đã tiêm");
+                StatusComboBox.addItem("Đã hủy");
             }
 
             JButton UpdateStatusButton = new JButton();
@@ -721,10 +736,10 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
                         CallableStatement cst = connection.prepareCall(plsql);
-                        int temp = dv.getStatusIndex(StatusChoice.getSelectedItem());
+                        int temp = dv.getStatusIndex(String.valueOf(StatusComboBox.getSelectedItem()));
                         cst.setString("par_PersonalID", Reg.getCitizen().getID());
                         cst.setString("par_SchedID", Reg.getSched().getID());
-                        cst.setInt("par_Status", dv.getStatusIndex(StatusChoice.getSelectedItem()));
+                        cst.setInt("par_Status", dv.getStatusIndex(String.valueOf(StatusComboBox.getSelectedItem())));
 
                         cst.execute();
                     }
@@ -742,19 +757,19 @@ public class ManageScheduleView extends JPanel implements ActionListener
                     }
 
                     //repaint Status on Registration Panel
-                    Reg.setStatus(dv.getStatusIndex(StatusChoice.getSelectedItem()));
+                    Reg.setStatus(dv.getStatusIndex(String.valueOf(StatusComboBox.getSelectedItem())));
                     TimeNOStatus.setText("Buổi: " + dv.getTimeName(Reg.getTime())
                             + "          STT: " + Reg.getNO() + "          Tình trạng: " + dv.getStatusName(Reg.getStatus()));
 
-                    if (StatusChoice.getSelectedItem() == "Điểm danh")
+                    if (StatusComboBox.getSelectedItem() == "Điểm danh")
                     {
-                        StatusChoice.removeAll();
-                        StatusChoice.add("Đã tiêm");
-                        StatusChoice.add("Đã hủy");
+                        StatusComboBox.removeAllItems();
+                        StatusComboBox.addItem("Đã tiêm");
+                        StatusComboBox.addItem("Đã hủy");
                     }
                     else
                     {
-                        StatusChoice.removeAll();
+                        StatusComboBox.removeAllItems();
                         UpdateStatusButton.setEnabled(false);
                     }
                     RegPanel.repaint();
@@ -768,7 +783,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
             UpdateStatusButton.setIcon(UpdateStatusButtonIcon);
             UpdateStatusButton.addActionListener(handleUpdateRegistrations);
 
-            RegPanel.add(StatusChoice);
+            RegPanel.add(StatusComboBox);
             RegPanel.add(UpdateStatusButton);
         }
 
@@ -862,7 +877,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
         nReg = i;
 
-        RegListPanel.setPreferredSize(new Dimension(660, 150*nReg+nReg*10));
+        RegListPanel.setPreferredSize(new Dimension(660, 120*nReg+nReg*5));
     }
 
     private void initScrollPaneRegList()
@@ -881,7 +896,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
     *   - BUTTON: CREATE A NEW SCHEDULE
     *   - PANEL:
     *       + LABELS
-    *       + CHOICES
+    *       + ComboBoxS
     *       + BUTTON: CONFIRM CREATION
     * */
 
@@ -967,17 +982,18 @@ public class ManageScheduleView extends JPanel implements ActionListener
             }
         }
 
-        Choice VaccineChoice = new Choice();
-        VaccineChoice.setPreferredSize(new Dimension(200, 30));
-        VaccineChoice.setFont(new Font(dv.fontName(), 0, 16));
-        VaccineChoice.setForeground(new Color(dv.BlackTextColor()));
+        JComboBox VaccineComboBox = new JComboBox();
+        VaccineComboBox.setPreferredSize(new Dimension(200, 30));
+        VaccineComboBox.setFont(new Font(dv.fontName(), 0, 16));
+        VaccineComboBox.setForeground(new Color(dv.BlackTextColor()));
+        VaccineComboBox.setBackground(Color.WHITE);
 
         nVacc = i;
 
-        VaccineChoice.add("");
+        VaccineComboBox.addItem("");
         for (i = 0; i<nVacc; i++)
         {
-            VaccineChoice.add(vacc[i].getID());
+            VaccineComboBox.addItem(vacc[i].getID());
         }
 
         JLabel SerialLabel = new JLabel("Series vaccine");
@@ -1026,7 +1042,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
             public void actionPerformed(ActionEvent e)
             {
                 String InputOnDate = OnDateField.getJFormattedTextField().getText();
-                String InputVaccineID = VaccineChoice.getSelectedItem();
+                String InputVaccineID = String.valueOf(VaccineComboBox.getSelectedItem());
                 String InputSerial = SerialTextField.getText();
 
                 if (dv.checkStringInputValue(InputOnDate,
@@ -1139,7 +1155,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
         c.insets = new Insets(0,0,10,0);
         c.gridy++;
-        CreateSchedPanel.add(VaccineChoice,c);
+        CreateSchedPanel.add(VaccineComboBox,c);
 
         c.insets = new Insets(0, 0, 0, 0);
         c.gridy++;
@@ -1229,10 +1245,22 @@ public class ManageScheduleView extends JPanel implements ActionListener
     }
 
     /*CONSTRUCTOR*/
-    public ManageScheduleView(Organization org)
+    public ManageScheduleView(Organization org, JButton Back)
     {
+        BackButton = Back;
         orgUser = org;
         initComponents();
+    }
+
+    public void closeConnection()
+    {
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /*ACTION PERFORMED*/
@@ -1241,7 +1269,13 @@ public class ManageScheduleView extends JPanel implements ActionListener
     {
         if (e.getSource() == SchedFilterButton)
         {
-
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
 
 //            CreateSchedPanel = null;
             LayeredPaneArea.removeAll();
@@ -1253,7 +1287,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
             SchedListLabel.setForeground(new Color(dv.FeatureButtonColor()));
             SchedListLabel.setHorizontalAlignment(JLabel.CENTER);
 
-            initScrollPaneSchedList(SchedFilterChoice.getSelectedIndex());
+            initScrollPaneSchedList(SchedFilterComboBox.getSelectedIndex());
 
             LayeredPaneArea.add(SchedListLabel, Integer.valueOf(0));
             LayeredPaneArea.add(ScrollPaneSchedList, Integer.valueOf(0));
@@ -1274,7 +1308,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
             RegListLabel.setForeground(new Color(dv.FeatureButtonColor()));
             RegListLabel.setHorizontalAlignment(JLabel.CENTER);
 
-            initRegListPanel(SelectedSched, RegFilterChoice.getSelectedIndex()-1);
+            initRegListPanel(SelectedSched, RegFilterComboBox.getSelectedIndex()-1);
             initScrollPaneRegList();
 
             LayeredPaneArea.add(RegListLabel);
@@ -1283,6 +1317,14 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
         if (e.getSource() == CreateNewSchedButton)
         {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
             SchedListPanel = null;
             ScrollPaneSchedList = null;
 
@@ -1299,5 +1341,4 @@ public class ManageScheduleView extends JPanel implements ActionListener
         }
 
     }
-
 }

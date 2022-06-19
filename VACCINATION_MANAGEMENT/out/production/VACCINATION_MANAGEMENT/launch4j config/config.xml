@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>D:\Java Projects\VACCINATION\VACCINATION_MANAGEMENT\out\artifacts\VACCINATION_MANAGEMENT_jar\VACCINATION_MANAGEMENT.jar</jar>
+  <outfile>C:\Users\operator\Desktop\Covid-19 Vaccination Management.exe</outfile>
+  <errTitle>Java download error</errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>D:\Java Projects\VACCINATION\VACCINATION_MANAGEMENT\src\Resources\icon\Virus.ico</icon>
+  <jre>
+    <path></path>
+    <bundledJre64Bit>false</bundledJre64Bit>
+    <bundledJreAsFallback>false</bundledJreAsFallback>
+    <minVersion>1.8.0</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+    <runtimeBits>64/32</runtimeBits>
+  </jre>
+  <versionInfo>
+    <fileVersion>2022.6.10.1</fileVersion>
+    <txtFileVersion>2022.6.10.1</txtFileVersion>
+    <fileDescription>Design for Vietnam Covid-19 vaccination management business process</fileDescription>
+    <copyright>dangnghiepcuong</copyright>
+    <productVersion>2022.6.10.1</productVersion>
+    <txtProductVersion>2022.6.10.1</txtProductVersion>
+    <productName>Covid-19 Vaccination Management</productName>
+    <companyName>University of Information Technology</companyName>
+    <internalName>Covid-19 Vaccination Management</internalName>
+    <originalFilename>Covid-19 Vaccination Management.exe</originalFilename>
+    <trademarks></trademarks>
+    <language>ENGLISH_US</language>
+  </versionInfo>
+</launch4jConfig>

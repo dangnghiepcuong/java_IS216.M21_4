@@ -3,7 +3,7 @@ package View;
 import Process.*;
 import View.CitizenView.CitizenMainView;
 import View.CitizenView.RegisterAccView;
-import View.OrgView.MOHMainView;
+import View.MOHView.MOHMainView;
 import View.OrgView.ORGMainView;
 
 import javax.swing.*;
@@ -16,6 +16,10 @@ import java.sql.*;
  * @author NghiepCuong
  */
 public class LoginView extends JFrame implements ActionListener, MouseListener, KeyListener {
+    private JLabel author1 = new JLabel("20520418 - git:dangnghiepcuong");
+    private JLabel author2 = new JLabel("20520282 - git:lychthac");
+    private JLabel author3 = new JLabel("20521720 - git:Nhi230600");
+    private JLabel author4 = new JLabel("20521890 - git:TNQT14");
     private JLabel ViewSymbol;
     private JLabel UsernameLabel;
     private JLabel PasswordLabel;
@@ -182,8 +186,30 @@ public class LoginView extends JFrame implements ActionListener, MouseListener, 
     public LoginView()
     {
         initFrameComponents();
+
+        author1.setBounds(0,0,380,15);
+        author2.setBounds(0,15,380,15);
+        author3.setBounds(0,30,380,15);
+        author4.setBounds(0,45,380,15);
+
+        author1.setFont(new Font(dv.fontName(), 2,11));
+        author2.setFont(new Font(dv.fontName(), 2,11));
+        author3.setFont(new Font(dv.fontName(), 2,11));
+        author4.setFont(new Font(dv.fontName(), 2,11));
+
+        add(author1);
+        add(author2);
+        add(author3);
+        add(author4);
     }
 
+    /*CONSTRUCTOR*/
+    public static void main(String args[])
+    {
+        LoginView loginView = new LoginView();
+    }
+
+    /*ACTION PERFORMED*/
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -239,15 +265,15 @@ public class LoginView extends JFrame implements ActionListener, MouseListener, 
             {
                 switch (acc.getRole()) {
                     case 0:
-//                        this.dispose();
+                        this.dispose();
                         MOHMainView mohMainView = new MOHMainView(acc.getUsername());
                         break;
                     case 1:
-//                        this.dispose();
+                        this.dispose();
                         ORGMainView orgMainView = new ORGMainView(acc.getUsername());
                         break;
                     case 2:
-//                        this.dispose();
+                        this.dispose();
                         CitizenMainView citizenMainView = new CitizenMainView(acc.getUsername());
                         break;
                     default:
@@ -258,13 +284,6 @@ public class LoginView extends JFrame implements ActionListener, MouseListener, 
         }
     }
 
-    /*CONSTRUCTOR*/
-    public static void main(String args[])
-    {
-        LoginView loginView = new LoginView();
-    }
-
-    /*ACTION PERFORMED*/
     @Override
     public void mouseClicked(MouseEvent e)
     {
@@ -349,15 +368,15 @@ public class LoginView extends JFrame implements ActionListener, MouseListener, 
             {
                 switch (acc.getRole()) {
                     case 0:
-//                        this.dispose();
+                        this.dispose();
                         MOHMainView mohMainView = new MOHMainView(acc.getUsername());
                         break;
                     case 1:
-//                        this.dispose();
+                        this.dispose();
                         ORGMainView orgMainView = new ORGMainView(acc.getUsername());
                         break;
                     case 2:
-//                        this.dispose();
+                        this.dispose();
                         CitizenMainView citizenMainView = new CitizenMainView(acc.getUsername());
                         break;
                     default:
