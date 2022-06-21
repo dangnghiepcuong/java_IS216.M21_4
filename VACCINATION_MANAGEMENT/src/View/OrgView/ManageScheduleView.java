@@ -22,12 +22,15 @@ public class ManageScheduleView extends JPanel implements ActionListener
 {
     private DefaultValue dv = new DefaultValue();
     private Organization orgUser = new Organization();
+//    private
 
     /*Schedule List*/
     private JPanel SchedFilterPanel;
     private JLabel SchedFilterLabel;
     private JComboBox SchedFilterComboBox;
     private JButton SchedFilterButton;
+    private JButton BackButton;
+    private Connection conn = null;
 
     private JScrollPane ScrollPaneSchedList;
     private JPanel SchedListPanel;
@@ -129,8 +132,23 @@ public class ManageScheduleView extends JPanel implements ActionListener
     *               + LABELS
     *               + BUTTONS: WATCH LIST OF REGISTRATION
     */
+    private void initBackButton()
+    {
+        BackButton = new JButton();
+        ImageIcon BackButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Back Button_2.png"));
+        BackButton.setIcon(BackButtonIcon);
+
+        BackButton.setBounds(10, 10, BackButtonIcon.getIconWidth(), BackButtonIcon.getIconHeight());
+        BackButton.setBorder(null);
+        BackButton.setContentAreaFilled(false);
+
+        BackButton.addActionListener(this);
+    }
+
     private JPanel initSchedPanel(Schedule Sched)
     {
+        initBackButton();
+
         JPanel SchedPanel = new JPanel();
         SchedPanel.setLayout(null);
         SchedPanel.setPreferredSize(new Dimension(640,120));
@@ -211,17 +229,17 @@ public class ManageScheduleView extends JPanel implements ActionListener
                 public void actionPerformed(ActionEvent e)
                 {
                     if (e.getSource() == UpdateSchedButton) {
+                        BackButton.setEnabled(false);
                         //Take newest registered value
                         // and lock selecting row until a commit or rollback (prevent update selecting row)
                         String query = "select DayRegistered, NoonRegistered, NightRegistered" +
                                 " from SCHEDULE where ID = '" + Sched.getID() + "' for update";
 
-                        Connection connection = null;
                         try {
                             //create new connection
-                            connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-                            connection.setAutoCommit(false);
-                            PreparedStatement st = connection.prepareStatement(query);
+                            conn = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+                            conn.setAutoCommit(false);
+                            PreparedStatement st = conn.prepareStatement(query);
                             ResultSet rs = st.executeQuery(query);
 
                             //update newest registered value on GUI
@@ -232,18 +250,17 @@ public class ManageScheduleView extends JPanel implements ActionListener
                             Time.setText("Buổi sáng: " + Sched.getDayRegistered() + "/" + Sched.getLimitDay()
                                     + "          Buổi trưa: " + Sched.getNoonRegistered() + "/" + Sched.getLimitNoon()
                                     + "          Buổi tối: " + Sched.getNightRegistered() + "/" + Sched.getLimitNight());
-
                         } catch (SQLException ex) {
                             dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
                             ex.printStackTrace();
                             return;
-                        } finally {
+                        } /*finally {
                             try {
                                 connection.close();
                             } catch (SQLException ex) {
                                 ex.printStackTrace();
                             }
-                        }
+                        }*/
 
                         LayeredPaneArea.removeAll();
                         SchedListPanel = null;
@@ -323,10 +340,8 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                     return;
 
                                 String plsql = "{call SCHED_UPDATE_RECORD(?, ?, ?, ?)}";
-                                Connection connection = null;
                                 try {
-                                    connection = DriverManager.getConnection(dv.getDB_URL(),dv.getUsername(),dv.getPassword());
-                                    CallableStatement cst = connection.prepareCall(plsql);
+                                    CallableStatement cst = conn.prepareCall(plsql);
 
                                     cst.setString("par_ID", Sched.getID());
                                     cst.setInt("par_LimitDay", Integer.parseInt(InputLimitDay));
@@ -336,7 +351,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                     cst.execute(); //commited in stored proc
                                 } catch (SQLException ex) {
                                     try {
-                                        connection.rollback();
+                                        conn.rollback();
                                     } catch (SQLException ex1) {
                                         dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
                                         ex1.printStackTrace();
@@ -347,7 +362,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                     return;
                                 } finally {
                                     try {
-                                        connection.close();
+                                        conn.close();
                                     } catch (SQLException ex) {
                                         ex.printStackTrace();
                                     }
@@ -364,6 +379,8 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
                                 dv.popupOption(null, "Cập nhật thành công!", "Thông báo!", 0);
                             }
+
+
                         };
 
                         JButton UpdateSchedButton = new JButton();
@@ -467,6 +484,8 @@ public class ManageScheduleView extends JPanel implements ActionListener
                                 + "          Buổi trưa: " + Sched.getNoonRegistered() + "/" + Sched.getLimitNoon()
                                 + "          Buổi tối: " + Sched.getNightRegistered() + "/" + Sched.getLimitNight());
                         SchedPanel.repaint(0,0,640,120);
+
+                        BackButton.setEnabled(true);
                     }
                 }
             };
@@ -1233,10 +1252,22 @@ public class ManageScheduleView extends JPanel implements ActionListener
     }
 
     /*CONSTRUCTOR*/
-    public ManageScheduleView(Organization org)
+    public ManageScheduleView(Organization org, JButton Back)
     {
+        BackButton = Back;
         orgUser = org;
         initComponents();
+    }
+
+    public void closeConnection()
+    {
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /*ACTION PERFORMED*/
@@ -1245,7 +1276,13 @@ public class ManageScheduleView extends JPanel implements ActionListener
     {
         if (e.getSource() == SchedFilterButton)
         {
-
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
 
 //            CreateSchedPanel = null;
             LayeredPaneArea.removeAll();
@@ -1287,6 +1324,14 @@ public class ManageScheduleView extends JPanel implements ActionListener
 
         if (e.getSource() == CreateNewSchedButton)
         {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
             SchedListPanel = null;
             ScrollPaneSchedList = null;
 
@@ -1303,5 +1348,4 @@ public class ManageScheduleView extends JPanel implements ActionListener
         }
 
     }
-
 }

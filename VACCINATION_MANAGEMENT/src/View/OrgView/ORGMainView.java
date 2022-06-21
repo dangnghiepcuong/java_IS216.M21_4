@@ -433,6 +433,9 @@ public class ORGMainView extends JFrame implements ActionListener
     {
         if(e.getSource() == BackButton)
         {
+            if (manageScheduleView != null)
+                manageScheduleView.closeConnection();
+
             nullFeatureViews();
             MainLayeredPane.removeAll();
             MainLayeredPane.add(MainPanel, Integer.valueOf(1));
@@ -507,7 +510,7 @@ public class ORGMainView extends JFrame implements ActionListener
 
         if (e.getSource() == ManageSchedButton)
         {
-            manageScheduleView = new ManageScheduleView(orgUser);
+            manageScheduleView = new ManageScheduleView(orgUser, BackButton);
             MainLayeredPane.removeAll();
             MainLayeredPane.add(manageScheduleView, Integer.valueOf(0));
 
