@@ -2,7 +2,7 @@
 HỆ THỐNG QUẢN LÝ TIÊM CHỦNG VACCINE COVID-19
 
 CHƯƠNG 1: TỔNG QUAN ĐỀ TÀI
-Chương 1 khái quát các nội dung giới thiệu về đề tài như lý do hình thành ý tưởng, khảo sát sơ lược các dự án liên quan, đề ra mục tiêu cho đồ án, phát biểu về bài toán, mô tả các quy trình nghiệp vụ, phân tích các yêu cầu chức năng của hệ thống.
+.Chương 1 khái quát các nội dung giới thiệu về đề tài như lý do hình thành ý tưởng, khảo sát sơ lược các dự án liên quan, đề ra mục tiêu cho đồ án, phát biểu về bài toán, mô tả các quy trình nghiệp vụ, phân tích các yêu cầu chức năng của hệ thống.
 
 1.1. Lý do chọn đề tài
 Trong bối cảnh dịch bệnh truyền nhiễm diễn ra toàn cầu làm ảnh hưởng đến rất nhiều lĩnh vực đời sống như kinh tế, giáo dục, vận chuyển, sản xuất,… Để giảm tải cũng như phòng tránh dịch bệnh lây lan thì việc cấp thiết bây giờ là cần phải tăng tốc độ phủ vaccine Covid-19 cho toàn dân càng nhanh, càng hiệu quả càng tốt. Việc tổ chức tiêm chủng vaccine Covid-19 cần được thiết lập một cách chặt chẽ, nhanh gọn và đảm bảo các quy định về phòng chống dịch bệnh. Các thông tin tiêm chủng về các mũi tiêm, tình trạng sức khỏe cũng như bệnh nền của người dân cần phải được cập nhật liên tục, nhanh và chính xác nhất có thể. Để giải quyết nhu cầu trên, chính phủ cần có một quy trình tổ chức tiêm chủng cũng như giám sát và quản lý tình hình các mũi tiêm vaccine của người dân chặt chẽ, chuẩn xác và nhanh chóng nhưng vẫn đảm bảo tuân thủ các quy định phòng chống dịch.
