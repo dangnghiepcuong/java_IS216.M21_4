@@ -379,7 +379,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
                             "Cảnh báo!", "Nhập số cho số lượng!") != -2)
                         return;
 
-                    int answer = dv.popupConfirmOption(null,"Xác nhận tạo lịch " + InputQuantity
+                    int answer = dv.popupConfirmOption(null,"Xác nhận tạo" + InputQuantity
                             + " tài khoản đơn vị cho tỉnh/thành phố " + ProvinceComboBox.getSelectedItem() + "?", "Xác nhận!");
 
                     if (answer == JOptionPane.YES_OPTION)
@@ -393,13 +393,14 @@ public class CreateOrgAccView extends JPanel implements ActionListener
 
                             CallableStatement cst = connection.prepareCall(plsql);
                             cst.setString("par_Quantity", InputQuantity);
-                            cst.setString("par_Province", InputProvince);
+                            cst.setString("par_ProvinceName", InputProvince);
 
                             cst.execute();
                         } catch (SQLException ex)
                         {
                             dv.popupOption(null,  ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
                             ex.printStackTrace();
+                            return;
                         }
 
                         dv.popupOption(null, "Tạo tài khoản đơn vị thành công!", "Thông báo!", 0);
