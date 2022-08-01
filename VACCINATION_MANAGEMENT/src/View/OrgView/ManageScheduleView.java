@@ -164,7 +164,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                 SchedListPanel = null;
                 ScrollPaneSchedList = null;
 
-                JLabel RegListLabel = new JLabel("DANH SÁCH CÁC LƯỢT ĐĂNG KÝ:");
+                JLabel RegListLabel = new JLabel("DANH SÁCH CÁC LƯỢT ĐĂNG KÝ");
                 RegListLabel.setBounds(0,0,640,40);
                 RegListLabel.setFont(new Font(dv.fontName(), 1, 20));
                 RegListLabel.setForeground(new Color(dv.FeatureButtonColor()));
@@ -227,7 +227,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         UpdateSchedLabel.setForeground(new Color(dv.FeatureButtonColor()));
                         UpdateSchedLabel.setHorizontalAlignment(JLabel.CENTER);
 
-                        JLabel LimitDayLabel = new JLabel("Giới hạn số lượt đăng ký buổi sáng:");
+                        JLabel LimitDayLabel = new JLabel("Giới hạn số lượt đăng ký buổi sáng");
                         LimitDayLabel.setPreferredSize(new Dimension(270, 30));
                         LimitDayLabel.setFont(new Font(dv.fontName(), 0 ,16));
                         LimitDayLabel.setForeground(new Color(dv.BlackTextColor()));
@@ -237,7 +237,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         LimitDayTextField.setFont(new Font(dv.fontName(), 0 ,16));
                         LimitDayTextField.setForeground(new Color(dv.BlackTextColor()));
 
-                        JLabel LimitNoonLabel = new JLabel("Giới hạn số lượt đăng ký buổi trưa:");
+                        JLabel LimitNoonLabel = new JLabel("Giới hạn số lượt đăng ký buổi trưa");
                         LimitNoonLabel.setPreferredSize(new Dimension(270, 30));
                         LimitNoonLabel.setFont(new Font(dv.fontName(), 0 ,16));
                         LimitNoonLabel.setForeground(new Color(dv.BlackTextColor()));
@@ -247,7 +247,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         LimitNoonTextField.setFont(new Font(dv.fontName(), 0 ,16));
                         LimitNoonTextField.setForeground(new Color(dv.BlackTextColor()));
 
-                        JLabel LimitNightLabel = new JLabel("Giới hạn số lượt đăng ký buổi tối:");
+                        JLabel LimitNightLabel = new JLabel("Giới hạn số lượt đăng ký buổi tối");
                         LimitNightLabel.setPreferredSize(new Dimension(270, 30));
                         LimitNightLabel.setFont(new Font(dv.fontName(), 0 ,16));
                         LimitNightLabel.setForeground(new Color(dv.BlackTextColor()));
@@ -633,13 +633,13 @@ public class ManageScheduleView extends JPanel implements ActionListener
             if (Reg.getStatus() == 0)
             {
                 StatusChoice.add("Điểm danh");
-                StatusChoice.add("Hủy");
+                StatusChoice.add("Đã hủy");
             }
 
             if (Reg.getStatus() == 1)
             {
                 StatusChoice.add("Đã tiêm");
-                StatusChoice.add("Hủy");
+                StatusChoice.add("Đã hủy");
             }
 
             ActionListener handleUpdateRegistions = new ActionListener()
@@ -666,7 +666,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                         Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
                         CallableStatement cst = connection.prepareCall(plsql);
-
+                        int temp = dv.getStatusIndex(StatusChoice.getSelectedItem());
                         cst.setString("par_PersonalID", Reg.getCitizen().getID());
                         cst.setString("par_SchedID", Reg.getSched().getID());
                         cst.setInt("par_Status", dv.getStatusIndex(StatusChoice.getSelectedItem()));
@@ -681,7 +681,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                     }
 
                     //repaint Status on Registion Panel
-                    Reg.setStatus(StatusChoice.getSelectedIndex()+1);
+                    Reg.setStatus(dv.getStatusIndex(StatusChoice.getSelectedItem()));
                     TimeNOStatus.setText("Buổi: " + dv.getTimeName(Reg.getTime())
                             + "          STT: " + Reg.getNO() + "          Tình trạng: " + dv.getStatusName(Reg.getStatus()));
 
@@ -722,7 +722,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
                 " and REG.SchedID = '" +  Sched.getID() + "'";
         if (Status != -1)
             query += " and Status = " + Status;
-        query += " order by Time, NO";
+        query += " order by Status, Time, NO";
 
         System.out.println(query);
 
@@ -820,7 +820,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         OnDateField.setVisible(true);
         OnDateField.setEnabled(true);
 
-        JLabel VaccineLabel = new JLabel("Loại vaccine sử dụng:");
+        JLabel VaccineLabel = new JLabel("Loại vaccine sử dụng");
         VaccineLabel.setPreferredSize(new Dimension(200, 30));
         VaccineLabel.setFont(new Font(dv.fontName(), 0 ,16));
         VaccineLabel.setForeground(new Color(dv.BlackTextColor()));
@@ -870,7 +870,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
             VaccineChoice.add(vacc[i].getID());
         }
 
-        JLabel SerialLabel = new JLabel("Series vaccine:");
+        JLabel SerialLabel = new JLabel("Series vaccine");
         SerialLabel.setPreferredSize(new Dimension(200, 30));
         SerialLabel.setFont(new Font(dv.fontName(), 0 ,16));
         SerialLabel.setForeground(new Color(dv.BlackTextColor()));
@@ -880,7 +880,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         SerialTextField.setFont(new Font(dv.fontName(), 0 ,16));
         SerialTextField.setForeground(new Color(dv.BlackTextColor()));
 
-        JLabel LimitDayLabel = new JLabel("Giới hạn số lượt đăng ký buổi sáng:");
+        JLabel LimitDayLabel = new JLabel("Giới hạn số lượt đăng ký buổi sáng");
         LimitDayLabel.setPreferredSize(new Dimension(270, 30));
         LimitDayLabel.setFont(new Font(dv.fontName(), 0 ,16));
         LimitDayLabel.setForeground(new Color(dv.BlackTextColor()));
@@ -890,7 +890,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         LimitDayTextField.setFont(new Font(dv.fontName(), 0 ,16));
         LimitDayTextField.setForeground(new Color(dv.BlackTextColor()));
 
-        JLabel LimitNoonLabel = new JLabel("Giới hạn số lượt đăng ký buổi trưa:");
+        JLabel LimitNoonLabel = new JLabel("Giới hạn số lượt đăng ký buổi trưa");
         LimitNoonLabel.setPreferredSize(new Dimension(270, 30));
         LimitNoonLabel.setFont(new Font(dv.fontName(), 0 ,16));
         LimitNoonLabel.setForeground(new Color(dv.BlackTextColor()));
@@ -900,7 +900,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         LimitNoonTextField.setFont(new Font(dv.fontName(), 0 ,16));
         LimitNoonTextField.setForeground(new Color(dv.BlackTextColor()));
 
-        JLabel LimitNightLabel = new JLabel("Giới hạn số lượt đăng ký buổi tối:");
+        JLabel LimitNightLabel = new JLabel("Giới hạn số lượt đăng ký buổi tối");
         LimitNightLabel.setPreferredSize(new Dimension(270, 30));
         LimitNightLabel.setFont(new Font(dv.fontName(), 0 ,16));
         LimitNightLabel.setForeground(new Color(dv.BlackTextColor()));
@@ -1093,7 +1093,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         initSchedListPanel(0);
 
         //init LayeredPaneArea
-        JLabel SchedListLabel = new JLabel("DANH SÁCH LỊCH TIÊM (" + orgUser.getName() + "):");
+        JLabel SchedListLabel = new JLabel("DANH SÁCH LỊCH TIÊM (" + orgUser.getName() + ")");
         SchedListLabel.setBounds(0,0,640,40);
         SchedListLabel.setFont(new Font(dv.fontName(), 1, 20));
         SchedListLabel.setForeground(new Color(dv.FeatureButtonColor()));
@@ -1127,7 +1127,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
             LayeredPaneArea.removeAll();
             LayeredPaneArea.repaint(320, 40, 680, 630);
 
-            JLabel SchedListLabel = new JLabel("DANH SÁCH LỊCH TIÊM (" + orgUser.getName() + "):");
+            JLabel SchedListLabel = new JLabel("DANH SÁCH LỊCH TIÊM (" + orgUser.getName() + ")");
             SchedListLabel.setBounds(0,0,640,40);
             SchedListLabel.setFont(new Font(dv.fontName(), 1, 20));
             SchedListLabel.setForeground(new Color(dv.FeatureButtonColor()));
@@ -1148,7 +1148,7 @@ public class ManageScheduleView extends JPanel implements ActionListener
         {
             LayeredPaneArea.removeAll();
 
-            JLabel RegListLabel = new JLabel("DANH SÁCH CÁC LƯỢT ĐĂNG KÝ:");
+            JLabel RegListLabel = new JLabel("DANH SÁCH CÁC LƯỢT ĐĂNG KÝ");
             RegListLabel.setBounds(0,0,640,40);
             RegListLabel.setFont(new Font(dv.fontName(), 1, 20));
             RegListLabel.setForeground(new Color(dv.FeatureButtonColor()));

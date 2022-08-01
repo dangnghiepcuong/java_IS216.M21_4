@@ -189,7 +189,7 @@ public class SearchOrgView extends JPanel implements ActionListener
             {
                 LayeredPaneArea.removeAll();
 
-                JLabel SchedListLabel = new JLabel("DANH SÁCH CÁC LỊCH TIÊM " + Org.getName() + ":");
+                JLabel SchedListLabel = new JLabel("DANH SÁCH CÁC LỊCH TIÊM (" + Org.getName() + ")");
                 SchedListLabel.setBounds(0,0,640,40);
                 SchedListLabel.setFont(new Font(dv.fontName(), 1, 20));
                 SchedListLabel.setForeground(new Color(dv.FeatureButtonColor()));
@@ -306,7 +306,7 @@ public class SearchOrgView extends JPanel implements ActionListener
         if (TownChoice.getSelectedIndex() > 0)
             query = query + " and ORG.Town = '" + TownChoice.getSelectedItem() + "'";
 
-        query += " and (OnDate > '" + dv.oracleSysdate() + "' or OnDate is null)";
+        query += " and (OnDate > TO_DATE('" + dv.oracleSysdate() + "') or OnDate is null)";
         query += " group by ORG.ID, Name, Province, District, Town, Street";
         query += " order by ID, Province, District, Town";
 
@@ -594,7 +594,7 @@ public class SearchOrgView extends JPanel implements ActionListener
         query = "select *" +
                 " from SCHEDULE SCHED" +
                 " where OrgID = '" + Org.getID() + "'" +
-                " and OnDate >= TO_DATE('" + dv.oracleSysdate() + "')";
+                " and OnDate > TO_DATE('" + dv.oracleSysdate() + "')";
         if (SelectedVaccine != -1)
             query += " and VaccineID = '" + dv.getVaccineID(SchedFilterChoice.getSelectedIndex()-1) + "'";
         query += " order by OnDate";
@@ -702,7 +702,7 @@ public class SearchOrgView extends JPanel implements ActionListener
             LayeredPaneArea.removeAll();
 
             JLabel OrgListLabel = new JLabel("DANH SÁCH CÁC ĐƠN VỊ TIÊM CHỦNG ("
-                    + ProvinceChoice.getSelectedItem() + "-" + DistrictChoice.getSelectedItem() + "-" + TownChoice.getSelectedItem() + "):");
+                    + ProvinceChoice.getSelectedItem() + "-" + DistrictChoice.getSelectedItem() + "-" + TownChoice.getSelectedItem() + ")");
             OrgListLabel.setBounds(0, 0, 640, 40);
             OrgListLabel.setFont(new Font(dv.fontName(), 1, 20));
             OrgListLabel.setForeground(new Color(dv.FeatureButtonColor()));
@@ -722,7 +722,7 @@ public class SearchOrgView extends JPanel implements ActionListener
 
         if (e.getSource() == SchedFilterButton)
         {
-            JLabel SchedListLabel = new JLabel("DANH SÁCH CÁC LỊCH TIÊM " + SelectedOrg.getName() + ":");
+            JLabel SchedListLabel = new JLabel("DANH SÁCH CÁC LỊCH TIÊM (" + SelectedOrg.getName() +")");
             SchedListLabel.setBounds(0,0,640,40);
             SchedListLabel.setFont(new Font(dv.fontName(), 1, 20));
             SchedListLabel.setForeground(new Color(dv.FeatureButtonColor()));

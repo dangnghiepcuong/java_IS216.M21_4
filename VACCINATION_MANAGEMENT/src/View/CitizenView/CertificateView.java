@@ -15,14 +15,6 @@ import java.sql.*;
 public class CertificateView extends JPanel{
 
     /*Main GUI*/
-    private JLayeredPane MainLayeredPane;
-    private JPanel MainPanel;
-
-    private JLayeredPane InfoLayeredPane;
-    private JLabel InfoBackground;
-    private JLabel NameLabel;
-    private JLabel LocationLabel;
-    private JLabel image;
 
     private JScrollPane ScrollPaneInjList;
 
@@ -68,8 +60,8 @@ public class CertificateView extends JPanel{
        JPanel InjectionPanel = new JPanel();
        InjectionPanel.setPreferredSize(new Dimension(560, 120));
        InjectionPanel.setLayout(null);
-       InjectionPanel.setBackground(null);
-       InjectionPanel.setBorder(dv.border());
+       InjectionPanel.setBackground(Color.WHITE);
+//       InjectionPanel.setBorder(dv.border());
 
        InjectionPanel.add(NameOrg);
        InjectionPanel.add(Vaccine);
@@ -83,7 +75,8 @@ public class CertificateView extends JPanel{
    private void initInjectionListPanel()
    {
        InjectionListPanel = new JPanel();
-
+       InjectionListPanel.setLayout(new FlowLayout());
+       InjectionListPanel.setBackground(new Color(dv.SpecifiedAreaBackgroundColor()));
 
        int i =0;
        int nInj = 0;
@@ -138,16 +131,6 @@ public class CertificateView extends JPanel{
             return;
        }
 
-
-
-       InjectionListPanel.setLayout(new FlowLayout());
-       if (cert.getCertType() == 0)
-           InjectionListPanel.setBackground(new Color(dv.RedPastel()));
-       if (cert.getCertType() == 1)
-           InjectionListPanel.setBackground(new Color(dv.YellowPastel()));
-       if (cert.getCertType() == 2)
-           InjectionListPanel.setBackground(new Color(dv.GreenPastel()));
-
        nInj = i;
 
        InjectionListPanel.setPreferredSize(new Dimension(580, 120*nInj + nInj*10));
@@ -159,7 +142,7 @@ public class CertificateView extends JPanel{
         ScrollPaneInjList = new JScrollPane(InjectionListPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-        ScrollPaneInjList.setBounds(0,80,600, 510);; //320 40
+        ScrollPaneInjList.setBounds(0,120,600, 550);; //320 40
     }
 
     public void initLayeredPaneArea()
@@ -168,14 +151,39 @@ public class CertificateView extends JPanel{
         InfoLabel.setBounds(0, 0, 600, 40);
         InfoLabel.setFont(new Font(dv.fontName(),Font.BOLD, 24));
         InfoLabel.setHorizontalAlignment(JLabel.CENTER);
-        InfoLabel.setForeground(new Color(dv.FeatureButtonColor()));
 
         JLabel InfoLabel2 = new JLabel(personalUser.getFullName() + " (" + dv.getGenderName(personalUser.getGender()) + " - "
                 + personalUser.getBirthday().substring(0,4) + ")");
         InfoLabel2.setBounds(0, 40, 600, 40);
         InfoLabel2.setFont(new Font(dv.fontName(),Font.BOLD, 24));
         InfoLabel2.setHorizontalAlignment(JLabel.CENTER);
-        InfoLabel2.setForeground(new Color(dv.FeatureButtonColor()));
+
+        JLabel InfoLabel3 = new JLabel();
+        InfoLabel3.setBounds(0, 80, 600, 40);
+        InfoLabel3.setFont(new Font(dv.fontName(),Font.ITALIC, 24));
+        InfoLabel3.setHorizontalAlignment(JLabel.CENTER);
+
+        if (cert.getCertType() == 0)
+        {
+            InfoLabel.setForeground(Color.WHITE);
+            InfoLabel2.setForeground(Color.WHITE);
+            InfoLabel3.setForeground(Color.WHITE);
+            InfoLabel3.setText("Chưa thực hiện tiêm chủng vaccine Covid-19");
+        }
+        if (cert.getCertType() == 1)
+        {
+            InfoLabel.setForeground(new Color(dv.BlackTextColor()));
+            InfoLabel2.setForeground(new Color(dv.BlackTextColor()));
+            InfoLabel3.setForeground(new Color(dv.BlackTextColor()));
+            InfoLabel3.setText("Chưa tiêm đủ liều cơ bản vaccine Covid-19");
+        }
+        if (cert.getCertType() == 2)
+        {
+            InfoLabel.setForeground(Color.WHITE);
+            InfoLabel2.setForeground(Color.WHITE);
+            InfoLabel3.setForeground(Color.WHITE);
+            InfoLabel3.setText("Đã hoàn thành tiêm chủng vaccine Covid-19");
+        }
 
         LayeredPaneArea = new JLayeredPane();
         LayeredPaneArea.setBounds((this.getWidth()-600)/2,(this.getHeight()-630)/2,600, 630);
@@ -183,13 +191,14 @@ public class CertificateView extends JPanel{
 
         LayeredPaneArea.add(InfoLabel);
         LayeredPaneArea.add(InfoLabel2);
+        LayeredPaneArea.add(InfoLabel3);
     }
 
     private void initComponents()
     {
         this.setSize(dv.FrameWidth(), dv.FrameHeight());
         this.setVisible(true);
-        this.setBackground(new Color(dv.ViewBackgroundColor()));
+        //this.setBackground(new Color(dv.ViewBackgroundColor()));
         this.setLayout(null);
 
         initInjectionListPanel();
@@ -197,6 +206,13 @@ public class CertificateView extends JPanel{
 
         initLayeredPaneArea();
         LayeredPaneArea.add(ScrollPaneInjList, Integer.valueOf(0));
+
+        if (cert.getCertType() == 0)
+            this.setBackground(new Color(dv.RedPastel()));
+        if (cert.getCertType() == 1)
+            this.setBackground(new Color(dv.YellowPastel()));
+        if (cert.getCertType() == 2)
+            this.setBackground(new Color(dv.GreenPastel()));
 
         this.add(LayeredPaneArea);
         this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
@@ -229,51 +245,5 @@ public class CertificateView extends JPanel{
 
         initComponents();
     }
-
-    /*ACTION PERFORMED*/
-   
-    private void ActionUpLoadImage( )
-    {
-        JFileChooser chooser=new JFileChooser();
-        chooser.setFileFilter(new FileFilter() 
-        {
-                    @Override
-                    public boolean accept(File f)
-                    {
-                        if(f.isDirectory())
-                            return true;
-                        else
-                            return f.getName().toLowerCase().endsWith(".jpg");
-                    }   
-                 
-                    @Override
-                    public String getDescription()
-                    {
-                        return "Image File (*.jpg)";
-                    }                   
-                }
-        );
-        if(chooser.showOpenDialog(this) ==JFileChooser.CANCEL_OPTION)
-            return;
-        
-        File file=chooser.getSelectedFile();
-        try
-        {
-            ImageIcon imageicon=new ImageIcon(file.getPath());
-            Image img= ImageHelper.reSize(imageicon.getImage(), 4, 3);
-            JLabel image = new JLabel(imageicon); 
-            
-            image.setBounds(90,140,300,400);
-            image.setHorizontalAlignment(JLabel.CENTER);
-            InfoLayeredPane.add(image,Integer.valueOf(2));
-            
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-            
-        }
-    }
-
 
 }

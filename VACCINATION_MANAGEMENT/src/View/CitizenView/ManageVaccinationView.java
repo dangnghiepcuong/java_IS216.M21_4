@@ -108,43 +108,43 @@ public class ManageVaccinationView extends JPanel implements ActionListener
         JPanel RegPanel = new JPanel();
 
         RegPanel.setLayout(null);
-        RegPanel.setPreferredSize(new Dimension(640,120));
+        RegPanel.setPreferredSize(new Dimension(640, 120));
         RegPanel.setBackground(Color.WHITE);
 
         JLabel OrgName = new JLabel("Đơn vị: " + Reg.getOrg().getName());
         OrgName.setFont(new Font(dv.fontName(), 3, 18));
         OrgName.setForeground(new Color(dv.FeatureButtonColor()));
-        OrgName.setBounds(30,1,605,30);
+        OrgName.setBounds(30, 1, 605, 30);
         OrgName.setHorizontalAlignment(JLabel.LEFT);
         //OrgName.setBorder(dv.border());
 
-        JLabel Address = new JLabel("Đ/c: " + dv.getProvinceName(Reg.getOrg().getProvince())  + ", "
+        JLabel Address = new JLabel("Đ/c: " + dv.getProvinceName(Reg.getOrg().getProvince()) + ", "
                 + Reg.getOrg().getDistrict() + ", " + Reg.getOrg().getTown() + ", " + Reg.getOrg().getStreet());
         Address.setFont(new Font(dv.fontName(), 2, 16));
         Address.setForeground(new Color(dv.BlackTextColor()));
-        Address.setBounds(30,32,600,25);
+        Address.setBounds(30, 32, 600, 25);
         Address.setHorizontalAlignment(JLabel.LEFT);
         //OrgName.setBorder(dv.border());
 
         JLabel OnDateTime = new JLabel("Lịch tiêm ngày: " + Reg.getSched().getOnDate()
-                + "          Buổi: " + dv.getTimeName(Reg.getTime())  + "          STT: " + Reg.getNO());
+                + "          Buổi: " + dv.getTimeName(Reg.getTime()) + "          STT: " + Reg.getNO());
         OnDateTime.setFont(new Font(dv.fontName(), 1, 16));
         OnDateTime.setForeground(new Color(dv.BlackTextColor()));
-        OnDateTime.setBounds(30,32+25+2,500,25);
+        OnDateTime.setBounds(30, 32 + 25 + 2, 500, 25);
         OnDateTime.setHorizontalAlignment(JLabel.LEFT);
         //OnDate.setBorder(dv.border());
 
         JLabel Vaccine = new JLabel("Vaccine: " + Reg.getSched().getVaccineID() + " - " + Reg.getSched().getSerial());
         Vaccine.setFont(new Font(dv.fontName(), 0, 16));
         Vaccine.setForeground(new Color(dv.BlackTextColor()));
-        Vaccine.setBounds(30, 32+25*2+2,250,25);
+        Vaccine.setBounds(30, 32 + 25 * 2 + 2, 250, 25);
         Vaccine.setHorizontalAlignment(JLabel.LEFT);
         //VaccineID.setBorder(dv.border());
 
         JLabel Status = new JLabel("Tình trạng: " + dv.getStatusName(Reg.getStatus()));
         Status.setFont(new Font(dv.fontName(), 0, 16));
         Status.setForeground(new Color(dv.BlackTextColor()));
-        Status.setBounds(270, 32+25*2+2,250,25);
+        Status.setBounds(270, 32 + 25 * 2 + 2, 250, 25);
         Status.setHorizontalAlignment(JLabel.LEFT);
         //VaccineID.setBorder(dv.border());
 
@@ -154,54 +154,51 @@ public class ManageVaccinationView extends JPanel implements ActionListener
         RegPanel.add(Vaccine);
         RegPanel.add(Status);
 
-        if (Reg.getStatus() < 2)
+        JButton UpdateStatusButton = new JButton();
+        ActionListener handleUpdate = new ActionListener()
         {
-            ActionListener handleUpdate = new ActionListener()
+            @Override
+            public void actionPerformed(ActionEvent e)
             {
-                @Override
-                public void actionPerformed(ActionEvent e)
-                {
-                    if ( dv.popupConfirmOption(null,"Xác nhận cập nhật trạng thái lượt đăng ký?", "Xác nhận?") != 0)
-                        return;
+                if (dv.popupConfirmOption(null, "Xác nhận cập nhật trạng thái lượt đăng ký?", "Xác nhận?") != 0)
+                    return;
 
-                    String plsql = "{call REG_UPDATE_STATUS(?, ?, ?)}";
+                String plsql = "{call REG_UPDATE_STATUS(?, ?, ?)}";
 
-                    try {
-                        Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+                try {
+                    Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
 
-                        CallableStatement cst = connection.prepareCall(plsql);
+                    CallableStatement cst = connection.prepareCall(plsql);
 
-                        cst.setString("par_PersonalID", Reg.getCitizen().getID());
-                        cst.setString("par_SchedID", Reg.getSched().getID());
-                        cst.setInt("par_Status", 3);
+                    cst.setString("par_PersonalID", personalUser.getID());
+                    cst.setString("par_SchedID", Reg.getSched().getID());
+                    cst.setInt("par_Status", 3);
 
-                        cst.execute();
-                    }
-                    catch (SQLException ex)
-                    {
-                        dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(),2);
-                        ex.printStackTrace();
-                        return;
-                    }
-
-                    Reg.setStatus(3);
-                    Status.setText("Tình trạng: " + dv.getStatusName(Reg.getStatus()));
-
-                    RegPanel.repaint();
+                    cst.execute();
+                } catch (SQLException ex) {
+                    dv.popupOption(null, ex.getMessage(), "Lỗi " + ex.getErrorCode(), 2);
+                    ex.printStackTrace();
+                    return;
                 }
-            };
+                dv.popupOption(null, "Hủy lịch đăng ký tiêm thành công!", "Thông báo!", 0);
+                Reg.setStatus(3);
+                Status.setText("Tình trạng: " + dv.getStatusName(Reg.getStatus()));
+                UpdateStatusButton.setEnabled(false);
+                RegPanel.repaint();
+            }
+        };
+        ImageIcon UpdateStatusButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Cancel Reg Button.png"));
+        UpdateStatusButton.setForeground(new Color(dv.BlackTextColor()));
+        UpdateStatusButton.setBounds(500, 32 * 2 + 5, UpdateStatusButtonIcon.getIconWidth(), UpdateStatusButtonIcon.getIconHeight());
+        UpdateStatusButton.setContentAreaFilled(false);
+        UpdateStatusButton.setBorder(null);
+        UpdateStatusButton.setIcon(UpdateStatusButtonIcon);
+        UpdateStatusButton.addActionListener(handleUpdate);
+        if (Reg.getStatus() > 1)
+            UpdateStatusButton.setEnabled(false);
 
-            JButton UpdateStatusButton = new JButton();
-            ImageIcon UpdateStatusButtonIcon = new ImageIcon(getClass().getResource("/Resources/icon/Cancel Reg Button.png"));
-            UpdateStatusButton.setForeground(new Color(dv.BlackTextColor()));
-            UpdateStatusButton.setBounds(500,32*2+5,UpdateStatusButtonIcon.getIconWidth(),UpdateStatusButtonIcon.getIconHeight());
-            UpdateStatusButton.setContentAreaFilled(false);
-            UpdateStatusButton.setBorder(null);
-            UpdateStatusButton.setIcon(UpdateStatusButtonIcon);
-            UpdateStatusButton.addActionListener(handleUpdate);
+        RegPanel.add(UpdateStatusButton);
 
-            RegPanel.add(UpdateStatusButton);
-        }
 
         return RegPanel;
     }
@@ -214,7 +211,7 @@ public class ManageVaccinationView extends JPanel implements ActionListener
 
         int i = 0;
 
-        String query = "select DoseType, Time, NO, Status, Image, OnDate, VaccineID, Serial, Name, Province, District, Town, Street" +
+        String query = "select DoseType, Time, NO, Status, Image, SCHED.ID, OnDate, VaccineID, Serial, Name, Province, District, Town, Street" +
                 " from REGISTER REG, SCHEDULE SCHED, ORGANIZATION ORG" +
                 " where '" + personalUser.getID() + "' = REG.PersonalID" +
                 " and REG.SchedID = SCHED.ID" +
@@ -249,6 +246,7 @@ public class ManageVaccinationView extends JPanel implements ActionListener
                 Reg.setNO(rs.getInt("NO"));
                 Reg.setStatus(rs.getInt("Status"));
                 Reg.setImage(rs.getBytes("Image"));
+                Reg.getSched().setID(rs.getString("ID"));
                 Reg.getSched().setOnDate(rs.getString("OnDate").substring(0,10));
                 Reg.getSched().setVaccineID(rs.getString("VaccineID"));
                 Reg.getSched().setSerial(rs.getString("Serial"));
@@ -299,7 +297,7 @@ public class ManageVaccinationView extends JPanel implements ActionListener
         this.add(RegFilterPanel);
 
         //init RegList
-        JLabel RegListLabel = new JLabel("DANH SÁCH LỊCH TIÊM ĐÃ ĐĂNG KÝ (" + personalUser.getFullName() + "):");
+        JLabel RegListLabel = new JLabel("DANH SÁCH LỊCH TIÊM ĐÃ ĐĂNG KÝ (" + personalUser.getFullName() + ")");
         RegListLabel.setBounds(0,0,640,40);
         RegListLabel.setFont(new Font(dv.fontName(), 1, 20));
         RegListLabel.setForeground(new Color(dv.FeatureButtonColor()));

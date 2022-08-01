@@ -520,7 +520,7 @@ public class FillFormView extends JPanel implements ActionListener
         this.add(FillFormButton);
 
         //init FormListPanel
-        JLabel HealListLabel = new JLabel("DANH SÁCH TỜ KHAI Y TẾ (" + personalUser.getFullName() + "):");
+        JLabel HealListLabel = new JLabel("DANH SÁCH TỜ KHAI Y TẾ (" + personalUser.getFullName() + ")");
         HealListLabel.setBounds(0,0,640,40);
         HealListLabel.setFont(new Font(dv.fontName(), 1, 20));
         HealListLabel.setForeground(new Color(dv.FeatureButtonColor()));
@@ -556,7 +556,7 @@ public class FillFormView extends JPanel implements ActionListener
             LayeredPaneArea.removeAll();
             LayeredPaneArea.repaint(320, 40, 680, 630);
 
-            JLabel HealListLabel = new JLabel("DANH SÁCH TỜ KHAI Y TẾ (" + personalUser.getFullName() + "):");
+            JLabel HealListLabel = new JLabel("DANH SÁCH TỜ KHAI Y TẾ (" + personalUser.getFullName() + ")");
             HealListLabel.setBounds(0,0,640,40);
             HealListLabel.setFont(new Font(dv.fontName(), 1, 20));
             HealListLabel.setForeground(new Color(dv.FeatureButtonColor()));

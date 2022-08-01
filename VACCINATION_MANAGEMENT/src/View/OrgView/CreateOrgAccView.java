@@ -387,7 +387,7 @@ public class CreateOrgAccView extends JPanel implements ActionListener
         initOrgListPanel("00");
 
         //init LayeredPaneArea
-        JLabel OrgListLabel = new JLabel("DANH SÁCH ĐƠN VỊ:");
+        JLabel OrgListLabel = new JLabel("DANH SÁCH ĐƠN VỊ");
         OrgListLabel.setBounds(0,0,640,40);
         OrgListLabel.setFont(new Font(dv.fontName(), 1, 20));
         OrgListLabel.setForeground(new Color(dv.FeatureButtonColor()));

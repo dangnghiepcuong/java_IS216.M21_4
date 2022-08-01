@@ -49,73 +49,6 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
     private FileInputStream input=null;
 
     
-   public UpdateInjectionView(Person person) throws IOException
-   {
-       personalUser = person;
-
-        //set frame size
-        this.setSize(dv.FrameWidth(), dv.FrameHeight());
-        //this.setSize(1080, 720); --Main View
-        //set frame visible on screen
-        this.setVisible(true);
-        //set frame background color
-        this.setBackground(new Color(dv.ViewBackgroundColor()));
-        //set layout
-        this.setLayout(null);
-
-        String query = "select * "
-                        + "from PERSON join Register on Person.ID=Register.PersonalID "
-                        + "where PERSON.Phone = '" +  personalUser.getPhone() + "'"
-                        + "Order by SchedID DESC";
-        
-        String query1 = "select count(*) as Total "
-                        + "from PERSON join Register on Person.ID=Register.PersonalID "
-                        + "where PERSON.Phone = '" +  personalUser.getPhone() + "' and Status = 1";
-                      
-              
-        try {
-            
-            
-            Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
-
-            PreparedStatement st = connection.prepareStatement(query);
-            ResultSet rs = st.executeQuery(query);
-            
-            PreparedStatement st1 = connection.prepareStatement(query1);
-            ResultSet rs1 = st1.executeQuery(query1);
-            
-
-            rs.next();
-
-            Reg.setDoseType(rs.getString("Dosetype"));
-            
-            rs1.next();
-            Total_Injection=rs1.getInt("Total");
-          
-
-        } catch (SQLException ex) {
-            dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
-            ex.printStackTrace();
-            return;
-        }
-        
-        initMainLayeredPane();
-//        initMainPanel();
-          
-        initInfoInjectionPanel(personalUser);
-        initLayerPanel();
-        initScrollPaneRegList();
-        initInfoLayerPanel(); 
-        
-        this.add(MainLayeredPane);
-        this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
-        MainLayeredPane.add(MainPanel,Integer.valueOf(0));
-        MainPanel.add(InfoLayeredPane);
-        MainPanel.add(LayerPanel);
-        
-        MainPanel.add(ScrollPaneRegList);
-   }
-   
    private void initMainLayeredPane()
    {
        MainLayeredPane=new JLayeredPane();
@@ -139,7 +72,6 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         InfoLayeredPane.setLayout(null);
         InfoLayeredPane.setOpaque(true);
         
-
         //Load Image
             if(Reg.getImage() != null)
             {
@@ -164,20 +96,18 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         LayerPanel.setBounds(450,0,712, 140);
         LayerPanel.setLayout(null);
         LayerPanel.setOpaque(true);
-        //LayerPanel.setBackground(Color.blue);
-        
+
         JLabel InfoLabel=new JLabel("CẬP NHẬT THÔNG TIN TIÊM CHỦNG");
         InfoLabel.setBounds(0, 20, 630, 100);
         InfoLabel.setFont(new Font(dv.fontName(),Font.BOLD, 24));
         InfoLabel.setHorizontalAlignment(JLabel.CENTER);
         InfoLabel.setForeground(new Color(dv.FeatureButtonColor()));
-        //InfoLabel.setBackground(Color.blue);
 
         LayerPanel.add(InfoLabel);
    }
    
    
-   private void initInfoInjectionPanel(Person personalUser) throws IOException
+   private void initInfoInjectionPanel(Person personalUser) //throws IOException
    {
         InfoInjectionPanel = new JLayeredPane();
         InfoInjectionPanel.setBounds(400,100,600, dv.FrameHeight()-200);
@@ -186,8 +116,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         InfoInjectionPanel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
         
         InfoInjectionPanel.setBackground(new Color(dv.ViewBackgroundColor()));
-        
-        
+
         //InfoInjectionPanel.setBorder(border);
         
         String query = "select * " +
@@ -201,8 +130,7 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
 
             PreparedStatement st = connection.prepareStatement(query);
             ResultSet rs = st.executeQuery(query);
-            
-            
+
             rs.next();
             Reg.getSched().setID(rs.getString("ID"));
             Reg.getSched().setVaccineID(rs.getString("VaccineID"));
@@ -217,10 +145,18 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
             Reg.setStatus(rs.getInt("Status"));
             Reg.setImage(rs.getBytes("Image"));
 
-        } catch (SQLException ex) {
-            dv.popupOption(null,"Bạn không có mũi tiêm nào chưa được cập nhật!", "Thông báo", 0);
-            ex.printStackTrace();
-            return;
+        }
+        catch (SQLException ex)
+        {
+            if (ex.getErrorCode() == 17289)
+                dv.popupOption(null, "Bạn không có mũi tiêm nào chưa được cập nhật!",
+                        "Thông báo!", 0);
+            else
+            {
+                dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+                ex.printStackTrace();
+                return;
+            }
         }
 
         JLabel Name=new JLabel("Họ tên: "+personalUser.getFullName());
@@ -298,15 +234,11 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         ConfirmButton.addActionListener(this);
         
         JLabel Warning=new JLabel("<html>Khai báo thông tin sai là vi phạm pháp luật Việt Nam và có thể xử lý hình sự.");
-        //Warning.setText("");
         Warning.setBounds(50,380,440,60);
         Warning.setFont(new Font(dv.fontName(),Font.ITALIC,18));
         Warning.setHorizontalAlignment(JLabel.CENTER);
         Warning.setForeground(Color.red);
         
-        
-        
-        //Text
         InfoInjectionPanel.add(Name,Integer.valueOf(2));
         InfoInjectionPanel.add(sID,Integer.valueOf(2));
         InfoInjectionPanel.add(SDT,Integer.valueOf(2));        
@@ -320,22 +252,79 @@ public class UpdateInjectionView extends JPanel implements ActionListener{
         InfoInjectionPanel.add(Type,Integer.valueOf(1));
         InfoInjectionPanel.add(Warning,Integer.valueOf(1));
           
-        //Button
-        InfoInjectionPanel.add(UpLoadImageButton,Integer.valueOf(1));    
+        InfoInjectionPanel.add(UpLoadImageButton,Integer.valueOf(1));
         InfoInjectionPanel.add(ConfirmButton,Integer.valueOf(2));
    }
-   
-   
-   private void initScrollPaneRegList()//1
+
+   private void initScrollPaneRegList()
     {
         ScrollPaneRegList = new JScrollPane(InfoInjectionPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        //set Bounds
         ScrollPaneRegList.setBounds(450,140,600, dv.FrameHeight()-215);; //320 40
         
     }
+
+    public UpdateInjectionView(Person person) throws IOException
+    {
+        personalUser = person;
+
+        this.setSize(dv.FrameWidth(), dv.FrameHeight());
+        this.setVisible(true);
+        this.setBackground(new Color(dv.ViewBackgroundColor()));
+        this.setLayout(null);
+
+        /*String query = "select * "
+                + "from PERSON join Register on Person.ID=Register.PersonalID "
+                + "where PERSON.Phone = '" +  personalUser.getPhone() + "'"
+                + "Order by SchedID DESC";
+
+        String query1 = "select count(*) as Total "
+                + "from PERSON join Register on Person.ID=Register.PersonalID "
+                + "where PERSON.Phone = '" +  personalUser.getPhone() + "' and Status = 1";
+
+        try {
+            Connection connection = DriverManager.getConnection(dv.getDB_URL(), dv.getUsername(), dv.getPassword());
+
+            PreparedStatement st = connection.prepareStatement(query);
+            ResultSet rs = st.executeQuery(query);
+
+            PreparedStatement st1 = connection.prepareStatement(query1);
+            ResultSet rs1 = st1.executeQuery(query1);
+
+            rs.next();
+            Reg.setDoseType(rs.getString("Dosetype"));
+
+            rs1.next();
+            Total_Injection=rs1.getInt("Total");
+
+
+        } catch (SQLException ex) {
+            if (ex.getErrorCode() == 17289)
+                dv.popupOption(null, "Bạn không có mũi tiêm nào chưa được cập nhật!",
+                        "Thông báo!", 0);
+            else
+            {
+                dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+                ex.printStackTrace();
+                return;
+            }
+        }*/
+
+        initMainLayeredPane();
+        initInfoInjectionPanel(personalUser);
+        initLayerPanel();
+        initScrollPaneRegList();
+        initInfoLayerPanel();
+
+        this.add(MainLayeredPane);
+        this.repaint(0,0,dv.FrameWidth(), dv.FrameHeight());
+        MainLayeredPane.add(MainPanel,Integer.valueOf(0));
+        MainPanel.add(InfoLayeredPane);
+        MainPanel.add(LayerPanel);
+
+        MainPanel.add(ScrollPaneRegList);
+    }
    
-   
+   /*ACTION PERFORMED*/
     private void ActionUpLoadImage()
     {
         JFileChooser chooser=new JFileChooser();
