@@ -197,10 +197,10 @@ public class LoginView extends JFrame implements ActionListener, MouseListener, 
         author3.setFont(new Font(dv.fontName(), 2,11));
         author4.setFont(new Font(dv.fontName(), 2,11));
 
-        add(author1);
-        add(author2);
-        add(author3);
-        add(author4);
+//        add(author1);
+//        add(author2);
+//        add(author3);
+//        add(author4);
     }
 
     /*CONSTRUCTOR*/
