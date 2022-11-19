@@ -537,7 +537,6 @@ begin
     --check quantity
     if (par_Quantity <= 0)
     then
-    begin
         raise_application_error(-20021,'Quantity must be a positive number!');
     end if;
 

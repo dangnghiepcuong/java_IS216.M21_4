@@ -254,7 +254,22 @@ public class ManageScheduleView extends JPanel implements ActionListener
                             dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
                             ex.printStackTrace();
                             return;
-                        } /*finally {
+                        }
+
+                        query = "select DayRegistered, NoonRegistered, NightRegistered" +
+                                " from SCHEDULE@connLHD where ID = '" + Sched.getID() + "' for update";
+
+                        try {
+                            //create new connection
+                            PreparedStatement st = conn.prepareStatement(query);
+                            ResultSet rs = st.executeQuery(query);
+                        } catch (SQLException ex) {
+                            dv.popupOption(null, ex.getMessage(), String.valueOf(ex.getErrorCode()), 2);
+                            ex.printStackTrace();
+                            return;
+                        }
+
+                        /*finally {
                             try {
                                 connection.close();
                             } catch (SQLException ex) {
